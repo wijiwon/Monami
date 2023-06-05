@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캔버스 예시</title>
+
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            background-color:rgb(47, 47, 70);
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        canvas{
+            /* width: 500px;
+            height: 500px; */
+            border: 1px solid;
+            background-color: white;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .brushSize{
+            width: 30px;
+            height: 30px;
+            margin: 5;
+            border: 1px solid;
+            cursor: pointer;
+        }
+        .brushSizes{
+            display: flex;
+            width: auto;
+            height: 30px;
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translate(-50%);
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="brushSizes">
+        <div class="brushSize" data-size="5">5</div>
+        <div class="brushSize" data-size="10">10</div>
+        <div class="brushSize" data-size="15">15</div>
+        <div class="brushSize" data-size="20">20</div>
+    </div>
+</body>
+<!-- <script src="./canvas.js"></script> -->
+<script>
+// html에서 canvas 태크를 가져온다.
+const canvas = document.getElementById("canvas");
+// 
+const ctx = canvas.getContext("2d");
+//
+const brushSize = document.querySelector('.brushSizes');
+
+// canvas 영역 지정(css로는 X. 그림 그릴 때 마우스와 좌표가 안맞을 수 있음)
+canvas.width = 700;
+canvas.height = 700;
+
+let drawing = false;        // 기본 값은 종료상태이다.
+
+// ----- 브러쉬 사이즈를 변경하는 함수 ------------------------------------------------------------------
+
+//------- 읽어온 브러쉬 사이즈를 업데이트 하는 함수 --------------------------------
+let updateBrushSize = ()=>{
+    ctx.lineWidth = 
+
+}
+
+
+//-------------------------------------------------------------------------------
+
+
+//------ HTML에 저장된 브러쉬 사이즈를 읽어오는 함수 -------------------------------
+const changeBrush = (e)=>{
+    // 클릭으로 선택한 target의 클래스가 brushSize가 아니라면 return
+    if(!e.target.classList.contains("brushSize")) return;
+    // dataset.size: 'datasetd'을 사용하면 해당 요소의 'data-'접두사를 가진 속성의 값을 가져올 수 있다.
+    // 따라서, 'data-size'의 속성을 읽어올 수 있는 것이다.
+    const brushSized = e.target.dataset.size;  
+    updateBrushSize(brushSized);
+}
+// ------------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------------------------------
+
+
+brushSize.addEventListener("click",changeBrush);
+
+
+
+
+
+
+// ----------- 그림을 그리는 함수 -----------------------------------------------------------------------
+
+// ------- 그림 그리는 시작을 하는 함수 ----------------------
+const startDrawing = (e)=>{
+    drawing = true;
+    // getBoundingClientRect: 캔버스 요소의 위치와 크기를 가져온다.
+    // canvas영역과의 간격을 없애기 위해 선택한 좌표값에서 빼준다.
+    const canvasRect = canvas.getBoundingClientRect();
+    lastX = e.clientX - canvasRect.left;
+    lastY = e.clientY - canvasRect.top;
+}
+//----------------------------------------------------------
+
+// ------ 그림 그리는 동작을 종료하는 함수 ------------------
+const stopDrawing = ()=>{
+    drawing = false;
+}
+// -------------------------------------------------------
+
+// ------- 그림 그리는 동작을 하는 함수 -----------------------
+const draw = (e)=>{
+        // console.log(e);
+    // const x = e.offsetX;
+    // const y = e.offsetY;
+    const canvasRect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - canvasRect.left;
+    const mouseY = e.clientY - canvasRect.top;
+
+    if(!drawing) return;
+    // beginPath: 경로를 시작하는 메소드. 현재 경로가 초기화 되고, 이후의 그리기 명령으로 새로운 경로를 생성한다.
+    ctx.beginPath();
+    // moveTo: 시작점 설정
+    ctx.moveTo(lastX, lastY);
+    // lineTo: 끝점 설정
+    ctx.lineTo(mouseX, mouseY);
+    // stroke: 선 그리기
+    ctx.stroke();
+    // lineWidth: 선 굵기를 설정
+    ctx.lineWidth = 10;
+    // lineCap: 선의 끝 모양 설정 (butt: 선 끝이 직선(기본값) / round: 선 끝이 반원 / square: 선 끝이 사각형)
+    ctx.lineCap = "round";
+    // strokeStyle: 선 색상 설정
+    ctx.strokeStyle = "black";
+
+    lastX = mouseX;
+    lastY = mouseY;
+}
+//-----------------------------------------------------------------------------------------------------
+
+//----------- 그림 그릴 마우스의 상태지정 ---------------------------------------------------------------
+canvas.addEventListener("mousedown", startDrawing);     //마우스를 누르면 대기상태가 된다.
+canvas.addEventListener("mouseup", stopDrawing);     //마우스 떼면 종료상태가 된다.
+canvas.addEventListener("mouseout", stopDrawing);     //마우스가 캔버스 영역에서 나가면 종료상태가 된다.
+canvas.addEventListener("mousemove", draw);     //마우스를 누른 상태로 움직이면 그림그리는 함수가 동작한다.
+//-----------------------------------------------------------------------------------------------------
+
+</script>
+</html>

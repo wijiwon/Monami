@@ -23,25 +23,37 @@
             background-color: white;
             position: absolute;
             left: 50%;
-            top: 50%;
+            top: 40%;
             transform: translate(-50%,-50%);
         }
-        .brushSize{
-            width: 30px;
+        .brushSize,
+        .brushColor{
             height: 30px;
             margin: 5;
             border: 1px solid;
             cursor: pointer;
         }
-        .brushSizes{
+        .brushSize{
+            width: 30px;
+        }
+        .brushColor{
+            width: 60px;
+        }
+        .brushSizes,
+        .brushColors{
             display: flex;
             width: auto;
             height: 30px;
             position: absolute;
-            bottom: 5%;
             left: 50%;
             transform: translate(-50%);
             background-color: white;
+        }
+        .brushSizes{
+            bottom: 15%;
+        }
+        .brushColors{
+            bottom: 10%;
         }
     </style>
 </head>
@@ -53,6 +65,18 @@
         <div class="brushSize" data-size="15">15</div>
         <div class="brushSize" data-size="20">20</div>
     </div>
+    <div class="brushColors">
+        <div class="brushColor" data-color="white">지우개</div>
+        <div class="brushColor" data-color="black">black</div>
+        <div class="brushColor" data-color="red">red</div>
+        <div class="brushColor" data-color="pink">pink</div>
+        <div class="brushColor" data-color="orangered">orange</div>
+        <div class="brushColor" data-color="yellow">yellow</div>
+        <div class="brushColor" data-color="green">green</div>
+        <div class="brushColor" data-color="skyblue">sky</div>
+        <div class="brushColor" data-color="blue">blue</div>
+        <div class="brushColor" data-color="purple">purple</div>
+    </div>
 </body>
 <!-- <script src="./canvas.js"></script> -->
 <script>
@@ -62,6 +86,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 //
 const brushSize = document.querySelector('.brushSizes');
+const brushColors = document.querySelector('.brushColors');
 
 // canvas 영역 지정(css로는 X. 그림 그릴 때 마우스와 좌표가 안맞을 수 있음)
 canvas.width = 700;
@@ -72,12 +97,15 @@ let drawing = false;        // 기본 값은 종료상태이다.
 // ----- 브러쉬 사이즈를 변경하는 함수 ------------------------------------------------------------------
 
 //------- 읽어온 브러쉬 사이즈를 업데이트 하는 함수 --------------------------------
-let updateBrushSize = ()=>{
-    ctx.lineWidth = 
-
+let updateBrushSize = (e)=>{
+    ctx.lineWidth = e;
 }
+//-------------------------------------------------------------------------------
 
-
+//------- 읽어온 브러쉬 사이즈를 업데이트 하는 함수 --------------------------------
+let updateBrushColor = (e)=>{
+    ctx.strokeStyle = e;
+}
 //-------------------------------------------------------------------------------
 
 
@@ -92,10 +120,22 @@ const changeBrush = (e)=>{
 }
 // ------------------------------------------------------------------------------
 
+//------ HTML에 저장된 브러쉬 사이즈를 읽어오는 함수 -------------------------------
+const changeColor = (e)=>{
+    // 클릭으로 선택한 target의 클래스가 brushSize가 아니라면 return
+    if(!e.target.classList.contains("brushColor")) return;
+    // dataset.size: 'datasetd'을 사용하면 해당 요소의 'data-'접두사를 가진 속성의 값을 가져올 수 있다.
+    // 따라서, 'data-size'의 속성을 읽어올 수 있는 것이다.
+    const brushColored = e.target.dataset.color;  
+    updateBrushColor(brushColored);
+}
+// ------------------------------------------------------------------------------
+
 //-----------------------------------------------------------------------------------------------------
 
 
 brushSize.addEventListener("click",changeBrush);
+brushColors.addEventListener("click",changeColor);
 
 
 
@@ -140,15 +180,19 @@ const draw = (e)=>{
     // stroke: 선 그리기
     ctx.stroke();
     // lineWidth: 선 굵기를 설정
-    ctx.lineWidth = 10;
+    // ctx.lineWidth = 10;
     // lineCap: 선의 끝 모양 설정 (butt: 선 끝이 직선(기본값) / round: 선 끝이 반원 / square: 선 끝이 사각형)
     ctx.lineCap = "round";
     // strokeStyle: 선 색상 설정
-    ctx.strokeStyle = "black";
+    // ctx.strokeStyle = "black";
 
     lastX = mouseX;
     lastY = mouseY;
 }
+// 선 굵기 기본 값
+ctx.lineWidth = 10;
+// 선 색상 기본 값
+ctx.strokeStyle = "black";
 //-----------------------------------------------------------------------------------------------------
 
 //----------- 그림 그릴 마우스의 상태지정 ---------------------------------------------------------------

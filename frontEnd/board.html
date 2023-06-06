@@ -49,12 +49,22 @@
     async function getAPI() {
 
         try {
-            const {data} = await axios.get("")
+            // 000 데이터 달라고 요청하기
+            const {data} = await axios.get("http://127.0.0.1:8007/board/totalView" , {
+                withCredentials : true
+            })
+
+            console.log("데이터 들어오는거 확인 🙌🙌🙌🙌🙌" , data);
+
+            const posts = data;
+                
         } catch (error) {
             
         }
 
     }
+
+
 
 </script>
 

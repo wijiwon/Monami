@@ -9,6 +9,9 @@
     const { sequelize } = require("./models")
 
 
+    const boardRouter = require("./routers/boardRouter");
+
+
 // 테이블 생성 
     sequelize.sync({forse : false}).then(()=>{
         console.log("연결성공")
@@ -22,8 +25,6 @@
 // 미들웨어 
     app.use(express.urlencoded({extended:false}))
 
-    // 이미지 파일을 등록할 폴더 경로
-    app.use(express.static(path.join(__dirname,"image")))
 
     app.use(cors({
         origin: "http://127.0.0.1:5500",     // 각자 html 라이브서버 열어 url이 같은지 확인
@@ -37,9 +38,11 @@
     }))
 
     // 라우터로 연결
-    app.use('/board' , boardRouter);
+    app.use("/board" , boardRouter);
     
 
+    // '정적 파일 경로' 잡아주기 ⭐⭐⭐⭐⭐ 
+    app.use("/img" , express.static(path.join(__dirname , "image")))
 
 
 

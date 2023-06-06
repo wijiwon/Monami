@@ -1,15 +1,42 @@
 
-const router = require("express").Router();
+const routers = require("express").Router();
 
-const {allBoardView} = require("../controllers/boardControllers")
+const { allBoardView } = require("../controllers/boardControllers")
 
-
-// http://127.0.0.1:8007/board/totalView
-router.get('/totalView' , allBoardView)
-
-    // [추가할 것] 
-        // ✅ isLogin 미들웨어 추가 해야 함
+const { Upload } = require("../middleware/imageUpload")   
 
 
+// 전체 게시판 목록 보여주기
+    routers.get('/totalView' , allBoardView)
+        // [참고 | GET 요청경로 및 페이지] http://127.0.0.1:8007/board/totalView | boardCreate.html
+        // [추가할 것] 
+            // ✅ isLogin 미들웨어 추가 해야 함
 
-exports.module = router
+
+// 게시판 글쓰는 곳 보여주기 
+    routers.get("/create" , (req, res) => {
+        res.redirect('http://127.0.0.1:5500/frontEnd/boardCreate.html')
+    })
+
+
+// 게시판 글쓰기 
+    routers.post('/create' , Upload.single("post_img") , (req, res) => {
+        const {file, body} = req;
+
+        console.log(" input 넣은 사진 & 텍스트 확인 👉👉" , file, body);
+
+        res.send("파일 저장됨");
+    })
+    // [POST 요청 경로 및 페이지] http://127.0.0.1:8007/board/create | boardCreate.html
+
+    // [해석]
+        // 1) 미들웨어 처리가 끝나면, 파일은 image 폴더에 들어가서 GET 요청을 기다리게 된다. 
+    // [중요포인트] ⭐⭐⭐ 
+        // Upload.single("post_img") 여기에서 "post_img" 는
+        // boardCreate.html 에서     form.append("post_img" , post_img.files[0]); 이걸 기재할 때, 
+            // key인 post_img 와 동일하게 적어야 한다. 
+            // 즉, file 를 전송할 때의 key 값과 동일하게 적어야 한다. 
+            // 이것이 가능한 이유는 클라이언트에서 보낸 multipart/form-data 에 필드명이 담겨있고, 그래서 가능해 
+            // 이걸 가지고, 미들웨어는, file 에 해당하는 값을 찾아서 file 객체로 만들겠지.
+
+module.exports = routers

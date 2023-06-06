@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- axios 로 form 태그 대신 전송 받아오기 ⭐⭐ -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+</head>
+
+<style>
+
+    #item_01 {
+        background-color: aqua;
+    }
+
+</style>
+
+
+
+<body>
+
+    <div>
+
+    <div id="item_01">
+
+        <div id="title"> 제목입니다. </div>
+        <div id="commentCount"> 갯글 수 입니다 </div>
+        <div id="writer"> 글쓴이 입니다. </div>
+        <div id="createDate"> 작성일자 입니다. </div>
+        <div id="userExp"> 얼마나 많이 했나, 경험치 입니다. </div>
+        <div id="itemViews"> 게시글당 view 수 입니다. </div>
+
+    </div>
+
+</div>
+
+
+    
+</body>
+
+
+<script>
+
+    async function getAPI() {
+
+        try {
+            const {data} = await axios.get("")
+        } catch (error) {
+            
+        }
+
+    }
+
+</script>
+
+
+
+
+
+</html>

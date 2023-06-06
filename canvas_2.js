@@ -59,6 +59,7 @@ const startDrawing = (e) => {
     const canvasRect = canvas.getBoundingClientRect();
     lastX = e.clientX - canvasRect.left;
     lastY = e.clientY - canvasRect.top;
+    console.log(e)
 }
 //----------------------------------------------------------
 
@@ -96,12 +97,12 @@ const draw = (e) => {
     lastX = mouseX;
     lastY = mouseY;
     // 그림을 그릴 때 마다 그림그리는 동작을 기록한다.
-    recordedFrames.push(canvas.toDataURL('image/webp', 1.0));
-    console.log(recordedFrames)
+    // recordedFrames.push(canvas.toDataURL('image/webp', 1.0));
 }
 // 기본 선 굵기, 컬러 값
 ctx.lineWidth = 10;
 ctx.strokeStyle = "black";
+
 //-----------------------------------------------------------------------------------------------------
 
 //----------- 그림 그릴 마우스의 상태지정 ---------------------------------------------------------------
@@ -111,84 +112,9 @@ canvas.addEventListener("mouseout", stopDrawing);     //마우스가 캔버스 �
 canvas.addEventListener("mousemove", draw);     //마우스를 누른 상태로 움직이면 그림그리는 함수가 동작한다.
 //-----------------------------------------------------------------------------------------------------
 
-// 그림그리기는 동작을 기록하기 위한 배열 생성
-let recordedFrames = [];
 
-// 그림을 다 그리면 누르는 버튼
-const completeBtn = document.getElementById('complete');
+let mediaRecorder = null;
 
-// 영상을 생성하고 다운로드하는 함수 생성
-function createVideo() {
-    // 초당 프레임 수 설정
-    const framesPerSecond = 30;
-    // captureStream(): canvas 요소의 현재 상태를 스트림 형태로 캡쳐한다. canvas의 동작을 캡쳐하여 영상으로 저장한다.
-    const canvasStream = canvas.captureStream();
-    // MediaRecorder: 웹 브라우저 상에서 미디어 스트림을 녹화하고 저장하는 메소드이다.
-    // 해당 메소드를 사용하려면 녹화할 미디어 스트림(예.captureStream)을 제공해야 한다.
-    // mimeType 매개변수: 저장할 영상 형식으로 지정할 수 있다.
-    const mediaRecorder = new MediaRecorder(canvasStream, { mimeType: 'video/webm' });
-    // ondataavailable: 녹화된 데이터 조각을 사용하는 메소드. 데이터 조각은 Blob형식으로 제공
-        // Blob: 파일류의 불변하는 미가공 데이터를 나타낸다. 
-    // 각 Blob가 준비될 때마다 호출된다. 헤당 조각을 recordedFrames에 추가한다.
-    mediaRecorder.ondataavailable = (e) => {
-        console.log("e",e)
-        recordedFrames.push(e.data);
-    };
-    // mediaRecorder.onstop: 녹화가 종료되었을 때 호출된다.
-    mediaRecorder.onstop = () => {
-        // recordedFrames배열에 저장되어 있는 blob조각들을 사용하여 Blob객체를 생성한다.
-        // 타입을 video/webm 형식으로 지정한다.
-        const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
-        // URL.createObjectURL(): 매개변수의 객체를 URL로 변환한다.
-        // 따라서 Blob 객체를 다운로드 링크로 사용할 수 있다.
-        const videoURL = URL.createObjectURL(videoBlob);
-        // a태그를 생성하여 다운로들할 수 있는 링크로 이동한다.
-        const downloadLink = document.createElement('a');
-        // downloadLink.href: a태그의 이동할 url을 지정
-        downloadLink.href = videoURL;
-        // downloadLink.download: 다운로드될 파일의 이름을 지정
-        downloadLink.download = 'canvas_animation.webm';
-        // 자동으로 파일다운 링크로 넘어가도록 click버튼 활성화
-        downloadLink.click();
-        // URL을 할당하여 다운로드를 진행했으므로, URL.revokeObjectURL()를 사용하여 메모리를 해제해주어야 한다.
-        URL.revokeObjectURL(videoURL);
-    };
-    // start(): 녹화를 시작하는 메소드
-    mediaRecorder.start();
-    // frameDuration: 프레임간의 시간 간격을 나타냄
-    const frameDuration = 1000 / framesPerSecond;
-
-    for (let i = 0; i < recordedFrames.length; i++) {
-        setTimeout(() => {
-            // requestData메소드: 데이터 조각을 요청한다. 여기서 ondataavailable가 호출된다.
-            mediaRecorder.requestData();
-        }, i * frameDuration);
-    }
-
-    setTimeout(() => {
-        // stop(): 녹화를 중지하는 메소드
-        mediaRecorder.stop();
-    }, recordedFrames.length * frameDuration);
-}
-
-
-// 그림그리기 완료 함수 선언
-const stopRecording = () => {
-    drawing = false;
-    // canvas.toDataURL(): 캔버스에 그린 그림을 문자열로 저장하는 메소드
-        // 첫 번째 매개변수: 이미지 형식
-            // webp형식의 이미지로 변환
-        // 두 번째 매개변수: 이미지 품질
-            // 1.0: 최고 퀄리티
-            // 0.5: 중간 퀄리티
-            // 0.1: 낮은 퀄리티
-    recordedFrames.push(canvas.toDataURL('image/webp', 1.0));
-    // 영상을 생성하는 함수 실행
-    createVideo();
-}
-
-// 그림 완료 버튼을 누르면 stopRecording함수 실행
-completeBtn.addEventListener('click', stopRecording);
-
-
-
+const arrVideoData = [];
+const mediaStream = canvas.captureStream();
+mediaRecorder = new mediaRecorder(mediaStream);

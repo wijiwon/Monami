@@ -1,7 +1,7 @@
 
 const routers = require("express").Router();
 
-const { allBoardView , boardCreate} = require("../controllers/boardControllers")
+const { allBoardView , boardCreate , boardCreateView} = require("../controllers/boardControllers")
 
 const { Upload } = require("../middleware/imageUpload")   
 
@@ -14,9 +14,7 @@ const { Upload } = require("../middleware/imageUpload")
 
 
 // 게시판 글쓰는 곳 보여주기 
-    // routers.get("/create" , (req, res) => {
-    //     res.redirect('http://127.0.0.1:5500/frontEnd/boardCreate.html')
-    // })
+    routers.get("/create" , boardCreateView)
 
 
 // 게시판 글쓰기 

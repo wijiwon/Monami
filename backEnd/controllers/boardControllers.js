@@ -10,6 +10,12 @@ const {User, Post} = require('../models/index');
         // res 하기 
     }
 
+// [READ] 글쓰는 곳 보여주기 
+exports.boardCreateView = async(req, res) => {
+    console.log("🎏🎏🎏🎏🎏🎏🎏 여기까지 옴!!!!! ")
+    res.redirect("http://127.0.0.1:5500/frontEnd/boardCreate.html")
+}
+
 
 // [CREATE] 게시판 글쓰기 
     exports.boardCreate = async (req, res) => {
@@ -43,3 +49,5 @@ const {User, Post} = require('../models/index');
             // res.redirect("http://127.0.0.1:5500/frontEnd/boardItem.html")
 
     }
+
+

@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
-
 const { User, Post } = require("../models");
 
+
+// 게시판 랭킹 , 유저랭킹 함수
 exports.mainInfo = async(req,res)=>{
   try {
     await User.findAll({raw:true,where : {}}).
@@ -20,3 +21,5 @@ exports.mainInfo = async(req,res)=>{
     console.log("mainInfo 컨트롤 에러",error);
   }
 }
+
+

@@ -20,6 +20,7 @@ class Post extends Sequelize.Model{
             },
             status: {
                 type: Sequelize.INTEGER(10)    
+                // 공개, 삭제, 비공개, 
             },
             views: {
                 type: Sequelize.INTEGER(10)

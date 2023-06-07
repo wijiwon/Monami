@@ -14,51 +14,112 @@
 
 
     <!-- 제목 -->
-    <input type="text" id="title">
-
-    <!-- 사진 -->
-    <input type="file" id="post_img">
-
-    <!-- 사진 미리보기 ✅ -->
-    <div> 사진 업로드 하면 미리 보이기 🔮 </div>
+    <label for="">제목</label>
+    <input type="text" id="title"> <br>
 
     <!-- 본문 -->
-    <input type="text" id="content">
+    <label for="">본문</label> 
+    <input type="text" id="content"> <br>
+
+    <br>
+
+    <!-- 사진 -->
+    <input type="file" id="post_img"> <br>
+
+
+    <!-- 사진 미리보기 ✅ -->
+    <img id="post_img_pv" onerror="style.display='none'" alt="">
+        <!-- [해석] 
+                onerror="style.display='none'
+                    1) img에 이미지가 없을때 나오는 엑박을 안보이게 해줌 
+                    2) 없어도 되긴 하는 것 같은데, 우선, 해놓음 
+            -->
+    <br>
 
     <!-- 글쓰기 버튼 -->
     <button id="writeBtn"> 글쓰기 </button>
-
-
-
-
 
 </body>
 
 
 <script>
 
+// 전역변수 
+    let reader = new FileReader();
 
-writeBtn.onclick = () => {
-    // form 인스턴스 생성
-    const form = new FormData();
 
-    // form 객체 안에 데이터 append 하기
-    form.append("title" , title.value);
-    form.append("content" , content.value);
-    form.append("post_img" , post_img.files[0]);
-
-    // axios 전송 
-    axios.post("http://127.0.0.1:8007/board/create" , form, { 
-        // 헤더의 내용으로, 인코딩된, 폼 데이터로 전송한다고 설정
-        "Content-Type" : "multipart/form-data"
-    }).then( (e) => {
-        console.log("잘 전달됨🙌")
-        console.log(e.data)
-    }).catch((err) => {
-        console.log(err)
+// 🔹 사진 미리보기 기능 
+    // 1. input 태그가 변경되면, profile 함수 실행해서, 1) 변환 2) 보여주기 
+    post_img.addEventListener("click" , () => {
+        post_img.onchange = (e) => {
+            const filename = e.target.files[0];
+            profile(filename);
+        }
     })
 
-}
+    // 2. profile 함수 정의
+    const profile = (value) => {
+        // reader.readAsDataURL(value) 메소드 끝나면, 실행됨
+        reader.onload = () => {
+
+            // readAsDataURL 변환값을 res 에 할당
+            res = reader.result;
+                // [해석]
+                    // reader.result == reader.readAsDataURL(value)의 결과값
+
+            // 미리보기 img 태그에 res 넣기
+            post_img_pv.setAttribute("src" , res);
+                // [해석]
+                    // 미리보기 img 태그를 pv 로 가져오고, src 속성에, res 할당
+            
+            // pv 보이게 하기 
+            post_img_pv.style.display = 'block'
+                // [애매한 것]
+                    // pv 가 이전에는 꺼졌었나❓❓❓❓❓
+        }
+        // 파일 매개변수를 읽어서 -> base 64 로 변환
+        reader.readAsDataURL(value);
+            // [해석]
+                // 완료되면, reader.onload 가 실행됨
+    }
+
+
+    
+// 글쓰기 버튼 클릭시 axios post 요청 
+    writeBtn.onclick = () => {
+        // form 인스턴스 생성
+        const form = new FormData();
+
+        // form 객체 안에 데이터 append 하기
+        form.append("title" , title.value);
+        form.append("content" , content.value);
+        form.append("post_img" , post_img.files[0]);
+
+        console.log(title.value, content.value, post_img.files[0])
+
+        // axios 전송 
+        axios.post("http://127.0.0.1:8007/board/create" , form, { 
+            // 헤더의 내용으로, 인코딩된, 폼 데이터로 전송한다고 설정
+            "Content-Type" : "multipart/form-data"
+        }).then( (e) => {
+            console.log("🎏🎏🎏🎏🎏🎏 redirect 찾기" , e.data)
+            console.log("🎏🎏🎏🎏🎏🎏 redirect 찾기" , e.data.redirectURL)
+            
+            const redirectURL = e.data.redirectURL;
+            window.location.href = redirectURL;
+
+            // console.log("잘 전달됨🙌")
+            // console.log(e.data)
+
+        }).catch((err) => {
+            console.log(err)
+        })
+
+    }
+
+
+
+
 
 
 

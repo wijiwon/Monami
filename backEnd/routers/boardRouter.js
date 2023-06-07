@@ -1,32 +1,29 @@
 
 const routers = require("express").Router();
 
-const { allBoardView } = require("../controllers/boardControllers")
+const { allBoardView , boardCreate} = require("../controllers/boardControllers")
 
 const { Upload } = require("../middleware/imageUpload")   
 
 
 // 전체 게시판 목록 보여주기
-    routers.get('/totalView' , allBoardView)
+    // routers.get('/totalView' , allBoardView)
         // [참고 | GET 요청경로 및 페이지] http://127.0.0.1:8007/board/totalView | boardCreate.html
         // [추가할 것] 
             // ✅ isLogin 미들웨어 추가 해야 함
 
 
 // 게시판 글쓰는 곳 보여주기 
-    routers.get("/create" , (req, res) => {
-        res.redirect('http://127.0.0.1:5500/frontEnd/boardCreate.html')
-    })
+    // routers.get("/create" , (req, res) => {
+    //     res.redirect('http://127.0.0.1:5500/frontEnd/boardCreate.html')
+    // })
 
 
 // 게시판 글쓰기 
-    routers.post('/create' , Upload.single("post_img") , (req, res) => {
-        const {file, body} = req;
+    routers.post('/create' , Upload.single("post_img") , boardCreate );
 
-        console.log(" input 넣은 사진 & 텍스트 확인 👉👉" , file, body);
 
-        res.send("파일 저장됨");
-    })
+
     // [POST 요청 경로 및 페이지] http://127.0.0.1:8007/board/create | boardCreate.html
 
     // [해석]

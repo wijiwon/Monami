@@ -1,0 +1,22 @@
+const Sequelize = require("sequelize");
+
+const { User, Post } = require("../models");
+
+exports.mainInfo = async(req,res)=>{
+  try {
+    await User.findAll({raw:true,where : {}}).
+    then((user)=>{
+      // 내림차순 5개 가공
+      Post.findAll({
+        raw :true,
+        order : [['createdAt','DESC']],
+        limit : 5,
+        where: {}
+      }).then((posts)=>{
+        res.send({user : user, posts :posts});
+      })
+    })
+  } catch (error) {
+    console.log("mainInfo 컨트롤 에러",error);
+  }
+}

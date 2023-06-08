@@ -21,12 +21,27 @@ exports.joinUser = async(req,res)=>{
 
     const hash = bcrypt.hashSync(user_pw, 10);
 
+    const adminHash = bcrypt.hashSync("admin123", 10);
+
+    await User.findOne({where : {user_id :"admin"}})
+    if (user_id != null) {
+      User.create({
+        username:"admin",
+        user_id:"admin",
+        user_pw : adminHash,
+        profile_img : "http://127.0.0.1:4000/sample.gif",
+        exp : 0,
+        joinAllow : 2,
+      })
+    }
+
     await User.create({
       username,
       user_id,
       user_pw : hash,
       profile_img : "http://127.0.0.1:4000/monami.png",
       exp : 0,
+      joinAllow : 0,
     })
 
     res.send("완료")

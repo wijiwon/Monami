@@ -3,7 +3,7 @@ const { User, Post } = require("../models");
 
 
 // 게시판 랭킹 , 유저랭킹 함수
-exports.mainInfo = async(req,res)=>{
+exports.mainInfo = async(req,res,next)=>{
   try {
     await User.findAll({raw:true,where : {}}).
     then((user)=>{
@@ -15,6 +15,7 @@ exports.mainInfo = async(req,res)=>{
         where: {}
       }).then((posts)=>{
         res.send({user : user, posts :posts});
+        next();
       })
     })
   } catch (error) {

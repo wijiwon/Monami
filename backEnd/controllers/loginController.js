@@ -33,8 +33,8 @@ exports.loginUser = async(req,res)=>{
 
 
       
-      res.send({message : "로그인완",loggedInUserName:loggedInUserName});
-      // res.redirect("http://127.0.0.1:5500/frontEnd/main.html");
+      res.send({message : "로그인완",loggedInUserName:loggedInUserName, token:req.session.access_token});
+      // res.redirect("http://127.0.0.1:5500/Monami/frontEnd/main.html");
 
     }else{
       return res.json({message:"비밀번호 틀림"});

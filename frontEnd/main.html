@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,28 +8,31 @@
   <title>Document</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
-    .profileImg{
+    .profileImg {
       width: 300px;
       height: 300px;
     }
-    .beforeLogin{
+
+    .beforeLogin {
       width: 300px;
       height: 300px;
     }
-    .loginSuccess{
+
+    .loginSuccess {
       display: none;
     }
   </style>
 </head>
+
 <body>
   <div class="beforeLogin" id="beforeLogin">
-      <span id="idAlert"></span>
-      <label for="">아이디</label>
-      <input type="text" id="user_id"> <br>
-      <span id="pwAlert"></span>
-      <label for="">비밀번호</label>
-      <input type="password" id="user_pw"> <br>
-      <button id="loginBtn">로그인</button>
+    <span id="idAlert"></span>
+    <label for="">아이디</label>
+    <input type="text" id="user_id"> <br>
+    <span id="pwAlert"></span>
+    <label for="">비밀번호</label>
+    <input type="password" id="user_pw"> <br>
+    <button id="loginBtn">로그인</button>
   </div>
 
   <div class="loginSuccess" id="loginSuccess">
@@ -64,17 +68,17 @@
 <script>
   async function getMain() {
     try {
-      const data = await axios.get("http://127.0.0.1:4000/main",{
-        withCredentials : true,
-      }).then((e)=>{
-        console.log("html이야",e.data);
+      const data = await axios.get("http://127.0.0.1:4000/main", {
+        withCredentials: true,
+      }).then((e) => {
+        console.log("html이야", e.data);
         const titleNames = e.data.posts
         const userDatas = e.data.user
-        titleNames.forEach((e,index) => {
+        titleNames.forEach((e, index) => {
           console.log(e);
           board_rank.innerHTML += `<div><span> title : ${e.title}</span> <span> user_id :${e.user_id}</span></div>`
         });
-        userDatas.forEach((e,index)=>{
+        userDatas.forEach((e, index) => {
           user_rank.innerHTML += `<div><span> username : ${e.username}</span> <span>userEXP : ${e.exp}</span></div>`
           // console.log(e);
           img_file.src = e.profile_img;
@@ -82,31 +86,34 @@
       });
 
     } catch (error) {
-      console.log("main에러",error);
+      console.log("main에러", error);
     }
   }
 
-  loginBtn.onclick = ()=>{
-      axios.post('http://127.0.0.1:4000/login',{
-        data : 
-        {
-          user_id : user_id.value,
-          user_pw : user_pw.value
-        }
+  loginBtn.onclick = () => {
+    axios.post('http://127.0.0.1:4000/login', {
+      data:
+      {
+        user_id: user_id.value,
+        user_pw: user_pw.value
+      }
 
-      }).then((e)=>{
-        console.log(e);
-        if (e.data.message == "로그인완") {
-          console.log(e);
-          loginSuccess.style.display = "block"
-          beforeLogin.style.display = "none"
-          username.innerHTML = e.data.loggedInUserName;
-        }
+    }).then((e) => {
+      console.log(e);
+      if (e.data.message == "로그인완") {
+        console.log(e.data.token);
+        //쿠카의 값가지고와서 쿠키에[ 담긴 토큰을뽑아서 islogin에 넘긴다
+        document.cookie =`token=${e.data.token}; path=/`
 
-        // if (e.data.message == "비밀번호 틀림") {
-          
-        // }
-      })
+        loginSuccess.style.display = "block"
+        beforeLogin.style.display = "none"
+        username.innerHTML = e.data.loggedInUserName;
+      }
+
+      // if (e.data.message == "비밀번호 틀림") {
+
+      // }
+    })
 
   }
 
@@ -118,4 +125,5 @@
 
   getMain();
 </script>
+
 </html>

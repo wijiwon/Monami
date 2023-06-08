@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { RoomCreate, RoomChoice } = require('../controllers/gameReadyController');
+const { RoomCreate, RoomChoice, RoomViews } = require('../controllers/gameReadyController');
 const { islogin } = require('../middleware/isLogin')
 
-router.get('/', RoomChoice);
+router.get('/', RoomViews);
 
-router.post('/create', RoomCreate);
+router.post('/create', islogin, RoomCreate);
 
 module.exports = router;

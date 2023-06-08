@@ -6,12 +6,13 @@ exports.RoomCreate = async(req,res)=>{
     try {
         // console.log("req.body",req)
         const { title } = req.body;
-        // const { decode } = req;
+        // console.log("dedede@@@@@@@@@@@@@@@@@@@@@@@",req.decode);
+        const { decode } = req;
         console.log("타이틀?", title);
         // const { decoded } = req;
         Room.create({
             title: title,
-            room_manager: 1
+            room_manager: decode.id
         })
         res.json({redirectURL: 'http://127.0.0.1:5500/frontEnd/gameReady.html'})
     } catch (error) {
@@ -23,10 +24,10 @@ exports.RoomCreate = async(req,res)=>{
 exports.RoomViews = async(req,res)=>{
     try {
         const data = await Room.findAll({});
-        console.log("데이터",data)
-        res.render(data);
+        // console.log("데이터",data)
+        res.json(data);
     } catch (error) {
-        
+        console.log(error)
     }
 }
 

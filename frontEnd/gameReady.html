@@ -150,6 +150,20 @@
         .roompopup_ready .roomBtn_member{
             display: none;
         }
+        .row2 .roomlists{
+            margin: 15px;
+            width: 230px;
+            height: 150px;
+            border: 1px solid;
+        }
+        .row2 .roomList{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            overflow: visible;
+            overflow-x: hidden
+        }
     </style>
 </head>
 
@@ -164,7 +178,6 @@
         <!-- 페이지의 중간 영역. 생성된 방의 리스트와 현재 접속, 게임중인 유저 목록을 확인할 수 있다. -->
         <div class="row2">
             <div class="roomList">
-                <div class="roomlists"></div>
             </div>
             <div class="userList">
                 <p>User List</p>
@@ -248,9 +261,26 @@
     // --------- axios -----------------------------------------------------------------------------------------
     async function getAPI(){
         try {
-            await axios.get('http://127.0.0.1:4000/gameready',{
+            const data = await axios.get('http://127.0.0.1:4000/gameready',{
                 withCredentials: true
             })
+            console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&",data.data)
+            const roomArr = data.data;
+            const roomList = document.querySelector('.roomList');
+            roomArr.forEach((el, index) => {
+                console.log("------------------",el.room_manager.length)
+                let roomnum = [];
+                roomnum.push(el.room_manager);
+                roomnum.push(el.users_in_room);
+                console.log(roomnum.length);
+                roomList.innerHTML += `
+                <div class="roomlists">
+                    <div class="room_title">${el.title}</div>
+                    <div class="room_usernum">${roomnum}</div>
+                    <div class="room_play">게임 진행사항</div>
+                </div>
+                `
+            });
         } catch (error) {
             console.log(error);
         }

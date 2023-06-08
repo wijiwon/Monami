@@ -21,6 +21,7 @@ app.use(cors({
 }))
 
 app.use(session({
+    name : "token",
     secret : process.env.REFRESH_TOKEN_KEY,
     resave : false,
     saveUninitialized : false

@@ -5,12 +5,8 @@ exports.islogin = async(req,res,next)=>{
   //값이 암호화된 토큰만 풀어주면 바로 사용가능
   //req.session 대신 쿠키값 읽기
   console.log(req);
-  // console.log(req.rawHeaders[29]);
   const cookieString = req.rawHeaders[29];
-  // const cookieString = document.cookie;
   const access_token = cookieString.split('=')[1];
-  // const { access_token } = token
-  // console.log("asdfasdf",access_token);
   
   // 앍운 쿠키값 에서 token 해체 
   try {

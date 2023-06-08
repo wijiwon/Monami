@@ -1,8 +1,8 @@
 // html에서 canvas 태크를 가져온다.
 const canvas = document.getElementById("canvas");
-// 
+// getContext: 그래픽 렌더링 컨텍스트를 가져오는 메소드. 2d를 가져온다.
 const ctx = canvas.getContext("2d");
-//
+//브러쉬 사이즈와 컬러들을 담는 div를 불러오는 변수.
 const brushSize = document.querySelector('.brushSizes');
 const brushColor = document.querySelector('.brushColors');
 
@@ -13,7 +13,6 @@ canvas.height = 700;
 let drawing = false;        // 기본 값은 종료상태이다.
 
 // ----- 브러쉬 사이즈를 변경하는 함수 ------------------------------------------------------------------
-
 //------- 읽어온 브러쉬 사이즈를 업데이트 하는 함수 --------------------------------
 let updateBrushSize = (e) => {
     ctx.lineWidth = e;
@@ -59,7 +58,7 @@ const startDrawing = (e) => {
     const canvasRect = canvas.getBoundingClientRect();
     lastX = e.clientX - canvasRect.left;
     lastY = e.clientY - canvasRect.top;
-    console.log(e)
+    // console.log(e)
 }
 //----------------------------------------------------------
 
@@ -112,9 +111,42 @@ canvas.addEventListener("mouseout", stopDrawing);     //마우스가 캔버스 �
 canvas.addEventListener("mousemove", draw);     //마우스를 누른 상태로 움직이면 그림그리는 함수가 동작한다.
 //-----------------------------------------------------------------------------------------------------
 
+// 그림그리기는 동작을 기록하기 위한 배열 생성
+let recordedFrames = [];
+let mediaRecorder;
 
-let mediaRecorder = null;
+// 비디오 녹화 시작
+function startRecording() {
+    const canvasStream = canvas.captureStream();
+    mediaRecorder = new MediaRecorder(canvasStream, { mimeType: 'video/webm' });
+  
+    mediaRecorder.ondataavailable = (e) => {
+      recordedFrames.push(e.data);
+    };
+  
+    mediaRecorder.start();
+  }
 
-const arrVideoData = [];
-const mediaStream = canvas.captureStream();
-mediaRecorder = new mediaRecorder(mediaStream);
+  // 비디오 재생
+  function playVideo() {
+    const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
+    const videoURL = URL.createObjectURL(videoBlob);
+    const videoElement = document.getElementById('video_recorded');
+  
+    videoElement.src = videoURL;
+    videoElement.play();
+  }
+
+// 비디오 녹화 종료
+function stopRecording() {
+    mediaRecorder.stop();
+    // playVideo();
+  }
+
+  const completeBtn = document.getElementById('complete');
+  const playBtn = document.getElementById('play');
+
+
+  window.addEventListener('DOMContentLoaded',startRecording);
+  completeBtn.addEventListener('click', stopRecording);
+  playBtn.addEventListener('click', playVideo);

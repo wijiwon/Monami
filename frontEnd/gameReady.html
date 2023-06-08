@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameReady Page</title>
+    <style>
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+        .view1{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .row1,
+        .row2,
+        .row3 {
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+        }
+        .row1 {
+            height: 15%;
+            border: 1px solid violet;
+        }
+        .row2 {
+            height: 50%;
+            border: 1px solid darkblue;
+        }
+        .row3 {
+            height: 35%;
+            border: 1px solid darkolivegreen;
+        }
+        .row1 .Logo,
+        .row1 .createRoom {
+            top: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            cursor: pointer;
+        }
+        .row1 .Logo {
+            left: 50%;
+            font-size: 40px;
+            font-weight: 700;
+        }
+        .row1 .createRoom {
+            left: 70%;
+            padding: 10px;
+            font-size: 30px;
+            font-weight: 600;
+            border: 2px solid green;
+            border-radius: 2em;
+        }
+        .row2 .roomList,
+        .row2 .userList {
+        height: 100%;
+        box-sizing: border-box;
+        }
+        .row2 .roomList,
+        .row3 .chat {
+            width: 70%;
+            border: 2px solid fuchsia;
+        }
+        .row2 .userList,
+        .row3 .myProfile {
+            width: 30%;
+            border: 2px solid slateblue;
+        }
+        .roompopup_creat,
+        .roompopup_ready{
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            position: relative;
+            width: 600px;
+            height: 600px;
+            border: 3px solid;
+            z-index: 3;
+            background-color: white;
+        }
+        .roompopup_creat{
+            display: flex;
+            /* display: none; */
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .roomTitle{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .roomTitle P{
+            font-size: 30px;
+        }
+        .roomTitle input{
+            font-size: 20px;
+        }
+        .roomBtn{
+            display: flex;
+            justify-content: space-evenly;
+            flex-direction: row;
+            width: 100%;
+        }
+        .roomBtn .create,
+        .roomBtn .cancle{
+            width: 100px;
+            border: 1px solid;
+            height: 40px;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .roompopup_ready{
+            display: none;
+            /* display: flex; */
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+        .roompopup_ready .readyUser{
+            width: 70%;
+            height: 50%;
+            border: 1px solid;
+        }
+        .roompopup_ready .roomBtn_leader,
+        .roompopup_ready .roomBtn_member{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+        .roompopup_ready .roomBtn_leader{
+            /* display: none; */
+        }
+        .roompopup_ready .roomBtn_member{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 게임 대기방의 전체 영역을 가지고 있다. -->
+    <div class="view1">
+        <!-- 페이지의 최상단 영역. 로고와 방만들기 버튼이 있다. -->
+        <div class="row1">
+            <div class="Logo">그림 일심동체</div>
+            <div class="createRoom">방만들기</div>      <!-- 방을 생성할 수 있는 버튼 -->
+        </div>
+        <!-- 페이지의 중간 영역. 생성된 방의 리스트와 현재 접속, 게임중인 유저 목록을 확인할 수 있다. -->
+        <div class="row2">
+            <div class="roomList"></div>
+            <div class="userList">
+                <p>User List</p>
+            </div>
+        </div>
+        <!-- 페이지의 하단 영역. 접속중인 유저간의 전체 채팅과 현재 로그인한 유저의 정보를 확인할 수 있고, 게임페이지 홈으로 이동할 수 있다. -->
+        <div class="row3">
+            <!-- 접속 중인 전체유저 채팅-->
+            <div class="chat">
+                <!-- 채팅 내용이 보이는 영역 -->
+                <div class="chatBox"></div>
+                <!-- 채팅을 입력하는 영역 -->
+                <div class="chatInsert">
+                    <div>채팅</div>
+                    <input type="text" name="chatInput">
+                    <div>전송</div>
+                </div>
+            </div>
+            <!-- 유저가 로그인한 계정의 정보가 노출되는 영역. 홈으로 버튼을 누르면 게임 메인페이지로 이동한다. -->
+            <div class="myProfile">
+                <div class="pro_img"></div>
+                <div class="pro_exp"></div>
+                <div class="pro_home">홈으로</div>
+            </div>
+        </div>
+    </div>
+    <!-- 방 만들기 버튼을 누르면 켜지는 팝업. 방을 생성할 수 있다. -->
+    <div class="roompopup_creat">
+        <div class="roomTitle">
+            <p>방 제목</p>
+            <input type="text" name="title" placeholder="방 제목을 입력해주세요.">
+        </div>
+        <div class="roomBtn">
+            <div class="create">만들기</div>
+            <div class="cancle">취소하기</div>
+        </div>
+    </div>
+    <!-- 방을 생성하거나, 생성된 방에 들어가면 켜지는 팝업. 해당 방에서 대기하는 사람들을 확인할 수 있다. -->
+    <div class="roompopup_ready">
+        <div class="roomTitle">
+            <p>저장된 방 제목 노출</p>
+        </div>
+        <!-- 게임 시작 대기중인 유저정보 -->
+        <div class="readyUser">시작 대기 중인 유저 목록</div>
+        <!-- 하단의 버튼영역. 방장의 경우 좌측버튼 - 게임시작 -->
+        <div class="roomBtn_leader">
+            <div class="roomStart">게임시작</div>
+            <div class="roomExit">나가기</div>
+        </div>
+        <!-- 하단의 버튼영역. 멤버의 경우 좌측버튼 X -->
+        <div class="roomBtn_member">
+            <div class="roomExit">나가기</div>
+        </div>
+    </div>
+</body>
+<script>
+    const roomCreateBtn = document.querySelector('.createRoom');    // 방 만들기 버튼
+
+    
+    
+</script>
+</html>

@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameReady Page</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <style>
         body {
             position: relative;
@@ -88,11 +90,14 @@
             background-color: white;
         }
         .roompopup_creat{
-            display: flex;
-            /* display: none; */
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
+        }
+        .roompopup_creat.pop{
+            display: flex;
+
         }
         .roomTitle{
             display: flex;
@@ -158,7 +163,9 @@
         </div>
         <!-- 페이지의 중간 영역. 생성된 방의 리스트와 현재 접속, 게임중인 유저 목록을 확인할 수 있다. -->
         <div class="row2">
-            <div class="roomList"></div>
+            <div class="roomList">
+                <div class="roomlists"></div>
+            </div>
             <div class="userList">
                 <p>User List</p>
             </div>
@@ -188,11 +195,11 @@
     <div class="roompopup_creat">
         <div class="roomTitle">
             <p>방 제목</p>
-            <input type="text" name="title" placeholder="방 제목을 입력해주세요.">
+            <input type="text" id="title" placeholder="방 제목을 입력해주세요.">
         </div>
         <div class="roomBtn">
-            <div class="create">만들기</div>
-            <div class="cancle">취소하기</div>
+            <button class="create">만들기</button>
+            <button class="cancle">취소하기</button>
         </div>
     </div>
     <!-- 방을 생성하거나, 생성된 방에 들어가면 켜지는 팝업. 해당 방에서 대기하는 사람들을 확인할 수 있다. -->
@@ -215,8 +222,68 @@
 </body>
 <script>
     const roomCreateBtn = document.querySelector('.createRoom');    // 방 만들기 버튼
+    const roomPopupCreate = document.querySelector('.roompopup_creat')  // 방 만들기 팝업
+    const roomcancle = document.querySelector('.cancle');       // 방 만들기 팝업 - 취소하기 버튼
+    // 방 만들기 버튼 클릭 시, 팝업이 토글 됨
+    roomCreateBtn.onclick = ()=>{
+        if(roomPopupCreate.classList.contains('pop')){
+            roomPopupCreate.classList.toggle('pop')
+        }
+        else{
+            roomPopupCreate.classList.toggle('pop')
+        }
+    }
+    // 방 만들기 팝업에서 취소하기 버튼 클릭 시, 팝업이 none
+    roomcancle.onclick = ()=>{
+        if (roomPopupCreate.classList.contains('pop')) {
+            roomPopupCreate.classList.remove('pop')
+        }
+    }
 
     
+
+
+
+
+    // --------- axios -----------------------------------------------------------------------------------------
+    async function getAPI(){
+        try {
+            await axios.get('http://127.0.0.1:4000/gameready',{
+                withCredentials: true
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    getAPI();
+
+    const createBtn = document.querySelector('.create');
+
+    createBtn.onclick = ()=>{
+        // const form = new FormData();
+        // console.log("title.value",title.value);
+        // form.append("title", title.value);
+
+        axios.post("http://127.0.0.1:4000/gameready/create", {title:title.value}, {
+            withCredentials : true,
+            "Content-Type": "application/json"
+        }).then((e)=>{
+            const redirectURL = e.data.redirectURL;
+            window.location.href = redirectURL;
+        })
+        // form 데이터로 보내는데 form-data로 설정하지 않아서 생긴 이슈 - form에 json값으로 바꿔줌
+        // axios.post("http://127.0.0.1:4000/gameready/create", form, {
+        //     withCredentials : true,
+        //     // "Content-Type": "application/json"
+        // }).then((e)=>{
+        //     console.log(e.data)
+        // }).catch((err)=>{
+        //     console.log(err);
+        // })
+
+    }
+    
+
     
 </script>
 </html>

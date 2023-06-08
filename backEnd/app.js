@@ -9,6 +9,7 @@ const { sequelize } = require("./models")
 const mainInfoRouter = require("./routers/mainRouter");
 const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
+const gameReady = require('./routers/gameReadyRouter');
 
 app.use(express.urlencoded({extended:false}))
 
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use('/main',mainInfoRouter);
 app.use('/join',joinRouter);
 app.use('/login',loginRouter);
+app.use('/gameready',gameReady);
 
 sequelize.sync({forse : false}).then(()=>{
     console.log("연결성공")
@@ -38,6 +40,10 @@ sequelize.sync({forse : false}).then(()=>{
     console.log(err)
 })
 
-app.listen(4000, ()=>{
+const server = app.listen(4000, ()=>{
     console.log("서버열림")
 })
+
+const io = socketio(server);
+
+module.exports = server;

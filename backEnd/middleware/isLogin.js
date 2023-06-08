@@ -4,6 +4,7 @@ const dot = require("dotenv").config();
 exports.islogin = async(req,res,next)=>{
   //값이 암호화된 토큰만 풀어주면 바로 사용가능
   //req.session 대신 쿠키값 읽기
+  console.log("%%%%%%%%%%%%%%%%%%",req.rawHeaders[29]);
   const cookieString = req.rawHeaders[29];
   const access_token = cookieString.split('=')[1];
   

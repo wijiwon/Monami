@@ -4,6 +4,6 @@ const { islogin } = require('../middleware/isLogin')
 
 router.get('/', RoomChoice);
 
-router.post('/create', islogin, RoomCreate);
+router.post('/create', RoomCreate);
 
 module.exports = router;

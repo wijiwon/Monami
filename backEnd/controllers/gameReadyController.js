@@ -6,7 +6,7 @@ exports.RoomCreate = async(req,res)=>{
     try {
         // console.log("req.body",req)
         const { title } = req.body;
-        const { } = req
+        // const { decode } = req;
         console.log("타이틀?", title);
         // const { decoded } = req;
         Room.create({

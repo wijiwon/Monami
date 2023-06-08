@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const { allBoardView , boardCreate , boardCreateView , boardItemView } = require("../controllers/boardControllers")
+    const { allBoardView , boardCreate , boardCreateView , boardItemView , boardCommentCreate} = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
 
 
@@ -33,7 +33,9 @@
 // [read] 게시판 상세 내용 보여주기 
     routers.get('/item' , boardItemView)
 
-
-
+// [create] 댓글 생성 
+    routers.post('/comment/create' , Upload.single(), boardCommentCreate)
+    // [주의할 부분]
+        // 지금, single 메소드에 넣은 매개변수인 file 의 key 이름없음. 📛
 
 module.exports = routers

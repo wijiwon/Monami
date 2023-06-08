@@ -100,3 +100,22 @@ const {User, Post , Comment} = require('../models/index');
             console.error(error);
         }
     }
+
+
+
+// [create]
+    exports.boardCommentCreate = async (req, res) => {
+
+        // 1) 저장할 데이터 솎아내기 
+        const {body} = req;
+        console.log(body);
+
+        // 2) sequelize 상속받은 Comment 객체로 쿼리 날리기 
+        await Comment.create({
+            content : body.comment_content
+        })
+
+        // 3) res 보내기 
+        res.send("댓글 작성 완료")
+;
+    }

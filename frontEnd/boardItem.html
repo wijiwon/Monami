@@ -108,7 +108,22 @@
 
     // 댓글 등록하기 
     commentWriteBtn.onclick = () => {
-        axios.posts("http://")
+
+        // 1) 동적 form 데이터 만들기 
+        const form = new FormData();
+
+        form.append("comment_content" , comment_content.value);
+        console.log(comment_content.value)
+
+
+        // 2) axios 전송
+        axios.post("http://127.0.0.1:8007/board/comment/create" , form , {
+            "Content-Type" : "multipart/form-data"
+        }).then( (e) => {
+            console.log(e)
+        } ).catch((err) => {
+            console.log(err)
+        })
     }
 
 

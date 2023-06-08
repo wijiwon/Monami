@@ -49,6 +49,6 @@
 
 
 // 서버 대기 상태 
-    app.listen(8007, ()=>{
+    app.listen(8005, ()=>{
         console.log("서버열림")
     })

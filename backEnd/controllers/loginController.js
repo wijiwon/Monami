@@ -11,11 +11,11 @@ exports.loginUser = async(req,res)=>{
     if (data == null) {
       return res.json({message:"회원가입 한 아이디 없음"});
     }
-
     const same = bcrypt.compareSync(user_pw,data.user_pw);
     if (same) {
       // 로그인 성공시 토큰 발급
       const token = jwt.sign({
+        id : data.id,
         name : data.username,
         user_id : data.user_id,
         profile_img : data.profile_img,
@@ -26,15 +26,8 @@ exports.loginUser = async(req,res)=>{
         expiresIn : "60m"
       })
       req.session.access_token = token;
-
-
-    const loginNow = await User.findOne({});
-    const loggedInUserName = loginNow.username;
-
-
       
-      res.send({message : "로그인완",loggedInUserName:loggedInUserName, token:req.session.access_token});
-      // res.redirect("http://127.0.0.1:5500/Monami/frontEnd/main.html");
+      res.send({message : "로그인완",userInfo:data, token:req.session.access_token});
 
     }else{
       return res.json({message:"비밀번호 틀림"});

@@ -80,8 +80,6 @@
         });
         userDatas.forEach((e, index) => {
           user_rank.innerHTML += `<div><span> username : ${e.username}</span> <span>userEXP : ${e.exp}</span></div>`
-          // console.log(e);
-          img_file.src = e.profile_img;
         })
       });
 
@@ -107,7 +105,10 @@
 
         loginSuccess.style.display = "block"
         beforeLogin.style.display = "none"
-        username.innerHTML = e.data.loggedInUserName;
+
+        username.innerHTML = e.data.userInfo.username;
+        img_file.src = e.data.userInfo.profile_img;
+
       }
 
       // if (e.data.message == "비밀번호 틀림") {

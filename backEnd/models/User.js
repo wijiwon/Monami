@@ -32,7 +32,15 @@ class User extends Sequelize.Model{
             collate: "utf8_general_ci"
         })
     }
+
     static associate(db){
+        
+        db.User.hasMany(db.Post, {foreignKey: "user_primaryKey", sourceKey: "id"})
+        // db.User.hasMany(db.Post, {foreignKey: "user_id", sourceKey: "id"})
+        // [필요성] 해당 id 로 작성한, 가장 최신 글 보여주기 위해 필요
+        // [팀회의] 해당 id 로 저장된 글을 조회할 때 가져오게 됨 (23-06-08 update | 팀컨펌 아직 | ✅)
+        // [이슈사항] user_id 가 아닐 수도 있음✅
+
         db.User.hasMany(db.Comment, {foreignKey: "user_primaryKey", sourceKey: "id"})
         db.User.hasMany(db.Question, {foreignKey: "user_primaryKey", sourceKey: "id"})
         db.User.hasMany(db.Drawing, {foreignKey: "user_primaryKey", sourceKey: "id"})

@@ -1,6 +1,6 @@
 
 
-const {User, Post} = require('../models/index');
+const {User, Post , Comment} = require('../models/index');
 
 
 // [READ] 게시판에서 모든 게시글 보여주기 
@@ -10,10 +10,10 @@ const {User, Post} = require('../models/index');
         // res 하기 
     }
 
-// [READ] 글쓰는 곳 보여주기 
-exports.boardCreateView = async(req, res) => {
-    console.log("🎏🎏🎏🎏🎏🎏🎏 여기까지 옴!!!!! ")
-    res.redirect("http://127.0.0.1:5500/frontEnd/boardCreate.html")
+// [READ] 글쓰기 페이지 보여주기 
+    exports.boardCreateView = async(req, res) => {
+        console.log("🎏🎏🎏🎏🎏🎏🎏 여기까지 옴!!!!! ")
+        res.redirect("http://127.0.0.1:5500/frontEnd/boardCreate.html")
 }
 
 
@@ -45,9 +45,58 @@ exports.boardCreateView = async(req, res) => {
         // 3) 사용자가 봤으면 하는 화면으로 redirect 시키기
             // '그림 상세 페이지' 로 확정
             res.json({ redirectURL: 'http://127.0.0.1:5500/frontEnd/boardItem.html' });
-
-            // res.redirect("http://127.0.0.1:5500/frontEnd/boardItem.html")
-
+                // [해석]
+                    // json 형식으로 변환해서 res 로 보냄 
+                    // 그 이유는 axios 를 통해 소통하면, 클라이언트가 redirect 를 자동으로 처리 못 하는 경우가 있다고 함 (by GPT)
     }
 
 
+
+
+// [read] 게시글 상세 페이지 보여주기
+    exports.boardItemView = async (req, res) => {
+
+        try {
+            // 1) 조회할 id 가 제대로 넘어오는가 
+                // console.log("req.params.id 👉 " , req.params.id);
+                // req.params.id 를 하는 이유 : routing url 에서 placeholder 에 담겨서 id 가 넘어왔기 때문에 
+
+            // 2) User 데이터 조회
+                const userWithPosts = await User.findOne({
+                    where : {id : 1}, 
+                    include : [
+                        {model : Post}
+                    ]
+                    // 위 값을 찾아오는데 성공하면, 아래 구문을 실행
+                });
+                
+            // 3) Comment 조회 
+                const comment = await Comment.findOne( {
+                    where : {user_primaryKey : 1}
+                        // [해석] 
+                            // 이게 맞나 ❓❓❓ 
+                } )
+                
+            // 4) Post 조회
+                // [궁금증] 
+                    // post 는 따로 조회? 아니면, foreignKey로? 
+                    // post 는 이걸로 하는건가❓❓❓
+
+                // userWithPosts의 데이터값에서 Posts를 가져와서 각 Post의 데이터값만 저장
+                userWithPosts.dataValues.Posts = userWithPosts.dataValues.Posts.map(i => i.dataValues);
+                    // console.log("" , e.dataValues.Posts[0].dataValues)
+            
+            // 5) 결과 합치기
+                const result = {
+                    user : userWithPosts, 
+                    comment : comment
+                }
+                console.log("🔮🔮🔮🔮🔮" , result)
+            
+            // 6) 결과 보내기 
+                res.json(result)
+
+        } catch (error) {
+            console.error(error);
+        }
+    }

@@ -21,22 +21,24 @@
         // force : 초기화 시킬지 여부 , 데이터 베이스에 값이 있으면 지울지 여부
 
 
-
 // 미들웨어 
+    // body 객체 생성
     app.use(express.urlencoded({extended:false}))
 
-
+    // cors 생성 : 해당 경로에서 온 클라이언트만 유효함
     app.use(cors({
         origin: "http://127.0.0.1:5500",     // 각자 html 라이브서버 열어 url이 같은지 확인
         credentials : true 
     }))
 
+    // 세션 
     app.use(session({
         secret : process.env.REFRESH_TOKEN_KEY,
         resave : false,
         saveUninitialized : false
     }))
 
+    
     // 라우터로 연결
     app.use("/board" , boardRouter);
     

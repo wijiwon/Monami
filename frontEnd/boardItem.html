@@ -5,14 +5,116 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+
+    <!-- ✅ axios 설치 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
 </head>
 <body>
 
 
-    <h1>글 상세 보여주는 곳</h1>
+    <h1> 캐치 마인드 </h1>
 
-    
+    <!-- 오른쪽에 배치 -->
+    <button>글 목록</button>
+        <!-- [✅ todo] 글 목록으로 이동하게 해야 함 -->
 
+    <p> 작성자 : <p id="username"> </p> <br> 
+        <!-- 가져올 곳 : User 테이블의 username 열 -->
+        
+    <p> 조회수 : <p id="post_views"> </p> <br>
+        <!-- 가져올 곳 : Post 테이블의 views 열 -->
+        
+    <p> exp : <p id="user_exp"> </p> <br>
+        <!-- 가져올 곳 : User 테이블의 exp 열 -->
+        
+    <p> 👍 : <p id="post_likes"> </p> <br>
+        <!-- 가져올 곳 : Post 테이블의 likeClickUser 의 개수 -->
     
+    <p> <button id="post_likesBtn">🧡좋아요클릭</button> </p>
+        <!-- 보낼 곳 : 클릭하면, Post 테이블의 likeClickUser 에, user_id, name, id 를 보낸다. -->
+        <!-- 📛 foreignKey 와 현재 api 설정 된거 확인해야 이 부분이 깔끔할 듯 -->
+    
+    <p> 내용 : <p id="post_content"> </p> </p>
+        <!-- 가져올 곳 : Post 테이블의 content -->
+        
+    <p> 사진 : <img id="posts_img">  </p>
+        <!-- 가져올 곳 : Post 테이블의 content -->
+        <!-- 📛 img 태그를 가져오는게 맞겠지? -->
+    <br>
+
+
+    <!-- 댓글 -->
+        <p>댓글 작성된 것 : <p id="comment_content"> </p></p>
+            <!-- 📛 댓글 CREATE 기능 먼저 완료되면, 수행해야 함 -->
+            <!-- 가져올 곳 : comment 테이블의 content 와 connect_writer -->
+        
+        <label for="">댓글 작성란 : </label> 
+        <input type="text" id="comment_content"> <br>
+        <br>
+        <button id="commentWriteBtn"> 댓글 작성 완료 </button>
+            <!-- 보낼 곳 : comment 테이블의 connect_id, connect_writer, content -->
+
+
 </body>
+
+<script> 
+
+    // [getAPI 정의] 상세 글에 필요한 데이터 가져오기 
+    async function getAPI() {
+
+        try {
+            // 1) axios 로 get 요청보내서, data 받아오기
+            const {data} = await axios.get("http://127.0.0.1:8007/board/item" , {
+                withCredentials : true
+            }) 
+
+            // 2) 받아온 data 쓸 수 있게 솎아내기 
+            console.log("🙆‍♂️ 들어오는거 확인 👉👉👉" , data)
+            
+            
+            const posts = data;
+
+            // 3) innerHTML 로 붙여주기
+            username.innerHTML = data.username;
+
+            // post_views.innerHTML = data.username;
+                // ✅ 현재 데이터 없음
+                
+            user_exp.innerHTML = data.exp;
+                
+            // post_likes.innerHTML
+                // ✅ 현재 데이터 없음
+                
+            // post_likesBtn.innerHTML
+                // ✅ 현재 데이터 없음
+            
+            // posts_img.innerHTML
+            
+            
+            // comment_content.innerHTML
+
+            
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    // [getAPI 실행] 상세 글에 필요한 데이터 가져오기  
+        getAPI();
+
+    // 댓글 등록하기 
+    commentWriteBtn.onclick = () => {
+        axios.posts("http://")
+    }
+
+
+
+
+</script>
+
+
 </html>

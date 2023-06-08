@@ -15,7 +15,9 @@ class User extends Sequelize.Model{
                 type: Sequelize.STRING(20)
             },
             profile_img: {
-                type: Sequelize.STRING(200)
+                type: Sequelize.STRING(200),
+                // allowNull : false,
+                // defaultValue : "http://127.0.0.1:4000/monami.png"
             },
             exp: {
                 type: Sequelize.INTEGER(10)

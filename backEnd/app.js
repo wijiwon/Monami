@@ -6,6 +6,9 @@ const cors = require("cors")
 
 const app = express();
 const { sequelize } = require("./models")
+const mainInfoRouter = require("./routers/mainRouter");
+const joinRouter = require("./routers/joinRouter");
+const loginRouter = require("./routers/loginRouter");
 
 app.use(express.urlencoded({extended:false}))
 
@@ -22,6 +25,12 @@ app.use(session({
     resave : false,
     saveUninitialized : false
 }))
+
+app.use(express.json());
+
+app.use('/main',mainInfoRouter);
+app.use('/join',joinRouter);
+app.use('/login',loginRouter);
 
 sequelize.sync({forse : false}).then(()=>{
     console.log("연결성공")

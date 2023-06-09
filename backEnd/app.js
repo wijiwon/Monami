@@ -5,8 +5,11 @@
     const session = require("express-session");
     const cors = require("cors")
 
-    const app = express();
-    const { sequelize } = require("./models")
+const app = express();
+const { sequelize } = require("./models")
+const mainInfoRouter = require("./routers/mainRouter");
+const joinRouter = require("./routers/joinRouter");
+const loginRouter = require("./routers/loginRouter");
 
 
     const boardRouter = require("./routers/boardRouter");
@@ -34,24 +37,25 @@
         credentials : true 
     }))
 
-    // 세션 
-    app.use(session({
-        secret : process.env.REFRESH_TOKEN_KEY,
-        resave : false,
-        saveUninitialized : false
-    }))
+app.use(session({
+    name : "token",
+    secret : process.env.REFRESH_TOKEN_KEY,
+    resave : false,
+    saveUninitialized : false
+}))
 
-    
-    // 라우터로 연결
-    app.use("/board" , boardRouter);
+app.use(express.json());
 
+app.use('/main',mainInfoRouter);
+app.use('/join',joinRouter);
+app.use('/login',loginRouter);
 
-    // '정적 파일 경로' 잡아주기 ⭐⭐⭐⭐⭐ 
-    app.use("/img" , express.static(path.join(__dirname , "image")))
+sequelize.sync({forse : false}).then(()=>{
+    console.log("연결성공")
+}).catch((err)=>{
+    console.log(err)
+})
 
-
-
-// 서버 대기 상태 
-    app.listen(8003, ()=>{
-        console.log("서버열림")
-    })
+app.listen(4000, ()=>{
+    console.log("서버열림")
+})

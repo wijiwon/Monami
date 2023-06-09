@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!-- ✅ axios 설치 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+</head>
+<body>
+
+
+    <h1> 캐치 마인드 </h1>
+
+    <!-- 오른쪽에 배치 -->
+    <button>글 목록</button>  <br><br>
+        <!-- [✅ todo] 글 목록으로 이동하게 해야 함 -->
+
+    <span> 작성자 : <span id="username"> </span> <br><br> 
+        <!-- 가져올 곳 : User 테이블의 username 열 -->
+        
+    <span> 조회수 : <span id="post_views"> </span> <br><br>
+        <!-- 가져올 곳 : Post 테이블의 views 열 -->
+        
+    <span> exp : <span id="user_exp"> </span> <br><br>
+        <!-- 가져올 곳 : User 테이블의 exp 열 -->
+        
+    <span> 👍 : <span id="post_likes"> </span> 
+        <!-- 가져올 곳 : Post 테이블의 likeClickUser 의 개수 -->
+    
+    <span> <button id="post_likesBtn">🧡좋아요클릭</button> </span> <br><br>
+        <!-- 보낼 곳 : 클릭하면, Post 테이블의 likeClickUser 에, user_id, name, id 를 보낸다. -->
+        <!-- 📛 foreignKey 와 현재 api 설정 된거 확인해야 이 부분이 깔끔할 듯 -->
+    
+    <span> 내용 : <span id="post_content"> </span> </span> <br><br>
+        <!-- 가져올 곳 : Post 테이블의 content -->
+        
+    <span> 사진 : <img id="posts_img">  </span> <br><br><br><br>
+        <!-- 가져올 곳 : Post 테이블의 content -->
+        <!-- 📛 img 태그를 가져오는게 맞겠지? -->
+    
+
+    <!-- 댓글 -->
+        <span>댓글 작성된 것 : <span id="comment_read"> </span> </span> <br><br>
+            <!-- 📛 댓글 CREATE 기능 먼저 완료되면, 수행해야 함 -->
+            <!-- 가져올 곳 : comment 테이블의 content 와 connect_writer -->
+        
+        <label for=""> 댓글 작성란 : </label> 
+        <input type="text" id="comment_write"> 
+        <button id="commentWriteBtn"> 댓글 작성 완료 </button>
+            <!-- 보낼 곳 : comment 테이블의 connect_id, connect_writer, content -->
+
+
+</body>
+
+<script> 
+
+    // [getAPI 정의] 상세 글에 필요한 데이터 가져오기 
+    async function getAPI() {
+
+        try {
+            // 1) axios 로 get 요청보내서, data 받아오기
+            const {data} = await axios.get("http://127.0.0.1:8003/board/item" , {
+                withCredentials : true
+            }) 
+
+            // 2) 받아온 data 쓸 수 있게 솎아내기 
+            console.log("🙆‍♂️ 들어오는거 확인 👉👉👉" , data)
+
+            // user, post, comment 테이블 각각 가져오기  
+            const userData = data.user;
+            const postsData = userData.Posts;
+            // 😥😥😥 음... 
+            const commentData = data.comment;
+            
+
+            console.log("👉👉👉 userData" , userData)
+            console.log("👉👉👉 postsData" , postsData)
+            console.log("👉👉👉 commentData" , commentData)
+
+
+            // 3) innerHTML 로 붙여주기    
+                // 작성자
+                username.innerHTML = postsData[0].user_id;
+                    // [📛 개선해야 할 것]
+                        // user_id 를 가져와야 하는지 
+                        // 닉네임을 가져와야 하는지, foreignKey 는 어떻게 되는지 현재 불분명
+    
+                // exp
+                user_exp.innerHTML = userData.exp;
+                    // [📛 개선해야 할 것]
+                        // 완료하면, '게임 참여 완료' 되면 -> 이거 수치 증가 
+
+                // 좋아요 숫자
+                post_likes.innerHTML = postsData[0].likeClickUser.length
+                    // [📛 개선해야 할 것]
+                        // 좋아요 버튼 클릭하면 > 여기가 업데이트 되게 해야 함 
+                        // 아. CREATE 를 먼저 하자 앞으로
+                    // [진행과정]
+                        // '해당 배열의 숫자' 를 세면, 굳이, 따로, 열을 안 만들어줘도 될거 같은데?
+
+
+                // 내용
+                post_content.innerHTML = postsData[0].content
+                    // [📛 개선해야 할 것]
+                        // 바로 지금 작성한 유저가 한건지는
+
+
+                // 업로드한 이미지 (사진)
+                posts_img.innerHTML = postsData[0].post_img
+                    // [📛 개선해야 할 것]
+                        // 주소를 넣으면, 어떻게 '렌더' 되게 할지. 뭔가 추가적으로 필요함
+                        // 그리고, 이것도, '방금 업로드한 최신의 것' 을 가져와야 하나
+
+                // 게시글 조회수
+                post_views.innerHTML = postsData[0].views;
+                    // [📛 개선 해야할 것]
+                        // '제목 클릭' 하면, 조회수가 올라갈 수 있게 만들어야 함. 
+                        // 게시글이 올라가는 거 (CREATE 먼저)
+        
+                // 다른 사람들이 해당 게시글에 쓴 댓글
+                comment_read.innerHTML = commentData.content
+                    // [📛 개선 해야할 것]
+                        // 방금 접속한 id 유저가 쓴 글이라고 보장하지 못 함 
+                        // 해당 글에서 가장 최신의 것을 가져와야 하나
+
+                        
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    // [getAPI 실행] 상세 글에 필요한 데이터 가져오기  
+    document.addEventListener("DOMContentLoaded", function() {
+        getAPI();
+    });
+   
+    // 댓글 등록하기 
+    commentWriteBtn.onclick = () => {
+
+        // 1) datatype 에 맞게 변수 값 가져오기 
+            // a) 예전 방식 : 동적 form 데이터
+                // const form = new FormData();
+
+                // form.append("comment_write" , comment_write.value);
+                // console.log(comment_write.value)
+            // b) data 타입 변환 
+                const data = {
+                    comment_write : comment_write.value
+                }
+                console.log("👲👲👲👲👲👲 댓글 잘 보이나" , comment_write.value)
+
+        // 2) axios 전송
+        axios.post("http://127.0.0.1:8003/board/comment/create" , data , {
+            headers : {"Content-Type" : "application/json"}
+            // "Content-Type" : "multipart/form-data"
+        }).then( (e) => {
+            console.log(e)
+        } ).catch((err) => {
+            console.log(err)
+        })
+    }
+
+
+    // 좋아요 버튼 클릭시 > 1) 숫자 및 2) update 클릭 유저  update
+        // update 함수 실행
+        post_likesBtn.onclick = () => {
+            updateLikes();
+            console.log("좋아요 함수 실행👍👍👍")
+        }
+
+        // update 함수 정의
+        
+
+        async function updateLikes() {
+            
+            try {
+                // 1) 현재 접속중이면서, 클릭한 user id 가져오기  
+                    const {data} = axios.get("http://127.0.0.1:8003/board/item" , {
+                        withCredentials : true
+                    }) 
+                    const userData = data.user;
+                    const postsData = userData.Posts;
+                    const currentClickUser = postsData[0].user_id;
+                        // [📛개선할 것]
+                            // 이걸, 로그인 정보, 에서 가져와야 하지 않나? session 같은? 
+
+                // 2) 그 유저를, '좋아요 클릭 유저' 배열 안에 추가 하기
+                    postsData[0].likeClickUser.push(currentClickUser)
+                        // [📛개선할 것]
+                            // postsData[0] 이, 바로 그 게시글 임을 확증할 수 없음. 
+
+                // 3) 현재 보이는 likes 숫자 올리기 
+                    post_likes.innerHTML = postsData[0].likeClickUser.length
+                        // [📛개선할 것]
+                            // postsData[0] 이, 바로 그 게시글 임을 확증할 수 없음. 
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+
+
+
+</script>
+
+
+</html>

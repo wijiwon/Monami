@@ -10,6 +10,7 @@ const { sequelize } = require("./models")
 const mainInfoRouter = require("./routers/mainRouter");
 const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
+const mainloginaccessRouter=require("./routers/mainloginRouter");
 
 
     const boardRouter = require("./routers/boardRouter");
@@ -49,6 +50,7 @@ app.use(express.json());
 app.use('/main',mainInfoRouter);
 app.use('/join',joinRouter);
 app.use('/login',loginRouter);
+app.use('/mainlogin',mainloginaccessRouter);
 
 sequelize.sync({forse : false}).then(()=>{
     console.log("연결성공")

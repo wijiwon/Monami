@@ -25,14 +25,19 @@
 </head>
 
 <body>
-  <div class="beforeLogin" id="beforeLogin">
-    <span id="idAlert"></span>
-    <label for="">아이디</label>
-    <input type="text" id="user_id"> <br>
-    <span id="pwAlert"></span>
-    <label for="">비밀번호</label>
-    <input type="password" id="user_pw"> <br>
-    <button id="loginBtn">로그인</button>
+  <div class="beforeLogin" id="beforeLogin" >
+    <div>
+      <span id="idAlert"></span>
+      <label for="">아이디</label>
+      <input type="text" id="user_id"> <br>
+      <span id="pwAlert"></span>
+      <label for="">비밀번호</label>
+      <input type="password" id="user_pw"> <br>
+    </div>
+    <div>
+      <button id="loginBtn">로그인</button>
+    </div>
+    <a href="http://127.0.0.1:5500/Monami/frontEnd/join.html">회원가입</a>
   </div>
 
   <div class="loginSuccess" id="loginSuccess">
@@ -40,7 +45,7 @@
       <span id="username"></span>님 안녕하세요!
     </div>
     <div>
-      <a href="#">마이페이지</a>
+      <a href="http://127.0.0.1:5500/Monami/frontEnd/mypage.html">마이페이지</a>
       <button>로그아웃</button>
     </div>
   </div>
@@ -65,28 +70,59 @@
   </div>
 </body>
 <script>
+
+  async function getloginaccess(){
+    try {
+      const data2 = await axios.get("http://127.0.0.1:4000/mainlogin",{
+        withCredentials:true,
+
+      }).then((e)=>{
+        console.log("ㅇㅇ 님ㅈ됌",e); 
+        if(e)
+        {
+          loginSuccess.style.display = "block"
+        beforeLogin.style.display = "none"
+
+        username.innerHTML = e.data.login.username;
+        img_file.src = e.data.login.profile_img;
+
+        }
+      })
+    } catch (error) {
+      console.log("getloginaccess",error);
+      
+    }
+   
+  }
   async function getMain() {
     try {
+     
       const data = await axios.get("http://127.0.0.1:4000/main", {
         withCredentials: true,
       }).then((e) => {
-        console.log("html이야", e.data);
+        console.log(e);
         const titleNames = e.data.posts
         const userDatas = e.data.user
         titleNames.forEach((e, index) => {
-          console.log(e);
           board_rank.innerHTML += `<div><span> title : ${e.title}</span> <span> user_id :${e.user_id}</span></div>`
         });
         
         userDatas.forEach((e, index) => {
           user_rank.innerHTML += `<div><span> username : ${e.username}</span> <span>userEXP : ${e.exp}</span></div>`
         })
+
+        // if (document.cookie.includes("token")) {
+        //   console.log("??");
+        //   loginDraw(e);
+        // }
       });
 
     } catch (error) {
       console.log("main에러", error);
     }
   }
+
+
 
   loginBtn.onclick = () => {
     axios.post('http://127.0.0.1:4000/login', {
@@ -95,21 +131,16 @@
         user_id: user_id.value,
         user_pw: user_pw.value
       }
-
     }).then((e) => {
       console.log(e);
-      if (e.data.message == "로그인완") {
-        console.log(e.data.token);
-        //쿠카의 값가지고와서 쿠키에[ 담긴 토큰을뽑아서 islogin에 넘긴다
-        document.cookie =`token=${e.data.token}; path=/`
 
-        loginSuccess.style.display = "block"
-        beforeLogin.style.display = "none"
-
-        username.innerHTML = e.data.userInfo.username;
-        img_file.src = e.data.userInfo.profile_img;
-
+      if (e.data.token) {
+        console.log("!@#$#$^%@#^@#$%@#$%@#%?!@?!@?");
+        loginDraw(e);
       }
+      // if (e.data.message == "로그인완") {
+      //   loginDraw(e);
+      // }
 
       // if (e.data.message == "비밀번호 틀림") {
 
@@ -117,8 +148,18 @@
     })
 
   }
+  async function loginDraw(e) {
+        document.cookie =`token=${e.data.token}; path=/`
 
-  getMain();
+        loginSuccess.style.display = "block"
+        beforeLogin.style.display = "none"
+
+        username.innerHTML = e.data.userInfo.username;
+        img_file.src = e.data.userInfo.profile_img;
+  } 
+  
+ getMain();
+ getloginaccess();
 </script>
 
 </html>

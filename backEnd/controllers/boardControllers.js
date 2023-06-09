@@ -67,15 +67,17 @@ const {User, Post , Comment} = require('../models/index');
                     include : [
                         {model : Post}
                     ]
-                    // 위 값을 찾아오는데 성공하면, 아래 구문을 실행
                 });
+
+                console.log("🎏🎏🎏🎏🎏 userWithPosts : 유저 정보랑, 그 유저가 쓴 post 정보 가져와줘 👉" , userWithPosts)
                 
             // 3) Comment 조회 
                 const comment = await Comment.findOne( {
-                    where : {user_primaryKey : 1}
+                    where : {post_primaryKey : 1}
                         // [해석] 
                             // 이게 맞나 ❓❓❓ 
                 } )
+                console.log("🎏🎏🎏🎏🎏 comment 정보 | 위에 userWithPosts 이거랑 연결해야 하나?" , comment)
                 
             // 4) Post 조회
                 // [궁금증] 
@@ -83,7 +85,7 @@ const {User, Post , Comment} = require('../models/index');
                     // post 는 이걸로 하는건가❓❓❓
 
                 // userWithPosts의 데이터값에서 Posts를 가져와서 각 Post의 데이터값만 저장
-                userWithPosts.dataValues.Posts = userWithPosts.dataValues.Posts.map(i => i.dataValues);
+                // userWithPosts.dataValues.Posts = userWithPosts.dataValues.Posts.map(i => i.dataValues);
                     // console.log("" , e.dataValues.Posts[0].dataValues)
             
             // 5) 결과 합치기
@@ -91,7 +93,7 @@ const {User, Post , Comment} = require('../models/index');
                     user : userWithPosts, 
                     comment : comment
                 }
-                console.log("🔮🔮🔮🔮🔮" , result)
+                console.log("🎏🎏🎏🎏🎏" , result)
             
             // 6) 결과 보내기 
                 res.json(result)
@@ -105,17 +107,31 @@ const {User, Post , Comment} = require('../models/index');
 
 // [create]
     exports.boardCommentCreate = async (req, res) => {
+    
+        try {
+            // 1) 저장할 데이터 솎아내기 
+                // console.log("👲👲👲👲👲 req 보기 " , req);
+                // console.log("👲👲👲👲👲 axios 로 날린거 보기" , req.body);
+                    // 음... 봐도 모르겠는데 
 
-        // 1) 저장할 데이터 솎아내기 
-        const {body} = req;
-        console.log(body);
+                const { comment_write } = req.body;
+                console.log("👲👲👲👲👲 댓글 쓴게 보여?" , comment_write)
 
-        // 2) sequelize 상속받은 Comment 객체로 쿼리 날리기 
-        await Comment.create({
-            content : body.comment_content
-        })
+            // 2) sequelize 상속받은 Comment 객체로 쿼리 날리기 
+                await Comment.create({
+                    content : comment_write, 
+                    connect_id : "2",       // 이게 그 user 테이블의 id? ❓❓❓
+                    connect_writer : "2",    // 맞나? ❓❓❓
+                    // user_primaryKey : "1", 
 
-        // 3) res 보내기 
-        res.send("댓글 작성 완료")
-;
+                })
+
+            // 3) res 보내기 
+                res.send("댓글 작성 완료👏👏")
+                
+            } catch (error) {
+                console.log(error)
+                
+            }
+
     }

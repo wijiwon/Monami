@@ -14,6 +14,7 @@
 
 // [read] 게시판 글쓰는 곳 보여주기 
     routers.get("/create" , boardCreateView)
+    
 
 // [create] 게시판 글쓰기 
     routers.post('/create' , Upload.single("post_img") , boardCreate );
@@ -30,11 +31,17 @@
                     // 이것이 가능한 이유는 클라이언트에서 보낸 multipart/form-data 에 필드명이 담겨있고, 그래서 가능해 
                     // 이걸 가지고, 미들웨어는, file 에 해당하는 값을 찾아서 file 객체로 만들겠지.
 
+
 // [read] 게시판 상세 내용 보여주기 
     routers.get('/item' , boardItemView)
 
+
 // [create] 댓글 생성 
-    routers.post('/comment/create' , Upload.single(), boardCommentCreate)
+    // 1) 과거 버전 : 파일을 사용해서, multer 를 쓸 때 버전
+        // routers.post('/comment/create' , Upload.single("comment_write"), boardCommentCreate)
+    
+    // 2) 현재 텍스트만 쓸 때 = 그래서, multer 를 사용하지 않을 때 버전
+        routers.post('/comment/create', boardCommentCreate)
     // [주의할 부분]
         // 지금, single 메소드에 넣은 매개변수인 file 의 key 이름없음. 📛
 

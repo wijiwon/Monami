@@ -99,7 +99,7 @@
         console.log(title.value, content.value, post_img.files[0])
 
         // axios 전송 
-        axios.post("http://127.0.0.1:8007/board/create" , form, { 
+        axios.post("http://127.0.0.1:8003/board/create" , form, { 
             // 헤더의 내용으로, 인코딩된, 폼 데이터로 전송한다고 설정
             "Content-Type" : "multipart/form-data"
         }).then( (e) => {

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- axios 로 예전에 쓰던 form 태그 대신 전송⭐⭐⭐ -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body>
+
+
+    <!-- 제목 -->
+    <label for="">제목</label>
+    <input type="text" id="title"> <br>
+
+    <!-- 본문 -->
+    <label for="">본문</label> 
+    <input type="text" id="content"> <br>
+
+    <br>
+
+    <!-- 사진 -->
+    <input type="file" id="post_img"> <br>
+
+
+    <!-- 사진 미리보기 ✅ -->
+    <img id="post_img_pv" onerror="style.display='none'" alt="">
+        <!-- [해석] 
+                onerror="style.display='none'
+                    1) img에 이미지가 없을때 나오는 엑박을 안보이게 해줌 
+                    2) 없어도 되긴 하는 것 같은데, 우선, 해놓음 
+            -->
+    <br>
+
+    <!-- 글쓰기 버튼 -->
+    <button id="writeBtn"> 글쓰기 </button>
+
+
+</body>
+
+
+<script>
+
+// 전역변수 
+    let reader = new FileReader();
+    // const token = localStorage.getItem('access_token'); // 로컬 스토리지에서 토큰 값을 가져온다고 가정
+
+
+
+// 🔹 사진 미리보기 기능 
+    // 1. input 태그가 변경되면, profile 함수 실행해서, 1) 변환 2) 보여주기 
+    post_img.addEventListener("click" , () => {
+        post_img.onchange = (e) => {
+            const filename = e.target.files[0];
+            profile(filename);
+        }
+    })
+
+    // 2. profile 함수 정의
+    const profile = (value) => {
+        // reader.readAsDataURL(value) 메소드 끝나면, 실행됨
+        reader.onload = () => {
+
+            // readAsDataURL 변환값을 res 에 할당
+            res = reader.result;
+                // [해석]
+                    // reader.result == reader.readAsDataURL(value)의 결과값
+
+            // 미리보기 img 태그에 res 넣기
+            post_img_pv.setAttribute("src" , res);
+                // [해석]
+                    // 미리보기 img 태그를 pv 로 가져오고, src 속성에, res 할당
+            
+            // pv 보이게 하기 
+            post_img_pv.style.display = 'block'
+                // [애매한 것]
+                    // pv 가 이전에는 꺼졌었나❓❓❓❓❓
+        }
+        // 파일 매개변수를 읽어서 -> base 64 로 변환
+        reader.readAsDataURL(value);
+            // [해석]
+                // 완료되면, reader.onload 가 실행됨
+    }
+
+
+    
+// 글쓰기 버튼 클릭시 axios post 요청 
+    writeBtn.onclick = () => {
+        // form 인스턴스 생성
+        const form = new FormData();
+
+        // form 객체 안에 데이터 append 하기
+        form.append("title" , title.value);
+        form.append("content" , content.value);
+        form.append("post_img" , post_img.files[0]);
+
+        console.log(title.value, content.value, post_img.files[0])
+
+        // axios 전송 
+        axios.post("http://127.0.0.1:4000/board/create" , form, { 
+            // 헤더의 내용으로, 인코딩된, 폼 데이터로 전송한다고 설정
+            "Content-Type" : "multipart/form-data",
+            // "Authorization": `Bearer ${token}`
+            // ⭐⭐⭐⭐⭐ 이걸 추가 해야 > 미들웨어 islogin 에서   const authHeader = req.headers.authorization 이 값이 안 비어있게 됨 ⭐⭐⭐⭐⭐
+
+        }).then( (e) => {
+            
+            // redirect 를 수동으로 처리하기 ⭐⭐⭐ 
+                const redirectURL = e.data.redirectURL;
+                window.location.href = redirectURL;
+                    // [이렇게 하는 이유] ⭐⭐⭐⭐⭐⭐⭐⭐
+                        // axios 를 통해서 post 요청을 보내고, redirect 를 하면, 
+                        // axios 통신에 의해, 브라우저가 자동으로 redirect 를 안하는 경우가 생김. 
+                        // 따라서, 서버에서 redirect 할 url 을 json 형식으로 보내고, 그걸 수동으로 처리 해야 함. 
+                        // 다만, 이게 꼭 필요한가? 다른 방법은 없나? 
+            console.log("axios post 잘 전달했고, redirect 수동으로 잘 처리함 🙆‍♂️")
+        }).catch((err) => {
+            console.log(err)
+        })
+
+    }
+
+
+
+
+
+
+
+</script>
+
+
+</html>

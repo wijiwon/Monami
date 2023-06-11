@@ -10,6 +10,7 @@ const mainInfoRouter = require("./routers/mainRouter");
 const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
 const mainloginaccessRouter=require("./routers/mainloginRouter");
+const gameReady = require('./routers/gameReadyRouter');
 
 app.use(express.urlencoded({extended:false}))
 
@@ -38,6 +39,7 @@ app.use('/main',mainInfoRouter);
 app.use('/join',joinRouter);
 app.use('/login',loginRouter);
 app.use('/mainlogin',mainloginaccessRouter);
+app.use('/gameready',gameReady);
 
 sequelize.sync({forse : false}).then(()=>{
     console.log("연결성공")
@@ -46,7 +48,7 @@ sequelize.sync({forse : false}).then(()=>{
 })
 
 // const server에 app 변수할당
-const server=app.listen(4000, ()=>{
+const server=const server = app.listen(4000, ()=>{
     console.log("서버열림")
 })
 

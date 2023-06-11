@@ -68,6 +68,7 @@
     <span> </span>
     <span id="board_rank"></span>
   </div>
+  <div class="gamebtn">게임시작</div>
 </body>
 <script>
 
@@ -158,6 +159,12 @@
         img_file.src = e.data.userInfo.profile_img;
   } 
   
+  const gamestart = document.querySelector('.gamebtn');
+
+  gamestart.onclick = ()=>{
+    window.location.href = "http://127.0.0.1:5500/frontEnd/gameReady.html"
+  }
+
  getMain();
  getloginaccess();
 </script>

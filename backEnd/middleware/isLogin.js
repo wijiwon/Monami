@@ -12,7 +12,8 @@ exports.islogin = async(req,res,next)=>{
 
     const cookieString = req.rawHeaders.filter(header => header.toLowerCase().includes('token'));
     console.log("totooto%%%",cookieString);
-    const access_token = cookieString[0].split('=')[1];
+    // console.log("asdfdioasjflasdjflkasdf",cookieString);
+  const access_token = cookieString[0].split('=')[1];
     // 앍운 쿠키값 에서 token 해체 
     try {
       jwt.verify(access_token,process.env.ACCESS_TOKEN_KEY,(err,decode)=>{

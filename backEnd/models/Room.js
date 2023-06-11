@@ -12,7 +12,11 @@ class Room extends Sequelize.Model{
                 allowNull: false
             },
             users_in_room: {
-                type: Sequelize.INTEGER(10)
+                type: Sequelize.STRING(20)
+            },
+            play : {
+                type : Sequelize.STRING(10),
+                defaultValue : 0
             }
         },
         {

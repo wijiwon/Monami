@@ -5,8 +5,11 @@ const session = require("express-session");
 const cors = require("cors")
 
 const app = express();
-const { sequelize } = require("./models");
-const { name } = require("ejs");
+const { sequelize } = require("./models")
+const mainInfoRouter = require("./routers/mainRouter");
+const joinRouter = require("./routers/joinRouter");
+const loginRouter = require("./routers/loginRouter");
+const mainloginaccessRouter=require("./routers/mainloginRouter");
 
 app.use(express.urlencoded({extended:false}))
 
@@ -23,10 +26,18 @@ app.use(cors({
 ));
 
 app.use(session({
+    name : "token",
     secret : process.env.REFRESH_TOKEN_KEY,
     resave : false,
     saveUninitialized : false
 }))
+
+app.use(express.json());
+
+app.use('/main',mainInfoRouter);
+app.use('/join',joinRouter);
+app.use('/login',loginRouter);
+app.use('/mainlogin',mainloginaccessRouter);
 
 sequelize.sync({forse : false}).then(()=>{
     console.log("연결성공")

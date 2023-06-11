@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
     io.emit('nowusers',userid);
     io.emit('disconnectuser',socket.id);
   });
-  // 귓속말 보내는 socke
+  // 귓속말 보내는 socket
   socket.on('whisper',({message,receiverId})=>{
     // let receiver=false;
     // for(let i=0;i<userid.length;i++){

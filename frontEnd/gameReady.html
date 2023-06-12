@@ -236,7 +236,8 @@
             overflow: visible;
             overflow-x: hidden
         }
-        .roomList .room_usernum{
+
+        .roomList .room_usernum {
             display: none;
         }
 
@@ -246,7 +247,8 @@
             border-radius: 50%;
             border: 1px solid;
         }
-        .room_num{
+
+        .room_num {
             display: none;
         }
     </style>
@@ -319,38 +321,38 @@
     </div>
 </body>
 <script>
-    
-        console.log("dd")
-        const socket = io.connect('http://localhost:4000');
-        console.log(socket);
-        console.log(socket._opts.port);
-        // ahfmrpTdjdygg
-        // 모르게ㅆ어욯ㅎ
 
-        console.log("ddddddasmdmsadkasdkaskd")
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-        const messagesList = document.getElementById('messages');
-        const User_idlist = document.getElementById('User_id');
-        const receiverIdInput = document.getElementById('receiver-id');
+    console.log("dd")
+    const socket = io.connect('http://localhost:4000');
+    console.log(socket);
+    console.log(socket._opts.port);
+    // ahfmrpTdjdygg
+    // 모르게ㅆ어욯ㅎ
 
-        try {
-            sendButton.addEventListener('click', () => {
-                const message = messageInput.value;
-                const receiverId = receiverIdInput.value;
-                if (receiverId) {
-                    socket.emit('whisper', { message, receiverId });
-                } else {
-                let id=socket.id;
-                socket.emit('chat message', {message,id});
-                
+    console.log("ddddddasmdmsadkasdkaskd")
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const messagesList = document.getElementById('messages');
+    const User_idlist = document.getElementById('User_id');
+    const receiverIdInput = document.getElementById('receiver-id');
+
+    try {
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            const receiverId = receiverIdInput.value;
+            if (receiverId) {
+                socket.emit('whisper', { message, receiverId });
+            } else {
+                let id = socket.id;
+                socket.emit('chat message', { message, id });
+
 
             }
-                messageInput.value = '';
-                receiverId.value = '';
-            });
+            messageInput.value = '';
+            receiverId.value = '';
+        });
 
-       
+
 
         // socket.on('connectuser',(userid)=>{
         //   const li= document.createElement('li');
@@ -383,7 +385,7 @@
             //   messagesList.appendChild(li);
             // });
             await asd("User_id");
-            console.log("msg",msg);
+            console.log("msg", msg);
             await asdf(msg, "User_id");
 
         })
@@ -451,7 +453,7 @@
                 // console.log("썸바리헲미이이이이이익",rooms)
                 rooms.forEach((el2) => {
                     // console.log("살려주세요오오오오오오오옥",el)
-                    el2.onclick = ()=>{
+                    el2.onclick = () => {
                         // console.log("############",el)
                         const num = el2.querySelector('.room_num').textContent;
                         const title = el2.querySelector('.room_title').textContent;
@@ -467,9 +469,9 @@
                         axios.post('http://127.0.0.1:4000/gameready/roomchoice', { id: num }, {
                             withCredentials: true,
                             "Content-Type": "application/json"
-                        }).then((e)=>{
+                        }).then((e) => {
 
-                        }).catch((err)=>{
+                        }).catch((err) => {
                             console.log(err);
                         })
 
@@ -487,7 +489,7 @@
                         document.querySelector('.roomExit').onclick = () => {
                             popReady.classList.toggle('pop')
                         }
-                        
+
                     }
                 });
             });
@@ -496,14 +498,44 @@
         }
     }
     RoomView();
+    socket.on("makedRoom",
+        async () => {
 
+            console.log("서버에서 방생성이벤트 받음 화면 다시 그려줌");
+            await deleteRoomList('.roomList');
+            await RoomView();
+
+        })
     const createBtn = document.querySelector('.create');
+    // async function deleteRoomList(id) {
+
+    //     const room_list = document.querySelector(id);
+    //     console.log(room_list);
+    //     while (room_list.firstChild) {
+    //         room_list.removeChild(room_list.firstChild);
+    //     }
+    // }
+    function deleteRoomList(selector) {
+        return new Promise((resolve, reject) => {
+            const roomList = document.querySelector(selector);
+            console.log(roomList);
+            while (roomList.firstChild) {
+                roomList.removeChild(roomList.firstChild);
+            }
+            // Once the deletion is complete, resolve the promise
+            resolve();
+        });
+    }
+
 
     // 방만들기 버튼을 클릭하면 방을 생성할 수 있는 팝업이 열리고 클라이언트가 입력한 값이 db에 넘어간다.
     createBtn.onclick = () => {
         // const form = new FormData();
         // console.log("title.value",title.value);
         // form.append("title", title.value);
+        socket.emit("makedRoom", () => {
+            console.log("방생성되어서 이벤트보냄")
+        })
 
         axios.post("http://127.0.0.1:4000/gameready/create", { title: title.value }, {
             withCredentials: true,
@@ -518,10 +550,10 @@
                 const RoomExit = document.querySelector(".roomExit")
                 RoomExit.onclick = () => {
                     RoomPop.classList.toggle('pop')
-                    axios.post('http://127.0.0.1:4000/gameready/roomDel', { id: title.value }, {
-                        withCredentials: true,
-                        "Content-Type": "application/json"
-                    })
+                    // axios.post('http://127.0.0.1:4000/gameready/roomDel', { id: title.value }, {
+                    //     withCredentials: true,
+                    //     "Content-Type": "application/json"
+                    // })
                 }
             }
             // const redirectURL = e.data.redirectURL;
@@ -551,13 +583,13 @@
             messagesList.appendChild(li);
         })
         socket.on('chat message', (msg) => {
-            console.log("message의",msg);
+            console.log("message의", msg);
             const li = document.createElement('li');
             li.textContent = `${msg.nick}: ${msg.message}`;
             messagesList.appendChild(li);
         });
         console.log("여기까지 오니?")
-        socket.emit('connectuser2',e);
+        socket.emit('connectuser2', e);
         const userInfo = e.data;
         const myProf = document.querySelector('.myProfile2');
         myProf.innerHTML = `

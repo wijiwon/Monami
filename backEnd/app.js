@@ -116,6 +116,10 @@ io.on('connection', (socket) => {
        console.log(userid);
        io.emit('nowusers', userid);
        io.emit('connectuser', userid[userid.length-1]);
-
     });
+    socket.on('makedRoom',()=>{
+        io.emit('makedRoom',()=>{
+            console.log("방만드는 이벤트 받아서 다시 쏴줌");
+        })    
+    })
 });

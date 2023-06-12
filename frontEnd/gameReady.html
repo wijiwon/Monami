@@ -327,7 +327,7 @@
         // ahfmrpTdjdygg
         // 모르게ㅆ어욯ㅎ
 
-        console.log("ddddddd")
+        console.log("ddddddasmdmsadkasdkaskd")
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const messagesList = document.getElementById('messages');
@@ -340,7 +340,12 @@
                 const receiverId = receiverIdInput.value;
                 if (receiverId) {
                     socket.emit('whisper', { message, receiverId });
-                } else socket.emit('chat message', message);
+                } else {
+                let id=socket.id;
+                socket.emit('chat message', {message,id});
+                
+
+            }
                 messageInput.value = '';
                 receiverId.value = '';
             });
@@ -362,11 +367,11 @@
             li.textContent = `귓속말:${msg}`;
             messagesList.appendChild(li);
         })
-        socket.on('chat message', (msg) => {
-            const li = document.createElement('li');
-            li.textContent = msg;
-            messagesList.appendChild(li);
-        });
+        // socket.on('chat message', (msg) => {
+        //     const li = document.createElement('li');
+        //     li.textContent = msg;
+        //     messagesList.appendChild(li);
+        // });
         socket.on('nowusers', async (msg) => {
             // while (messageList.firstChild) {
             //   messageList.removeChild(messageList.firstChild);
@@ -545,6 +550,12 @@
             li.textContent = `${userid._nickname}님이 들어왔습니다.`
             messagesList.appendChild(li);
         })
+        socket.on('chat message', (msg) => {
+            console.log("message의",msg);
+            const li = document.createElement('li');
+            li.textContent = `${msg.nick}: ${msg.message}`;
+            messagesList.appendChild(li);
+        });
         console.log("여기까지 오니?")
         socket.emit('connectuser2',e);
         const userInfo = e.data;

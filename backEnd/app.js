@@ -74,9 +74,16 @@ io.on('connection', (socket) => {
     usercount++;
     console.log("유저아이디임", userid);
     socket.on('chat message', (msg) => {
+        let obj={}
         console.log('Received message:', msg);
         // Broadcast the message to all connected clients
-        io.emit('chat message', msg);
+        for(let i =0;i<userid.length;i++){
+            if(userid[i].userid===msg.id){
+                obj.nick=userid[i]._nickname;
+                obj.message=msg.message;
+            }
+        }
+        io.emit('chat message', obj);
     });
     io.emit('nowusers', userid);
     socket.on('disconnect', () => {

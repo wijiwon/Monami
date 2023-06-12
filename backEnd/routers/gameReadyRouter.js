@@ -8,4 +8,6 @@ router.get('/userInfo', islogin, UserView);
 
 router.post('/create', islogin, RoomCreate);
 
+router.post('/roomchoice', islogin, RoomChoice);
+
 module.exports = router;

@@ -82,6 +82,35 @@ exports.RoomChoice = async (req, res) => {
     // 선택된 방의 방장의 아이디 값이 로그인한 유저의 아이디 값과 같은지 확인한다.
     // 같다면 선택을 할 수 없다. (err)
     // 같지 않다면 해당 room의 정보를 클라이언트 측에 보내준다.
+    try {
+        const { id } = req.body;
+        const { decode } = req;
+
+        const room = await Room.findOne({where : {id : id}});
+        
+        const currentMem = room.users_in_room; // 현재 users_in_room 값 가져오기
+        const newMem = [];
+        if(currentMem != null){
+            console.log("$$$$$$$$$$$$$$$$$$$$",room.dataValues.users_in_room)
+            // const roomuser = room.dataValues.users_in_room;
+            console.log("sdsdsds",currentMem.indexOf(decode.id));
+            const isuser = currentMem.indexOf(decode.id);
+            if(isuser == -1){
+                newMem.push(currentMem);
+                newMem.push(decode.id);    // 새로운 title 값 생성
+                const newMem2 = newMem.toString();
+                await Room.update({users_in_room : newMem2}, {where : {id : id}});
+            }
+        }
+        else{
+            newMem.push(decode.id);    // 새로운 title 값 생성
+            const newMem2 = newMem.toString();
+            await Room.update({users_in_room : newMem2}, {where : {id : id}});
+        }
+            
+    } catch (error) {        
+        console.log(error)
+    }
 }
 
 // // 선택한 게임방에 속해있는 유저를 확인하는 함수
@@ -91,6 +120,7 @@ exports.RoomChoice = async (req, res) => {
 
 // 게임방을 나가는 함수
 exports.RoomExit = async (req, res) => {
+    // 게임방을 나가면 user_in_room에서 삭제된다.
 
 }
 

@@ -14,7 +14,7 @@ const gameReady = require('./routers/gameReadyRouter');
 app.use(express.urlencoded({extended:false}))
 
 // 이미지 파일을 등록할 폴더 경로
-app.use(express.static(path.join(__dirname,"imege")))
+app.use(express.static(path.join(__dirname,"image")))
 
 app.use(cors({
     origin: "http://127.0.0.1:5500",     // 각자 html 라이브서버 열어 url이 같은지 확인

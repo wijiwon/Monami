@@ -111,6 +111,7 @@
             
             // redirect 를 수동으로 처리하기 ⭐⭐⭐ 
                 const redirectURL = e.data.redirectURL;
+                console.log("redirectURL 이게 어떻게 넘어오지?" , redirectURL)
                 window.location.href = redirectURL;
                     // [이렇게 하는 이유] ⭐⭐⭐⭐⭐⭐⭐⭐
                         // axios 를 통해서 post 요청을 보내고, redirect 를 하면, 

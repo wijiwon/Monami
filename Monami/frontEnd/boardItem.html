@@ -21,29 +21,33 @@
     <button>글 목록</button>  <br><br>
         <!-- [✅ todo] 글 목록으로 이동하게 해야 함 -->
 
-    <span> 작성자 : <span id="username"> </span> </span> <br><br> 
+    <div> 작성자 : <span id="username"> </span> </div> <br><br> 
         <!-- 가져올 곳 : User 테이블의 username 열 -->
         
-    <span> 조회수 : <span id="post_views"> </span> </span> <br><br>
+    <div> 조회수 : <span id="post_views"> </span> </div> <br><br>
         <!-- 가져올 곳 : Post 테이블의 views 열 -->
         
-    <span> exp : <span id="user_exp"> </span> </span> <br><br>
+    <div> exp : <span id="user_exp"> </span> </div> <br><br>
         <!-- 가져올 곳 : User 테이블의 exp 열 -->
         
-    <span> 👍 : <span id="post_likes"> </span> </span> 
+
+    <div>
+        <div> 👍 : <span id="post_likes"> </span> </div>  <br>  
         <!-- 가져올 곳 : Post 테이블의 likeClickUser 의 개수 -->
     
-    <span> <button id="post_likesBtn">🧡좋아요클릭</button> </span> <br><br>
+        <div> <button id="post_likesBtn">🧡좋아요클릭</button> </div> <br><br>
         <!-- 보낼 곳 : 클릭하면, Post 테이블의 likeClickUser 에, user_id, name, id 를 보낸다. -->
         <!-- 📛 foreignKey 와 현재 api 설정 된거 확인해야 이 부분이 깔끔할 듯 -->
+    
+    </div>
         
-    <span> 제목 : <span id="post_title"> </span> </span> <br><br>
+    <div> 제목 : <span id="post_title"> </span> </div> <br><br>
         <!-- 가져올 곳 : Post 테이블의 content -->
 
-    <span> 내용 : <span id="post_content"> </span> </span> <br><br>
+    <div> 내용 : <span id="post_content"> </span> </div> <br><br>
         <!-- 가져올 곳 : Post 테이블의 content -->
         
-    <span> 사진 : <img id="posts_img">  </span> <br><br><br><br>
+    <span> 사진 : <img id="posts_img" src="">  </span> <br><br><br><br>
         <!-- 가져올 곳 : Post 테이블의 content -->
         <!-- 📛 img 태그를 가져오는게 맞겠지? -->
     
@@ -58,6 +62,8 @@
         <button id="commentWriteBtn"> 댓글 작성 완료 </button>
             <!-- 보낼 곳 : comment 테이블의 connect_id, connect_writer, content -->
 
+        <br>
+        <br>
 
 </body>
 
@@ -68,41 +74,49 @@
 
         try {
             // 1) axios 로 get 요청보내서, data 받아오기
-            const {data} = await axios.get("http://127.0.0.1:4000/board/item" , {
-                withCredentials : true
-            }) 
+                const {data} = await axios.get("http://127.0.0.1:4000/board/item" , {
+                    withCredentials : true
+                }) 
 
             // 2) 받아온 data 쓸 수 있게 솎아내기 
-            console.log("🙆‍♂️ 들어오는거 확인 👉👉👉" , data)
+                console.log("🙆‍♂️ 들어오는거 확인 👉👉👉" , data)
 
             // user, post, comment 테이블 각각 가져오기  
-            const userData = data.user;
-            const postsData = data.post;
-            const commentData = data.comment;
-            
-
-            console.log("👉👉👉 userData" , userData)
-            console.log("👉👉👉 postsData" , postsData)
-            console.log("👉👉👉 postsData" , postsData[0])
-            console.log("👉👉👉 postsData - 제목" , postsData[0].title)
-            console.log("👉👉👉 postsData - 내용" , postsData[0].content)
-            console.log("👉👉👉 commentData" , commentData)
+                const userData = data.user;
+                const postsData = data.post;
+                const commentData = data.comment;
+                
+                console.log("👉👉👉 userData : " , userData)
+                console.log("👉👉👉 userData - id : " , userData.id)
+                console.log("👉👉👉 postsData" , postsData)
+                console.log("👉👉👉 postsData - 제목 : " , postsData.title)
+                console.log("👉👉👉 postsData - 내용 : " , postsData.content)
+                console.log("👉👉👉 commentData : " , commentData)
 
 
             // 3) innerHTML 로 붙여주기    
                 // 작성자
-                username.innerHTML = userData.user_id;
+                    username.innerHTML = userData.user_id;
                     // [📛 개선해야 할 것]
                         // user_id 를 가져와야 하는지 
                         // 닉네임을 가져와야 하는지, foreignKey 는 어떻게 되는지 현재 불분명
     
                 // exp
-                user_exp.innerHTML = userData.exp;
+                    user_exp.innerHTML = userData.exp;
                     // [📛 개선해야 할 것]
                         // 완료하면, '게임 참여 완료' 되면 -> 이거 수치 증가 
 
                 // 좋아요 숫자
-                post_likes.innerHTML = postsData[0].likeClickUser.length;
+                    // 예전 코드
+                        // post_likes.innerHTML = postsData.likeClickUser.length;
+                        // post_likes.innerHTML = "임시 1 | 이 부분이 null 이면, 아래게 안 읽힘. 그러면, table column 처리를 해주는게 맞을 수도?";
+                    // now 
+                        // 테이블에 좋아요 컬럼 추가한 버전 
+                        post_likes.innerHTML = postsData.likes;
+
+                    // [📛 궁금한 것]
+                        // 왜, 이걸 주석처리하면, 밑에, '제목' 부분이 보이게 될까? 
+
                     // [📛 개선해야 할 것]
                         // 좋아요 버튼 클릭하면 > 여기가 업데이트 되게 해야 함 
                         // 아. CREATE 를 먼저 하자 앞으로
@@ -110,40 +124,42 @@
                         // '해당 배열의 숫자' 를 세면, 굳이, 따로, 열을 안 만들어줘도 될거 같은데?
 
                 // 제목 
-                // const lastOfPost = postsData[postsData.length - 1];
-                    // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
-                post_title.innerHTML = postsData[0].title
-                        // 직접 innerHTML 에 넣으면, '문자열이 아닌 경우' 안 나올 수 있음. 
+                    // const lastOfPost = postsData[postsData.length - 1];
+                        // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
+                        post_title.innerHTML = postsData.title;
+                    // [주의] 직접 innerHTML 에 넣으면, '문자열이 아닌 경우' 안 나올 수 있음. 
 
 
                 // 내용 
-                // const lastOfPost = postsData[postsData.length - 1];
-                const temp_content = postsData[0].content
-                    // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
-                post_content.innerHTML = temp_content
-                console.log("temp_content😥😥😥" , temp_content)
-                    // [📛 개선해야 할 것]
-                        // 바로 지금 작성한 유저가 한건지는
+                    // const lastOfPost = postsData[postsData.length - 1];
+                    const temp_content = postsData.content
+                        // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
+                    post_content.innerHTML = temp_content
+                        // [📛 개선해야 할 것]
+                            // 바로 지금 작성한 유저가 한건지는
 
 
                 // 업로드한 이미지 (사진)
-                posts_img.innerHTML = postsData[0].post_img
+                    tempImgFile = postsData.post_img;
+                    posts_img.src = `http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile}`;
+                    
+                    
                     // [📛 개선해야 할 것]
                         // 주소를 넣으면, 어떻게 '렌더' 되게 할지. 뭔가 추가적으로 필요함
                         // 그리고, 이것도, '방금 업로드한 최신의 것' 을 가져와야 하나
 
                 // 게시글 조회수
-                post_views.innerHTML = postsData[0].views;
+                    post_views.innerHTML = postsData.views;
                     // [📛 개선 해야할 것]
                         // '제목 클릭' 하면, 조회수가 올라갈 수 있게 만들어야 함. 
                         // 게시글이 올라가는 거 (CREATE 먼저)
         
                 // 다른 사람들이 해당 게시글에 쓴 댓글
-                comment_read.innerHTML = commentData.content
+                    comment_read.innerHTML = commentData.content
                     // [📛 개선 해야할 것]
                         // 방금 접속한 id 유저가 쓴 글이라고 보장하지 못 함 
                         // 해당 글에서 가장 최신의 것을 가져와야 하나
-
+                
                         
 
         } catch (error) {
@@ -151,16 +167,26 @@
         }
 
     }
+
     // [getAPI 실행] 상세 글에 필요한 데이터 가져오기  
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     getAPI();
-    // });
-    getAPI();
+        // 방식 1
+            // document.addEventListener("DOMContentLoaded", function() {
+                //     getAPI();
+                // });
+        // 방식 2
+                getAPI();
 
 
 
     // 댓글 등록하기 
     commentWriteBtn.onclick = () => {
+
+        // 0) 필요한 데이터 가져오기 
+            // 글쓰는 사람의 id 
+                // isLogin 되고 난 다음 
+
+            // '현재 게시글의 post 테이블 id'
+                
 
         // 1) datatype 에 맞게 변수 값 가져오기 
             // a) 예전 방식 : 동적 form 데이터
@@ -168,12 +194,35 @@
 
                 // form.append("comment_write" , comment_write.value);
                 // console.log(comment_write.value)
+
             // b) data 타입 변환 
                 const data = {
-                    comment_write : comment_write.value
+                    // 작성한 댓글 내용
+                        comment_write : comment_write.value,
+
+                    // 현재 댓글 작성하는 사람의 user id
+                        user_primaryKey : 1, 
+                        // [어떻게 가져오지📛]
+
+                    // 댓글 작성의 대상이 되는 '게시글의 id' 값 
+                        // [📛 어떻게 가져올지 고민] 
+                            // 트리거가 생기면 >  post 테이블 외래키 값을 할당
+                        id_of_targetPost : 1,       // 임시 ✅✅
+                    
+                    // 대댓글의 경우, 댓글 작성의 대상이 되는 'comment 테이블 id' 값
+                        id_of_targetComment : 1,
+                    
+                    // 대댓글의 경우, 댓글 작성의 대상이 되는 'comment 작성자의 username' 값
+                        writer_of_targetComment : "dj"
+                        // [📛 어떻게 가져올지 고민] 
+                            // 'id_of_targetComment' 에서, id 값을 가져오면, 그걸 토대로, username 을 가져와야 할듯?
+
+                
                 }
                 console.log("👲👲👲👲👲👲 댓글 잘 보이나" , comment_write.value)
 
+                
+            
         // 2) axios 전송
         axios.post("http://127.0.0.1:4000/board/comment/create" , data , {
             headers : {"Content-Type" : "application/json"}

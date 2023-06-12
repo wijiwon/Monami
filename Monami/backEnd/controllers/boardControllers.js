@@ -37,9 +37,8 @@ const {User, Post , Comment} = require('../models/index');
             // console.log(" input 넣은 사진 & 텍스트 확인 decode 👉👉" , req.decode.id);
     
         // 2) sequelize 상속받은 Post 객체로 쿼리 날리기 
-
         try {
-            await Post.create({
+            const newPost = await Post.create({
                 user_id : 'dj', 
                     // 임의로 넣음 ✅✅
                     // login 성공하면 👉 거기에서 가져오기 ✅✅ 
@@ -71,18 +70,23 @@ const {User, Post , Comment} = require('../models/index');
                 post_img : file.filename,       // 근데 이걸 넣으면, 보여지나❓❓❓
             })
                 // user_id 도 뭔가 연결로 넣어줘야 하는데 😥😥😥😥😥😥
+                
+            // 3) 사용자가 봤으면 하는 화면으로 redirect 시키기
+                // '그림 상세 페이지' 로 확정
+                const temp_post_id = newPost.id;
+                // const temp_post_id = 지금까지 있는 post 테이블 id + 1?
+                res.json({ redirectURL: `http://127.0.0.1:5500/Monami/frontEnd/boardItem/${temp_post_id}` });
+                // res.json({ redirectURL: `http://127.0.0.1:5500/Monami/frontEnd/boardItem` });
+                    // [해석]
+                        // json 형식으로 변환해서 res 로 보냄 
+                        // 그 이유는 axios 를 통해 소통하면, 클라이언트가 redirect 를 자동으로 처리 못 하는 경우가 있다고 함 (by GPT)
 
-        } catch (error) {
+                
+            } catch (error) {
             console.log(error)
         }
 
 
-        // 3) 사용자가 봤으면 하는 화면으로 redirect 시키기
-            // '그림 상세 페이지' 로 확정
-            res.json({ redirectURL: 'http://127.0.0.1:5500/Monami/frontEnd/boardItem.html' });
-                // [해석]
-                    // json 형식으로 변환해서 res 로 보냄 
-                    // 그 이유는 axios 를 통해 소통하면, 클라이언트가 redirect 를 자동으로 처리 못 하는 경우가 있다고 함 (by GPT)
     }
 
 
@@ -99,7 +103,7 @@ const {User, Post , Comment} = require('../models/index');
                 // console.log("req.decode.id🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️" , req.decode)
 
 
-            // 2) User 데이터 조회
+            // 2) User 테이블에서, data 가져오기
                 const userWithPosts = await User.findOne({
                     where : {id : 2}, 
                     include : [
@@ -107,11 +111,14 @@ const {User, Post , Comment} = require('../models/index');
                     ]
                 });
 
-                console.log("🎏🎏🎏🎏🎏 userWithPosts : 유저 정보랑, 그 유저가 쓴 post 정보 가져와줘 👉" , userWithPosts)
-            // 2) Post 데이터 조회 
-                const 
+                console.log(" userWithPosts 데이터 확인 @boardItemView" , userWithPosts)
+            
+            // 2) Post 테이블에서, data 가져오기
+                const post = await Post.findOne({
+                    where : {user_primaryKey : 2}
+                })
 
-            // 3) Comment 조회 
+            // 3) Comment 테이블에서, data
                 const comment = await Comment.findOne( {
                     where : {post_primaryKey : 2}
                         // [해석] 
@@ -119,7 +126,7 @@ const {User, Post , Comment} = require('../models/index');
                             // 이 쿼리문이 어렵네 ⭐⭐⭐⭐⭐ 
                             // 이게 지금 핵심 기술이네 ⭐⭐⭐⭐⭐⭐⭐ 
                 } )
-                console.log("🎏🎏🎏🎏🎏 comment 정보 | 위에 userWithPosts 이거랑 연결해야 하나?" , comment)
+                console.log("comment 정보 @boardItemView" , comment)
                     // 👉 이건 아직 안 들어옴 
                     // 👉 이건, post 를 저장할 때, foreignKey 저장도 같이 해주는 걸 고려해야 함
                 
@@ -135,9 +142,10 @@ const {User, Post , Comment} = require('../models/index');
             // 5) 결과 합치기
                 const result = {
                     user : userWithPosts, 
+                    post : post,
                     comment : comment
                 }
-                console.log("🎏🎏🎏🎏🎏" , result)
+                console.log("게시글 상세에서 보여줄 데이터가 다 들어있나 @boardItemView" , result)
             
             // 6) 결과 보내기 
                 res.json(result)
@@ -159,7 +167,7 @@ const {User, Post , Comment} = require('../models/index');
                     // 음... 봐도 모르겠는데 
 
                 const { comment_write } = req.body;
-                console.log("👲👲👲👲👲 댓글 쓴게 보여?" , comment_write)
+                console.log("댓글 쓴게 보이는지 확인 @boardCommentCreate" , comment_write)
 
             // 2) sequelize 상속받은 Comment 객체로 쿼리 날리기 
                 await Comment.create({

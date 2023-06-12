@@ -54,14 +54,17 @@ app.use(session({
 
 app.use(express.json());
 
+
+// 라우터로 연결
 app.use('/main',mainInfoRouter);
 app.use('/join',joinRouter);
 app.use('/login',loginRouter);
 app.use('/mainlogin',mainloginaccessRouter);
 
 
-// 라우터로 연결
 app.use("/board" , boardRouter);
+
+
 
 
 // db 

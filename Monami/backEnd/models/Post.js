@@ -3,28 +3,53 @@ const Sequelize = require("sequelize");
 class Post extends Sequelize.Model{
     static init(sequelize){
         return super.init({
+            // 유저의 '닉네임' 
             user_id : {
                 type: Sequelize.STRING(20),
                 allowNull: false
             },
+
+            // 게시글 '제목' 
             title: {
                 type: Sequelize.STRING(100),
                 allowNull: false
             },
+
+            // 게시글 작성하는 '텍스트 내용'
             content: {
                 type: Sequelize.STRING(300),
                 allowNull: false
             },
+            
+            // 게시글에 올리는 '사진'
             post_img: {
-                type: Sequelize.STRING(100)
+                type: Sequelize.STRING(100),
+                allowNull: false
             },
+
+            // 게시글 공개 여부
             status: {
-                type: Sequelize.INTEGER(10)    
-                // 공개, 삭제, 비공개, 
+                type: Sequelize.INTEGER(10),
+                allowNull: false,
+                defaultValue : 1    
             },
+                // [설명] 공개 = 1, 삭제 = 0(DB엔 남아있음), 비공개(DB & MYPAGE 에는 남음) = 2, 
+
+            // 조회수 
             views: {
-                type: Sequelize.INTEGER(10)
+                type: Sequelize.INTEGER(10),
+                allowNull: false,
+                defaultValue : 1       
             },
+
+            // 좋아요 숫자
+            likes : {
+                type : Sequelize.INTEGER(100), 
+                allowNull: false,
+                defaultValue : 0
+            },
+
+            // 좋아요 클릭한 유저
             likeClickUser: {
                 type: Sequelize.STRING(100)
             }

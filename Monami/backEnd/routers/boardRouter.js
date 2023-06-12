@@ -37,6 +37,7 @@
     routers.get('/item' , boardItemView)
 
 
+    
 // [create] 댓글 생성 
     // 1) 과거 버전 : 파일을 사용해서, multer 를 쓸 때 버전
         // routers.post('/comment/create' , Upload.single("comment_write"), boardCommentCreate)

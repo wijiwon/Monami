@@ -3,20 +3,36 @@ const Sequelize = require("sequelize");
 class Comment extends Sequelize.Model{
     static init(sequelize){
         return super.init({
+            // 댓글 내용
             content: {
                 type: Sequelize.STRING(300),
                 allowNull: false
             },
-            // 이게 지금 댓글 쓰는 사람의 id 인가? | 아니면, 댓글의 대상이 되는 원본 글 id 인가? 
-                // 그러면, foreignKey 로 가져와야 하나? 
-            connect_id : {
-                type: Sequelize.INTEGER(10)
+
+            // 댓글 작성하는 유저의 id 
+            user_primaryKey : {
+                type : Sequelize.INTEGER(100), 
+                allowNull : false, 
             },
-            connect_writer: {
-                type: Sequelize.INTEGER(10),
+
+            // '댓글 작성의 경우, 어떤 post 에 대해서 댓글을 작성하고 있는가' 를 알기 위한 post 테이블 의 id 
+            id_of_targetPost_primaryKey : {
+                type : Sequelize.INTEGER(100), 
+                allowNull : false,
+            }, 
+
+            // '대댓글의 경우, 어떤 댓글을 대상으로 작성하고 있나.' 를 알기 위한 comment 테이블의 id 값 ❓❓
+            id_of_targetComment : {
+                type: Sequelize.INTEGER(100), 
+                allowNull : false, 
+            },
+
+            // '대댓글의 경우, 어떤 '유저' 가 작성한 댓글을 대상으로 작성하고 있나.' 를 알기 위해 
+                // comment 테이블의 id 값에서 추출해 저장하는 값❓❓
+            writer_of_targetComment : {
+                type: Sequelize.INTEGER(100),
                 allowNull: false
             }
-
         },
         {
             sequelize,

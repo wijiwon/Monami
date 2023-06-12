@@ -48,7 +48,7 @@ sequelize.sync({forse : false}).then(()=>{
 })
 
 // const server에 app 변수할당
-const server=const server = app.listen(4000, ()=>{
+const server = app.listen(4000, ()=>{
     console.log("서버열림")
 })
 

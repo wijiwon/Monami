@@ -236,12 +236,18 @@
             overflow: visible;
             overflow-x: hidden
         }
+        .roomList .room_usernum{
+            display: none;
+        }
 
         .pro_img {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             border: 1px solid;
+        }
+        .room_num{
+            display: none;
         }
     </style>
 </head>
@@ -427,34 +433,48 @@
             const roomList = document.querySelector('.roomList');
             roomArr.forEach((el, index) => {
                 // console.log("------------------", el.room_manager.length)
-                let roomnum = [];
-                roomnum.push(el.room_manager);
-                roomnum.push(el.users_in_room);
-                // console.log(roomnum.length);
                 roomList.innerHTML += `
                 <div class="roomlists">
+                    <div class="room_num">${el.id}</div>
                     <div class="room_title">${el.title}</div>
-                    <div class="room_usernum">${roomnum}</div>
+                    <div class="room_manager">${el.room_manager}</div>
                     <div class="room_play">게임 진행사항</div>
                 </div>
                 `
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
                 let rooms = document.querySelectorAll(".roomlists");
                 // console.log("썸바리헲미이이이이이익",rooms)
-                rooms.forEach((el) => {
+                rooms.forEach((el2) => {
                     // console.log("살려주세요오오오오오오오옥",el)
-                    el.onclick = () => {
+                    el2.onclick = ()=>{
                         // console.log("############",el)
-                        const title = el.querySelector('.room_title').textContent;
-                        const usernum = el.querySelector('.room_usernum').textContent;
-                        const play = el.querySelector('.room_play').textContent;
+                        const num = el2.querySelector('.room_num').textContent;
+                        const title = el2.querySelector('.room_title').textContent;
+                        // const usernum = el2.querySelector('.room_usernum').textContent;
+                        const play = el2.querySelector('.room_play').textContent;
+
+                        // let usernum2 = [];
+                        // usernum2.push(usernum);
+                        // console.log(usernum)
+                        // let usernum3 = usernum2.split(',') 
+                        // console.log("$$$$$$$$$$$$$$$$",usernum3)
+
+                        axios.post('http://127.0.0.1:4000/gameready/roomchoice', { id: num }, {
+                            withCredentials: true,
+                            "Content-Type": "application/json"
+                        }).then((e)=>{
+
+                        }).catch((err)=>{
+                            console.log(err);
+                        })
+
+
 
                         const popReady = document.querySelector('.roompopup_ready');
                         popReady.classList.toggle('pop');
-
+                        // <div class="readyUser">${usernum}</div>
                         popReady.innerHTML = `
                         <div class="roomTitle">${title}</div>
-                        <div class="readyUser">${usernum}</div>
                         <div class="roomBtn_member pop">
                             <div class="roomExit">나가기</div>
                         </div>
@@ -462,7 +482,7 @@
                         document.querySelector('.roomExit').onclick = () => {
                             popReady.classList.toggle('pop')
                         }
-
+                        
                     }
                 });
             });

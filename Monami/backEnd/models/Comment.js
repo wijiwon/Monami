@@ -15,11 +15,19 @@ class Comment extends Sequelize.Model{
                 allowNull : false, 
             },
 
+            // 댓글의 타겟이 되는 게시글의 id
+            // post_primaryKey : {
+            //     type : Sequelize.INTEGER(100), 
+            //     allowNull : false,
+            // },
+                // 👉 중복되는거 같아서 생략 
+
             // '댓글 작성의 경우, 어떤 post 에 대해서 댓글을 작성하고 있는가' 를 알기 위한 post 테이블 의 id 
             id_of_targetPost_primaryKey : {
                 type : Sequelize.INTEGER(100), 
                 allowNull : false,
             }, 
+
 
             // '대댓글의 경우, 어떤 댓글을 대상으로 작성하고 있나.' 를 알기 위한 comment 테이블의 id 값 ❓❓
             id_of_targetComment : {
@@ -30,9 +38,11 @@ class Comment extends Sequelize.Model{
             // '대댓글의 경우, 어떤 '유저' 가 작성한 댓글을 대상으로 작성하고 있나.' 를 알기 위해 
                 // comment 테이블의 id 값에서 추출해 저장하는 값❓❓
             writer_of_targetComment : {
-                type: Sequelize.INTEGER(100),
+                type: Sequelize.STRING(100),
                 allowNull: false
-            }
+            }, 
+
+
         },
         {
             sequelize,

@@ -2,7 +2,7 @@
 
 const { decode } = require('jsonwebtoken');
 const {User, Post , Comment} = require('../models/index');
-
+const path = require("path")
 
 // [READ] 게시판에서 모든 게시글 보여주기 
     exports.allBoardView = async (req, res) => {
@@ -20,9 +20,6 @@ const {User, Post , Comment} = require('../models/index');
 
 // [CREATE] 게시판 글쓰기 
     exports.boardCreate = async (req, res) => {
-
-        
-
 
         // 1) 저장할 데이터 솎아내기 
             const {file, body} = req;
@@ -72,11 +69,30 @@ const {User, Post , Comment} = require('../models/index');
                 // user_id 도 뭔가 연결로 넣어줘야 하는데 😥😥😥😥😥😥
                 
             // 3) 사용자가 봤으면 하는 화면으로 redirect 시키기
-                // '그림 상세 페이지' 로 확정
-                const temp_post_id = newPost.id;
-                // const temp_post_id = 지금까지 있는 post 테이블 id + 1?
-                res.json({ redirectURL: `http://127.0.0.1:5500/Monami/frontEnd/boardItem/${temp_post_id}` });
-                // res.json({ redirectURL: `http://127.0.0.1:5500/Monami/frontEnd/boardItem` });
+                
+                // 방금만들어진 post 의 id 값 가져오기
+                const id = newPost.id;
+                console.log("id가 찍혀? @boardController > boardCreate" , id)
+                        // [해석]
+                            // Post 의 create를 사용 -> newPost 인스턴스가 만들어짐 ⭐⭐⭐
+                            // newPost 인스턴스에서 만들어진 테이블 속성에 접근이 가능 ⭐⭐⭐
+            
+                // id 값 포함해서 redirect 시키기
+                    // [시도] - 라우터로 보내보기
+                    
+                        res.json({ redirectURL: `http://127.0.0.1:4000/board/item/${id}`});
+                            // [해석]
+                                // ⭐⭐⭐ 포트를 4000 으로 해야 > 클라이언트에서 보내고, 라우터로 들어간다. 
+
+                    // [오류 났던 부분]
+                        // res.redirect(`http://127.0.0.1:5500/board/item/${id}`);
+                        // res.json({ redirectURL: `http://127.0.0.1:5500/board/item/${id}` });
+
+                    // [예전버전] - 작동 안 함 📛
+                        // res.json({ redirectURL: `http://127.0.0.1:5500/Monami/frontEnd/boardItem/${temp_post_id}` });
+
+                    // [예전버전] - 작동함🔵
+                        // res.json({ redirectURL: `http://127.0.0.1:5500/Monami/frontEnd/boardItem.html` });
                     // [해석]
                         // json 형식으로 변환해서 res 로 보냄 
                         // 그 이유는 axios 를 통해 소통하면, 클라이언트가 redirect 를 자동으로 처리 못 하는 경우가 있다고 함 (by GPT)
@@ -120,7 +136,7 @@ const {User, Post , Comment} = require('../models/index');
 
             // 3) Comment 테이블에서, data
                 const comment = await Comment.findOne( {
-                    where : {post_primaryKey : 2}
+                    where : {id_of_targetComment : 2}
                         // [해석] 
                             // 이게 맞나 ❓❓❓ 📛📛📛📛📛📛 
                             // 이 쿼리문이 어렵네 ⭐⭐⭐⭐⭐ 
@@ -157,32 +173,91 @@ const {User, Post , Comment} = require('../models/index');
 
 
 
+// [read] params 로 id 넣었을 때, 보여지는거 
+    exports.boardParamsView = async (req, res) => {
+
+        
+        try {
+            
+            // 1) 값 들어오는지 확인 
+            console.log("@Controller > boardParamsView 입장")
+            // console.log("req.params.id 확인👉👉" , req)
+            console.log("req.params.id 확인👉👉" , req.params.id)
+        
+            // 2) boardItem 보여주기 
+                // sendFile 
+                    res.sendFile(path.join(__dirname , "../../frontEnd/boardItem.html"))
+            
+                //  res.redirect(`http://127.0.0.1:5500/Monami/frontEnd/boardItem.html?postId=${req.params.id}`)
+                // [해석]
+                    // 이게 되려나? 
+
+        } catch (error) {
+            console.log(error)
+            
+        }
+    }
+
+
+
 // [create]
     exports.boardCommentCreate = async (req, res) => {
     
         try {
-            // 1) 저장할 데이터 솎아내기 
-                // console.log("👲👲👲👲👲 req 보기 " , req);
-                // console.log("👲👲👲👲👲 axios 로 날린거 보기" , req.body);
-                    // 음... 봐도 모르겠는데 
+            // 1) 저장할 데이터 확인
+                console.log("@ boardController > boardCommentCreate 진입!")
+                console.log("👲👲👲👲👲 axios 로 날린거 보기" , req.body);
+                console.log("댓글 쓴게 보이는지 확인 @boardCommentCreate" , req.body.content)
+                
+                const temp_write = req.body.content;
+                const temp_user_primaryKey = req.body.user_primaryKey;
+                const temp_id_of_targetPost = req.body.id_of_targetPost;
+                const temp_id_of_targetComment = req.body.id_of_targetComment;
+                const temp_writer_of_targetComment = req.body.writer_of_targetComment;
 
-                const { comment_write } = req.body;
-                console.log("댓글 쓴게 보이는지 확인 @boardCommentCreate" , comment_write)
+
 
             // 2) sequelize 상속받은 Comment 객체로 쿼리 날리기 
-                await Comment.create({
-                    content : comment_write, 
-                    connect_id : 6,       // 이게 그 user 테이블의 id? ❓❓❓
-                    connect_writer : "hi",    // 맞나? ❓❓❓
-                    user_primaryKey : 1, 
-                    post_primaryKey : 2,
-                        // 글쓰는 대상이 정해지면 -> 따라오게 해야 함 
-                        // 우선, 지금은 임의로. | dj 가 적은 id 2 인 글! 
+                const newComment = await Comment.create({
+                    // 댓글 작성 내용
+                    content : temp_write,
+                    
+                    // 댓글 작성한 유저의 user 테이블 상의 id 
+                    user_primaryKey : temp_user_primaryKey,
+
+                    // 댓글 작성 대상이 된 '대상 게시글의 id' (post 테이블에서 가져오기)                    
+                    id_of_targetPost_primaryKey : temp_id_of_targetPost,
+
+                    // 댓글 작성 대상이 되는 '대상 댓글의 id' (comment 테이블에서 가져오기)
+                    id_of_targetComment : temp_id_of_targetComment,
+
+                    // 댓글 작성 대상이 되는 '대상 댓글을 쓴 유저' (comment 테이블에서 가져오기)
+                    writer_of_targetComment : temp_writer_of_targetComment
+
                 })
 
 
             // 3) res 보내기 
-                res.send("댓글 작성 완료👏👏")
+
+                // 방금 만들어진 댓글 id 값 가져오기 
+                    const id_of_newComment = newComment.id
+                
+                // 댓글의 대상이 되는 게시글의 id 가져오기 
+                    const id = id_of_targetPost_primaryKey
+                    // [해석] ⭐⭐⭐ | 나중에 잊어버릴거 같아 
+                        // 1) '글쓰기 페이지(boardCreate.html)' 에서, 기입하고, 버튼 누르면, 게시글 id 가 url 에 담겨짐 
+                        // 2) boardItem 에서는 getAPI() 에서 가져와서 👉 URL 경로에서 ID 값만 빼냄 
+                        // 3) 그리고 ⭐'전역 변수 postId' 로 저장함 (SCOPE 주의)
+                        // 4) 이 postId 를 댓글 클릭할 때 가져와서 이쪽에서 활용
+
+                    // [requirement] 
+                        // URL 형식은 '게시글id' + '댓글 id' 들 다 여야 함 
+                        // '게시글 id 가 필요한 이유' = 댓글의 target 이 되기 때문
+
+                    res.json({redirectURL :  `http://127.0.0.1:4000/board/item/${id}/${id_of_newComment}` })
+
+
+                    // res.send("댓글 작성 완료👏👏")
                 
             } catch (error) {
                 console.log(error)

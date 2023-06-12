@@ -5,6 +5,10 @@
     const session = require("express-session");
     const cors = require("cors")
 
+    // 라우팅 처리 어떻게 되는지 보기 위한 모듈 
+    // const morgan = require('morgan');
+
+
 const app = express();
 const { sequelize } = require("./models")
 const mainInfoRouter = require("./routers/mainRouter");
@@ -31,6 +35,7 @@ const boardRouter = require("./routers/boardRouter");
 // 미들웨어 
     // body 객체 생성
     app.use(express.urlencoded({extended:false}))
+    
     // 이미지를 static 으로 만들어줌 
     app.use(express.static(path.join(__dirname,"image")));
         // [해석]
@@ -44,6 +49,10 @@ const boardRouter = require("./routers/boardRouter");
         origin: "http://127.0.0.1:5500",     // 각자 html 라이브서버 열어 url이 같은지 확인
         credentials : true 
     }))
+    
+    // 라우팅 처리 어떻게 되는지 보기 위한 미들웨어
+    // app.use(morgan('dev'));
+
 
 app.use(session({
     name : "token",

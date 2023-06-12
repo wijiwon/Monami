@@ -51,6 +51,7 @@
 
 
 
+
 // 🔹 사진 미리보기 기능 
     // 1. input 태그가 변경되면, profile 함수 실행해서, 1) 변환 2) 보여주기 
     post_img.addEventListener("click" , () => {
@@ -88,7 +89,7 @@
 
 
     
-// 글쓰기 버튼 클릭시 axios post 요청 
+// 🔹 글쓰기 버튼 클릭시 axios post 요청 
     writeBtn.onclick = () => {
         // form 인스턴스 생성
         const form = new FormData();
@@ -111,6 +112,7 @@
             
             // redirect 를 수동으로 처리하기 ⭐⭐⭐ 
                 const redirectURL = e.data.redirectURL;
+                
                 console.log("redirectURL 이게 어떻게 넘어오지?" , redirectURL)
                 window.location.href = redirectURL;
                     // [이렇게 하는 이유] ⭐⭐⭐⭐⭐⭐⭐⭐

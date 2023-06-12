@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const { allBoardView , boardCreate , boardCreateView , boardItemView , boardCommentCreate} = require("../controllers/boardControllers")
+    const { allBoardView , boardCreate , boardCreateView , boardItemView , boardCommentCreate , boardParamsView } = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
     const { islogin } = require("../middleware/isLogin");
 
@@ -35,6 +35,13 @@
 
 // [read] 게시판 상세 내용 보여주기 
     routers.get('/item' , boardItemView)
+
+// [read] id 값을 가져온 걸로, 상세 페이지 보여주기 
+    // routers.get('/item/*' , boardParamsView)
+    // [해석] ejs 에서 /item/:id 쓰던 걸-> /item/* 이렇게 작성 ⭐⭐
+    
+    routers.get('/item/:id' , boardParamsView)
+    // [해석] 이걸로 연결하게 되나❓❓❓❓❓ 
 
 
     

@@ -180,7 +180,7 @@
                     // [주의] 직접 innerHTML 에 넣으면, '문자열이 아닌 경우' 안 나올 수 있음. 
 
 
-                // 게시글 내용 
+                // 내용 
                     // const lastOfPost = postsData[postsData.length - 1];
                     const temp_content = postingByUser.content
                         // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
@@ -204,24 +204,18 @@
                         // '제목 클릭' 하면, 조회수가 올라갈 수 있게 만들어야 함. 
                         // 게시글이 올라가는 거 (CREATE 먼저)
         
-                // 댓글 내용
-                    // 1) 댓글 내용 1개 인 경우
-                        // comment_read.innerHTML = commentData.content
-                        // [📛 개선 해야할 것]
-                            // 방금 접속한 id 유저가 쓴 글이라고 보장하지 못 함 
-                            // 해당 글에서 가장 최신의 것을 가져와야 하나
-                    
-                    // 2) 댓글 내용 누적 
-                        commentData.forEach(item => {
-                        const div = document.createElement('div');
-                        div.textContent = item.content;
-                        comment_read.appendChild(div);
-                        })
-
+                // 다른 사람들이 해당 게시글에 쓴 댓글
+                    comment_read.innerHTML = commentData.content
+                    // [📛 개선 해야할 것]
+                        // 방금 접속한 id 유저가 쓴 글이라고 보장하지 못 함 
+                        // 해당 글에서 가장 최신의 것을 가져와야 하나
+                
+                        
 
         } catch (error) {
             console.log(error)
         }
+
     }
 
     // [getAPI 실행] 상세 글에 필요한 데이터 가져오기  
@@ -266,7 +260,6 @@
                         // 댓글 작성의 대상이 되는 '타겟 게시글의 id' 값 
                             id_of_targetPost : postId,       
                         
-                        
                         // 대댓글의 경우, 댓글 작성의 대상이 되는 'comment 테이블 id' 값
                             id_of_targetComment : 1,
                                 // [✅ TODO]
@@ -300,7 +293,7 @@
                     // 3) 그거를 골라서 보여줘야 함 
                         // 어케 보여주지? 
                         // comment 중 > newCommentId 에 해당하는 값 보여주기 ✅✅  
-                    
+
 
             });
 

@@ -117,9 +117,26 @@ io.on('connection', (socket) => {
        io.emit('nowusers', userid);
        io.emit('connectuser', userid[userid.length-1]);
     });
-    socket.on('makedRoom',()=>{
-        io.emit('makedRoom',()=>{
+    socket.on('madeRoom',()=>{
+        io.emit('madeRoom',()=>{
             console.log("방만드는 이벤트 받아서 다시 쏴줌");
         })    
     })
+//   socket.on('jointheroom',()=>{
+//     console.log("클라이언트로 부터 joinroom 아벤트를 받음");
+//     socket.join(1);
+//     io.to(1).emit('connectuser');
+//     io.to(1).emit('chat message',userid)
+//   })
+  socket.on('joinRoom',(roomNum)=>{
+    console.log("방입장 한뒤 소켓으로보냄");
+    const roomName=`room${roomNum}`;
+    socket.join(roomName);
+    let obj={}
+    obj.nick="운영자"
+    obj.message=`${roomName}새로운 유저가 방에 입장하였습니다.`;
+    console.log(`${roomName}에접속`)
+    socket.to(roomName).emit('chat message',obj);
+
+  })
 });

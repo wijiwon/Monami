@@ -225,7 +225,7 @@
             width: 230px;
             height: 150px;
             border: 1px solid;
-            cursor: pointer;
+            /* cursor: pointer; */
         }
 
         .row2 .roomList {
@@ -249,7 +249,7 @@
         }
 
         .room_num {
-            display: none;
+            display: block;
         }
     </style>
 </head>
@@ -335,6 +335,22 @@
     const messagesList = document.getElementById('messages');
     const User_idlist = document.getElementById('User_id');
     const receiverIdInput = document.getElementById('receiver-id');
+    function joinRoom(roomNUm){
+        socket.emit('joinRoom',roomNUm)
+    }
+    async function hello(){
+        const roomNumElements = document.getElementsByClassName('room_num');
+        console.log(roomNumElements);
+        Array.from(roomNumElements).forEach((element)=>{
+            element.addEventListener('click',()=>{
+                console.log("ㅇㅇ눌리긴함");
+                const roomNum = element.textContent;
+                joinRoom(roomNum);
+            })
+        })
+    
+    }
+    
 
     try {
         sendButton.addEventListener('click', () => {
@@ -448,6 +464,7 @@
                     <div class="room_play">게임 진행사항</div>
                 </div>
                 `
+               
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
                 let rooms = document.querySelectorAll(".roomlists");
                 // console.log("썸바리헲미이이이이이익",rooms)
@@ -492,13 +509,24 @@
 
                     }
                 });
-            });
+            }
+            
+            );
+            const roomNumElements = document.getElementsByClassName('room_num');
+                console.log(roomNumElements);
+                Array.from(roomNumElements).forEach((element)=>{
+            element.addEventListener('click',()=>{
+                console.log("ㅇㅇ눌리긴함");
+                const roomNum = element.textContent;
+                joinRoom(roomNum);
+            })
+        })
         } catch (error) {
             console.log(error);
         }
     }
     RoomView();
-    socket.on("makedRoom",
+    socket.on("madeRoom",
         async () => {
 
             console.log("서버에서 방생성이벤트 받음 화면 다시 그려줌");
@@ -536,7 +564,7 @@
         // const form = new FormData();
         // console.log("title.value",title.value);
         // form.append("title", title.value);
-        socket.emit("makedRoom", () => {
+        socket.emit("madeRoom", () => {
             console.log("방생성되어서 이벤트보냄")
         })
 

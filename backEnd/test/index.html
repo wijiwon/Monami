@@ -14,14 +14,14 @@
   <input id="message-input" type="text" placeholder="Type your message">
   <input type="text" id="receiver-id" placeholder="Receiver ID or username">
   <button id="send-button">Send</button>
-
+  <button id="room-btn">select</button>
   <ul id="messages"></ul>
   <ul id="User_id"></ul>
 </body>
 <script>
   try {
     console.log("dd")
-    const socket = io.connect('http://localhost:4000');
+    const socket = io.connect('http://localhost:8080');
     console.log(socket);
     console.log(socket._opts.port);
     // ahfmrpTdjdygg
@@ -33,6 +33,7 @@
     const messagesList = document.getElementById('messages');
     const User_idlist = document.getElementById('User_id');
     const receiverIdInput = document.getElementById('receiver-id');
+    const receiveroom= document.getElementById('room-btn');
 
     try {
       sendButton.addEventListener('click', () => {
@@ -49,7 +50,11 @@
     } catch (error) {
       console.log(error);
     }
-    
+    receiveroom.addEventListener('click',()=>{
+      socket.emit('jointheroom');
+    })
+    socket.on()
+
     socket.on('connectuser',(userid)=>{
       const li= document.createElement('li');
       li.textContent =`${userid}님이 들어왔습니다.`

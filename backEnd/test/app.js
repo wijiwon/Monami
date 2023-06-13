@@ -63,4 +63,16 @@ io.on('connection', (socket) => {
     // }
     io.to(receiverId).emit('whisper',message);
   })
+  socket.on('jointheroom',()=>{
+    console.log("클라이언트로 부터 joinroom 아벤트를 받음");
+    socket.join(1);
+    io.to(1).emit('connectuser');
+    io.to(1).emit('chat message',userid)
+  })
+  socket.on('joinRoom',(roomNum)=>{
+    const roomName=`room${roomNum}`;
+    socket.join(roomName);
+    socket.to(roomName).emit('message',`새로운 유저가 방에 입장하였습니다.`);
+
+  })
 });

@@ -12,11 +12,15 @@ const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
 const mainloginaccessRouter = require("./routers/mainloginRouter");
 const gameReady = require('./routers/gameReadyRouter');
+const logoutUser = require("./routers/logoutRouter");
+const mypageRouter = require("./routers/mypageRouter");
+const adminRouter = require("./routers/adminRouter");
 
 app.use(express.urlencoded({ extended: false }))
 
 // 이미지 파일을 등록할 폴더 경로
-app.use(express.static(path.join(__dirname, "image")))
+
+app.use("/img", express.static(path.join(__dirname,"image")));
 
 app.use(cors({
     origin:"http://127.0.0.1:5501",
@@ -38,11 +42,15 @@ app.use(session({
 
 app.use(express.json());
 
-app.use('/main', mainInfoRouter);
-app.use('/join', joinRouter);
-app.use('/login', loginRouter);
-app.use('/mainlogin', mainloginaccessRouter);
+
 app.use('/gameready', gameReady);
+app.use('/main',mainInfoRouter);
+app.use('/join',joinRouter);
+app.use('/login',loginRouter);
+app.use('/mainlogin',mainloginaccessRouter);
+app.use('/logout',logoutUser);
+app.use("/mypage",mypageRouter);
+app.use("/admin",adminRouter);
 
 sequelize.sync({ forse: false }).then(() => {
     console.log("연결성공")

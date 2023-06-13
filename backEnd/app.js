@@ -9,12 +9,15 @@ const { sequelize } = require("./models")
 const mainInfoRouter = require("./routers/mainRouter");
 const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
-const mainloginaccessRouter=require("./routers/mainloginRouter");
+const mainloginaccessRouter = require("./routers/mainloginRouter");
+const logoutUser = require("./routers/logoutRouter");
+const mypageRouter = require("./routers/mypageRouter");
+const adminRouter = require("./routers/adminRouter");
 
 app.use(express.urlencoded({extended:false}))
 
 // 이미지 파일을 등록할 폴더 경로
-app.use(express.static(path.join(__dirname,"imege")))
+app.use("/img", express.static(path.join(__dirname,"image")));
 
 app.use(cors({
     origin: "http://127.0.0.1:5500",     // 각자 html 라이브서버 열어 url이 같은지 확인
@@ -34,6 +37,9 @@ app.use('/main',mainInfoRouter);
 app.use('/join',joinRouter);
 app.use('/login',loginRouter);
 app.use('/mainlogin',mainloginaccessRouter);
+app.use('/logout',logoutUser);
+app.use("/mypage",mypageRouter);
+app.use("/admin",adminRouter);
 
 sequelize.sync({forse : false}).then(()=>{
     console.log("연결성공")

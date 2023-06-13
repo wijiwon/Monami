@@ -7,12 +7,12 @@ const { User, Post } = require("../models");
 // 디코드 함수 가져오기
 exports.mainloginaccess = async(req,res)=>{
   try{
-    console.log(req);
+    // console.log(req);
     const { decode } = req;
     if (decode) {
       console.log("디디디디%^%^%^%^%^%^%^",decode);
       await User.findOne({
-        where : {username : decode.name}
+        where : {user_id : decode.user_id}
       }).then((e) => {
         res.send({  login: e });
       })
@@ -32,7 +32,7 @@ exports.mainInfo = async (req, res) => {
           [Sequelize.Op.not]: 2
         }
       },
-      order: [['exp', 'ASC']],
+      order: [['exp', 'DESC']],
       limit: 5
 
     }
@@ -48,22 +48,40 @@ exports.mainInfo = async (req, res) => {
       })
     })
 
-    // const { decode } = req;
-    // if (decode) {
-    //   console.log("디디디디%^%^%^%^%^%^%^",decode);
-    //   const user = await User.findOne({
-    //     where : {username : decode.name}
-    //   })
-      
-    // //   if (user) {
-        
-    // //   }
-    // //   res.json(user)
-    // }
-
   } catch (error) {
     console.log("mainInfo 컨트롤 에러", error);
   }
 }
 
 
+// exports.logOut = async(req,res) =>{
+//   // try {
+//   //   const { decode } = req;
+//   //   if (decode) {
+//   //     console.log("디디디디%^%^%^%^%^%^%^",decode);
+//   //     await User.findOne({
+//   //       where : {username : decode.name}
+//   //     }).then((e) => {
+//   //       res.send({  login: e });
+//   //     })
+//   //   }
+//   // }
+
+//   //   const token = jwt.sign({
+//   //     id : data.id,
+//   //     name : data.username,
+//   //     user_id : data.user_id,
+//   //     profile_img : data.profile_img,
+//   //     experience : data.exp,
+//   //   },
+//   //   process.env.ACCESS_TOKEN_KEY,
+//   //   {
+//   //     expiresIn : "0"
+//   //   })
+//   //   req.session.access_token = token;
+//   //   res.send({message : "로그아웃",userInfo:data, token:req.session.access_token});
+
+//   // } catch (error) {
+//   //   console.log(error);
+//   // }
+// }

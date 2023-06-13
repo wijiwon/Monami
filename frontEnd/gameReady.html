@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameReady Page</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+
     <style>
         body {
             position: relative;
@@ -87,24 +88,25 @@
         .row3 .myProfile {
             width: 30%;
             border: 2px solid slateblue;
-            
+
         }
-        .row3 .myProfile{
+
+        .row3 .myProfile {
             position: relative;
         }
 
-        .myProfile .myProfile2{
+        .myProfile .myProfile2 {
             width: 230px;
             border: 1px solid;
             display: flex;
             position: absolute;
             left: 50%;
             top: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
             box-sizing: border-box;
         }
 
-        .myProfile2 .profile3{
+        .myProfile2 .profile3 {
             margin-left: 10px;
             width: 120px;
             display: flex;
@@ -112,11 +114,13 @@
             align-items: flex-start;
             justify-content: center;
         }
-        .profile3 .pro_name{
+
+        .profile3 .pro_name {
             font-size: 20px;
             font-weight: 600;
         }
-        .profile3 a{
+
+        .profile3 a {
             text-decoration: none;
             color: black;
         }
@@ -201,15 +205,18 @@
 
         .roompopup_ready .roomBtn_leader {
             /* display: none; */
+            border: 1xp solid black;
         }
 
         .roompopup_ready .roomBtn_member {
             display: none;
         }
+
         .roomBtn_member.pop {
             display: flex;
         }
-        .roomBtn_member .roomExit{
+
+        .roomBtn_member .roomExit {
             cursor: pointer;
         }
 
@@ -218,7 +225,7 @@
             width: 230px;
             height: 150px;
             border: 1px solid;
-            cursor: pointer;
+            /* cursor: pointer; */
         }
 
         .row2 .roomList {
@@ -229,17 +236,20 @@
             overflow: visible;
             overflow-x: hidden
         }
-        .roomList .room_usernum{
+
+        .roomList .room_usernum {
             display: none;
         }
-        .pro_img{
+
+        .pro_img {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             border: 1px solid;
         }
-        .room_num{
-            display: none;
+
+        .room_num {
+            display: block;
         }
     </style>
 </head>
@@ -258,6 +268,7 @@
             </div>
             <div class="userList">
                 <p>User List</p>
+                <ul id="User_id"></ul>
             </div>
         </div>
         <!-- 페이지의 하단 영역. 접속중인 유저간의 전체 채팅과 현재 로그인한 유저의 정보를 확인할 수 있고, 게임페이지 홈으로 이동할 수 있다. -->
@@ -268,9 +279,12 @@
                 <div class="chatBox"></div>
                 <!-- 채팅을 입력하는 영역 -->
                 <div class="chatInsert">
-                    <div>채팅</div>
-                    <input type="text" name="chatInput">
-                    <div>전송</div>
+                    <input id="message-input" type="text" placeholder="Type your message">
+                    <input type="text" id="receiver-id" placeholder="Receiver ID or username">
+                    <button id="send-button">Send</button>
+
+                    <ul id="messages"></ul>
+
                 </div>
             </div>
             <!-- 유저가 로그인한 계정의 정보가 노출되는 영역. 홈으로 버튼을 누르면 게임 메인페이지로 이동한다. -->
@@ -307,6 +321,112 @@
     </div>
 </body>
 <script>
+
+    console.log("dd")
+    const socket = io.connect('http://localhost:4000');
+    console.log(socket);
+    console.log(socket._opts.port);
+    // ahfmrpTdjdygg
+    // 모르게ㅆ어욯ㅎ
+
+    console.log("ddddddasmdmsadkasdkaskd")
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const messagesList = document.getElementById('messages');
+    const User_idlist = document.getElementById('User_id');
+    const receiverIdInput = document.getElementById('receiver-id');
+    function joinRoom(roomNUm){
+        socket.emit('joinRoom',roomNUm)
+    }
+    async function hello(){
+        const roomNumElements = document.getElementsByClassName('room_num');
+        console.log(roomNumElements);
+        Array.from(roomNumElements).forEach((element)=>{
+            element.addEventListener('click',()=>{
+                console.log("ㅇㅇ눌리긴함");
+                const roomNum = element.textContent;
+                joinRoom(roomNum);
+            })
+        })
+    
+    }
+    
+
+    try {
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            const receiverId = receiverIdInput.value;
+            if (receiverId) {
+                socket.emit('whisper', { message, receiverId });
+            } else {
+                let id = socket.id;
+                socket.emit('chat message', { message, id });
+
+
+            }
+            messageInput.value = '';
+            receiverId.value = '';
+        });
+
+
+
+        // socket.on('connectuser',(userid)=>{
+        //   const li= document.createElement('li');
+        //   li.textContent =`${userid}님이 들어왔습니다.`
+        //   messagesList.appendChild(li);
+        // })
+        socket.on('disconnectuser', (userid) => {
+            const li = document.createElement('li');
+            li.textContent = `${userid}님이 나갔습니다..`
+            messagesList.appendChild(li);
+        })
+        socket.on('whisper', (msg) => {
+            const li = document.createElement('li');
+            li.textContent = `귓속말:${msg}`;
+            messagesList.appendChild(li);
+        })
+        // socket.on('chat message', (msg) => {
+        //     const li = document.createElement('li');
+        //     li.textContent = msg;
+        //     messagesList.appendChild(li);
+        // });
+        socket.on('nowusers', async (msg) => {
+            // while (messageList.firstChild) {
+            //   messageList.removeChild(messageList.firstChild);
+            // }
+            // msg.forEach(element => {
+            //   console.log(element.userid);
+            //   const li = document.createElement('li');
+            //   li.textContent = "user " + element._nickname;
+            //   messagesList.appendChild(li);
+            // });
+            await asd("User_id");
+            console.log("msg", msg);
+            await asdf(msg, "User_id");
+
+        })
+    } catch (error) {
+        console.log(error);
+    }
+    async function asd(id) {
+        const User_idlist = document.getElementById(id);
+        while (User_idlist.firstChild) {
+            User_idlist.removeChild(User_idlist.firstChild);
+        }
+    }
+    async function asdf(tmp, id) {
+        const User_idlist = document.getElementById(id);
+        tmp.forEach(element => {
+            console.log(element.userid);
+            const li = document.createElement('li');
+            li.textContent = `${element._nickname}, ${element.userid}`;
+            User_idlist.appendChild(li);
+        });
+
+    }
+
+    //-----------------------채팅방
+
     const roomCreateBtn = document.querySelector('.createRoom');    // 방 만들기 버튼
     const roomPopupCreate = document.querySelector('.roompopup_creat')  // 방 만들기 팝업
     const roomcancle = document.querySelector('.cancle');       // 방 만들기 팝업 - 취소하기 버튼
@@ -344,12 +464,13 @@
                     <div class="room_play">게임 진행사항</div>
                 </div>
                 `
+               
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
                 let rooms = document.querySelectorAll(".roomlists");
                 // console.log("썸바리헲미이이이이이익",rooms)
                 rooms.forEach((el2) => {
                     // console.log("살려주세요오오오오오오오옥",el)
-                    el2.onclick = ()=>{
+                    el2.onclick = () => {
                         // console.log("############",el)
                         const num = el2.querySelector('.room_num').textContent;
                         const title = el2.querySelector('.room_title').textContent;
@@ -365,9 +486,9 @@
                         axios.post('http://127.0.0.1:4000/gameready/roomchoice', { id: num }, {
                             withCredentials: true,
                             "Content-Type": "application/json"
-                        }).then((e)=>{
+                        }).then((e) => {
 
-                        }).catch((err)=>{
+                        }).catch((err) => {
                             console.log(err);
                         })
 
@@ -382,26 +503,70 @@
                             <div class="roomExit">나가기</div>
                         </div>
                         `
-                        document.querySelector('.roomExit').onclick = ()=>{
+                        document.querySelector('.roomExit').onclick = () => {
                             popReady.classList.toggle('pop')
                         }
-                        
+
                     }
                 });
-            });
+            }
+            
+            );
+            const roomNumElements = document.getElementsByClassName('room_num');
+                console.log(roomNumElements);
+                Array.from(roomNumElements).forEach((element)=>{
+            element.addEventListener('click',()=>{
+                console.log("ㅇㅇ눌리긴함");
+                const roomNum = element.textContent;
+                joinRoom(roomNum);
+            })
+        })
         } catch (error) {
             console.log(error);
         }
     }
     RoomView();
+    socket.on("madeRoom",
+        async () => {
 
+            console.log("서버에서 방생성이벤트 받음 화면 다시 그려줌");
+            await deleteRoomList('.roomList');
+            setTimeout(() => {
+                RoomView();
+            }, 100);
+            // await RoomView();
+
+        })
     const createBtn = document.querySelector('.create');
+    // async function deleteRoomList(id) {
+
+    //     const room_list = document.querySelector(id);
+    //     console.log(room_list);
+    //     while (room_list.firstChild) {
+    //         room_list.removeChild(room_list.firstChild);
+    //     }
+    // }
+    function deleteRoomList(selector) {
+        return new Promise((resolve, reject) => {
+            const roomList = document.querySelector(selector);
+            console.log(roomList);
+            while (roomList.firstChild) {
+                roomList.removeChild(roomList.firstChild);
+            }
+            // Once the deletion is complete, resolve the promise
+            resolve();
+        });
+    }
+
 
     // 방만들기 버튼을 클릭하면 방을 생성할 수 있는 팝업이 열리고 클라이언트가 입력한 값이 db에 넘어간다.
     createBtn.onclick = () => {
         // const form = new FormData();
         // console.log("title.value",title.value);
         // form.append("title", title.value);
+        socket.emit("madeRoom", () => {
+            console.log("방생성되어서 이벤트보냄")
+        })
 
         axios.post("http://127.0.0.1:4000/gameready/create", { title: title.value }, {
             withCredentials: true,
@@ -416,15 +581,15 @@
                 const RoomExit = document.querySelector(".roomExit")
                 RoomExit.onclick = () => {
                     RoomPop.classList.toggle('pop')
-                    axios.post('http://127.0.0.1:4000/gameready/roomDel', { id: title.value }, {
-                        withCredentials: true,
-                        "Content-Type": "application/json"
-                    })
+                    // axios.post('http://127.0.0.1:4000/gameready/roomDel', { id: title.value }, {
+                    //     withCredentials: true,
+                    //     "Content-Type": "application/json"
+                    // })
                 }
             }
             // const redirectURL = e.data.redirectURL;
             // window.location.href = redirectURL;
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err);
         })
         // form 데이터로 보내는데 form-data로 설정하지 않아서 생긴 이슈 - form에 json값으로 바꿔줌
@@ -441,8 +606,21 @@
     //------로그인한 유저의 정보를 보여주는 부분----------------------------------------------------------
     axios.get('http://127.0.0.1:4000/gameready/userInfo', {
         withCredentials: true
-    }).then((e)=>{
-        // console.log(e)
+    }).then((e) => {
+        console.log(e)
+        socket.on('connectuser', (userid) => {
+            const li = document.createElement('li');
+            li.textContent = `${userid._nickname}님이 들어왔습니다.`
+            messagesList.appendChild(li);
+        })
+        socket.on('chat message', (msg) => {
+            console.log("message의", msg);
+            const li = document.createElement('li');
+            li.textContent = `${msg.nick}: ${msg.message}`;
+            messagesList.appendChild(li);
+        });
+        console.log("여기까지 오니?")
+        socket.emit('connectuser2', e);
         const userInfo = e.data;
         const myProf = document.querySelector('.myProfile2');
         myProf.innerHTML = `
@@ -453,7 +631,7 @@
                 <a href="main.html">홈으로</a>
             </div>
         `
-    }).catch((err)=>{
+    }).catch((err) => {
         console.log(err)
     })
     //----------------------------------------------------------------------------------------------------

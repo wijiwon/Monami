@@ -23,13 +23,14 @@ exports.joinUser = async(req,res)=>{
 
     const adminHash = bcrypt.hashSync("admin123", 10);
 
-    await User.findOne({where : {user_id :"admin"}})
-    if (user_id != null) {
+    const adminUser = await User.findOne({where : {user_id :"admin"}})
+    if (!adminUser) {
+      console.log("어드민 계정 만든다");
       User.create({
         username:"admin",
         user_id:"admin",
         user_pw : adminHash,
-        profile_img : "http://127.0.0.1:4000/sample.gif",
+        profile_img : "http://127.0.0.1:4000/img/sample.gif",
         exp : 0,
         joinAllow : 2,
       })
@@ -39,7 +40,7 @@ exports.joinUser = async(req,res)=>{
       username,
       user_id,
       user_pw : hash,
-      profile_img : "http://127.0.0.1:4000/monami.png",
+      profile_img : "http://127.0.0.1:4000/img/monami.png",
       exp : 0,
       joinAllow : 0,
     })

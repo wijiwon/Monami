@@ -1,9 +1,9 @@
 const router = require("express").Router();
 
-const { mainInfo } = require("../controllers/mainControllers");
+const { mainloginaccess } = require("../controllers/mainControllers");
 const { islogin } = require("../middleware/isLogin");
 
-router.get("/",islogin,mainInfo);
+router.get('/',islogin,mainloginaccess);
 
 
 module.exports = router;

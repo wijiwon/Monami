@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const dot = require("dotenv").config();
 
 exports.islogin = async(req,res,next)=>{
-  console.log("dddd");
+  // console.log("dddd");
   //값이 암호화된 토큰만 풀어주면 바로 사용가능
   //req.session 대신 쿠키값 읽기
   if (req.rawHeaders.filter(header => header.toLowerCase().includes('token')).length == 0) {
@@ -11,7 +11,7 @@ exports.islogin = async(req,res,next)=>{
   }else{
 
     const cookieString = req.rawHeaders.filter(header => header.toLowerCase().includes('token'));
-    console.log("totooto%%%",cookieString);
+    // console.log("totooto%%%",cookieString);
     const access_token = cookieString[0].split('=')[1];
     // 앍운 쿠키값 에서 token 해체 
     try {

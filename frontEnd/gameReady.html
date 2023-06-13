@@ -503,7 +503,10 @@
 
             console.log("서버에서 방생성이벤트 받음 화면 다시 그려줌");
             await deleteRoomList('.roomList');
-            await RoomView();
+            setTimeout(() => {
+                RoomView();
+            }, 100);
+            // await RoomView();
 
         })
     const createBtn = document.querySelector('.create');

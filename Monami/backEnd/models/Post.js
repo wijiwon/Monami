@@ -52,7 +52,15 @@ class Post extends Sequelize.Model{
             // 좋아요 클릭한 유저
             likeClickUser: {
                 type: Sequelize.STRING(100)
-            }
+            }, 
+
+            // // user_primaryKey 외래키 | 외래키 기본값은 null 로 해놔야 왜 ❓❓❓❓❓ 
+            // user_primaryKey : { 
+            //     type : Sequelize.INTEGER(100), 
+            //     defaultValue : null, 
+            //     allowNull : false
+            // },
+
         },
         {
             sequelize,
@@ -73,8 +81,14 @@ class Post extends Sequelize.Model{
             // [팀회의] 해당 id 로 저장된 글을 조회할 때 가져오게 됨 (23-06-08 update | 팀컨펌 아직 | ✅)
             // [이슈사항] user_id 가 아닐 수도 있음✅
 
-        
-        db.Post.belongsTo(db.Comment, {foreignKey: "post_primaryKey", sourceKey: "id"})
+        // [새로운 방식] comment 와 post 간의 관계를 다시 설정 
+            db.Post.hasMany(db.Comment, {foreignKey: "post_primaryKey", sourceKey: "id"})
+            // [해석] ⭐⭐⭐⭐⭐⭐⭐⭐⭐
+                // User 가 많은 post 를 쓸 수 있으니가 > User.hasMany 인 것 처럼 
+                // Post 가 많은 comment 를 가질 수 있으니까 > Post.hasMany 로! 쓴다 
+        // [예전방식]
+            // db.Post.belongsTo(db.Comment, {foreignKey: "post_primaryKey", sourceKey: "id"})
+
     }
 }
 

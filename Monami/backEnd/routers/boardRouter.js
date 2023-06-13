@@ -36,13 +36,16 @@
 // [read] 게시판 상세 내용 보여주기 
     routers.get('/item' , boardItemView)
 
-// [read] id 값을 가져온 걸로, 상세 페이지 보여주기 
+// [read] post id 값을 가져온 걸로, 상세 페이지 보여주기 
     // routers.get('/item/*' , boardParamsView)
     // [해석] ejs 에서 /item/:id 쓰던 걸-> /item/* 이렇게 작성 ⭐⭐
     
-    routers.get('/item/:id' , boardParamsView)
-    // [해석] 이걸로 연결하게 되나❓❓❓❓❓ 
+    routers.get('/item/:id_post' , boardParamsView)
+    // [해석] 이걸로 연결하게 되나❓ : 응. 글 작성하면, 이걸로 연결하게 돼
 
+// [read] post_id + comment id 값 가져온 걸로, 상페, 보여주기
+    // routers.get('/item/:id_post' , boardParamsView)
+    // routers.get('/item/:id_post/:id_newComment' , boardParamsView);    
 
     
 // [create] 댓글 생성 

@@ -16,7 +16,7 @@
     .beforeLogin {
       width: 300px;
       height: 300px;
-    }
+    } 
 
     .loginSuccess {
       display: none;
@@ -68,6 +68,7 @@
     <span> </span>
     <span id="board_rank"></span>
   </div>
+  <div class="gamebtn">게임시작</div>
 </body>
 <script>
   // 로그인했을때 데이터 들고와서 뿌려주는 함수
@@ -173,8 +174,15 @@
         img_file.src = e.data.userInfo.profile_img;
   } 
   
-getMain();
-getloginaccess();
+  const gamestart = document.querySelector('.gamebtn');
+
+  gamestart.onclick = ()=>{
+    window.location.href = "http://127.0.0.1:5500/frontEnd/gameReady.html"
+  }
+
+ getMain();
+ getloginaccess();
+
 </script>
 
 </html>

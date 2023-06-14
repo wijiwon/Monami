@@ -16,6 +16,7 @@ const game = require('./routers/gameReadyRouter');
 const logoutUser = require("./routers/logoutRouter");
 const mypageRouter = require("./routers/mypageRouter");
 const adminRouter = require("./routers/adminRouter");
+const gameRouter = require("./routers/game");
 
 app.use(express.urlencoded({ extended: false }))
 
@@ -52,6 +53,7 @@ app.use('/mainlogin',mainloginaccessRouter);
 app.use('/logout',logoutUser);
 app.use("/mypage",mypageRouter);
 app.use("/admin",adminRouter);
+app.use("/game",gameRouter);
 
 sequelize.sync({ forse: false }).then(() => {
     console.log("연결성공")

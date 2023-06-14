@@ -37,7 +37,7 @@
     <div>
       <button id="loginBtn">로그인</button>
     </div>
-    <a href="http://127.0.0.1:5500/Monami/frontEnd/join.html">회원가입</a>
+    <a href="http://127.0.0.1:5501/frontEnd/join.html">회원가입</a>
   </div>
 
   <div class="loginSuccess" id="loginSuccess">
@@ -138,7 +138,7 @@
         loginDraw(e);
       }
       if (e.data.message == "어드민") {
-        window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/admin.html"
+        window.location.href = "http://127.0.0.1:5501/Monami/frontEnd/admin.html"
       }
 
       if (e.data.message == "로그인할 수 없습니다 (승인대기중)") {
@@ -177,7 +177,7 @@
   const gamestart = document.querySelector('.gamebtn');
 
   gamestart.onclick = ()=>{
-    window.location.href = "http://127.0.0.1:5500/frontEnd/gameReady.html"
+    window.location.href = "http://127.0.0.1:5501/frontEnd/gameReady.html"
   }
 
  getMain();

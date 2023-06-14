@@ -12,6 +12,7 @@ const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
 const mainloginaccessRouter = require("./routers/mainloginRouter");
 const gameReady = require('./routers/gameReadyRouter');
+const game = require('./routers/gameReadyRouter');
 const logoutUser = require("./routers/logoutRouter");
 const mypageRouter = require("./routers/mypageRouter");
 const adminRouter = require("./routers/adminRouter");

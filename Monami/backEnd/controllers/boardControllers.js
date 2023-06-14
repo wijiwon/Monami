@@ -2,7 +2,8 @@
 
 const { decode } = require('jsonwebtoken');
 const {User, Post , Comment} = require('../models/index');
-const path = require("path")
+const path = require("path");
+const { error } = require('console');
 
 // [READ] 게시판에서 모든 게시글 보여주기 
     exports.allBoardView = async (req, res) => {
@@ -102,17 +103,22 @@ const path = require("path")
 
 // [read] 게시글 상세 페이지 보여주기
     exports.boardItemView = async (req, res) => {
-        
-        console.log("===================================")
-        const postId = req.query.id;
+
 
         try {
-            // 1) 조회할 id 가 제대로 넘어오는가 
-                // console.log("req.params.id 👉 " , req.params.id);
-                // req.params.id 를 하는 이유 : routing url 에서 placeholder 에 담겨서 id 가 넘어왔기 때문에 
-                // console.log("req.decode.id🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️" , req.decode.id)
-                // console.log("req.decode.id🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️🙆‍♂️" , req.decode)
+            // 0) 필요한 값 확인 및 할당
+                console.log("@ boardController > boardItemView 입성")
+                console.log("islogin 실행 후 값 들어오는지 보자 💁‍♀️" ,  req.decode)
 
+                const _userTable_ID = req.decode.id 
+                const _userTable_userId = req.decode.user_id 
+                const postId = req.query.id;
+
+            // 1) 로그인한 유저 정보 
+                const loginUser = {
+                    _userTable_ID : _userTable_ID, 
+                    _userTable_userId : _userTable_userId
+                }
 
             // 2) User 테이블에서, data 가져오기
                 const userWithPosts = await User.findOne({
@@ -158,6 +164,7 @@ const path = require("path")
                 const result = {
                     user : userWithPosts, 
                     post : postWithComments,
+                    loginUser : loginUser,
                     // comment : comment,
                 }
                 console.log("게시글 상세에서 보여줄 데이터가 다 들어있나 @boardItemView" , result)
@@ -196,30 +203,29 @@ const path = require("path")
     }
 
 
-
-// [create]
+// [create] 게시판 댓글 생성 
     exports.boardCommentCreate = async (req, res) => {
     
         try {
             // 1) 저장할 데이터 확인
                 console.log("@ boardController > boardCommentCreate 진입!")
                 console.log("👲👲👲👲👲 axios 로 날린거 보기" , req.body);
-                console.log("댓글 쓴게 보이는지 확인 @boardCommentCreate" , req.body.data.content)
+                console.log("댓글 쓴게 보이는지 확인 @boardCommentCreate" , req.body.content)
                 
                 // 댓글 내용
-                const temp_write = req.body.data.content;
+                const temp_write = req.body.content;
                 
                 // 댓글 작성한 유저 id
-                const temp_user_primaryKey = req.body.data.user_primaryKey;
+                const temp_user_primaryKey = req.body.user_primaryKey;
                 
                 // 댓글의 '대상이 되는 게시글 id'
-                const temp_post_primaryKey  = req.body.data.post_primaryKey;
+                const temp_post_primaryKey  = req.body.post_primaryKey;
 
                 // 대댓글의 경우 '대상이 되는 댓글 id'
-                const temp_id_of_targetComment = req.body.data.id_of_targetComment;
+                const temp_id_of_targetComment = req.body.id_of_targetComment;
 
                 // 대댓글의 경우 '대상이 되는 댓글의 작성자' 
-                const temp_writer_of_targetComment = req.body.data.writer_of_targetComment;
+                const temp_writer_of_targetComment = req.body.writer_of_targetComment;
 
 
             // 2) sequelize 상속받은 Comment 객체로 쿼리 날리기 
@@ -267,6 +273,9 @@ const path = require("path")
                         // res.redirect(`http://127.0.0.1:4000/board/item/${id_post}`)
 
                     // 2) 다만, 새로고침 되는게 싫어서 이렇게 보내보자 다시. 
+                        
+                    
+                        // 예전방식 - 작동함🔵
                         res.json({
                             redirectURL :  `http://127.0.0.1:4000/board/item/${id_post}` , 
                             newComment : newComment,
@@ -279,5 +288,117 @@ const path = require("path")
                 console.log(error)
                 
             }
+
+    }
+
+
+// 좋아요 버튼 
+    exports.likesBtn = async (req,res) => {
+
+        try {
+            // 필요한 데이터 도착 확인
+            console.log("@controllers > likesBtn 입성")
+            // console.log("req.body 📌" , req.body)
+            // console.log("req.body likeClickUserID📌" , req.body.likeClickUserID)
+            // console.log("req.body likeClickUserUserID📌" , req.body.likeClickUserUserID)
+            // console.log("req.body clickedPostID📌" , req.body.clickedPostID)
+            
+            const clickedPostID = req.body.clickedPostID;
+            const clickedPostUserID = req.body.likeClickUserUserID;
+            console.log("clickedPostID📌" , clickedPostID)  // 🔵 clickedPostID📌 65
+            console.log("clickedPostID📌" , clickedPostUserID)  
+
+
+
+            // [새로운 시도] 🔵 작동함 | 
+                // post 테이블에서 postid 에 해당하는 row 찾기
+                const post = await Post.findByPk(clickedPostID)
+                
+                // 찾았는데 없으면 에러 메시지
+                if(!post) {
+                    console.log("그 포스트 id 에 해당하는 포스트 없어");
+                    return
+                }
+
+                // 있으면, likes 속성 값 1 증가 
+                await post.increment('likes' , {by : 1});
+                
+                // 클릭한 유저 이름을 추가 
+                const clickeUserUpdatePost = await post.update( {likeClickUser : clickedPostUserID} );
+
+                // 유저 업데이트 한거 확인 
+                console.log("좋아요 클릭버튼 유저 업데이트 완료" , clickeUserUpdatePost);
+                
+                // 서버에 보내기
+                res.json()
+
+            // [과거 코드] 작동함 🔵 | 다만, post.findBypk 가 반복되는 것 같아 줄여보기 
+
+                    // // post 테이블의 좋아요 컬럼에 저장하기 : 특정 게시글에 특정 열 값을 추가! 해야 함.
+                    //     await Post.findByPk(clickedPostID)
+                    //         .then((post) => {
+                    //             // [해석] 
+                    //                 // post는 Post.findByPk(clickedPostID) 호출로 찾아낸 특정 post 행(row) 임. ⭐⭐
+                    //             if (!post) { 
+                    //                 console.log("그 포스트 id 에 해당하는 포스트 없어")
+                    //             } else {
+                    //                 return post.increment('likes' , {by : 1});
+                    //             }
+                                
+                    //         }).then((post) => {
+                    //             // [해석]
+                    //                 // console.log(`1증가 시킨 결과물 : ${post.likes}`)
+                    //                 // console.log(`post 에 담긴 것들 : ${JSON.stringify(post.toJSON() , null, 2)}`)
+                    //                     // 이렇게 하는 이유 | 그냥 post 만 하면, 이상한 값이 나와서
+                    //                     // JSON.stringify | javascript 객체를 JSON 문자열로 변환 
+                    //                     // null, 2 | stringfy 의 인자. 선택적임. | 모든 속성에 적용되며, 들여쓰기에 2개의 공백문자를 쓴다.
+                    //                             // | 이로인해 '가독성' 이 좋아짐
+                    //                     // post.toJSON() | 모든 sequelize 객체가 아니라, 'post 테이블이 가진 데이터' 만 필요한 경우 
+                    //                 // const newPost = JSON.stringify(post.toJSON() , null, 2)
+                    //                 // const currentLikes = newPost.likes
+                                
+                    //             // 결과물 찍어보기
+                    //             // console.log("Post 테이블 특정 id 의 row 에서, 수정된, row  : " , post)
+                    //             // console.log("Post 테이블 특정 id 의 row 에서, 수정된, row 중 likes 값: " , post.likes)  // 작동함 🔵
+                    //                 // [이슈]
+                    //                     // 실제로 업데이트 된 값이 실시간으로 나오는지 여부 
+                    //                         // no 한박자 늦게 나옴 
+                    //                         // 새로고침을 한번해서, DB 값을 가져와야 최신 LIKES 로 개정이 됨. 
+                    //                     // 방법 
+                    //                         // 1) 업데이트가 아직 덜 된 값에 +1 을 해서 보내는 방법 
+                    //                         // 2) GET API 를 호출할 때 마다, 새롭게 업데이트 된 DB 값을 가져와서 그려주는 법 
+                    //                     // 즉, 문제는? 
+                    //                         // 지금 여기서 보는 DB 가 완전 최신이 아님 
+                    //                         // 그러면, 이 상황에서, 다시, boardItem 을 부른다면? 다시 getAPI 를 해서 최신을 받아오지 않을까? 
+
+                    //                 // 클라한테 보내려고 만들었는데, 이거 없어도 likes 업데이트 잘 됨
+                    //                     // const likesBtn = {
+                    //                     //     likes : post.likes
+                    //                     // }
+                                
+                    //             // 우선 보내기 
+                    //                 res.json();
+                    //         })
+
+                    // // post 테이블의 likeClickuser 컬럼에 해당 id 추가하기 
+                    //     await Post.findByPk(clickedPostID)      // post id 로 업데이트할 row 찾음 ⭐
+                    //         .then((post) => {
+                    //             // 유저 이름을 업데이트 하기 
+                    //             return post.update({
+                    //                 likeClickUser : 'dj'
+                    //             });
+                    //         })
+                    //         .then((updatedPost) => {
+                    //             console.log("좋아요 클릭버튼 유저 업데이트 완료" , updatedPost)
+                    //                 // updatedPost 에는 유저 이름 업데이트 한 그 row 가 담김
+                    //         })
+                    //         .catch ((error) => {
+                    //             console.log(error)
+                    //         });
+
+
+        } catch (error) {
+            console.log(error)
+        }
 
     }

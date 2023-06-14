@@ -12,13 +12,27 @@
 
 
 </head>
+
+
+<style>
+
+
+    #comment_container{
+        /* background-color: goldenrod;
+        width: 700px;
+        height: 500px; */
+    }
+
+</style>
+
 <body>
 
 
     <h1> 캐치 마인드 </h1>
 
     <!-- 오른쪽에 배치 -->
-    <button>글 목록</button>  <br><br>
+    <a href="http://127.0.0.1:5500/Monami/frontEnd/boardList.html"> <button>글 목록</button> </a> <br><br>
+
         <!-- [✅ todo] 글 목록으로 이동하게 해야 함 -->
 
     <div> 작성자 : <span id="username"> </span> </div> <br><br> 
@@ -35,7 +49,7 @@
         <div> 👍 : <span id="post_likes"> </span> </div>  <br>  
         <!-- 가져올 곳 : Post 테이블의 likeClickUser 의 개수 -->
     
-        <div> <button id="post_likesBtn">🧡좋아요클릭</button> </div> <br><br>
+        <div> <button id="post_likesBtn">🧡좋아요클릭버튼</button> </div> <br><br>
         <!-- 보낼 곳 : 클릭하면, Post 테이블의 likeClickUser 에, user_id, name, id 를 보낸다. -->
         <!-- 📛 foreignKey 와 현재 api 설정 된거 확인해야 이 부분이 깔끔할 듯 -->
     
@@ -52,15 +66,18 @@
         <!-- 📛 img 태그를 가져오는게 맞겠지? -->
     
 
-    <!-- 댓글 -->
-        <span>댓글 작성된 것 : <span id="comment_read"> </span> </span> <br><br>
-            <!-- 📛 댓글 CREATE 기능 먼저 완료되면, 수행해야 함 -->
-            <!-- 가져올 곳 : comment 테이블의 content 와 connect_writer -->
-        
+    <!-- 댓글 -->        
         <label for=""> 댓글 작성란 : </label> 
         <input type="text" id="comment_write"> 
-        <button id="commentWriteBtn"> 댓글 작성 완료 </button>
+        <button id="commentWriteBtn"> 댓글 작성 완료 </button> <br><br>
             <!-- 보낼 곳 : comment 테이블의 connect_id, connect_writer, content -->
+
+        <span>댓글 작성된 것 : <span id="comment_read"> </span> </span> <br><br>
+        
+        <div id="comment_container">
+
+        </div>
+
 
         <br>
         <br>
@@ -76,6 +93,13 @@
     let postId = 0;
         // [해석] 글쓰기 페이지에서 '완료' 하고 상세페이지로 넘어간 경우, 방금 막 완료된 id
     
+    // 현재 로그인한 유저 정보
+    let loginUser_ID = 0;
+    let loginUser_UserID = "";
+
+    // 클릭된 대댓글 포스트 id 
+    let reCommentClickedBtnID = 0;
+
     // 이것들은 없어도 되지 않나? 👇 
     let userData = {};
     let postsByUser = [] 
@@ -117,7 +141,7 @@
                     const {data} = await axios.get(`http://127.0.0.1:4000/board/item` , {
                         withCredentials : true,
                         params : {
-                            id :postId,
+                            id : postId,
                         }});
 
                     // [이해] 클라에서 서버로 데이터 전송하기 ⭐⭐⭐⭐⭐⭐ 
@@ -150,6 +174,12 @@
                 postsData = data.post;
                 console.log("현재 게시글 정보 = postsData 👉" , postsData)
                 
+                loginUserData = data.loginUser
+                console.log("현재 로그인한 유저 데이터" , loginUserData)
+
+                loginUser_ID = loginUserData._userTable_ID
+                loginUser_UserID = loginUserData._userTable_userId
+
 
             // 3) 이 user 가 적은 post 데이터 중 ⭐방금적은 글 = postID⭐ 에 해당하는 것 가져오기 
                 const postingByUser = postsByUser.find(item => item.id == postId);
@@ -169,7 +199,7 @@
                         // [결과] : 그러니까, commentsByPost 여기에는, 이미 내가 원하는 데이터가 있음. 
 
                     
-            // 3) innerHTML 로 붙여주기    
+            // 5) innerHTML 로 붙여주기    
                 // 작성자
                     username.innerHTML = userData.user_id;
                     // [📛 개선해야 할 것]
@@ -227,23 +257,105 @@
                         // '제목 클릭' 하면, 조회수가 올라갈 수 있게 만들어야 함. 
                         // 게시글이 올라가는 거 (CREATE 먼저)
         
-                // 댓글 내용                        
-                    // '지금 보이고 있는 글' 에 대해 '작성된 모든 댓글'                        
-                    commentContents = commentsByPost.map(comment => comment.content);
-                    comment_read.innerHTML = commentContents.join("!! ");
+                // 댓글 내용 
+                    // [새로 작성] 😥😥😥😥😥😥😥😥😥😥😥😥😥 
+                        // '지금 보이고 있는 글' 에 대해 '작성된 모든 댓글'       
+                        commentContents = commentsByPost.forEach( (comment, index) => {
+                            
+                            // 새로운 div 추가
+                            const temp_div = document.createElement('div');
+                            temp_div.id = `reComment_div_${index}`
 
+                            // 해당 div 에 n 번째 댓글의 내용을 텍스트로 넣기
+                            temp_div.textContent = comment.content;
+
+                            // div 색상
+                            temp_div.style.backgroundColor = 'lightblue'
+                            
+                            // div 테두리
+                                // 맨 첫 번째 div 선 긋기
+                                if (index == 0) {
+                                    temp_div.style.borderTop = '0.5px solid black'; 
+                                }
+                                temp_div.style.borderBottom = '0.5px solid black';
+                                temp_div.style.borderLeft = '0.5px solid black';
+                                temp_div.style.borderRight = '0.5px solid black';
+
+                            // 버튼 추가 
+                                const reCommentBtn = document.createElement('button');
+                                reCommentBtn.textContent = '답글✍';
+
+                            // 댓글 입력창 
+                                // 입력창 테두리
+                                const reComment_container = document.createElement('div')
+                                reComment_container.style.display = "none"
+
+                                // 입력창 내부 > 댓글 다는 곳
+                                const reComment_input = document.createElement('input')
+                                reComment_input.id = `reComment_input_${index}`
+                                reComment_container.appendChild(reComment_input)
+
+                                // 입력창 내부 > 작성완료 버튼 
+                                const comment_reCompleteBtn = document.createElement('button')
+                                comment_reCompleteBtn.textContent = "작성완료👏"
+                                comment_reCompleteBtn.id = `reComment_CompleteBtn_${index}`
+                                comment_reCompleteBtn.classList.add('reComment_CompleteBtn')
+                                reComment_container.appendChild(comment_reCompleteBtn)
+
+
+                                // '답글' 버튼 클릭시 밑으로 떨어지게 하기
+                                reCommentBtn.onclick = () => {
+                                    if (reComment_container.style.display = "none") {
+                                        reComment_container.style.display = "block"
+                                    } else {
+                                        reComment_container.style.display = "none"
+                                    }
+                                }
+                            
+                            // temp_div 에 버튼, 댓글 창 추가
+                                temp_div.appendChild(reCommentBtn)
+                            
+                            // 추가할 곳에 넣기
+                                document.getElementById('comment_container').appendChild(temp_div)
+                                document.getElementById('comment_container').appendChild(reComment_container)
+                                // 대댓글 여기 아래에 추가 👇👇  
+
+
+                        
+                            // 대댓글 작성완료 클릭 버튼 찾기
+                                // reCommentCompleteClicked()
+                        });
+
+                        // keep 하는 참고 코드 
+                            // commentContents = commentsByPost.map((comment , index) => {
+                            
+                            // const div = document.createElement('div');
+                            // div.textContent = comment
+                            
+                            // return `
+                            // <div style = "background-color : ${color}; margin : 10px; padding : 10px;">
+                            //     ${comment.content}
+                            // </div>
+                            // `
+                        
+                    // [예전 방식] 작동함 🔵
+                        // // 하나씩 빼서 div 에 담는다. 
+                            // document.createElement('div')
+                            // document.body.appendChild()
+                            // comment_read.innerHTML = commentContents.join("!! ");
         } catch (error) {
             console.log(error)
         }
     }
 
     // [getAPI 실행] 상세 글에 필요한 데이터 가져오기  
-        // 방식 1
-            document.addEventListener("DOMContentLoaded", function() {
-                    getAPI();
+            document.addEventListener("DOMContentLoaded", async function() {
+                    
+                    await getAPI();
+
+                    // 어떤 대댓글 버튼이 클릭되는지 체크
+                    reCommentBtnClicked()   
                 });
-        // 방식 2
-                // getAPI();
 
 
 
@@ -297,14 +409,10 @@
                     console.log("👲👲👲👲👲👲 댓글 잘 보이나" , comment_write.value)
                 
             // 2) axios 전송
-            const result = await axios.post("http://127.0.0.1:4000/board/comment/create" , 
-                {
-                    withCredentials:true ,      // withCredentials 필수 ⭐⭐
-                    data
-                } , {
+            const result = await axios.post("http://127.0.0.1:4000/board/comment/create" , data , {
+                    withCredentials : true ,      // withCredentials 필수 ⭐⭐
                     headers : {"Content-Type" : "application/json"}
-                        // "Content-Type" : "multipart/form-data"
-
+                } , {
                 }).then((response) => {
                     
                 // 3) 댓글 쓴거를 보이게 하기 | UI 가 변경되면 바뀔 부분임 ✅ 
@@ -318,7 +426,12 @@
                         console.log("commentContents 최근작성한 댓글까지 있어? 아님 그 전것들만?" , commentContents)
 
                     // c) 우선, 이것만 문자열로 넣어볼까.
-                        comment_read.innerHTML += `${response.data.newComment.content}`
+                        // getAPI 방식 
+                            // getAPI()
+                                // content 가 없다고 하는데, 이건, 이제 매개변수를 활용해서 넣으면 될 것 같음
+
+                        // [예전방식] 작동함🔵
+                            comment_read.innerHTML += `${response.data.newComment.content}`
 
                     // [이건 getAPI 에서 댓글 그려지는 방식 | 참고]
                         // const commentContents = commentsByPost.map(comment => comment.content);
@@ -339,51 +452,196 @@
 
 
 
-    // 좋아요 버튼 클릭시 > 1) 숫자 및 2) update 클릭 유저  update
-        // update 함수 실행
-        post_likesBtn.onclick = () => {
-            updateLikes();
-            console.log("좋아요 함수 실행👍👍👍")
+
+// 🔹 대댓글 등록하기 
+
+    // 1) 대댓글 완료 버튼 체크
+        reCommentBtnClicked = async () => {
+            const _reComment_CompleteBtn = document.querySelectorAll('.reComment_CompleteBtn')
+            console.log("⏩  대댓글 작성완료 버튼 모음 " , _reComment_CompleteBtn)
+
+            _reComment_CompleteBtn.forEach(btn => {
+                btn.addEventListener('click' , async (event) => {
+                    console.log("대댓글 작성완료 클릭됐는지🚀")
+                    const temp_clickedBtnID = event.target.id.split('_')[2];
+                    
+                    reCommentClickedBtnID = temp_clickedBtnID;  // 전역변수 주의📛  
+                    console.log("reCommentClickedBtnID 👉 " , reCommentClickedBtnID)
+
+                    await saveComment();    
+                        // ⭐⭐⭐⭐⭐ 비동기처리로써 기다린다 이렇게 쓰는구나
+
+                    console.log("현재 클릭된, 대댓글, 작성완료, 버튼 💫 " , reCommentClickedBtnID)
+                })
+            });
         }
+    
+    // 2) 함수 실행 ⭐⭐ 
+        // getAPI() 가 전부 끝나고 되어야 하므로, getAPI() 이후로 동기처럼 작동하는 비동기 처리
 
-        // update 함수 정의
-        async function updateLikes() {
+
+    // 3) 댓글 가져온거 저장하기 
+        saveComment = async () => {
+
+        try {
+
+            // 0) 어떤 '대댓글 작성완료 버튼' 클릭 됐는지 보기 
+                console.log("reCommentClickedBtnID @saveComment" , reCommentClickedBtnID)
+                const clickedBtnID = reCommentClickedBtnID
+                console.log("현재 클릭된, 대댓글, 작성완료, 버튼 ID 🎢 " , clickedBtnID)
+
+            // 1) input value 데이터 확인
+                const _content = document.getElementById(`reComment_input_${clickedBtnID}`).value
+                console.log("대댓글 넘어오니? @boardItem > saveComment : " , _content);
             
-            try {
-                // 1) 현재 접속중이면서, 클릭한 user id 가져오기  
-                    const {data} = axios.get("http://127.0.0.1:4000/board/item" , {
-                        withCredentials : true
-                    }) 
-                    const userData = data.user;
-                    const postsData = userData.Posts;
-                    const currentClickUser = postsData[0].user_id;
-                        // [📛개선할 것]
-                            // 이걸, 로그인 정보, 에서 가져와야 하지 않나? session 같은? 
+            
+            // 2) 서버에 넘겨줄 데이터 
+                const data = {
 
-                // 2) 그 유저를, '좋아요 클릭 유저' 배열 안에 추가 하기
-                    postsData[0].likeClickUser.push(currentClickUser)
-                        // [📛개선할 것]
-                            // postsData[0] 이, 바로 그 게시글 임을 확증할 수 없음. 
+                    // 대댓글 내용
+                    content : _content, 
 
-                // 3) 현재 보이는 likes 숫자 올리기 
-                    post_likes.innerHTML = postsData[0].likeClickUser.length
-                        // [📛개선할 것]
-                            // postsData[0] 이, 바로 그 게시글 임을 확증할 수 없음. 
+                    // 대댓글을 작성한 사람의 ID 
+                    user_primaryKey : userData.id,
+                        // [모르겠는것] 작성자의 id 를 user_primaryKey 로 가져오는게 맞나❓❓
+                        
+                    // 대댓글 작성의 대상이 되는 '타겟 게시글' 의 'POST ID' 
+                    post_primaryKey : postId, 
+
+                    // 대댓글의 경우, 댓글 작성 대상이 되는 'comment' 의 'comment 테이블 id'
+                    id_of_targetComment : 1, 
+                        // [이슈]
+                            // 이 부분 수정 필요 ⭐⭐⭐⭐⭐⭐⭐ 
+
+                    // 대댓글의 경우, 댓글 작성 대상이 되는 'comment' 의 'USERID'
+                    writer_of_targetComment : userData.user_id
+                        // [이슈]
+                            // 이게 왜 필요하지?                            
+                    }
+                console.log("현재 들어온 데이터들 확인 👉👉👉" , data)
+
+
+            // 3) axios 로 서버에 전송 
+                const result = await axios.post("http://127.0.0.1:4000/board/comment/create" , data, {
+                    withCredentials : true, 
+                    headers : {"Content-Type" : "application/json"}
+                } , {
+                }).then((response) => {
+                    console.log("@boardItem > newComment_button, 대댓글 버튼 | 서버에 post 요청 보내고 response로 돌아옴")
+                    
+                    // 필요한 정보 
+                        // reCommentClickedBtnID : 대댓글의 대상이 되는 id 가 뭔지 ⭐⭐ | 전역변수 
+
+                    // 대댓글 보여줄 div 만들기
+                    const reComment_read = document.createElement('div')
+
+                    // '대댓글이 보일 div' 에 response 로 받은, 방금 쓴 대댓글 내용 가져오기 
+                    reComment_read.textContent = response.data.newComment.content   // response에서받아온댓글데이터
+                    
+                    // '대댓글이 보일 div' 에 id 부여하기 
+                    reComment_read.id = `reComment_input_${reCommentClickedBtnID}`
+
+                    // '대댓글이 보일 div' 를 '클릭이 일어난 div' 아래에 붙이기 
+                    const _targetDiv = document.getElementById(`reComment_div_${reCommentClickedBtnID}`)
+                    _targetDiv.appendChild(reComment_read)
+
+                    // ✅ 다만, 댓글과 대댓글이 같이 함께 보이는게 가능할까. ✅✅✅  
+
+                });
+                // [현재 230614 이슈]
+                    // 1) 댓글과 대댓글 구분 없이 그냥 댓글 테이블에 넣었다. 문제가 없을까? 
+                    // 2) '기존 누적으로 보이는 댓글' 그 밑에!!! 원본 댓글이 붙어야 한다. 
+                    // 3) 대댓글이 완성되면, 딱 1번만 된다. 2번 이상은 안 된다 😥😥  
+
 
             } catch (error) {
                 console.log(error)
             }
+
+            }
+
+
+
+
+
+
+
+    // 2차 시도 
+    
+        // document.querySelectorAll('.reComment_CompleteBtn').forEach(btn => {
+
+        //     btn.addEventListener('click' , (event) => {
+            
+        //         temp_clickedBtnID = event.target.id
+        //         reCommentClickedBtnID = temp_clickedBtnID.split('_')[2]
+        //             // [이슈] 
+        //                 // 혹시, 이게 문자인데, 숫자로 바꿔야 하나? ❓❓❓❓❓❓❓
+
+        //         console.log(reCommentClickedBtnID) 
+        //         console.log("현재 클릭된, 대댓글, 작성완료, 버튼 💫 " , reCommentClickedBtnID)
+        //     })
+        // });
+
+
+        // 저장하기 
+
+
+
+
+
+    // 3차 시도
+
+
+
+
+
+
+// 🔹 좋아요 버튼 클릭시 > 1) 숫자 및 2) update 클릭 유저  update
+    
+    // update 함수 실행
+    post_likesBtn.onclick = () => {
+        updateLikes();
+        console.log("좋아요 함수 실행👍👍👍")
+    }
+
+    // update 함수 정의
+    async function updateLikes() {
+        
+        try {
+
+            // 1) 현재 접속중이면서, 클릭한 user의 ID 와 USERID 가져오기  
+            const likeClickUserID = loginUser_ID;   // 전역변수로 가져오는 중 ✅ 
+            const likeClickUserUserID = loginUser_UserID;   // 전역변수로 가져오는 중 ✅ 
+            const clickedPostID = postId
+                console.log("likeClickUserID 찍히나?" , likeClickUserID);
+                console.log("likeClickUserUserID 찍히나?" , likeClickUserUserID);
+                console.log("clickedPostID 찍히나?" , clickedPostID);
+
+            const data = {
+                likeClickUserID : likeClickUserID, 
+                likeClickUserUserID : likeClickUserUserID,
+                clickedPostID : clickedPostID,
+            }
+                console.log("data 잘 들어갔나" , data);
+
+            await axios.post("http://127.0.0.1:4000/board/likes" , data, {
+                withCredentials : true, 
+            } , {
+                headers : {"Content-Type" : "application/json"}
+            }).then((response) => {
+                
+                console.log("@boardItem > updateLikes 진입")
+                    // console.log("response 받음" , response.data)
+                    // console.log("response 받음" , response)
+                getAPI();
+            
+            })
+
+
+        } catch (error) {
+            console.log(error)
         }
-
-
-
-// () => {
-//     const {data} = await axios.get(`http://127.0.0.1:4000/board/item` , {
-//                     withCredentials : true,
-//                 params : {
-//                     id :postId,
-//                 }});
-// };
+    }
 
 
 </script>

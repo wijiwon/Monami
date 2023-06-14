@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const { allBoardView , boardCreate , boardCreateView , boardItemView , boardCommentCreate , boardParamsView } = require("../controllers/boardControllers")
+    const { allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView } = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
     const { islogin } = require("../middleware/isLogin");
 
@@ -14,8 +14,8 @@
 
 
 // [read] 게시판 글쓰는 곳 보여주기 
-    routers.get("/create" ,  boardCreateView)
-    
+    routers.get("/create" ,  islogin, boardCreateView)
+
 
 // [create] 게시판 글쓰기 
     routers.post('/create' ,  Upload.single("post_img") ,  boardCreate );
@@ -34,13 +34,13 @@
 
 
 // [read] 게시판 상세 내용 보여주기 
-    routers.get('/item' , boardItemView)
+    routers.get('/item' , islogin, boardItemView)
 
 // [read] post id 값을 가져온 걸로, 상세 페이지 보여주기 
     // routers.get('/item/*' , boardParamsView)
     // [해석] ejs 에서 /item/:id 쓰던 걸-> /item/* 이렇게 작성 ⭐⭐
     
-    routers.get('/item/:id_post' , boardParamsView)
+    routers.get('/item/:id_post' , islogin , boardParamsView)
     // [해석] 이걸로 연결하게 되나❓ : 응. 글 작성하면, 이걸로 연결하게 돼
 
 // [read] post_id + comment id 값 가져온 걸로, 상페, 보여주기
@@ -53,8 +53,14 @@
         // routers.post('/comment/create' , Upload.single("comment_write"), boardCommentCreate)
     
     // 2) 현재 텍스트만 쓸 때 = 그래서, multer 를 사용하지 않을 때 버전
-        routers.post('/comment/create', boardCommentCreate)
+        routers.post('/comment/create', islogin, boardCommentCreate)
     // [주의할 부분]
         // 지금, single 메소드에 넣은 매개변수인 file 의 key 이름없음. 📛
+
+
+// [create] 좋아요 버튼 숫자 넣기 
+    routers.post('/likes' , islogin , likesBtn)
+
+
 
 module.exports = routers

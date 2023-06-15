@@ -422,7 +422,7 @@
     let mediaRecorder;
 
     // 비디오 녹화 시작
-    async function startRecording() {
+    function startRecording() {
         const canvasStream = canvas.captureStream();
         mediaRecorder = new MediaRecorder(canvasStream, { mimeType: 'video/webm' });
 
@@ -436,30 +436,30 @@
 
     async function createVideoURL() {
         const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
-            // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
-        const formData = new FormData();
-        formData.append('file', videoBlob);
-
-        await axios.post('http://127.0.0.1:4000/gameplay', formData , {
+        const videoURL2 = URL.createObjectURL(videoBlob);
+        await axios.post('http://127.0.0.1:4000/gameplay', { url: videoURL2 }, {
             withCredentials: true,
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "application/json"
         }).then((e) => {
 
         }).catch((err) => {
             console.log(err)
         })
-        // return URL.createObjectURL(videoBlob);
+        return videoURL2
     }
 
     // 비디오 재생
-    async function playVideo() {
+    async function playVideo(videoURL) {
         const videoElement = document.getElementById('video_recorded');
-        await axios.get('http://127.0.0.1:4000/gameplay/viewVideo', {
+        const data = await axios.get('http://127.0.0.1:4000/gameplay/viewVideo', {
             responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
             withCredentials: true
         }).then((e)=>{
+            console.log("eeeeeeeeeeeee",e)
+            console.log("eeeeeeeeeeeee",e.data)
             const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
             const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+            console.log("vvvvvvvvvvvvv",videoSrc)
             videoElement.src = videoSrc;
             videoElement.play();
         }).catch((err)=>{
@@ -471,24 +471,25 @@
     }
 
     // 비디오 녹화 종료
-    async function stopRecording() {
+    function stopRecording() {
+
         mediaRecorder.onstop = (e) => {
             const videoURL = createVideoURL();
-            // playBtn.addEventListener('click',playVideo);
+            playBtn.addEventListener('click', () => playVideo(videoURL));
         };
+
         mediaRecorder.stop();
     }
-    
+
     const completeBtn = document.getElementById('complete');
     const playBtn = document.getElementById('play');
-    
-    
+
+
     window.addEventListener('DOMContentLoaded', startRecording);
     completeBtn.addEventListener('click', () => {
         stopRecording();
     });
-    
-    playBtn.addEventListener('click',playVideo);
+
 
 
 

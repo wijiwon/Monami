@@ -12,7 +12,7 @@ const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
 const mainloginaccessRouter = require("./routers/mainloginRouter");
 const gameReady = require('./routers/gameReadyRouter');
-const game = require('./routers/gameReadyRouter');
+const game = require('./routers/game');
 const logoutUser = require("./routers/logoutRouter");
 const mypageRouter = require("./routers/mypageRouter");
 const adminRouter = require("./routers/adminRouter");
@@ -45,6 +45,7 @@ app.use(express.json());
 
 
 app.use('/gameready', gameReady);
+app.use('/gameplay', game);
 app.use('/main',mainInfoRouter);
 app.use('/join',joinRouter);
 app.use('/login',loginRouter);

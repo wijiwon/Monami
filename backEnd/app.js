@@ -142,6 +142,13 @@ io.on('connection', (socket) => {
         console.log("방입장 한뒤 소켓으로보냄");
         const roomName = `room${roomNum}`;
         socket.join(roomName);
+
+        socket.on('exitRoom', () => {
+            console.log("User has exited the room");
+            socket.leave(roomName);
+            // Perform any additional actions or emit events as needed
+        });
+
         let obj = {}
         obj.nick = "운영자"
         obj.message = `${roomName}새로운 유저가 방에 입장하였습니다.`;
@@ -159,29 +166,31 @@ io.on('connection', (socket) => {
         }
         socket.to(roomName).emit('chat message', obj);
         socket.to(roomName).emit('getreadyuser',  username );
+        
+        socket.on('gamestart',()=>{
+            setTimeout(() => {
+                socket.to(roomName).emit('gamestart1',()=>{
+                    console.log("여기까지옴");
+                })
+                
+            }, 1000);
+            setTimeout(() => {
+                socket.to(roomName).emit('gamestart2',()=>{
+                    console.log("여기까지옴");
+                })
+                
+            }, 2000);
+            setTimeout(() => {
+                socket.to(roomName).emit('gamestart3',()=>{
+                    console.log("여기까지옴");
+                })
+                
+            }, 3000);
+           
+        })
 
 
     })
-    socket.on('gamestart',()=>{
-        setTimeout(() => {
-            io.emit('gamestart1',()=>{
-                console.log("여기까지옴");
-            })
-            
-        }, 1000);
-        setTimeout(() => {
-            io.emit('gamestart2',()=>{
-                console.log("여기까지옴");
-            })
-            
-        }, 2000);
-        setTimeout(() => {
-            io.emit('gamestart3',()=>{
-                console.log("여기까지옴");
-            })
-            
-        }, 3000);
-       
-    })
+
     
 });

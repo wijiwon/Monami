@@ -409,7 +409,7 @@
     //         })
 
     exit.addEventListener('click', async () => {
-        await axios.post('youdonghee.shop/gameready/RoomDelete', { title: titlevalue },
+        await axios.post('/gameready/RoomDelete', { title: titlevalue },
         {
             withCredentials:true
         })
@@ -616,7 +616,7 @@
                         // let usernum3 = usernum2.split(',') 
                         // console.log("$$$$$$$$$$$$$$$$",usernum3)
 
-                        axios.post('youdonghee.shop/gameready/roomchoice', { id: num }, {
+                        axios.post('/gameready/roomchoice', { id: num }, {
                             withCredentials: true,
                             "Content-Type": "application/json"
                         }).then((e) => {
@@ -699,7 +699,7 @@
             console.log("방생성되어서 이벤트보냄")
         })
         // joinRoom();
-        axios.post("youdonghee.shop/gameready/create", { title: title.value }, {
+        axios.post("/gameready/create", { title: title.value }, {
             withCredentials: true,
             "Content-Type": "application/json"
 
@@ -734,7 +734,7 @@
         // }).catch((err)=>{
         //     console.log(err);
         // })
-        axios.post("youdonghee.shop/gameready/gethost", { title: titlevalue }, {
+        axios.post("/gameready/gethost", { title: titlevalue }, {
             withCredentials: true
         }).then((e) => {
             console.log(e);

@@ -68,7 +68,7 @@
             approveButton.addEventListener("click", () => {
               try {
                 console.log("승인:", item);
-                axios.post("youdonghee.shop/admin",{
+                axios.post("/admin",{
                   // req.body.data 로 승인 거절 누른 사람 정보 전송해줌
                   data:
                   {

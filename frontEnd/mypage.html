@@ -99,7 +99,7 @@
       form.append("nickName",user_name.innerHTML);
     }
     
-    axios.post("youdonghee.shop/mypage",form,{
+    axios.post("/mypage",form,{
       withCredentials:true,
       "Content-Type" : "multipart/form-data"
     }).then((e)=>{

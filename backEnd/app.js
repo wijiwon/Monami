@@ -17,6 +17,7 @@ const logoutUser = require("./routers/logoutRouter");
 const mypageRouter = require("./routers/mypageRouter");
 const adminRouter = require("./routers/adminRouter");
 const gameRouter = require("./routers/game");
+const { Cookie } = require('express-session');
 
 app.use(express.urlencoded({ extended: false }))
 
@@ -39,7 +40,8 @@ app.use(session({
     name: "token",
     secret: process.env.REFRESH_TOKEN_KEY,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { secure: false }
 }))
 
 app.use(express.json());

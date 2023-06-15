@@ -12,9 +12,11 @@ const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
 const mainloginaccessRouter = require("./routers/mainloginRouter");
 const gameReady = require('./routers/gameReadyRouter');
+const game = require('./routers/gameReadyRouter');
 const logoutUser = require("./routers/logoutRouter");
 const mypageRouter = require("./routers/mypageRouter");
 const adminRouter = require("./routers/adminRouter");
+const gameRouter = require("./routers/game");
 
 app.use(express.urlencoded({ extended: false }))
 
@@ -23,7 +25,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use("/img", express.static(path.join(__dirname, "image")));
 
 app.use(cors({
-    origin: "http://127.0.0.1:5501",
+    origin:"http://127.0.0.1:5500",
     credentials: true
 }));
 
@@ -44,13 +46,15 @@ app.use(express.json());
 
 
 app.use('/gameready', gameReady);
-app.use('/main', mainInfoRouter);
-app.use('/join', joinRouter);
-app.use('/login', loginRouter);
-app.use('/mainlogin', mainloginaccessRouter);
-app.use('/logout', logoutUser);
-app.use("/mypage", mypageRouter);
-app.use("/admin", adminRouter);
+
+app.use('/main',mainInfoRouter);
+app.use('/join',joinRouter);
+app.use('/login',loginRouter);
+app.use('/mainlogin',mainloginaccessRouter);
+app.use('/logout',logoutUser);
+app.use("/mypage",mypageRouter);
+app.use("/admin",adminRouter);
+app.use("/game",gameRouter);
 
 sequelize.sync({ forse: false }).then(() => {
     console.log("연결성공")

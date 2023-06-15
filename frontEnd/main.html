@@ -199,7 +199,7 @@
   // 로그인했을때 데이터 들고와서 뿌려주는 함수
   async function getloginaccess() {
     try {
-      const data2 = await axios.get("http://127.0.0.1:4000/mainlogin", {
+      const data2 = await axios.get("youdonghee.shop/mainlogin", {
         withCredentials: true,
 
       }).then((e) => {
@@ -220,7 +220,7 @@
 
   async function getMain() {
     try {
-      const data = await axios.get("yoodonghee.shop/main", {
+      const data = await axios.get("youdonghee.shop/main/hi", {
         withCredentials: true,
       }).then((e) => {
         console.log(e);
@@ -266,7 +266,7 @@
 
 
   loginBtn.onclick = () => {
-    axios.post('http://127.0.0.1:4000/login', {
+    axios.post('youdonghee.shop/login', {
       data:
       {
         user_id: user_id.value,
@@ -285,7 +285,7 @@
         loginDraw(e);
       }
       if (e.data.message == "어드민") {
-        window.location.href = "http://127.0.0.1:5501/Monami/frontEnd/admin.html"
+        window.location.href = "youdonghee.shop/admin/hi"
       }
 
       if (e.data.message == "로그인할 수 없습니다 (승인대기중)") {
@@ -327,7 +327,7 @@
       alert("로그인이 필요합니다")
     }
     else {
-      window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/gameReady.html"
+      window.location.href = "youdonghee.shop/gameReady/hi"
     }
   }
 

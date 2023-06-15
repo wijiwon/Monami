@@ -2,7 +2,11 @@ const router = require('express').Router();
 const { RoomCreate, RoomChoice, RoomViews, UserView,getHost,RoomDelete} = require('../controllers/gameReadyController');
 const { islogin } = require('../middleware/isLogin')
 
-router.get('/', islogin, RoomViews);
+router.get('/',(req,res)=>{
+  res.sendFile("/home/ubuntu/frontEnd/game.html");
+});
+
+router.get('/hi', islogin, RoomViews);
 
 router.get('/userInfo', islogin, UserView);
 

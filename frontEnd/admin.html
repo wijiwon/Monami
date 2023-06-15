@@ -27,7 +27,7 @@
   // 테이블 그려주는 함수
   async function drawAdminTable() {
     try {
-      await axios.get("http://127.0.0.1:4000/admin", {
+      await axios.get("youdonghee.shop/admin", {
         withCredentials: true,
       }).then((e) => {
         // 유저 데이터 다 가져와서 (어드민 빼고) 그려준다

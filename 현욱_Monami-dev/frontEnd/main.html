@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    .profileImg {
+      width: 300px;
+      height: 300px;
+    }
+
+    .beforeLogin {
+      width: 300px;
+      height: 300px;
+    } 
+
+    .loginSuccess {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="beforeLogin" id="beforeLogin" >
+    <div>
+      <span id="idAlert"></span>
+      <label for="">아이디</label>
+      <input type="text" id="user_id"> <br>
+      <span id="pwAlert"></span>
+      <label for="">비밀번호</label>
+      <input type="password" id="user_pw"> <br>
+    </div>
+    <div>
+      <button id="loginBtn">로그인</button>
+    </div>
+    <a href="http://127.0.0.1:5500/Monami/frontEnd/join.html">회원가입</a>
+  </div>
+
+  <div class="loginSuccess" id="loginSuccess">
+    <div>
+      <span id="username"></span>님 안녕하세요!
+    </div>
+    <div>
+      <a href="http://127.0.0.1:5500/Monami/frontEnd/mypage.html">마이페이지</a>
+      <button>로그아웃</button>
+    </div>
+  </div>
+
+
+  <div>
+    <h1>프로필 이미지</h1>
+    <img src="" alt="" id="img_file" class="profileImg">
+  </div>
+
+  <h1>유저랭킹 5위</h1>
+  <div>
+    <span id="user_rank"></span>
+  </div>
+  <div>
+  </div>
+
+  <h1>게시판 5개</h1>
+  <div>
+    <span> </span>
+    <span id="board_rank"></span>
+  </div>
+  <div class="gamebtn">게임시작</div>
+</body>
+<script>
+
+  async function getloginaccess(){
+    try {
+      const data2 = await axios.get("http://127.0.0.1:4000/mainlogin",{
+        withCredentials:true,
+
+      }).then((e)=>{
+        console.log("ㅇㅇ 님ㅈ됌",e); 
+        if(e)
+        {
+          loginSuccess.style.display = "block"
+        beforeLogin.style.display = "none"
+
+        username.innerHTML = e.data.login.username;
+        img_file.src = e.data.login.profile_img;
+
+        }
+      })
+    } catch (error) {
+      console.log("getloginaccess",error);
+      
+    }
+   
+  }
+  async function getMain() {
+    try {
+     
+      const data = await axios.get("http://127.0.0.1:4000/main", {
+        withCredentials: true,
+      }).then((e) => {
+        console.log(e);
+        const titleNames = e.data.posts
+        const userDatas = e.data.user
+        titleNames.forEach((e, index) => {
+          board_rank.innerHTML += `<div><span> title : ${e.title}</span> <span> user_id :${e.user_id}</span></div>`
+        });
+        
+        userDatas.forEach((e, index) => {
+          user_rank.innerHTML += `<div><span> username : ${e.username}</span> <span>userEXP : ${e.exp}</span></div>`
+        })
+
+        // if (document.cookie.includes("token")) {
+        //   console.log("??");
+        //   loginDraw(e);
+        // }
+      });
+
+    } catch (error) {
+      console.log("main에러", error);
+    }
+  }
+
+
+
+  loginBtn.onclick = () => {
+    axios.post('http://127.0.0.1:4000/login', {
+      data:
+      {
+        user_id: user_id.value,
+        user_pw: user_pw.value
+      }
+    }).then((e) => {
+      console.log(e);
+
+      if (e.data.token) {
+        console.log("!@#$#$^%@#^@#$%@#$%@#%?!@?!@?");
+        loginDraw(e);
+      }
+      // if (e.data.message == "로그인완") {
+      //   loginDraw(e);
+      // }
+
+      // if (e.data.message == "비밀번호 틀림") {
+
+      // }
+    })
+
+  }
+  async function loginDraw(e) {
+        document.cookie =`token=${e.data.token}; path=/`
+
+        loginSuccess.style.display = "block"
+        beforeLogin.style.display = "none"
+
+        username.innerHTML = e.data.userInfo.username;
+        img_file.src = e.data.userInfo.profile_img;
+  } 
+  
+  const gamestart = document.querySelector('.gamebtn');
+
+  gamestart.onclick = ()=>{
+    window.location.href = "http://127.0.0.1:5501/frontEnd/gameReady.html"
+  }
+
+ getMain();
+ getloginaccess();
+</script>
+
+</html>

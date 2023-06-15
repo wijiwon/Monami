@@ -122,7 +122,9 @@ const { error } = require('console');
 
             // 2) User 테이블에서, data 가져오기
                 const userWithPosts = await User.findOne({
-                    where : {id : 2},   // ✅ 현재 dj 가 id 2 라서 설정함
+                    where : {id : _userTable_ID},   
+                        // ✅ 현재 dj 가 id 2 라서 설정함
+                        // 이제, 세션에 저장된걸로 대체하기 : _userTable_ID
                     include : [
                         {model : Post}
                     ]
@@ -208,43 +210,46 @@ const { error } = require('console');
     
         try {
             // 1) 저장할 데이터 확인
-                console.log("@ boardController > boardCommentCreate 진입!")
-                console.log("👲👲👲👲👲 axios 로 날린거 보기" , req.body);
-                console.log("댓글 쓴게 보이는지 확인 @boardCommentCreate" , req.body.content)
+                console.log("@@@ boardController > boardCommentCreate 진입!")
+                console.log("🛴 클라에서 axios 로 받은거  보기" , req.body);
+                console.log("| 댓글 내용 " , req.body.content)
+                console.log("| 댓글 작성한 유저 id" , req.body.user_primaryKey)
+                console.log("| 댓글의 '대상이 되는 게시글 id'" , req.body.post_primaryKey)
+                console.log("| 대댓글의 경우 '대상이 되는 댓글 id' : 1) 원본댓글 = 0 , 2) 대댓글은, '타겟 댓글의 comment 테이블 id' 가 들어와야함" , req.body.id_of_targetComment)
+                console.log("| writer_of_targetComment : 대댓글의 타겟 댓글 작성자 id" , req.body.writer_of_targetComment)
                 
                 // 댓글 내용
-                const temp_write = req.body.content;
+                // const temp_write = req.body.content;
                 
                 // 댓글 작성한 유저 id
-                const temp_user_primaryKey = req.body.user_primaryKey;
+                // const temp_user_primaryKey = req.body.user_primaryKey;
                 
                 // 댓글의 '대상이 되는 게시글 id'
-                const temp_post_primaryKey  = req.body.post_primaryKey;
+                // const temp_post_primaryKey  = req.body.post_primaryKey;
 
                 // 대댓글의 경우 '대상이 되는 댓글 id'
-                const temp_id_of_targetComment = req.body.id_of_targetComment;
+                // const temp_id_of_targetComment = req.body.id_of_targetComment;
 
                 // 대댓글의 경우 '대상이 되는 댓글의 작성자' 
-                const temp_writer_of_targetComment = req.body.writer_of_targetComment;
+                // const temp_writer_of_targetComment = req.body.writer_of_targetComment;
 
 
             // 2) sequelize 상속받은 Comment 객체로 쿼리 날리기 
                 const newComment = await Comment.create({
                     // 댓글 작성 내용
-                    content : temp_write,
+                    content : req.body.content,
                     
                     // 댓글 작성한 유저의 user 테이블 상의 id 
-                    user_primaryKey : temp_user_primaryKey,
+                    user_primaryKey : req.body.user_primaryKey,
 
                     // 댓글 작성 대상이 된 '대상 게시글의 id' (post 테이블에서 가져오기)                    
-                    post_primaryKey : temp_post_primaryKey,
+                    post_primaryKey : req.body.post_primaryKey,
 
-                    // 댓글 작성 대상이 되는 '대상 댓글의 id' (comment 테이블에서 가져오기)
-                    id_of_targetComment : temp_id_of_targetComment,
+                    // 대댓글 작성 대상이 되는 '대상 댓글의 id' (comment 테이블에서 가져오기)
+                    id_of_targetComment : req.body.id_of_targetComment,
 
                     // 댓글 작성 대상이 되는 '대상 댓글을 쓴 유저' (comment 테이블에서 가져오기)
-                    writer_of_targetComment : temp_writer_of_targetComment
-
+                    writer_of_targetComment : req.body.writer_of_targetComment
                 })
 
 
@@ -254,7 +259,10 @@ const { error } = require('console');
                     const id_newComment = newComment.id
                 
                 // 댓글의 대상이 되는 게시글의 id 가져오기 
-                    const id_post = temp_post_primaryKey
+                    const id_post = newComment.post_primaryKey
+                    
+                // 대댓글의 대상이 되는 원본 댓글 ID 가져오기
+                    const reComment_original_commentID = newComment.id_of_targetComment
                     // const id_post = temp_post_primaryKey
                     // [해석] ⭐⭐⭐ | 나중에 잊어버릴거 같아 
                         // 1) '글쓰기 페이지(boardCreate.html)' 에서, 기입하고, 버튼 누르면, 게시글 id 가 url 에 담겨짐 
@@ -266,8 +274,10 @@ const { error } = require('console');
                         // URL 형식은 '게시글id' + '댓글 id' 들 다 여야 함 
                         // '게시글 id 가 필요한 이유' = 댓글의 target 이 되기 때문
                     
-                    console.log("res 까지 왔음!")
-                    console.log("방금 작성한 댓글의 id" , id_newComment)
+                    console.log("@boradController > boardCommentCreate 까지 왔음!")
+                    console.log("방금 작성한 '댓글 ID'" , id_newComment)
+                    console.log("방금 작성한 댓글의 대상이 되는 '게시글ID' " , id_post)
+                    console.log("대댓글 시, '원본 댓글 ID'" , reComment_original_commentID)
 
                     // 1) 이렇게 보내면 작동함
                         // res.redirect(`http://127.0.0.1:4000/board/item/${id_post}`)
@@ -290,6 +300,31 @@ const { error } = require('console');
             }
 
     }
+
+// [GET] comment 테이블 에서 필요한 데이터 가져오기 
+    exports.commentDataGet = async (req, res) => {
+
+        try {
+            // 클라에서 데이터가 잘 넘어오는지 확인 
+                console.log("@boardController > commentDataGet : " , req.query)     //  id_of_targetComment: '66' }
+                console.log("@boardController > commentDataGet : " , req.query.id_of_targetComment) // 66
+                console.log(req.body)
+
+            // comment 테이블에서 '타겟 댓글 id' 에 해당하는 row 가져오기 
+                const originalCommentID = await Comment.findAll({
+                    where : {id_of_targetComment : req.query.id_of_targetComment}
+                });
+                console.log("대댓글 작성중 | 해당 게시글에 작성한 모든 대댓글" , originalCommentID)
+
+            // 결과 보내기 
+                res.json(originalCommentID)
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
 
 
 // 좋아요 버튼 

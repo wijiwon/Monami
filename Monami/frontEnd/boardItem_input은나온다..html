@@ -285,365 +285,134 @@
                         // commentsByPost 에, 각 댓글 마다의 id 가 있는지 여부 
                         console.log("commentsByPost 에, 각 댓글 마다의 id 가 있나" , commentsByPost)    // 🔵 있음! 
 
-
-                        
-
-                    // [3차 작성] 
-                        // ⭐변경 이유 : 원본댓글이 먼저 그려지고 -> 그 다음 대댓글이 찾아가는 형태여야, null 값이 안 생기는 것 같음. 
-                        // '⭐무엇이 먼저 그려져야 하는가⭐' 는 중요한 의사결정 지점 ⭐⭐⭐⭐⭐⭐ 
-                        
-
-                        // 1) 현재 게시글에 담긴 댓글을 '원본 댓글' 과 '대댓글들' 로 나누기 
-                        const comment_container = commentsByPost.filter( comment => comment.id_of_targetComment === 0 );
-                        const reComment_item = commentsByPost.filter( comment => comment.id_of_targetComment !== 0 );
-                        console.log("'원본 댓글' 과 '대댓글들' 구분하기 - 원본댓글" , comment_container);
-                        console.log("'원본 댓글' 과 '대댓글들' 구분하기 - 대댓글" , reComment_item);
-
-
-                        // 2) '원본댓글 먼저 그리기' 👉 저장되게 하기 
-                        comment_container.forEach((comment, index) => {
+                        // '지금 보이고 있는 글' 에 대해 '작성된 모든 댓글'       
+                        commentContents = commentsByPost.forEach( (comment, index) => {
                             
-                            // div 추가 
-                            const temp_div = document.createElement('div');
-                            temp_div.id = `comment_div_ID_${comment.id}` 
-                                // 여기서 index 를 없애면, 다른 부분 오류 불가피 
-
-                            // 해당 div 에 '배열에 담긴 댓글'을 텍스트로 넣기
-                            temp_div.textContent = comment.content;
-
-                            // 색상
-                            temp_div.style.backgroundColor = 'lightgreen'
+                            // 만약, comment 안에, id_of_targetComment 에 숫자가 "0" -> comment.id 만큼의 container 로 가면돼 
+                            // 만약, comment 안에, id_of_targetComment 에 숫자가 "있어" -> '해당하는 숫자'의 container 로 가야해
 
 
-                            // 선긋기 
-                            if (index == 0) {
-                                // 맨 첫 번째 div 선 긋기
-                                temp_div.style.border= '0.5px solid black'; 
+                            // 현재 댓글의 id 가져오기
+                            const commentID = comment.id
+
+
+                            // 원본댓글 하나 당 -> container 로 만들기 
+                            if(comment.id_of_targetComment == 0) {
+
+                                // 현재 댓글ID 로 CONTAINER div 만든다.
+                                const comment_container_commentID = document.createElement('div')
+
                             } else {
-                                // 두 번째 선 div 긋기
-                                temp_div.style.borderBottom = '0.5px solid black';
-                                temp_div.style.borderLeft = '0.5px solid black';
-                                temp_div.style.borderRight = '0.5px solid black';
+                                
+                                // 현재 대댓글 ID 로 recomment div 만든다.
+                                const reComment_commentID = document.createElement('div')
+
+                                // 원본댓글이 되는 태그 아래에 붙인다.
+                                comment_container_`${comment.id_of_targetComment}`.appendChild()
+
                             }
 
-
-                            // 버튼 추가
-                            const reCommentBtn = document.createElement('button');
-                            reCommentBtn.id = `reComment_Btn_IND_${index}_ID_${comment.id}`
-                            reCommentBtn.textContent = '답글✍';
-
-
-                            // 답글 누르면 나오는 input 창
                             
-                            const reComment_container = document.createElement('div')
-                            const reComment_input = document.createElement('input')
-                            
-                            reComment_input.id = `reComment_input_${index}`
-                            reComment_container.appendChild(reComment_input)
-                            temp_div.appendChild(reComment_container)
-
-                            reComment_container.style.display = "none"
-                            
-                            reCommentBtn.addEventListener('click' , () => {
-                                console.log(`이거 클릭 : reComment_Btn_IND_${index}_ID_${comment.id}`)
-
-                                if (reComment_container.style.display == 'block') {
-                                    reComment_container.style.display = 'none'
-                                } else {
-                                    reComment_container.style.display = 'block'
-                                }
-                            })
-
-                            temp_div.appendChild(reCommentBtn)
-
-                            // appendChild 로 붙이기 
-                            document.getElementById('comment_container').appendChild(temp_div)
-                            
-                            
-                            // document.getElementById('comment_container').appendChild(reComment_container)
-
-
-                            // 입력창 테두리
-                            // const reComment_container = document.createElement('div')
-                            // reComment_container.style.display = "none"
-
-                            
-                            // 입력창 내부 > 댓글 다는 곳
-                            // const reComment_input = document.createElement('input')
-                            // reComment_input.id = `reComment_input_${index}`
-                            // reComment_container.appendChild(reComment_input)
-
-
-                        })
-
-
-
-                        // 3) 대댓글 그리기 
-                        reComment_item.forEach((comment, index) => {
-
-                            // div 추가 | 이름은 temp_div
+                            // 새로운 div 추가
                             const temp_div = document.createElement('div');
-                            temp_div.id = `REcomment_div_IND_${index}_ID_${comment.id}`
+                            temp_div.id = `comment_div_IND_${index}_ID_${comment.id}`
+                            
 
                             // 해당 div 에 '배열에 담긴 댓글'을 텍스트로 넣기
                             temp_div.textContent = comment.content;
 
-                            // 색상
-                            temp_div.style.backgroundColor = 'lightgray'
 
-                            // appendchild 붙이기
-                            const targetCommentID = comment.id_of_targetComment
-                            const findOriginComment = document.getElementById(`comment_div_ID_${targetCommentID}`)
-                            
-                            findOriginComment.appendChild(temp_div)
-                            console.log("findOriginComment" , findOriginComment)
-                            console.log("temp_div" , temp_div)
-
-                        })
-
-
-
-                        //     // 입력창 테두리
-                        //     const reComment_container = document.createElement('div')
-                        //     reComment_container.style.display = "none"
-
-                        //     // 입력창 내부 > 댓글 다는 곳
-                        //     const reComment_input = document.createElement('input')
-                        //     reComment_input.id = `reComment_input_${index}`
-                        //     reComment_container.appendChild(reComment_input)
-
-                        //     // 입력창 내부 > 작성완료 버튼 
-                        //     const comment_reCompleteBtn = document.createElement('button')
-                        //     comment_reCompleteBtn.textContent = "작성완료👏"
-                        //     comment_reCompleteBtn.id = `reComment_CompleteBtn_${index}`
-                        //     comment_reCompleteBtn.classList.add('reComment_CompleteBtn')
-                        //     reComment_container.appendChild(comment_reCompleteBtn)
-
-
-                        //     // '답글✍' 버튼 클릭시 밑으로 떨어지게 하기
-                        //     reCommentBtn.onclick = (event) => {
-
-                        //         // 드롭다운으로 떨어지게 하기
-                        //             if (reComment_container.style.display = "none") {
-                        //                 reComment_container.style.display = "block"
-                        //             } else {
-                        //                 reComment_container.style.display = "none"
-                        //             }
-
-                        //         // 대댓글 위해, '원본 댓글 ID' 알아내기 
-                        //             // 현재 포스트에서 몇 번째 댓글인가 파악
-                        //             console.log("대댓글이 일어나는 원본댓글 id 찾기 @boardItem")
-                        //             console.log(event.target.id)    // reComment_Btn_IND_128_ID_222
-
-                        //             console.log(event.target.id.split('_')[5])      // 222 만 뽑힘
-
-                        //             // 대댓글 작성시, 대상이 되는 '댓글의 ID'
-                        //             reComment_originalCommentID = event.target.id.split('_')[5]     // 전역변수 주의 📛
-                        //             // 대댓글 작성시, 대댓글이 붙어야 하는 '댓글의 DIV'
-                        //             reComment_originalCommentDIV = event.target.id    // 전역변수 주의 📛
-                        //             console.log("답글 클릭시, 원본 댓글 id 찍히나 보기" , reComment_originalCommentID)
-                        //             console.log("답글 클릭시, 원본 댓글 DIV 태그가 찍히나 보기" , reComment_originalCommentDIV)
-                                    
-                        //     }
-                        
-                        // // temp_div(댓글이 들어갈 임시 div) 에 버튼, 댓글 창 추가
-                            // temp_div.appendChild(reCommentBtn)
-                        
-                        // 추가할 곳에 넣기
-                            
-                            // if (comment.id_of_targetComment == 0) {
-                            //     document.getElementById('comment_container').appendChild(temp_div)
-                            // } else {
-                            //     document.getElementById(`${reComment_originalCommentDIV}`).appendChild(temp_div)
-                            // }
-
-                            // document.getElementById('comment_container').appendChild(reComment_container)
-
-
-
-
-
-
-
-
-                        // -------------- [2차 작성] -----------------------
-                        // // '지금 보이고 있는 글' 에 대해 '작성된 모든 댓글'       
-                        // commentContents = commentsByPost.forEach( (comment, index) => {
-                            
-                        //     // 만약, comment 안에, id_of_targetComment 에 숫자가 "0" -> comment.id 만큼의 container 로 가면돼 
-                        //     // 만약, comment 안에, id_of_targetComment 에 숫자가 "있어" -> '해당하는 숫자'의 container 로 가야해
-
-
-                        //     // 현재 댓글의 id 가져오기
-                        //     // const commentID = comment.id
-
-
-
-
-
-                        //     // [2차 작성] 수정 예정 📛 
-                        //                     let findOriginComment = null;
-
-                        //                     // 원본댓글 하나 당 -> container 로 만들기 
-
-                        //                         // 1단계 
-                        //                         if(comment.id_of_targetComment == 0) {
-
-                        //                             // 현재 댓글ID 로 CONTAINER div 만든다.
-                        //                             comment_container = document.createElement('div')
-
-                        //                             // 해당 div 에 '배열에 담긴 댓글'을 텍스트로 넣기
-                        //                             comment_container.textContent = comment.content;
-
-                        //                             // 색상넣기
-                        //                             comment_container.style.backgroundColor = 'gray'
-
-                        //                             // 버튼
-                        //                             const reCommentBtn = document.createElement('button');
-                        //                             reCommentBtn.id = `reComment_Btn_IND_${index}_ID_${comment.id}`
-                        //                             reCommentBtn.textContent = '답글✍';
-                        //                             comment_container.appendChild(reCommentBtn)
-
-                        //                             // index & ID 할당
-                        //                             comment_container.id = `comment_container_ID_${comment.id}`
-
-                        //                         // 대댓글
-                        //                         } else {
-                        //                             // 현재 대댓글 ID 로 recomment div 만든다.
-                        //                             reComment = document.createElement('div')
-
-                        //                             // 해당 div 에 '배열에 담긴 댓글'을 텍스트로 넣기
-                        //                             reComment.textContent = comment.content;
-
-                        //                             // 색상넣기
-                        //                             reComment.style.backgroundColor = 'yellow'
-
-                        //                             // INDEX & ID 할당
-                        //                             reComment.id = `comment_comment_ID_${comment.id}`
-
-                        //                         }
-
-                        //                         // 2. 
-                        //                             // 원본댓글이 가져오기
-                        //                             console.log("이게 맞지? 값이 들어오지?" , comment.id_of_targetComment)
-
-                        //                             if (comment.id_of_targetComment == 0) {
-
-                        //                                 comment_read.appendChild(comment_container)
-
-                        //                             } else {
-                        //                                 const findOriginComment = document.querySelector(`#comment_container_ID_${comment.id_of_targetComment}`)
-                        //                                 findOriginComment.appendChild(reComment)
-                        //                             }
-                        //                             console.log("findOriginComment 가져와져❓❓" , findOriginComment)
-
-                                    // [예전 댓글 ] | 작동함 🔵 
-                                    // 원본댓글에 대댓글 붙이기
-                                    // findOriginComment.appendChild(reComment)
-
-
-                                
-                            
-                                // [예전코드] 새로운 div 추가
-                                    // const temp_div = document.createElement('div');
-                                    // temp_div.id = `comment_div_IND_${index}_ID_${comment.id}`
-                            
-
-                                // [예전코드] 해당 div 에 '배열에 담긴 댓글'을 텍스트로 넣기
-                                    // temp_div.textContent = comment.content;
-
-
-                                // div 색상
-                                    // 새로운 시도
-                                    // if (comment.id_of_targetComment == 0) {
-                                    //     temp_div.style.backgroundColor = 'lightblue'
-                                    // } else {
-                                    //     temp_div.style.backgroundColor = 'yellow'
-                                    // }
+                            // div 색상
+                                // 새로운 시도
+                                if (comment.id_of_targetComment == 0) {
+                                    temp_div.style.backgroundColor = 'lightblue'
+                                } else {
+                                    temp_div.style.backgroundColor = 'yellow'
+                                }
 
                                 // 원래 코드
                                 // temp_div.style.backgroundColor = 'lightblue'
                             
-                                
-                                // [예전코드] div 테두리
-                                    // if (index == 0) {
-                                        // 맨 첫 번째 div 선 긋기
-                                    //     temp_div.style.border= '0.5px solid black'; 
-                                    // } else {
-                                        // 두 번째 선 div 긋기
-                                    //     temp_div.style.borderBottom = '0.5px solid black';
-                                    //     temp_div.style.borderLeft = '0.5px solid black';
-                                    //     temp_div.style.borderRight = '0.5px solid black';
-                                    // }
+                            
+                            // div 테두리
+                                if (index == 0) {
+                                    // 맨 첫 번째 div 선 긋기
+                                    temp_div.style.border= '0.5px solid black'; 
+                                } else {
+                                    // 두 번째 선 div 긋기
+                                    temp_div.style.borderBottom = '0.5px solid black';
+                                    temp_div.style.borderLeft = '0.5px solid black';
+                                    temp_div.style.borderRight = '0.5px solid black';
+                                }
 
                             
-                                // [예전코드] 버튼 추가
-                                    // const reCommentBtn = document.createElement('button');
-                                    // reCommentBtn.id = `reComment_Btn_IND_${index}_ID_${comment.id}`
-                                    // reCommentBtn.textContent = '답글✍';
-                                        // 대댓글은 답글 안 주고 싶은데 😥😥 
+                            // 버튼 추가
+                                const reCommentBtn = document.createElement('button');
+                                reCommentBtn.id = `reComment_Btn_IND_${index}_ID_${comment.id}`
+                                reCommentBtn.textContent = '답글✍';
+                                    // 대댓글은 답글 안 주고 싶은데 😥😥 
 
 
-                                // 댓글 입력창 ✅✅✅ 추가 해야 함 | 여기부터 다시 봐야 함  ✅✅✅✅✅
-                                //     // 입력창 테두리
-                                //     const reComment_container = document.createElement('div')
-                                //     reComment_container.style.display = "none"
+                            // 댓글 입력창 
+                                // 입력창 테두리
+                                const reComment_container = document.createElement('div')
+                                reComment_container.style.display = "none"
 
-                                //     // 입력창 내부 > 댓글 다는 곳
-                                //     const reComment_input = document.createElement('input')
-                                //     reComment_input.id = `reComment_input_${index}`
-                                //     reComment_container.appendChild(reComment_input)
+                                // 입력창 내부 > 댓글 다는 곳
+                                const reComment_input = document.createElement('input')
+                                reComment_input.id = `reComment_input_${index}`
+                                reComment_container.appendChild(reComment_input)
 
-                                //     // 입력창 내부 > 작성완료 버튼 
-                                //     const comment_reCompleteBtn = document.createElement('button')
-                                //     comment_reCompleteBtn.textContent = "작성완료👏"
-                                //     comment_reCompleteBtn.id = `reComment_CompleteBtn_${index}`
-                                //     comment_reCompleteBtn.classList.add('reComment_CompleteBtn')
-                                //     reComment_container.appendChild(comment_reCompleteBtn)
+                                // 입력창 내부 > 작성완료 버튼 
+                                const comment_reCompleteBtn = document.createElement('button')
+                                comment_reCompleteBtn.textContent = "작성완료👏"
+                                comment_reCompleteBtn.id = `reComment_CompleteBtn_${index}`
+                                comment_reCompleteBtn.classList.add('reComment_CompleteBtn')
+                                reComment_container.appendChild(comment_reCompleteBtn)
 
 
-                                //     // '답글✍' 버튼 클릭시 밑으로 떨어지게 하기
-                                //     reCommentBtn.onclick = (event) => {
+                                // '답글✍' 버튼 클릭시 밑으로 떨어지게 하기
+                                reCommentBtn.onclick = (event) => {
 
-                                //         // 드롭다운으로 떨어지게 하기
-                                //             if (reComment_container.style.display = "none") {
-                                //                 reComment_container.style.display = "block"
-                                //             } else {
-                                //                 reComment_container.style.display = "none"
-                                //             }
+                                    // 드롭다운으로 떨어지게 하기
+                                        if (reComment_container.style.display = "none") {
+                                            reComment_container.style.display = "block"
+                                        } else {
+                                            reComment_container.style.display = "none"
+                                        }
 
-                                //         // 대댓글 위해, '원본 댓글 ID' 알아내기 
-                                //             // 현재 포스트에서 몇 번째 댓글인가 파악
-                                //             console.log("대댓글이 일어나는 원본댓글 id 찾기 @boardItem")
-                                //             console.log(event.target.id)    // reComment_Btn_IND_128_ID_222
+                                    // 대댓글 위해, '원본 댓글 ID' 알아내기 
+                                        // 현재 포스트에서 몇 번째 댓글인가 파악
+                                        console.log("대댓글이 일어나는 원본댓글 id 찾기 @boardItem")
+                                        console.log(event.target.id)    // reComment_Btn_IND_128_ID_222
 
-                                //             console.log(event.target.id.split('_')[5])      // 222 만 뽑힘
+                                        console.log(event.target.id.split('_')[5])      // 222 만 뽑힘
 
-                                //             // 대댓글 작성시, 대상이 되는 '댓글의 ID'
-                                //             reComment_originalCommentID = event.target.id.split('_')[5]     // 전역변수 주의 📛
-                                //             // 대댓글 작성시, 대댓글이 붙어야 하는 '댓글의 DIV'
-                                //             reComment_originalCommentDIV = event.target.id    // 전역변수 주의 📛
-                                //             console.log("답글 클릭시, 원본 댓글 id 찍히나 보기" , reComment_originalCommentID)
-                                //             console.log("답글 클릭시, 원본 댓글 DIV 태그가 찍히나 보기" , reComment_originalCommentDIV)
-                                            
-                                //     }
+                                        // 대댓글 작성시, 대상이 되는 '댓글의 ID'
+                                        reComment_originalCommentID = event.target.id.split('_')[5]     // 전역변수 주의 📛
+                                        // 대댓글 작성시, 대댓글이 붙어야 하는 '댓글의 DIV'
+                                        reComment_originalCommentDIV = event.target.id    // 전역변수 주의 📛
+                                        console.log("답글 클릭시, 원본 댓글 id 찍히나 보기" , reComment_originalCommentID)
+                                        console.log("답글 클릭시, 원본 댓글 DIV 태그가 찍히나 보기" , reComment_originalCommentDIV)
+                                        
+                                }
+                            
+                            // temp_div(댓글이 들어갈 임시 div) 에 버튼, 댓글 창 추가
+                                temp_div.appendChild(reCommentBtn)
+                            
+                            // 추가할 곳에 넣기
                                 
-                                // // temp_div(댓글이 들어갈 임시 div) 에 버튼, 댓글 창 추가
-                                //     temp_div.appendChild(reCommentBtn)
-                                
-                                // // 추가할 곳에 넣기
-                                    
-                                //     if (comment.id_of_targetComment == 0) {
-                                //         document.getElementById('comment_container').appendChild(temp_div)
-                                //     } else {
-                                //         document.getElementById(`${reComment_originalCommentDIV}`).appendChild(temp_div)
-                                //     }
+                                if (comment.id_of_targetComment == 0) {
+                                    document.getElementById('comment_container').appendChild(temp_div)
+                                } else {
+                                    document.getElementById(`${reComment_originalCommentDIV}`).appendChild(temp_div)
+                                }
 
-                                //     document.getElementById('comment_container').appendChild(reComment_container)
+                                document.getElementById('comment_container').appendChild(reComment_container)
 
 
                                 // 대댓글 여기 아래에 추가 👇👇  
-                        // });
+                        });
 
                         // keep 하는 참고 코드 
                             // commentContents = commentsByPost.map((comment , index) => {

@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const { allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView } = require("../controllers/boardControllers")
+    const { allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet} = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
     const { islogin } = require("../middleware/isLogin");
 
@@ -57,6 +57,8 @@
     // [주의할 부분]
         // 지금, single 메소드에 넣은 매개변수인 file 의 key 이름없음. 📛
 
+// [get] comment 테이블에서, 대댓글의 target인 '원본 댓글만' 가져오기 
+    routers.get('/comment' , islogin , commentDataGet)
 
 // [create] 좋아요 버튼 숫자 넣기 
     routers.post('/likes' , islogin , likesBtn)

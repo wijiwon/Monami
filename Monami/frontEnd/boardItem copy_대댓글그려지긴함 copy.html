@@ -333,16 +333,11 @@
                             reCommentBtn.textContent = '답글✍';
 
 
-                            // 답글 누르면 나오는 input 창
-                            
+                            // 답글 누르면 나오는 입력창
                             const reComment_container = document.createElement('div')
-                            const reComment_input = document.createElement('input')
                             
-                            reComment_input.id = `reComment_input_${index}`
-                            reComment_container.appendChild(reComment_input)
-                            temp_div.appendChild(reComment_container)
-
                             reComment_container.style.display = "none"
+
                             
                             reCommentBtn.addEventListener('click' , () => {
                                 console.log(`이거 클릭 : reComment_Btn_IND_${index}_ID_${comment.id}`)
@@ -354,13 +349,12 @@
                                 }
                             })
 
-                            temp_div.appendChild(reCommentBtn)
 
                             // appendChild 로 붙이기 
                             document.getElementById('comment_container').appendChild(temp_div)
-                            
-                            
                             // document.getElementById('comment_container').appendChild(reComment_container)
+                            temp_div.appendChild(reCommentBtn)
+                            // temp_div.appendChild(reComment_container)
 
 
                             // 입력창 테두리

@@ -27,6 +27,7 @@
 <body>
 
     <h1>게시판 목록</h1>
+    <p>중요정보 카드 식으로 요약해서 보여주면 됨</p>
 
 
     <div>
@@ -35,16 +36,14 @@
         <div id="item_01">
 
             <div id="title"> 제목 </div>
-            <div id="commentCount"> 갯글 수  </div>
+            <div id="commentCount"> 댓글 수  </div>
             <div id="writer"> 글쓴이 </div>
             <div id="createDate"> 작성일자  </div>
             <div id="userExp"> 유저 경험치 </div>
             <div id="itemViews"> view  </div>
+            <div id="itemViews"> 사진 </div>
 
         </div>
-
-        <!-- 아이템 2 -->
-            <!-- 이걸, 1) 서버에서 그려줄 수도 있고 2) 클라에서 그려줄 수도?  -->
 
     </div>
 
@@ -54,19 +53,64 @@
 
 
 <script>
+// 🔹 전역변수 
 
-    async function getAPI() {
+
+
+    async function getView() {
 
         try {
-            // 000 데이터 달라고 요청하기
-            const {data} = await axios.get("http://127.0.0.1:4000/board/totalView" , {
-                withCredentials : true
-            })
 
-            console.log("데이터 들어오는거 확인 🙌🙌🙌🙌🙌" , data);
+            // 1. 필요한 데이터 가져오기 
 
-            const posts = data;
+                // 1) 넘길 데이터 준비 
+                    // 뭘 넘겨야 하지? 
+                    // 페이지네이션 하려면? 음😥😥😥 
+
+
+                // 2) 넘기기         
+                    const {data} = await axios.get(`http://127.0.0.1:4000/board/list` , {
+                                withCredentials : true,
+                                params : {
+                                    id : postId,     
+                                }});
+                    
+                                
+                // 3) 잘 들어왔는지 확인        
+                    console.log("@boardList > getView() 들어오는거 확인 🙆‍♂️ " , data)
+                    
+                    // user, post, comment 테이블 각각 가져오기 
+                        // 요약된 정보엔 모든 테이블에서 필요할 것 | 아닐 수도 😥
+                    userData = data.user;
+                    console.log("현재 유저 정보 👉 " , userData)
+
+                    postsByUser = userData.Posts 
+                    console.log("해당 user 가 적은 모든 posting = postsByUser 👉" , postsByUser)
+
+                    postsData = data.post;
+                    console.log("현재 게시글 정보 = postsData 👉" , postsData)
                 
+                    loginUserData = data.loginUser
+                    console.log("현재 로그인한 유저 데이터" , loginUserData)
+
+
+                // 4) 전체 배열통 | 그려줘야 하는 것 '게시글당 모아주기' 
+                    // ex) [ {1번게시물} , {2번게시물}, {3번 게시물} ]
+                    // map? fileter? 
+                
+                // 5) 전체를 -> 페이지네이션 별로 나누기 
+
+                // 6) 1page 에서는, 첫 번째 배열만 렌더링 
+                    // 2page 에서는, 두 번째 배열만 렌더링 
+                    // 이때, 함수를 사용할 수도? 
+
+
+
+
+
+
+
+                    
         } catch (error) {
             
         }

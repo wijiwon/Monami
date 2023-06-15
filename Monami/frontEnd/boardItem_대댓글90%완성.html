@@ -286,6 +286,8 @@
                         console.log("commentsByPost 에, 각 댓글 마다의 id 가 있나" , commentsByPost)    // 🔵 있음! 
 
 
+                        
+
                     // [3차 작성] 
                         // ⭐변경 이유 : 원본댓글이 먼저 그려지고 -> 그 다음 대댓글이 찾아가는 형태여야, null 값이 안 생기는 것 같음. 
                         // '⭐무엇이 먼저 그려져야 하는가⭐' 는 중요한 의사결정 지점 ⭐⭐⭐⭐⭐⭐ 
@@ -355,10 +357,8 @@
                             // '숨었다 나오는 input' 을 '원본 댓글' 에 붙이기
                             temp_div.appendChild(reComment_container)
 
-
                             // 대댓글 버튼 클릭하면 -> 1) input 창 등장 2) 대댓글의 대상이 되는 '원본 댓글 id' 얻기
                             reCommentBtn.addEventListener('click' , (event) => {
-                                // 들어오는지 확인
                                 console.log(`이거 클릭 : reComment_Btn_IND_${index}_ID_${comment.id}`)
 
                                 // input 창 등장
@@ -476,13 +476,13 @@
                         
                         // 추가할 곳에 넣기
                             
-                            // if (comment.id_of_targetComment == 0) {
-                            //     document.getElementById('comment_container').appendChild(temp_div)
-                            // } else {
-                            //     document.getElementById(`${reComment_originalCommentDIV}`).appendChild(temp_div)
-                            // }
+                            if (comment.id_of_targetComment == 0) {
+                                document.getElementById('comment_container').appendChild(temp_div)
+                            } else {
+                                document.getElementById(`${reComment_originalCommentDIV}`).appendChild(temp_div)
+                            }
 
-                            // document.getElementById('comment_container').appendChild(reComment_container)
+                            document.getElementById('comment_container').appendChild(reComment_container)
 
 
 
@@ -759,7 +759,6 @@
                     headers : {"Content-Type" : "application/json"}
                 } , {
                 }).then((response) => {
-                    // AWAIT 랑 THEN, 이랑 같이 쓰면 안 되는거 같은데 우선... 음... 😥😥  
 
                     console.log("@boardItem 작성한 댓글 ID 가 뭡니까! 🕵️‍♂️" , response.data.newComment.id)
                     

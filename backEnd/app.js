@@ -146,6 +146,7 @@ io.on('connection', (socket) => {
         socket.on('exitRoom', () => {
             console.log("User has exited the room");
             socket.leave(roomName);
+            socket.to(roomName).emit('getreadyuser',  username );
             // Perform any additional actions or emit events as needed
         });
 
@@ -168,6 +169,11 @@ io.on('connection', (socket) => {
         socket.to(roomName).emit('getreadyuser',  username );
         
         socket.on('gamestart',()=>{
+            console.log("gamestart");
+            console.log(clientsInRoom);
+            io.to(clientsInRoom[0]).emit('hostgamestart',()=>{
+                console.log("방장도 같이시작.");
+            })
             setTimeout(() => {
                 socket.to(roomName).emit('gamestart1',()=>{
                     console.log("여기까지옴");

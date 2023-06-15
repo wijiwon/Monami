@@ -377,10 +377,10 @@
                 const currentClasses = mutation.target.classList;
                 if (currentClasses.contains('test')) {
                     const roomExitButton = document.querySelector('.roomBtn_member.pop .roomExit');
-                    roomExitButton.addEventListener('click',()=>{
+                    roomExitButton.addEventListener('click', () => {
                         socket.emit('exitRoom');
                         console.log("dd");
-                         asd1('.readyUser');
+                        asd1('.readyUser');
                         console.log("asdsad");
                     })
                     asdf1(tmp, '.readyUser');
@@ -410,9 +410,9 @@
 
     exit.addEventListener('click', async () => {
         await axios.post('http://127.0.0.1:4000/gameready/RoomDelete', { title: titlevalue },
-        {
-            withCredentials:true
-        })
+            {
+                withCredentials: true
+            })
         socket.emit('madeRoom', () => {
             console.log("해결함");
         });
@@ -438,6 +438,24 @@
     gamestarts.addEventListener('click', () => {
         socket.emit('gamestart')
         // window.location.href="http://127.0.0.1:5501/frontEnd/maingame.html";
+    })
+    socket.on('hostgamestart',()=>{
+        console.log("여기오긴하냐.")
+        setTimeout(() => {
+            test1.style.display = "block";
+        }, 1000);
+        setTimeout(() => {
+            test1.style.display = "none";
+            test2.style.display = "block";
+        }, 2000);
+        setTimeout(() => {
+            test2.style.display = "none";
+            test3.style.display = "block";
+        }, 3000);
+        setTimeout(() => {
+            window.location.href = "http://127.0.0.1:5501/frontEnd/maingame.html";
+        }, 4000);
+        
     })
     socket.on('gamestart1', () => {
         console.log("안녕")
@@ -734,14 +752,16 @@
         // }).catch((err)=>{
         //     console.log(err);
         // })
-        axios.post("http://127.0.0.1:4000/gameready/gethost", { title: titlevalue }, {
-            withCredentials: true
-        }).then((e) => {
-            console.log(e);
-            let num = e.data.id
-            joinRoom(num);
+        setTimeout(() => {
+            axios.post("http://127.0.0.1:4000/gameready/gethost", { title: titlevalue }, {
+                withCredentials: true
+            }).then((e) => {
+                console.log(e);
+                let num = e.data.id
+                joinRoom(num);
+            })
+        }, 100);
 
-        })
     }
     //--------------------------------------------------------------------------------------------------
     //------로그인한 유저의 정보를 보여주는 부분----------------------------------------------------------

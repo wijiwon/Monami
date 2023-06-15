@@ -328,40 +328,65 @@
 
 
                             // 버튼 추가
+                                // 답글✍ 버튼
                             const reCommentBtn = document.createElement('button');
-                            reCommentBtn.id = `reComment_Btn_IND_${index}_ID_${comment.id}`
+                            reCommentBtn.id = `reComment_Btn_ID_${comment.id}`
                             reCommentBtn.textContent = '답글✍';
 
+                                // 작성완료👏 버튼
+                            const comment_reCompleteBtn = document.createElement('button')
+                            comment_reCompleteBtn.textContent = "작성완료👏"
+                            comment_reCompleteBtn.id = `reComment_CompleteBtn_${index}`
+                            comment_reCompleteBtn.classList.add('reComment_CompleteBtn')
+                            
 
-                            // 답글 누르면 나오는 input 창
-                            
-                            const reComment_container = document.createElement('div')
-                            const reComment_input = document.createElement('input')
-                            
-                            reComment_input.id = `reComment_input_${index}`
+
+                            // 답글 누르면 '숨었다 나오는 input'
+                                // container
+                                const reComment_container = document.createElement('div')
+                                reComment_container.style.display = "none"
+
+                                // input 
+                                const reComment_input = document.createElement('input')
+                                reComment_input.id = `reComment_input_${index}`
+
+                            // input container 에 붙이기
                             reComment_container.appendChild(reComment_input)
+                            reComment_container.appendChild(comment_reCompleteBtn)
+
+                            // '숨었다 나오는 input' 을 '원본 댓글' 에 붙이기
                             temp_div.appendChild(reComment_container)
 
-                            reComment_container.style.display = "none"
-                            
-                            reCommentBtn.addEventListener('click' , () => {
+                            // 대댓글 버튼 클릭하면 -> 1) input 창 등장 2) 대댓글의 대상이 되는 '원본 댓글 id' 얻기
+                            reCommentBtn.addEventListener('click' , (event) => {
                                 console.log(`이거 클릭 : reComment_Btn_IND_${index}_ID_${comment.id}`)
 
-                                if (reComment_container.style.display == 'block') {
-                                    reComment_container.style.display = 'none'
-                                } else {
-                                    reComment_container.style.display = 'block'
-                                }
+                                // input 창 등장
+                                    if (reComment_container.style.display == 'block') {
+                                        reComment_container.style.display = 'none'
+                                    } else {
+                                        reComment_container.style.display = 'block'
+                                    }
+
+                                // 대댓글 작성시 1) 대상이 되는 '댓글의 ID' 2) 대댓글이 붙어야 하는 '댓글 div 의 ID' 파악
+                                    console.log(event.target.id)    // reComment_Btn_ID_48
+                                    console.log("대댓글의 대상이 되는 '원본 댓글 id' 찾기 👉" , event.target.id.split('_')[3])
+
+                                    // 1) 대상이 되는 '댓글의 ID'
+                                    reComment_originalCommentID = event.target.id.split('_')[3]     // 전역변수 주의 📛
+
+                                    // 2) 대댓글이 붙어야 하는 '댓글 div 의 ID'
+                                    reComment_originalCommentDIV = event.target.id      // 전역변수 주의 📛
+
                             })
 
                             temp_div.appendChild(reCommentBtn)
 
                             // appendChild 로 붙이기 
                             document.getElementById('comment_container').appendChild(temp_div)
-                            
-                            
-                            // document.getElementById('comment_container').appendChild(reComment_container)
-
+                                // document.getElementById('comment_container').appendChild(reComment_container)
+                                    // 예전 버전에서는 이렇게 붙여줬는데 이렇게 해야 하나 
+                                    // 우선 밑에껀 필수는 아님 
 
                             // 입력창 테두리
                             // const reComment_container = document.createElement('div')
@@ -420,7 +445,7 @@
                         //     reComment_container.appendChild(comment_reCompleteBtn)
 
 
-                        //     // '답글✍' 버튼 클릭시 밑으로 떨어지게 하기
+                        // //     // '답글✍' 버튼 클릭시 밑으로 떨어지게 하기
                         //     reCommentBtn.onclick = (event) => {
 
                         //         // 드롭다운으로 떨어지게 하기
@@ -447,17 +472,17 @@
                         //     }
                         
                         // // temp_div(댓글이 들어갈 임시 div) 에 버튼, 댓글 창 추가
-                            // temp_div.appendChild(reCommentBtn)
+                        //     temp_div.appendChild(reCommentBtn)
                         
                         // 추가할 곳에 넣기
                             
-                            // if (comment.id_of_targetComment == 0) {
-                            //     document.getElementById('comment_container').appendChild(temp_div)
-                            // } else {
-                            //     document.getElementById(`${reComment_originalCommentDIV}`).appendChild(temp_div)
-                            // }
+                            if (comment.id_of_targetComment == 0) {
+                                document.getElementById('comment_container').appendChild(temp_div)
+                            } else {
+                                document.getElementById(`${reComment_originalCommentDIV}`).appendChild(temp_div)
+                            }
 
-                            // document.getElementById('comment_container').appendChild(reComment_container)
+                            document.getElementById('comment_container').appendChild(reComment_container)
 
 
 

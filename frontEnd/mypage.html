@@ -22,7 +22,7 @@
 </head>
 <body>
   <h1>마이페이지</h1>
-  <a href="youdonghee.shop/main/hi">메인페이지</a>
+  <a href="/main/hi">메인페이지</a>
   <div>
     <img src="" alt="" id="img_file">
   </div>
@@ -49,7 +49,7 @@
 
   async function getMypage() {
     try {
-      const data = await axios.get("youdonghee.shop/mypage/hi",{
+      const data = await axios.get("/mypage/hi",{
         withCredentials : true,
       }).then((e)=>{
         // console.log();

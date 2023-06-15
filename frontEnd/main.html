@@ -142,7 +142,7 @@
             <div class="button_box">
               <button id="loginBtn">로그인</button>
               <button id="joinBtn"
-                onclick="location.href='youdonghee.shop/join'">회원가입</button>
+                onclick="location.href='/join'">회원가입</button>
             </div>
           </div>
 
@@ -158,7 +158,7 @@
             <div class="user_box">
               <img src="" alt="" id="img_file" class="profileImg">
               <button id="joinBtn"
-                onclick="location.href='http://127.0.0.1:5500/Monami/frontEnd/mypage.html'">마이페이지</button>
+                onclick="location.href='/mypage/hi'">마이페이지</button>
               <button id="logoutBtn">로그아웃</button>
             </div>
 
@@ -199,7 +199,7 @@
   // 로그인했을때 데이터 들고와서 뿌려주는 함수
   async function getloginaccess() {
     try {
-      const data2 = await axios.get("youdonghee.shop/mainlogin", {
+      const data2 = await axios.get("/mainlogin", {
         withCredentials: true,
 
       }).then((e) => {
@@ -220,7 +220,7 @@
 
   async function getMain() {
     try {
-      const data = await axios.get("youdonghee.shop/main/hi", {
+      const data = await axios.get("/main/hi", {
         withCredentials: true,
       }).then((e) => {
         console.log(e);
@@ -285,7 +285,7 @@
         loginDraw(e);
       }
       if (e.data.message == "어드민") {
-        window.location.href = "youdonghee.shop/admin/hi"
+        window.location.href = "/admin/hi"
       }
 
       if (e.data.message == "로그인할 수 없습니다 (승인대기중)") {
@@ -327,7 +327,7 @@
       alert("로그인이 필요합니다")
     }
     else {
-      window.location.href = "youdonghee.shop/gameReady/hi"
+      window.location.href = "/gameReady/hi"
     }
   }
 

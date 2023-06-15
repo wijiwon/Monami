@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameReady Page</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="youdonghee.shop/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 
     <style>
         body {
@@ -345,7 +345,7 @@
     </div>
 </body>
 <script>
-    const socket = io.connect('youdonghee.shop');
+    const socket = io.connect('/');
 
     // ahfmrpTdjdygg
     // 모르게ㅆ어욯ㅎ
@@ -454,7 +454,7 @@
         test2.style.display = "none";
         test3.style.display = "block";
         setTimeout(() => {
-            window.location.href = "youdonghee.shop/game/hi";
+            window.location.href = "/game/hi";
 
         }, 1000);
     })
@@ -583,7 +583,7 @@
     // 현재 대기중, 게임중인 룸을 나타내주는 함수
     async function RoomView() {
         try {
-            const data = await axios.get('youdonghee.shop/gameready/hi', {
+            const data = await axios.get('/gameready/hi', {
                 withCredentials: true
             })
             const roomArr = data.data;

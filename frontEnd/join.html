@@ -39,7 +39,10 @@
     }).then((e)=>{
       console.log(e);
       if (e.data == "완료") {
-        window.location.href = "youdonghee.shop/main"
+        window.location.href = "/main/hi"
+      }
+      if (e.data == "중복된 아이디 입니다") {
+        alert("중복된 아이디 입니다");
       }
     })
   }

@@ -31,6 +31,8 @@ exports.loginUser = async(req,res)=>{
       {
         expiresIn : "60m"
       })
+      console.log("Generated token:",token);
+
       req.session.access_token = token;
       
       if (user_id == "admin") {

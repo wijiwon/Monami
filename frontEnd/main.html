@@ -313,14 +313,8 @@
 
   async function loginDraw(e) {
     console.log("Received token:", e.data.token);
-    let date = new Date();
-date.setTime(date.getTime() + (1 * 60 * 60 * 1000));
-// document.cookie='히히히'
-    // document.cookie = `token2=${e.data.token};domain=youdonghee.shop ;expires=${date.toUTCString()}; path=/`
-    setTimeout(()=>{
-      console.log(document.cookie)
+    // document.cookie = `token2=${e.data.token}; path=/`
 
-    },2000)
     loginSuccess.style.display = "block"
     beforeLogin.style.display = "none"
 
@@ -337,10 +331,9 @@ date.setTime(date.getTime() + (1 * 60 * 60 * 1000));
       window.location.href = "/gameReady"
     }
   }
-  // window.location.href = "/gameReady"
 
-  // getMain(); 
-  // getloginaccess(); 
+  getMain(); 
+  getloginaccess(); 
 </script>
 
 </html>

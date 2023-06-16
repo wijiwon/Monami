@@ -33,7 +33,7 @@ exports.loginUser = async(req,res)=>{
       })
       console.log("Generated token:",token);
 
-      req.session.access_token = token;
+      req.session.access_token = "token";
       
       if (user_id == "admin") {
         res.send({message : "어드민",userInfo:data, token:req.session.access_token});

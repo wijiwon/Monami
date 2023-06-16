@@ -437,3 +437,153 @@ const { error } = require('console');
         }
 
     }
+
+
+
+
+// GET | [게시판 목록 보여주기]
+
+exports.boardListPages = async (req, res) => {
+
+    try {
+        // 0) 필요한 데이터 들어왔는지 확인
+            console.log("@ boardController > boardListPages 게시판 목록 입성")
+            console.log("islogin 실행 후 값 들어는가🛴 " ,  req.decode)
+            
+            // console.log(req)
+            // console.log(req.page)
+            // console.log(req.body.page)
+
+                // [고민]
+                    // 게시글 상세는, 게시글이 저장되는 순간, POST ID 를 가져옴 
+                    // 이번에는 그러지 못 할 것 같음. 
+                    // 이번에는 DIV 가 생성될 때, 들고 있어야 함 ⭐⭐⭐ 
+
+                    // 우선, 
+                        // 1) '게시글을 다 들고와' (이때, 1) ID 순? 2) 이름순? 3) 조회순? 등등으로 보여질 수 있을 것)
+                        // 2) 그걸, 클라한테 넘겨 | ✅ 여기까지가 boardListPages 이 할일 ✅ 
+                        // 3) 클라에서 갖고 있는 걸로 for 문 돌려서 다 그려 | boardlist 가 할일  
+                        // 4) 그 다음 클릭하면, POST ID 뽑아내 -> 그걸로 이제 상세 페이지 들어가 
+                        // 5) 각 테이블에 있는 data 가 있으면 -> 어떻게든 가져와서 쓸 수 있음. ⭐ 
+
+        // 1) 로그인한 유저 정보 
+            const _userTable_ID = req.decode.id 
+            const _userTable_userId = req.decode.user_id 
+            console.log("@boardListPages | _userTable_ID " , _userTable_ID)
+            console.log("@boardListPages | _userTable_userId " , _userTable_userId)
+
+            const loginUser = {
+                _userTable_ID : _userTable_ID, 
+                _userTable_userId : _userTable_userId
+            }
+            
+        // // 2) User 테이블에서, data 가져오기 
+        //     const userWithPosts = await User.findOne({
+        //         where : {id : _userTable_ID},   
+        //         include : [
+        //             {model : Post}
+        //         ]
+        //     });
+                // [게시판 상세 코드]
+                    // const userWithPosts = await User.findOne({
+                    //     where : {id : _userTable_ID},   
+                    //     include : [
+                    //         {model : Post}
+                    //     ]
+                    // });
+            // console.log("@boardListPages | userWithPosts 데이터 확인 " , userWithPosts)
+
+
+        // // 3) Post 테이블에서, data 가져오기
+        //     const postsByAllUser = await Post.findOne({
+        //         // where : {id : postId}, 
+        //         include : [
+        //             {model : Comment}
+        //         ]
+        //     });
+        //     [고민] 
+        //         이번엔 comment 는 굳이 필요없으려나? 우선, 갖고와 
+
+
+        // 4) 전부 다, 외래키 활용해서, include로 가져오기 ⭐⭐⭐ 
+            const postsWithCommentsUsers = await Post.findAll({
+                include : [
+                    {model : Comment},
+                    {model : User}
+                ]
+            })
+
+        // 5) 합치기 
+            const result = {
+                loginUser : loginUser, 
+                postsWithCommentsUsers : postsWithCommentsUsers, 
+                // post : postsByAllUser,  // 🔵 
+            }
+            // console.log("@boardListPages | '게시판 목록' 에 보여줄 데이터 다 들어왔나" , result)
+
+        // 5) 클라이언트에 보내기 
+            res.json(result)
+
+
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+
+// [GET] 페이지네이션
+    exports.pagenation = async (req, res) => {
+
+        try {
+            // 0) 데이터 들어오는 값 확인
+                console.log("@pagenation 입성 💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️")
+                console.log(req.query.page)
+            
+                // 사용자가 보고싶어서 누른 페이지
+                const page = req.query.page
+
+                // 한 페이지에서 몇 개의 포스팅을 보이게 할 것 인가. 
+                const limit = postsPerPage     // 임시📛 
+
+                // Post 테이블 중 '어디에서 부터' 데이터를 가져올 것 인가.
+                const offset = limit * (page - 1)
+
+
+            // 1) 로그인 유저 
+                const loginUser = {
+                    _userTable_ID : _userTable_ID, 
+                    _userTable_userId : _userTable_userId
+                }
+
+
+            // 2) sequelize 페이지네이션  
+            const postsWithCommentsUsers = await Post.findAll({
+
+                limit : limit,        // 한 페이지에 몇 개의 포스팅이 보이게 할 것 인가
+                offset : offset,        // post 에서, 몇 번째 POST ID 에서 찾을 것 인가 
+                include : [
+                    {model : Comment},
+                    {model : User}
+                ], 
+                order : [["createAt" , "DESC"]]     // 최신순이 위로 오도록
+            });
+
+
+            // 5) 합치기 
+                const result = {
+                    loginUser : loginUser, 
+                    postsWithCommentsUsers : postsWithCommentsUsers, 
+                    // post : postsByAllUser,  // 🔵 
+                }
+                console.log("@pagenation | 데이터 다 나가고 있니" , result)
+
+            // 5) 클라이언트에 보내기 
+                res.json(result)
+            
+        } catch (error) {
+            
+            console.log(error)
+        }
+
+    }

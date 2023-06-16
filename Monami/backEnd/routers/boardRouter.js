@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const { allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet} = require("../controllers/boardControllers")
+    const { allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation} = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
     const { islogin } = require("../middleware/isLogin");
 
@@ -62,6 +62,15 @@
 
 // [create] 좋아요 버튼 숫자 넣기 
     routers.post('/likes' , islogin , likesBtn)
+
+
+// [get] 게시판 목록 
+    // 👇 게시판 목록에서 기본으로 보여주기 | 절대 변경금지 
+    routers.get('/list' , islogin , boardListPages)
+
+// [get] 게시판 > 페이지네이션 구현
+    routers.get('/list/page' , islogin , pagenation)    
+        // query 방식에서는 ? 붙이지 않아도 됨. 
 
 
 

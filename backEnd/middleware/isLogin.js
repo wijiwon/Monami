@@ -9,8 +9,8 @@ exports.islogin = async(req,res,next)=>{
   console.log(req,"req");
   if (req.rawHeaders.filter(header => header.toLowerCase().includes('token')).length == 0) {
     console.log("필터",req.rawHeaders);
-    console.log("스토리지",req.sessionStorage.sesssion);
-    console.log("스토리지 안 세션",req.sessionStorage);
+    console.log("스토리지",req.sessionStore.sesssion);
+    console.log("스토리지 안 세션",req.sessionStore);
     next();
   }else{
 

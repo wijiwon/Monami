@@ -329,7 +329,7 @@
   }
   const gamestart = document.querySelector('.gamebtn');
 
-  gamestart.onclick = () => {
+  gamestart.addEventListener('click',() => {
     console.log(document.cookie,"ㅑㅑ야 죽을래");
     if (!document.cookie) {
       alert("로그인이 필요합니다")
@@ -337,7 +337,7 @@
     else {
       window.location.href = "/gameReady"
     }
-  }
+  })  
 
   getMain(); 
   getloginaccess(); 

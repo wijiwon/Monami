@@ -312,6 +312,8 @@
   }
 
   async function loginDraw(e) {
+    console.log("Received token:", e.data.token);
+
     document.cookie = `token=${e.data.token}; path=/`
 
     loginSuccess.style.display = "block"

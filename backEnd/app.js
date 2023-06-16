@@ -19,7 +19,6 @@ const adminRouter = require("./routers/adminRouter");
 const gameRouter = require("./routers/game");
 const { Cookie } = require('express-session');
 
-import Cookies from 'js-cookie';
 
 // 수정중입니다 건들지 말아주세요
 // const cookieParser = require('cookie-parser');

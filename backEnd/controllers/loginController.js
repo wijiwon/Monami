@@ -62,7 +62,7 @@ exports.logoutUser = async(req, res) => {
               return res.json({message:"로그아웃 실패"});
           }
           
-          res.clearCookie('connect.sid');  
+          res.clearCookie('token');  
           // connect.sid는 express-session에서 기본으로 사용하는 세션 쿠키 이름입니다.
           res.send({message : "로그아웃 완료"});
       });

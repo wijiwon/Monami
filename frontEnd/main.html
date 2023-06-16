@@ -305,12 +305,16 @@
   }
 
   logoutBtn.onclick = () => {
-    Cookies.remove('token');
-    // document.cookie = "token=; Domain=.www.youdonghee.shop; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    loginSuccess.style.display = "none"
-    beforeLogin.style.display = "block"
-    img_file.src = ""
-  }
+  axios.post("/logout", {}, {
+    withCredentials: true,
+  }).then((e) => {
+    console.log("logout?!?!",e);
+    loginSuccess.style.display = "none";
+    beforeLogin.style.display = "block";
+    img_file.src = "";
+  });
+};
+
 
   async function loginDraw(e) {
     console.log("Received token:", e.data.token);

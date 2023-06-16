@@ -21,6 +21,8 @@ const { User, Room, Question, Drawing } = require('../models');
 // 그린 그림을 db에 저장한다.
 exports.DrawingAdd = async(req,res)=>{
     try {
+        const { room } = req;
+        console.log("지금 방 정보를 확인할 수 있다고???",room)
         const videoData = req.file.buffer;
         await Drawing.create({
             content: videoData

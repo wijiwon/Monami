@@ -19,8 +19,10 @@ const adminRouter = require("./routers/adminRouter");
 const gameRouter = require("./routers/game");
 const { Cookie } = require('express-session');
 
+import Cookies from 'js-cookie';
+
 // 수정중입니다 건들지 말아주세요
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 
 app.use(express.urlencoded({ extended: false }))
 
@@ -34,7 +36,7 @@ app.use(cors({
 }));
 
 // 수정중 입니다
-app.use(cookieParser());
+// app.use(cookieParser());
 
 
 // app.use(cors({

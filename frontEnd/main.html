@@ -316,7 +316,10 @@
     let date = new Date();
 date.setTime(date.getTime() + (1 * 60 * 60 * 1000));
     document.cookie = `token=${e.data.token}; expires=${date.toUTCString()}; path=/`
-    console.log(document.cookie)
+    setTimeout(()=>{
+      console.log(document.cookie)
+
+    },2000)
     loginSuccess.style.display = "block"
     beforeLogin.style.display = "none"
 

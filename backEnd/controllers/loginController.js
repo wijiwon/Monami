@@ -32,8 +32,12 @@ exports.loginUser = async(req,res)=>{
         expiresIn : "60m"
       })
       console.log("Generated token:",token);
+      
+      // express-session과 같은 세션 미들웨어를 사용하면 사용자의 브라우저에 저장된 쿠키를 사용하여 세션을 식별합니다.
+      // 세션에 저장할거면 
+      // sessionStorage.setItem("key", "value"); 이렇게 써줘야 한다
 
-      req.session.access_token = "token";
+      req.session.access_token = token;
       
       if (user_id == "admin") {
         res.send({message : "어드민",userInfo:data, token:req.session.access_token});

@@ -48,7 +48,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     // 이걸 쓰면 보안문제는 약해지는데 쿠키는 받아올수있다..
-    cookie: { secure: false }
+    // cookie: { secure: false }
 }))
 
 app.use(express.json());

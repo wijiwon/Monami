@@ -305,7 +305,7 @@
   }
 
   logoutBtn.onclick = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; Domain=.youdonghee.shop/; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     loginSuccess.style.display = "none"
     beforeLogin.style.display = "block"
     img_file.src = ""
@@ -313,6 +313,7 @@
 
   async function loginDraw(e) {
     console.log("Received token:", e.data.token);
+    // 안써도 됨... login 할때 req.session == cookie 에 넣어주는 작업 이였음
     // document.cookie = `token2=${e.data.token}; path=/`
 
     loginSuccess.style.display = "block"

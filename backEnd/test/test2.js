@@ -38,36 +38,56 @@
   // 5. n-1유저가 n유저의 제시어를 보고 그림을그린다. 
   // 6. n+3 유저가 n-1유저의 그림을보고 정답을 말한다. 
   // 7. n+2 유저가 6번에서 전해준 정답을 보고 그림을그린다. 
-  let palyer= ["현욱","지원","동희","덕진"];
-  function game(player){
-    let tmp=player.length;
-    let replay=[];
-    let dap=[];
-    let painting=[];
-    for(let i=0;i<tmp;i++)
-    {
-        dap[i]=prompt('enter your answer');
-        replay[i]={
-            제시어:dap[i]
-        }
-    }
-    console.log("모든 정답이 입력되었습니다");
-    for(let i=0;i<tmp;i++){
-        console.log(dpa[i]);
-        if(i==0){
-            let asdf=prompt('그림을 그려주세요');
-            // 첫번째 유저의 제시어가 보여졌을때
-            // 마지막유저의 그림이 들어간다.
-            painting[i]={ans1:`${player[tmp]},${asdf}`};
-        }else{
-        // 두번째이후 유저이후
-        let asd=prompt('그림을 그려주세요');
-        painting[i]={ans1:`${player[i-1]},${asd}`};
-        }
-    }
+//   let palyer= ["현욱","지원","동희","덕진"];
+//   function game(player){
+//     let tmp=player.length;
+//     let replay=[];
+//     let dap=[];
+//     let painting=[];
+//     for(let i=0;i<tmp;i++)
+//     {
+//         dap[i]=prompt('enter your answer');
+//         replay[i]={
+//             제시어:dap[i]
+//         }
+//     }
+//     console.log("모든 정답이 입력되었습니다");
+//     for(let i=0;i<tmp;i++){
+//         console.log(dpa[i]);
+//         if(i==0){
+//             let asdf=prompt('그림을 그려주세요');
+//             // 첫번째 유저의 제시어가 보여졌을때
+//             // 마지막유저의 그림이 들어간다.
+//             painting[i]={ans1:`${player[tmp]},${asdf}`};
+//         }else{
+//         // 두번째이후 유저이후
+//         let asd=prompt('그림을 그려주세요');
+//         painting[i]={ans1:`${player[i-1]},${asd}`};
+//         }
+//     }
     
    
-  }
+//   }
 
-  game(palyer);
+//   game(palyer);
+
+let rooms =new Array(100);
+// let room={
+//     room_Num:0,
+//     users:[],
+//     host:0,
+//     roomSocketname:""
+// };
+let room =new Object;
+room.room_Num=0;
+room.user=[];
+room.host=0;
+room.roomSocketname="";
+
+
+console.log(rooms);
+rooms[13]={...room};
+rooms[0]={...room}
+rooms[0].host=2;
+console.log(rooms);
 

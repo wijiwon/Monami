@@ -4,11 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 </head>
 <body>
+    
     <p>메인 게임임</p>
 </body>
 <script>
+    const socket = io.connect('http://localhost:4000');
+    console.log("d");
+    socket.on('THrowGameMember',(tmp)=>{
+        console.log(tmp);
+    } )
+
+    // window.onload = () => {
+    //     setTimeout(() => {
+    //     socket.on('THrowGameMember', )
+    
+
+       
+        
+        // await axios.get('http://127.0.0.1:4000/gameready', {
+        //         withCredentials: true
+        //     })
+        // await axios.post('http://127.0.0.1:4000/gameready/roomchoice', { id: num }, {
+        //                     withCredentials: true,
+        //                     "Content-Type": "application/json"
+        //                 }).then((e) => {
+
+        //                 }).catch((err) => {
+        //                     console.log(err);
+        //                 })
+        
+    //     function game(player) {
+    //     let tmp = player.length;
+    //     let replay = [];
+    //     let dap = [];
+    //     let painting = [];
+    //     for (let i = 0; i < tmp; i++) {
+    //         dap[i] = prompt('enter your answer');
+    //         replay[i] = {
+    //             playerSuggest:`${palyer[i]}의 제시어:${dap[i]}`
+    //         }
+    //     }
+    //     console.log("모든 정답이 입력되었습니다");
+    //     for (let i = 0; i < tmp; i++) {
+    //         console.log(dap[i]);
+    //         if (i == 0) {
+    //             alert(dap[0]);
+    //             let asdf = prompt('그림을 그려주세요');
+    //             // 첫번째 유저의 제시어가 보여졌을때
+    //             // 마지막유저의 그림이 들어간다.
+    //             painting[i] = { paint1: `${player[tmp - 1]},${asdf}` };
+    //             replay[i].first = painting[i];
+    //         } else {
+    //             alert(dap[i])
+    //             // 두번째이후 유저이후
+    //             let asd = prompt('그림을 그려주세요');
+    //             painting[i] = { paint1: `${player[i - 1]},${asd}` };
+    //             replay[i].first = painting[i];
+    //         }
+    //     }
+    //     for (let i = 0; i < tmp; i++) {
+    //         alert(replay[i].first.paint1);
+    //         let playerIndex = (i + 3) % player.length;
+    //         let asdfa = prompt(`${player[playerIndex]}의 정답은?`);
+    //         replay[i].second = {answer:`${player[playerIndex]}, ${asdfa}`};
+    //     }
+
+    //     for (let i = 0; i < tmp; i++) {
+    //         alert(replay[i].second.answer);
+    //         let playerIndex = (i + 2) % player.length;
+    //         let asdfa = prompt(`${player[playerIndex]}의 그림그려주세용`);
+    //         replay[i].third = {paint:`${player[playerIndex]}, ${asdfa}`};
+    //     }
+    //     for (let i = 0; i < tmp; i++) {
+    //         alert(replay[i].third.paint);
+    //         let playerIndex = (i + 1) % player.length;
+    //         let asdfa = prompt(`${player[playerIndex]}의 정답은?`);
+    //         replay[i].forth = {ans:`${player[playerIndex]}, ${asdfa}`};
+    //     }
+
+
+    //     console.log(painting);
+    //     console.log(replay);
+
+
+    // }
+
+    // game(palyer);
 
 
 </script>

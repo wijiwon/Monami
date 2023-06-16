@@ -363,6 +363,7 @@
     const exit = document.querySelector('.roomExit');
     const title = document.getElementById('title');
     const createRoom = document.querySelector('.createRoom');
+    const create=document.querySelector('.create');
 
     // roomExitButton.addEventListener('click',()=>{
     //     console.log("나가버릴꺼야~");
@@ -402,6 +403,9 @@
             console.log(titlevalue);
         })
     })
+    // create.addEventListener('click',()=>{
+    //     console.log("방만들기 버튼 눌림");
+    // })
     // async function RoomView() {
     //     try {
     //         const data = await axios.get('http://127.0.0.1:4000/gameready', {
@@ -758,7 +762,9 @@
             }).then((e) => {
                 console.log(e);
                 let num = e.data.id
+                socket.emit('createRoom',e.data);
                 joinRoom(num);
+                
             })
         }, 100);
 

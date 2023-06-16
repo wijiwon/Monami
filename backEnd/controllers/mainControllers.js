@@ -44,7 +44,7 @@ exports.mainInfo = async (req, res) => {
         limit: 5,
         where: {}
       }).then((posts) => {
-        res.send({ user: user, posts: posts });
+        // res.send({ user: user, posts: posts });
       })
     })
 

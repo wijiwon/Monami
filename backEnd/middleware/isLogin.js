@@ -41,3 +41,10 @@ exports.islogin = async(req,res,next)=>{
     }
   
 }
+
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6IjEyMyIsInVzZXJfaWQiOiIxMjMiLCJwcm9maWxlX2ltZyI6Imh0dHA6Ly8xMjcuMC4wLjE6NDAwMC9pbWcvbW9uYW1pLnBuZyIsImV4cGVyaWVuY2UiOjAsImlhdCI6MTY4Njg4ODc0NCwiZXhwIjoxNjg2ODkyMzQ0fQ.giSvIz5RzPsnP4U4x6jaMVh2ct6jJn4fssFCMFNfIUc
+
+
+
+// s:-UI_VtqCZ56CNmlUKGXXKi6XGLAmEyDF.5BfnvWtNjoks/BmQfvVYJoiYpSsaWvNsFOStJLmvRY4

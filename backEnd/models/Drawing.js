@@ -4,7 +4,7 @@ class Drawing extends Sequelize.Model{
     static init(sequelize){
         return super.init({
             content : {
-                type: Sequelize.BLOB,
+                type: Sequelize.BLOB('long'),
                 allowNull: false
             }
         },

@@ -20,12 +20,14 @@
             box-sizing: border-box;
         }
 
-        .questions {
-            display: none;
+        .questions.pop,
+        .drawings.pop {
+            display: block;
         }
 
-        .drawings {
-            /* display: none; */
+        .drawings,
+        .questions {
+            display: none;
         }
 
         .questions .row1,
@@ -45,7 +47,7 @@
         .row1 .users,
         .row1 .time,
         .rows1 .users,
-        .rows1 .time {
+        .rows1 .draw_time {
             width: 120px;
             height: 120px;
             border: 1px solid slateblue;
@@ -200,7 +202,7 @@
 
 <body>
     <!-- 첫 제시어 입력하는 화면 -->
-    <div class="questions">
+    <div class="questions pop">
         <!-- row1: 최상단영역 - 총인원(좌), 라운드 시간(우)이 표시된다. -->
         <div class="row1">
             <div class="users">유저인원</div>
@@ -230,41 +232,21 @@
         <div class="rows1">
             <div class="users">유저인원</div>
             <div class="view_question">넘겨받은 제시어</div>
-            <div class="time">라운드시간</div>
+            <div class="draw_time">라운드시간</div>
         </div>
         <div class="rows2">
             <div class="colors">
                 <div class="colors2">
-                    <div class="colorbox">
-                        <div style="background-color: white;" class="brushColor" data-color="white"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: black;" class="brushColor" data-color="black"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: red;" class="brushColor" data-color="red"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: pink;" class="brushColor" data-color="pink"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: orangered;" class="brushColor" data-color="orangered"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: yellow;" class="brushColor" data-color="yellow"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: green;" class="brushColor" data-color="green"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: blue;" class="brushColor" data-color="blue"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: purple;" class="brushColor" data-color="purple"></div>
-                    </div>
+                    <div class="colorbox"><div style="background-color: white;" class="brushColor" data-color="white"></div></div>
+                    <div class="colorbox"><div style="background-color: black;" class="brushColor" data-color="black"></div></div>
+                    <div class="colorbox"><div style="background-color: red;" class="brushColor" data-color="red"></div></div>
+                    <div class="colorbox"><div style="background-color: pink;" class="brushColor" data-color="pink"></div></div>
+                    <div class="colorbox"><div style="background-color: orangered;" class="brushColor" data-color="orangered"></div></div>
+                    <div class="colorbox"><div style="background-color: yellow;" class="brushColor" data-color="yellow"></div></div>
+                    <div class="colorbox"><div style="background-color: green;" class="brushColor" data-color="green"></div></div>
+                    <div class="colorbox"><div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div></div>
+                    <div class="colorbox"><div style="background-color: blue;" class="brushColor" data-color="blue"></div></div>
+                    <div class="colorbox"><div style="background-color: purple;" class="brushColor" data-color="purple"></div></div>
                 </div>
             </div>
             <div class="bord">
@@ -295,7 +277,7 @@
             </div>
         </div>
         <div class="rows3">
-            <button id="complete">완료</button>
+            <!-- <button id="complete">완료</button> -->
         </div>
         <video style="width: 300px; height: 200px;" id="video_recorded" controls style="border: 1px solid black;"
             src=""></video>
@@ -477,16 +459,16 @@
             // playBtn.addEventListener('click',playVideo);
         };
         mediaRecorder.stop();
-    }
+    } 
     
     const completeBtn = document.getElementById('complete');
     const playBtn = document.getElementById('play');
     
     
     window.addEventListener('DOMContentLoaded', startRecording);
-    completeBtn.addEventListener('click', () => {
-        stopRecording();
-    });
+    // completeBtn.addEventListener('click', () => {
+    //     stopRecording();
+    // });
     
     playBtn.addEventListener('click',playVideo);
 
@@ -495,13 +477,52 @@
 
 
     // ------------------------------------------------------------------------------------------------------
-    axios.get('http://127.0.0.1:4000/gameplay', {
-        withCredentials: true
-    }).then((e) => {
-        console.log(e)
-    }).catch((err) => {
-        console.log(err);
-    })
+    // 그림 그리는 시간 타이머 ---------------------------------------
+    let time = 10;      // 10초
+    let sec = "";
+    let questionTime = true;    // 제시어 입력하는 시간
+    let drawingTime = false;    // 그림그리는 시간
+
+
+    if( questionTime == true){
+        let QuestionTimer = setInterval(()=>{
+            sec = time;
+            document.querySelector('.time').innerHTML = sec + "초";
+            time--;
+    
+            if(time < 0){
+                clearInterval(QuestionTimer);
+                document.querySelector('.time').innerHTML = "시간종료";
+                questionTime = false;
+                drawingTime = true;
+                document.querySelector(".drawings").classList.toggle('pop');
+                document.querySelector(".questions").classList.toggle('pop');
+            }
+        },1000);     
+    }
+    else if (drawingTime == true){
+        let DrawingTimer = setInterval(()=>{
+            sec = time;
+            document.querySelector('.draw_time').innerHTML = sec + "초";
+            time--;
+    
+            if(time < 0){
+                clearInterval(DrawingTimer);
+                document.querySelector('.draw_time').innerHTML = "시간종료";
+                // stopRecording();
+                drawingTime = false;
+                drawingTime = true;
+                document.querySelector(".drawings").classList.toggle('pop');
+                document.querySelector(".questions").classList.toggle('pop');
+            }
+        },1000);        
+    }
+
+
+
+
+
+
 </script>
 
 </html>

@@ -29,7 +29,7 @@ exports.loginUser = async(req,res)=>{
       },
       process.env.ACCESS_TOKEN_KEY,
       {
-        expiresIn : "60m"
+        // expiresIn : "60m"
       })
       console.log("Generated token:",token);
 

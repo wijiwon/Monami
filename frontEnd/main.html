@@ -313,9 +313,10 @@
 
   async function loginDraw(e) {
     console.log("Received token:", e.data.token);
-
-    document.cookie = `token=${e.data.token}; path=/`
-    console.log(document)
+    let date = new Date();
+date.setTime(date.getTime() + (1 * 60 * 60 * 1000));
+    document.cookie = `token=${e.data.token}; expires=${date.toUTCString()}; path=/`
+    console.log(document.cookie)
     loginSuccess.style.display = "block"
     beforeLogin.style.display = "none"
 

@@ -11,7 +11,23 @@ exports.islogin = async (req, res, next) => {
   // console.log(req,"req");
   console.log("스토어", req.sessionStore.sesssion);
   console.log("스토어 안 세션", req.sessionStore);
-  console.log(req.rawHeaders);
+  console.log(req.session.access_token);
+  jwt.verify(req.session.access_token, process.env.ACCESS_TOKEN_KEY, (err, decode) => {
+    if (err) {
+      console.log("Error when verifying token:", err);
+      console.log("Token value:", access_token);
+      console.log("ACCESS_TOKEN_KEY value:", process.env.ACCESS_TOKEN_KEY);
+
+
+      return res.send("다시 로그인");
+    } else {
+      console.log("이거 나오면 서ㅏㅂ질한거임",decode);
+      req.decode = decode;
+      console.log("Decoded token:", jwt.decode(access_token));
+      // console.log(decode);
+      next();
+    }
+  })
   if (req.rawHeaders.filter(header => header.toLowerCase().includes('token2')).length == 0) {
     next();
   } else {

@@ -15,7 +15,7 @@ exports.islogin = async (req, res, next) => {
   jwt.verify(req.session.access_token, process.env.ACCESS_TOKEN_KEY, (err, decode) => {
     if (err) {
       console.log("Error when verifying token:", err);
-      console.log("Token value:", access_token);
+      console.log("Token value:", req.session.access_token);
       console.log("ACCESS_TOKEN_KEY value:", process.env.ACCESS_TOKEN_KEY);
 
 
@@ -23,7 +23,7 @@ exports.islogin = async (req, res, next) => {
     } else {
       console.log("이거 나오면 서ㅏㅂ질한거임",decode);
       req.decode = decode;
-      console.log("Decoded token:", jwt.decode(access_token));
+      console.log("Decoded token:", jwt.decode(req.session.access_token));
       // console.log(decode);
       next();
     }

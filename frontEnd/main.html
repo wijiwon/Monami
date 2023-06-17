@@ -275,52 +275,6 @@
         </div>`;
     });
   }
-//   async function getMain() {
-//     try {
-//       const data = await axios.get("/main/hi", {
-//         withCredentials: true,
-//       }).then((e) => {
-//         console.log(e);
-//         const titleNames = e.data.posts
-//         const userDatas = e.data.user
-
-//         titleNames.forEach((e, index) => {
-//           board_rank.innerHTML += `
-//         <div>
-//             <a href="/post/${e.id}">
-//                 <span> title : ${e.title}</span> 
-//                 <span> user_id :${e.user_id}</span>
-//             </a>
-//         </div>`;
-//         });
-
-
-//         userDatas.forEach((e, index) => {
-//     if (index === 0) { 
-//         user_rank.innerHTML += `
-//             <div>
-//                 <img src="${e.profile_img}" alt="Profile image of ${e.username}" style="width: 50px; height: 50px;">
-//                 <span> username : ${e.username}</span> 
-//                 <span> userEXP : ${e.exp}</span>
-//             </div>`;
-//     } else {
-//         user_rank.innerHTML += `
-//             <div>
-//                 <span> username : ${e.username}</span> 
-//                 <span> userEXP : ${e.exp}</span>
-//             </div>`;
-//     }
-// });
-
-
-//       });
-
-//     } catch (error) {
-//       console.log("main에러", error);
-//     }
-//   }
-
-
 
   loginBtn.onclick = () => {
     axios.post('/login', {
@@ -384,24 +338,23 @@
     username.innerHTML = e.data.userInfo.username;
     img_file.src = e.data.userInfo.profile_img;
   }
-  const gamestart = document.querySelector('.gamebtn');
 
-  gamestart.addEventListener('click',() => {
-    // console.log(document.cookie,"ㅑㅑ야 죽을래");
-    axios.get('/gamestart',{ withCredentials : true })
+  const gamestart = document.querySelector('.gamebtn');
+  gamestart.addEventListener('click', () => {
+    axios.get('/gamestart', { withCredentials: true })
     .then((e) => {
-      console.log("data 정보임용",e.data);
-      // if (!document.cookie) {
-      //   alert("로그인이 필요합니다")
-      // }
-      // else {
-      //   window.location.href = "/gameReady"
-      // }
+      console.log("data 정보임용", e.data);
+      if (e.data.token) {
+        // 토큰이 있는 경우 리다이렉트 또는 다른 동작 수행
+        window.location.href = "/gameReady";
+      } else {
+        // 토큰이 없는 경우 처리
+        alert("로그인이 필요합니다.");
+      }
     })
     .catch(err => {
-      console.error("겜스타트 에러",err);
-    })
-
+      console.error("겜스타트 에러", err);
+    });
   })  
 
   getloginaccess();

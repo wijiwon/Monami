@@ -223,24 +223,6 @@
   } catch (error) {
     console.log("getloginaccess", error);
   }
-  //   try {
-  //     const data2 = await axios.get("-", {
-  //       withCredentials: true,
-
-  //     }).then((e) => {
-  //       console.log("ㅇㅇ 님ㅈ됌", e);
-  //       if (e) {
-  //         loginSuccess.style.display = "block"
-  //         beforeLogin.style.display = "none"
-
-  //         username.innerHTML = e.data.login.username;
-  //         img_file.src = e.data.login.profile_img;
-
-  //       }
-  //     })
-  //   } catch (error) {
-  //     console.log("getloginaccess", error);
-  //   }
   }
 
   function handleUserRankings(userDatas) {
@@ -343,18 +325,16 @@
   gamestart.addEventListener('click', () => {
     axios.get('/gamestart', { withCredentials: true })
     .then((e) => {
-      console.log("data 정보임용", e.data);
-      if (e.data.token) {
-        // 토큰이 있는 경우 리다이렉트 또는 다른 동작 수행
-        window.location.href = "/gameReady";
-      } else {
-        // 토큰이 없는 경우 처리
-        alert("로그인이 필요합니다.");
+      console.log("머임?",e);
+      if (e.data.message == "게임 스타트") {
+          window.location.href = "/gameReady";
+      }else{
+          alert("로그인이 필요합니다.");
       }
     })
-    .catch(err => {
-      console.error("겜스타트 에러", err);
-    });
+    .catch((error)=>{
+      console.error("게임시작 에러",error);
+    })
   })  
 
   getloginaccess();

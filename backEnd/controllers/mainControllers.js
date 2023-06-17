@@ -31,9 +31,7 @@ exports.mainInfo = async (req, res) => {
     const userRanking = await User.findAll({
       raw: true,
       where: {
-        joinAllow: {
-          [Sequelize.Op.not]: 2
-        }
+        joinAllow: 1
       },
       order: [['exp', 'DESC']],
       limit: 5

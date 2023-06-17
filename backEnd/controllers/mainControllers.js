@@ -5,7 +5,7 @@ const { User, Post } = require("../models");
 
 // 게시판 랭킹 , 유저랭킹 함수
 // 디코드 함수 가져오기
-exports.mainloginaccess = async(req,res)=>{
+exports.mainloginaccess = async(req,res,next)=>{
   try{
     // console.log(req);
     const { decode } = req;

@@ -55,14 +55,7 @@ exports.viewVideo = async(req,res)=>{
         //     'Content-Length': videoData.length
         // });
         // res.end(videoData);
-        const draw = await Drawing.findOne({ where: { id: 2 } });
-        console.log("왜 재생안되는데????????????",draw.content);
-        const videoData = draw.content;
-        res.writeHead(200, {
-            'Content-Type': 'video/webm',
-            'Content-Length': videoData.length
-        });
-        res.end(videoData);
+      
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

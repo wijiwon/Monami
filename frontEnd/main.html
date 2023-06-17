@@ -199,29 +199,30 @@
   // 로그인했을때 데이터 들고와서 뿌려주는 함수
   async function getloginaccess() {
     try {
-      const res = await axios.get("/main/hi", { withCredentials: true });
-      console.log("getloginaccess response:", res);
-      console.log("res.data.login? :",res.data.login);
-      if (res.data.login) {
-        // user is logged in
-        loginSuccess.style.display = "block";
-        beforeLogin.style.display = "none";
+    const res = await axios.get("/main/hi", { withCredentials: true });
+    console.log("getloginaccess response:", res);
+    console.log("res.data.login? :", res.data.login);
+    
+    // Handle user rankings here
+    handleUserRankings(res.data.user);
+    // Handle posts here
+    handlePosts(res.data.posts);
+    
+    if (res.data.login) {
+      // user is logged in
+      loginSuccess.style.display = "block";
+      beforeLogin.style.display = "none";
 
-        username.innerHTML = res.data.login.username;
-        img_file.src = res.data.login.profile_img;
-
-        // Handle user rankings here
-        handleUserRankings(res.data.user);
-        // Handle posts here
-        handlePosts(res.data.posts);
-      } else {
-        // user is not logged in
-        loginSuccess.style.display = "none";
-        beforeLogin.style.display = "block";
-      }
-    } catch (error) {
-      console.log("getloginaccess", error);
+      username.innerHTML = res.data.login.username;
+      img_file.src = res.data.login.profile_img;
+    } else {
+      // user is not logged in
+      loginSuccess.style.display = "none";
+      beforeLogin.style.display = "block";
     }
+  } catch (error) {
+    console.log("getloginaccess", error);
+  }
   //   try {
   //     const data2 = await axios.get("-", {
   //       withCredentials: true,

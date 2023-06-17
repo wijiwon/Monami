@@ -22,20 +22,16 @@
             box-sizing: border-box;
         }
 
-
-        /* 페이지 3개 껐다 켜 */
-        .questions {
+        .questions.pop,
+        .drawings.pop,
+        .gameResult.pop {
             display: block;
-            display: none;
         }
 
-        .drawings {
-            display: block;
-            display: none;
-        }
-
+        .drawings,
+        .questions,
         .gameResult {
-            display: block;
+            display: none;
         }
 
         .questions .row1,
@@ -56,8 +52,7 @@
         .row1 .users,
         .row1 .time,
         .rows1 .users,
-
-        .rows1 .time {
+        .rows1 .draw_time {
             width: 120px;
             height: 120px;
             border: 1px solid slateblue;
@@ -99,7 +94,6 @@
         }
 
         .row3 button {
-
             width: 100px;
             height: 50px;
             font-size: 20px;
@@ -254,9 +248,7 @@
 
 <body>
     <!-- 첫 제시어 입력하는 화면 -->
-
-    <div class="questions">
-
+    <div class="questions pop">
         <!-- row1: 최상단영역 - 총인원(좌), 라운드 시간(우)이 표시된다. -->
         <div class="row1">
             <!-- <div class="users">유저인원</div> -->
@@ -291,36 +283,16 @@
         <div class="rows2">
             <div class="colors">
                 <div class="colors2">
-                    <div class="colorbox">
-                        <div style="background-color: white;" class="brushColor" data-color="white"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: black;" class="brushColor" data-color="black"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: red;" class="brushColor" data-color="red"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: pink;" class="brushColor" data-color="pink"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: orangered;" class="brushColor" data-color="orangered"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: yellow;" class="brushColor" data-color="yellow"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: green;" class="brushColor" data-color="green"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: blue;" class="brushColor" data-color="blue"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: purple;" class="brushColor" data-color="purple"></div>
-                    </div>
+                    <div class="colorbox"><div style="background-color: white;" class="brushColor" data-color="white"></div></div>
+                    <div class="colorbox"><div style="background-color: black;" class="brushColor" data-color="black"></div></div>
+                    <div class="colorbox"><div style="background-color: red;" class="brushColor" data-color="red"></div></div>
+                    <div class="colorbox"><div style="background-color: pink;" class="brushColor" data-color="pink"></div></div>
+                    <div class="colorbox"><div style="background-color: orangered;" class="brushColor" data-color="orangered"></div></div>
+                    <div class="colorbox"><div style="background-color: yellow;" class="brushColor" data-color="yellow"></div></div>
+                    <div class="colorbox"><div style="background-color: green;" class="brushColor" data-color="green"></div></div>
+                    <div class="colorbox"><div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div></div>
+                    <div class="colorbox"><div style="background-color: blue;" class="brushColor" data-color="blue"></div></div>
+                    <div class="colorbox"><div style="background-color: purple;" class="brushColor" data-color="purple"></div></div>
                 </div>
             </div>
             <div class="bord">
@@ -501,8 +473,7 @@
     let mediaRecorder;
 
     // 비디오 녹화 시작
-
-    function startRecording() {
+    async function startRecording() {
         const canvasStream = canvas.captureStream();
         mediaRecorder = new MediaRecorder(canvasStream, { mimeType: 'video/webm' });
 
@@ -510,31 +481,61 @@
             recordedFrames.push(e.data);
         };
 
+
         mediaRecorder.start();
     }
 
-    // 비디오 재생
-    function playVideo() {
+    async function createVideoURL() {
         const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
-        const videoURL = URL.createObjectURL(videoBlob);
-        const videoElement = document.getElementById('video_recorded');
+            // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
+        const formData = new FormData();
+        formData.append('file', videoBlob);
 
-        videoElement.src = videoURL;
-        videoElement.play();
+        await axios.post('http://127.0.0.1:4000/gameplay', formData , {
+            withCredentials: true,
+            "Content-Type": "multipart/form-data"
+        }).then((e) => {
+            console.log(e.data)
+            console.log("아현이짱짱맨")
+        }).catch((err) => {
+            console.log(err)
+        })
+        // return URL.createObjectURL(videoBlob);
+    }
+
+    // 비디오 재생
+    async function playVideo() {
+        const videoElement = document.getElementById('video_recorded');
+        await axios.get('http://127.0.0.1:4000/gameplay/viewVideo', {
+            responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+            withCredentials: true
+        }).then((e)=>{
+            const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+            const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+            videoElement.src = videoSrc;
+            videoElement.play();
+        }).catch((err)=>{
+            console.log(err)
+        })
+        
+        // videoElement.src = videoURL;
+        // videoElement.play();
     }
 
     // 비디오 녹화 종료
-    function stopRecording() {
+    async function stopRecording() {
+        mediaRecorder.onstop = (e) => {
+            const videoURL = createVideoURL();
+            // playBtn.addEventListener('click',playVideo);
+        };
         mediaRecorder.stop();
-        // playVideo();
-    }
-
+    } 
+    
     const completeBtn = document.getElementById('complete');
     const playBtn = document.getElementById('play');
-
-
+    
+    
     window.addEventListener('DOMContentLoaded', startRecording);
-<<<<<<< HEAD
     // completeBtn.addEventListener('click', () => {
     //     stopRecording();
     // });
@@ -602,14 +603,10 @@
     //--------- 제시어 입력하는 구문 ------------------------------------------------------------
     function questionInput(){
         const queInput = document.getElementById('question');
-        console.log("인풋으로 입력받은 데이터는????",queInput)
         console.log("인풋으로 입력받은 데이터는????",queInput.value)
+        axios.post('http://127.0.0.1:4000/gameplay/InputQuestion')
     }
     
-=======
-    completeBtn.addEventListener('click', stopRecording);
-    playBtn.addEventListener('click', playVideo);
->>>>>>> 905022b416bb44c2375c544875dae9d34d3193dc
 </script>
 
 </html>

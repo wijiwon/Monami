@@ -17,8 +17,9 @@ exports.isRoom = async(req,res,next)=>{
             for (const i of room) {
                 const userInRoom = i.dataValues.users_in_room;
                 console.log("userInRoom?????????",userInRoom);
-                console.log("userInRoom에 속해있니?????????",userInRoom.split(',').includes(decode.id));
-                if(userInRoom && userInRoom.split(',').includes(decode.id)){
+                console.log("userInRoom에 정말 속해있니?????????",userInRoom.split(','));
+                console.log("userInRoom에 속해있니?????????",userInRoom.split(',').includes(decode.id.toString()));
+                if(userInRoom && userInRoom.split(',').includes(decode.id.toString())){
                     console.log("%%%%%%%%%%%%%%%%%%%",i.dataValues)
                     req.room = i.dataValues;
                     next();

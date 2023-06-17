@@ -27,7 +27,8 @@ exports.DrawingAdd = async(req,res)=>{
         await Drawing.create({
             content: videoData
         });
-        res.sendStatus(200);
+        // res.sendStatus(200);
+        res.status(200).send();
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -37,14 +38,18 @@ exports.DrawingAdd = async(req,res)=>{
 //그림을 보여주는 함수
 exports.viewVideo = async(req,res)=>{
     try {
-        const draw = await Drawing.findOne({ where: { id: 2 } });
+        const draw = await Drawing.findOne({ where: { id: 41 } });
         console.log("왜 재생안되는데????????????",draw.content);
         const videoData = draw.content;
-        res.writeHead(200, {
+        res.status(200).set({
             'Content-Type': 'video/webm',
             'Content-Length': videoData.length
-        });
-        res.end(videoData);
+          }).send(videoData);
+        // res.writeHead(200, {
+        //     'Content-Type': 'video/webm',
+        //     'Content-Length': videoData.length
+        // });
+        // res.end(videoData);
     } catch (error) {
         console.log(error);
         res.sendStatus(500);

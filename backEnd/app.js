@@ -17,7 +17,6 @@ const logoutUser = require("./routers/logoutRouter");
 const mypageRouter = require("./routers/mypageRouter");
 const adminRouter = require("./routers/adminRouter");
 const gameRouter = require("./routers/game");
-const gameStartRouter = require("./routers/gameStartRouter");
 const { Cookie } = require('express-session');
 
 
@@ -66,7 +65,6 @@ app.use('/logout',logoutUser);
 app.use("/mypage",mypageRouter);
 app.use("/admin",adminRouter);
 app.use("/game",gameRouter);
-app.use('/gamestart',gameStartRouter);
 
 sequelize.sync({ forse: false }).then(() => {
     console.log("연결성공")

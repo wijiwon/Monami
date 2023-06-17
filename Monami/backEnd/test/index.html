@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <input id="message-input" type="text" placeholder="Type your message">
+  <input type="text" id="receiver-id" placeholder="Receiver ID or username">
+  <button id="send-button">Send</button>
+  <button id="room-btn">select</button>
+  <ul id="messages"></ul>
+  <ul id="User_id"></ul>
+</body>
+<script>
+  try {
+    console.log("dd")
+    const socket = io.connect('http://localhost:8080');
+    console.log(socket);
+    console.log(socket._opts.port);
+    // ahfmrpTdjdygg
+    // 모르게ㅆ어욯ㅎ
+
+    console.log("ddddddd")
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const messagesList = document.getElementById('messages');
+    const User_idlist = document.getElementById('User_id');
+    const receiverIdInput = document.getElementById('receiver-id');
+    const receiveroom= document.getElementById('room-btn');
+
+    try {
+      sendButton.addEventListener('click', () => {
+      const message = messageInput.value;
+      const receiverId = receiverIdInput.value;
+      if(receiverId)
+      {
+        socket.emit('whisper',{message,receiverId});
+      }else socket.emit('chat message', message);
+      messageInput.value = '';
+      receiverId.value='';
+    });
+      
+    } catch (error) {
+      console.log(error);
+    }
+    receiveroom.addEventListener('click',()=>{
+      socket.emit('jointheroom');
+    })
+    socket.on()
+
+    socket.on('connectuser',(userid)=>{
+      const li= document.createElement('li');
+      li.textContent =`${userid}님이 들어왔습니다.`
+      messagesList.appendChild(li);
+    })
+    socket.on('disconnectuser',(userid)=>{
+      const li= document.createElement('li');
+      li.textContent =`${userid}님이 나갔습니다..`
+      messagesList.appendChild(li);
+    })
+    socket.on('whisper',(msg)=>{
+      const li = document.createElement('li');
+      li.textContent = `귓속말:${msg}`;
+      messagesList.appendChild(li);
+    })
+    socket.on('chat message', (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      messagesList.appendChild(li);
+    });
+    socket.on('nowusers',  async (msg) => {
+      // while (messageList.firstChild) {
+      //   messageList.removeChild(messageList.firstChild);
+      // }
+      // msg.forEach(element => {
+      //   console.log(element.userid);
+      //   const li = document.createElement('li');
+      //   li.textContent = "user " + element._nickname;
+      //   messagesList.appendChild(li);
+      // });
+      await asd("User_id");
+      console.log(msg);
+      await asdf(msg,"User_id");
+
+    })
+  } catch (error) {
+    console.log(error);
+  }
+  async function asd(id){
+    const User_idlist= document.getElementById(id);
+    while (User_idlist.firstChild) {
+      User_idlist.removeChild(User_idlist.firstChild);
+      }
+  }
+  async function asdf(tmp,id){
+    const User_idlist = document.getElementById(id);
+    tmp.forEach(element => {
+        console.log(element.userid);
+        const li = document.createElement('li');
+        li.textContent = "user " + element.userid;
+        User_idlist.appendChild(li);
+      });
+
+  }
+
+</script>
+
+</html>

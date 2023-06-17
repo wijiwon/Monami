@@ -1,4 +1,4 @@
-const e = require('express');
+// const e = require('express');
 const Sequelize = require("sequelize");
 const { User, Post } = require("../models");
 
@@ -34,7 +34,7 @@ exports.mainInfo = async (req, res) => {
       raw: true,
       where: {
         joinAllow: {
-          [Sequel.Op.not]: 0
+          [Sequelize.Op.not]: 2
         }
       },
       order: [['exp', 'DESC']],

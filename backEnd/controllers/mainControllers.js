@@ -14,14 +14,19 @@ exports.mainloginaccess = async(req,res)=>{
       await User.findOne({
         where : {user_id : decode.user_id}
       }).then((e) => {
-        res.send({  login: e });
+        req.userInfo = e;
+        next();
+        // res.send({  login: e });
       })
+    }else{
+      next();
     }
   }
   catch(err){
     console.log(err);
   }
 }
+
 exports.mainInfo = async (req, res) => {
   try {
     // console.log("알이큐#$#$%#$%#$%",req);
@@ -29,7 +34,7 @@ exports.mainInfo = async (req, res) => {
       raw: true,
       where: {
         joinAllow: {
-          [Sequelize.Op.not]: 2
+          [Sequel.Op.not]: 0
         }
       },
       order: [['exp', 'DESC']],
@@ -42,9 +47,12 @@ exports.mainInfo = async (req, res) => {
         raw: true,
         order: [['createdAt', 'DESC']],
         limit: 5,
-        where: {}
       }).then((posts) => {
-        res.send({ user: user, posts: posts });
+        if (req.userInfo) {
+          res.send({ user: user, posts: posts, userInfo: req.userInfo });
+        } else {
+          res.send({ user: user, posts: posts });
+        }
       })
     })
 

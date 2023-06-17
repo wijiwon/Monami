@@ -10,13 +10,14 @@ const { sequelize } = require("./models")
 const mainInfoRouter = require("./routers/mainRouter");
 const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
-const mainloginaccessRouter = require("./routers/mainloginRouter");
+// const mainloginaccessRouter = require("./routers/mainloginRouter");
 const gameReady = require('./routers/gameReadyRouter');
 const game = require('./routers/gameReadyRouter');
 const logoutUser = require("./routers/logoutRouter");
 const mypageRouter = require("./routers/mypageRouter");
 const adminRouter = require("./routers/adminRouter");
 const gameRouter = require("./routers/game");
+const gameStartRouter = require("./routers/gameStartRouter");
 const { Cookie } = require('express-session');
 
 
@@ -60,11 +61,12 @@ app.use('/gameready', gameReady);
 app.use('/main',mainInfoRouter);
 app.use('/join',joinRouter);
 app.use('/login',loginRouter);
-app.use('/mainlogin',mainloginaccessRouter);
+// app.use('/mainlogin',mainloginaccessRouter);
 app.use('/logout',logoutUser);
 app.use("/mypage",mypageRouter);
 app.use("/admin",adminRouter);
 app.use("/game",gameRouter);
+app.use('/gamestart',gameStartRouter);
 
 sequelize.sync({ forse: false }).then(() => {
     console.log("연결성공")

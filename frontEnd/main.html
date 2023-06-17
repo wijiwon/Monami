@@ -199,69 +199,122 @@
   // 로그인했을때 데이터 들고와서 뿌려주는 함수
   async function getloginaccess() {
     try {
-      const data2 = await axios.get("/mainlogin", {
-        withCredentials: true,
+      const res = await axios.get("/main/hi", { withCredentials: true });
+      console.log("getloginaccess response:", res);
+      if (res.data.login) {
+        // user is logged in
+        loginSuccess.style.display = "block";
+        beforeLogin.style.display = "none";
 
-      }).then((e) => {
-        console.log("ㅇㅇ 님ㅈ됌", e);
-        if (e) {
-          loginSuccess.style.display = "block"
-          beforeLogin.style.display = "none"
+        username.innerHTML = res.data.login.username;
+        img_file.src = res.data.login.profile_img;
 
-          username.innerHTML = e.data.login.username;
-          img_file.src = e.data.login.profile_img;
-
-        }
-      })
+        // Handle user rankings here
+        handleUserRankings(res.data.user);
+        // Handle posts here
+        handlePosts(res.data.posts);
+      } else {
+        // user is not logged in
+        loginSuccess.style.display = "none";
+        beforeLogin.style.display = "block";
+      }
     } catch (error) {
       console.log("getloginaccess", error);
     }
+  //   try {
+  //     const data2 = await axios.get("-", {
+  //       withCredentials: true,
+
+  //     }).then((e) => {
+  //       console.log("ㅇㅇ 님ㅈ됌", e);
+  //       if (e) {
+  //         loginSuccess.style.display = "block"
+  //         beforeLogin.style.display = "none"
+
+  //         username.innerHTML = e.data.login.username;
+  //         img_file.src = e.data.login.profile_img;
+
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.log("getloginaccess", error);
+  //   }
   }
 
-  async function getMain() {
-    try {
-      const data = await axios.get("/main/hi", {
-        withCredentials: true,
-      }).then((e) => {
-        console.log(e);
-        const titleNames = e.data.posts
-        const userDatas = e.data.user
-
-        titleNames.forEach((e, index) => {
-          board_rank.innerHTML += `
-        <div>
-            <a href="/post/${e.id}">
-                <span> title : ${e.title}</span> 
-                <span> user_id :${e.user_id}</span>
-            </a>
-        </div>`;
-        });
-
-
-        userDatas.forEach((e, index) => {
-    if (index === 0) { 
+  function handleUserRankings(userDatas) {
+    userDatas.forEach((e, index) => {
+      if (index === 0) {
         user_rank.innerHTML += `
             <div>
                 <img src="${e.profile_img}" alt="Profile image of ${e.username}" style="width: 50px; height: 50px;">
-                <span> username : ${e.username}</span> 
+                <span> username : ${e.username}</span>
                 <span> userEXP : ${e.exp}</span>
             </div>`;
-    } else {
+      } else {
         user_rank.innerHTML += `
             <div>
-                <span> username : ${e.username}</span> 
+                <span> username : ${e.username}</span>
                 <span> userEXP : ${e.exp}</span>
             </div>`;
-    }
-});
-
-
-      });
-
-    } catch (error) {
-      console.log("main에러", error);
-    }
+      }
+    });
   }
+
+  function handlePosts(titleNames) {
+    titleNames.forEach((e, index) => {
+      board_rank.innerHTML += `
+        <div>
+            <a href="/post/${e.id}">
+                <span> title : ${e.title}</span>
+                <span> user_id :${e.user_id}</span>
+            </a>
+        </div>`;
+    });
+  }
+//   async function getMain() {
+//     try {
+//       const data = await axios.get("/main/hi", {
+//         withCredentials: true,
+//       }).then((e) => {
+//         console.log(e);
+//         const titleNames = e.data.posts
+//         const userDatas = e.data.user
+
+//         titleNames.forEach((e, index) => {
+//           board_rank.innerHTML += `
+//         <div>
+//             <a href="/post/${e.id}">
+//                 <span> title : ${e.title}</span> 
+//                 <span> user_id :${e.user_id}</span>
+//             </a>
+//         </div>`;
+//         });
+
+
+//         userDatas.forEach((e, index) => {
+//     if (index === 0) { 
+//         user_rank.innerHTML += `
+//             <div>
+//                 <img src="${e.profile_img}" alt="Profile image of ${e.username}" style="width: 50px; height: 50px;">
+//                 <span> username : ${e.username}</span> 
+//                 <span> userEXP : ${e.exp}</span>
+//             </div>`;
+//     } else {
+//         user_rank.innerHTML += `
+//             <div>
+//                 <span> username : ${e.username}</span> 
+//                 <span> userEXP : ${e.exp}</span>
+//             </div>`;
+//     }
+// });
+
+
+//       });
+
+//     } catch (error) {
+//       console.log("main에러", error);
+//     }
+//   }
 
 
 
@@ -330,17 +383,24 @@
   const gamestart = document.querySelector('.gamebtn');
 
   gamestart.addEventListener('click',() => {
-    console.log(document.cookie,"ㅑㅑ야 죽을래");
-    if (!document.cookie) {
-      alert("로그인이 필요합니다")
-    }
-    else {
-      window.location.href = "/gameReady"
-    }
+    // console.log(document.cookie,"ㅑㅑ야 죽을래");
+    axios.get('/gamestart',{ withCredentials : true })
+    .then((e) => {
+      console.log("data 정보임용",e.data);
+      // if (!document.cookie) {
+      //   alert("로그인이 필요합니다")
+      // }
+      // else {
+      //   window.location.href = "/gameReady"
+      // }
+    })
+    .catch(err => {
+      console.error("겜스타트 에러",err);
+    })
+
   })  
 
-  getMain(); 
-  getloginaccess(); 
+  getloginaccess();
 </script>
 
 </html>

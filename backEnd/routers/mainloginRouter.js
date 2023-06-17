@@ -1,10 +1,10 @@
-const router = require("express").Router();
+// const router = require("express").Router();
 
-const { mainloginaccess } = require("../controllers/mainControllers");
-const { islogin } = require("../middleware/isLogin");
-
-
-router.get('/',islogin,mainloginaccess);
+// const { mainloginaccess } = require("../controllers/mainControllers");
+// const { islogin } = require("../middleware/isLogin");
 
 
-module.exports = router;
+// router.get('/',islogin,mainloginaccess);
+
+
+// module.exports = router;

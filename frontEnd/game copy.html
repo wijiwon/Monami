@@ -13,34 +13,23 @@
         }
 
         .questions,
-
-        .drawings,
-        .gameResult {
+        .drawings {
             width: 100vw;
             height: 100vh;
             border: 3px solid red;
             box-sizing: border-box;
         }
 
-
-        /* 페이지 3개 껐다 켜 */
         .questions {
-            display: block;
             display: none;
         }
 
         .drawings {
-            display: block;
-            display: none;
-        }
-
-        .gameResult {
-            display: block;
+            /* display: none; */
         }
 
         .questions .row1,
-        .drawings .rows1,
-        .gameResult .row1 {
+        .drawings .rows1 {
             width: 90%;
             height: 15%;
             border: 1px solid forestgreen;
@@ -56,7 +45,6 @@
         .row1 .users,
         .row1 .time,
         .rows1 .users,
-
         .rows1 .time {
             width: 120px;
             height: 120px;
@@ -99,7 +87,6 @@
         }
 
         .row3 button {
-
             width: 100px;
             height: 50px;
             font-size: 20px;
@@ -208,58 +195,15 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
-
-        .gameResult .row1 {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            height: 15%;
-            border: 1px solid forestgreen;
-        }
-        .row1 .playerImage{
-            background-color: yellowgreen;
-            width: 15%;
-            height: 100%;
-        }
-        .gameResult .row2 {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            width: 100%;
-            height: 70%;
-            border: 1px solid hotpink;
-        }
-
-        .row2 .player,
-        .row2 .gameBoard {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 45%;
-            height: 100%;
-            border: 3px solid goldenrod;
-        }
-
-        .gameResult .row3 {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 15%;
-            border: 1px solid darkblue;
-        }
     </style>
 </head>
 
 <body>
     <!-- 첫 제시어 입력하는 화면 -->
-
     <div class="questions">
-
         <!-- row1: 최상단영역 - 총인원(좌), 라운드 시간(우)이 표시된다. -->
         <div class="row1">
-            <!-- <div class="users">유저인원</div> -->
+            <div class="users">유저인원</div>
             <div class="time">라운드시간</div>
         </div>
         <!-- row2: 중간 영역 - 첫 제시어 입력 시 로딩이 나오고, 다음 제시어 입력 시, 그림이 나온다. -->
@@ -277,16 +221,16 @@
         <div class="row3">
             <div>
                 <input type="text" name="question" id="question" placeholder="제시어를 입력하세요!">
-                <!-- <button>등록</button> -->
+                <button>등록</button>
             </div>
         </div>
     </div>
     <!-- 그림 그리는 화면 -->
     <div class="drawings">
         <div class="rows1">
-            <!-- <div class="users">유저인원</div> -->
+            <div class="users">유저인원</div>
             <div class="view_question">넘겨받은 제시어</div>
-            <div class="draw_time">라운드시간</div>
+            <div class="time">라운드시간</div>
         </div>
         <div class="rows2">
             <div class="colors">
@@ -351,35 +295,12 @@
             </div>
         </div>
         <div class="rows3">
-            <!-- <button id="complete">완료</button> -->
+            <button id="complete">완료</button>
         </div>
         <video style="width: 300px; height: 200px;" id="video_recorded" controls style="border: 1px solid black;"
             src=""></video>
         <button id="play">재생</button>
     </div>
-    <!-- 결과 보여주는 화면 -->
-    <div class="gameResult">
-        <div class="row1">
-            <div class="playerImage">
-                <img style="width: 100px; height: 100px;" src="http://127.0.0.1:4000/monami.png" alt="게임 로고" id="gamelogo">
-            </div>
-        </div>
-        <div class="row2">
-            <!-- Player 정보 -->
-            <div class="player">
-                <div class="playerName">플레이어명</div>
-
-            </div>
-            <!-- Game 결과 -->
-            <div class="gameBoard">
-                <canvas id="resultCanvas"></canvas>
-            </div>
-        </div>
-        <div class="row3">
-            <button id="restart">다시하기</button>
-        </div>
-    </div>
-
 </body>
 <script>
     // html에서 canvas 태크를 가져온다.
@@ -501,7 +422,6 @@
     let mediaRecorder;
 
     // 비디오 녹화 시작
-
     function startRecording() {
         const canvasStream = canvas.captureStream();
         mediaRecorder = new MediaRecorder(canvasStream, { mimeType: 'video/webm' });
@@ -510,23 +430,55 @@
             recordedFrames.push(e.data);
         };
 
+
         mediaRecorder.start();
     }
 
-    // 비디오 재생
-    function playVideo() {
+    async function createVideoURL() {
         const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
-        const videoURL = URL.createObjectURL(videoBlob);
-        const videoElement = document.getElementById('video_recorded');
+        const videoURL2 = URL.createObjectURL(videoBlob);
+        await axios.post('http://127.0.0.1:4000/gameplay', { url: videoURL2 }, {
+            withCredentials: true,
+            "Content-Type": "application/json"
+        }).then((e) => {
 
-        videoElement.src = videoURL;
-        videoElement.play();
+        }).catch((err) => {
+            console.log(err)
+        })
+        return videoURL2
+    }
+
+    // 비디오 재생
+    async function playVideo(videoURL) {
+        const videoElement = document.getElementById('video_recorded');
+        const data = await axios.get('http://127.0.0.1:4000/gameplay/viewVideo', {
+            responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+            withCredentials: true
+        }).then((e)=>{
+            console.log("eeeeeeeeeeeee",e)
+            console.log("eeeeeeeeeeeee",e.data)
+            const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+            const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+            console.log("vvvvvvvvvvvvv",videoSrc)
+            videoElement.src = videoSrc;
+            videoElement.play();
+        }).catch((err)=>{
+            console.log(err)
+        })
+        
+        // videoElement.src = videoURL;
+        // videoElement.play();
     }
 
     // 비디오 녹화 종료
     function stopRecording() {
+
+        mediaRecorder.onstop = (e) => {
+            const videoURL = createVideoURL();
+            playBtn.addEventListener('click', () => playVideo(videoURL));
+        };
+
         mediaRecorder.stop();
-        // playVideo();
     }
 
     const completeBtn = document.getElementById('complete');
@@ -534,8 +486,23 @@
 
 
     window.addEventListener('DOMContentLoaded', startRecording);
-    completeBtn.addEventListener('click', stopRecording);
-    playBtn.addEventListener('click', playVideo);
+    completeBtn.addEventListener('click', () => {
+        stopRecording();
+    });
+
+
+
+
+
+
+    // ------------------------------------------------------------------------------------------------------
+    axios.get('http://127.0.0.1:4000/gameplay', {
+        withCredentials: true
+    }).then((e) => {
+        console.log(e)
+    }).catch((err) => {
+        console.log(err);
+    })
 </script>
 
 </html>

@@ -123,6 +123,7 @@
     </div>
 
 
+
     <!-- 메인페이지의 가운데 부분 -->
     <div class="container">
 
@@ -285,6 +286,7 @@
         loginDraw(e);
       }
       if (e.data.message == "어드민") {
+
         window.location.href = "http://127.0.0.1:5501/Monami/frontEnd/admin.html"
       }
 
@@ -321,6 +323,7 @@
     img_file.src = e.data.userInfo.profile_img;
   }
   const gamestart = document.querySelector('.gamebtn');
+
 
   gamestart.onclick = () => {
     if (!document.cookie) {

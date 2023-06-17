@@ -9,7 +9,7 @@ class Question extends Sequelize.Model{
             },
             connect_id: {
                 type: Sequelize.INTEGER(10),
-                allowNull: false
+                allowNull: true
             }
         },
         {

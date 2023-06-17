@@ -507,9 +507,7 @@
     }
 
     
-    //--------- 제시어 입력하는 구문 ------------------------------------------------------------
-
-
+    //--------- 제시어 입력하는 시간 타이머 -----------------------------
     const questionFun = async()=>{
         if(questionTime == true){
             let time = 10;  
@@ -517,10 +515,11 @@
                 sec = time;
                 document.querySelector('.time').innerHTML = sec + "초";
                 time--;
-        
+                
                 if(time < 0){
                     clearInterval(QuestionTimer);
                     document.querySelector('.time').innerHTML = "시간종료";
+                    questionInput();
                     questionTime = false;
                     drawingTime = true;
                     document.querySelector(".drawings").classList.toggle('pop');
@@ -531,9 +530,14 @@
         }
     }
     questionFun();
-
-
-
+    
+    //--------- 제시어 입력하는 구문 ------------------------------------------------------------
+    function questionInput(){
+        const queInput = document.getElementById('question');
+        console.log("인풋으로 입력받은 데이터는????",queInput)
+        console.log("인풋으로 입력받은 데이터는????",queInput.value)
+    }
+    
 </script>
 
 </html>

@@ -1,5 +1,6 @@
 const { User, Room } = require('../models');
 const Sequelize = require('sequelize');
+const { get } = require('../routers/gameReadyRouter');
 const Op = Sequelize.Op;
 
 // 게임방을 생성하는 함수
@@ -122,9 +123,36 @@ exports.RoomChoice = async (req, res) => {
 exports.RoomExit = async (req, res) => {
     // 게임방을 나가면 user_in_room에서 삭제된다.
 
+
 }
+exports.RoomDelete = async (req, res) => {
+    // 게임방을 나가면 user_in_room에서 삭제된다.
+    
+    const {title} = req.body;
+    console.log(title);
+    await Room.destroy({ where: { title: title } });
+    res.json();
+}
+
 
 exports.UserView = async (req, res) => {
     const { decode } = req;
     res.json(decode);
 }
+
+exports.getHost = async(req,res)=>{
+    try {
+        console.log("하아하이이하이히아");
+        const {title} = req.body;
+        console.log(title);
+        const room = await Room.findOne({where:{title:title}});
+        // const room = await Room.findOne({
+        //     order: [['id', 'DESC']],
+        //   })
+          console.log(room);
+        res.json(room);
+    } catch (error) {
+        console.log(error);
+    }
+}
+

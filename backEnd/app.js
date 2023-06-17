@@ -22,16 +22,17 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use("/img", express.static(path.join(__dirname, "image")));
 
-app.use(cors({
-    origin:"http://127.0.0.1:5500",
-    credentials: true
-}));
-
-
 // app.use(cors({
-//     origin:"http://127.0.0.1:5501",
-// }
-// ));
+//     origin:"http://127.0.0.1:5500",
+//     credentials: true
+// }));
+
+
+app.use(cors({
+    origin:"http://127.0.0.1:5501",
+    credentials:true
+}
+));
 
 app.use(session({
     name: "token",
@@ -182,6 +183,7 @@ io.on('connection', (socket) => {
         _roomNum = roomNum;
         roomName = `room${_roomNum}`;
         socket.join(roomName);
+        // rooms[roomNum].roomSocketname=roomName;
         // socket.on('exitRoom', () => {
         //     console.log("User has exited the room");
         //     socket.leave(roomName);
@@ -241,7 +243,7 @@ io.on('connection', (socket) => {
                 })
             }, 3000);
             setTimeout(() => {
-                io.emit('THrowGameMember', rooms);
+                io.emit('THrowGameMember', {rooms,roomNum});
                 console.log("정보를 게임방으로 던져줌");
             }, 6000);
         })

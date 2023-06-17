@@ -3,7 +3,7 @@ const { RoomCreate, RoomChoice, RoomViews, UserView,getHost,RoomDelete} = requir
 const { islogin } = require('../middleware/isLogin')
 
 router.get('/',islogin,(req,res)=>{
-  res.sendFile("/home/ubuntu/frontEnd/game.html");
+  res.sendFile("/home/ubuntu/frontEnd/gameready.html");
 });
 
 router.get('/hi', islogin, RoomViews);

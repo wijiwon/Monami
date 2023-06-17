@@ -39,7 +39,7 @@ exports.DrawingAdd = async(req,res)=>{
 exports.viewVideo = async(req,res)=>{
     try {
         const draw = await Drawing.findOne({ where: { id: 41 } });
-        console.log("왜 재생안되는데????????????",draw.content);
+        // console.log("왜 재생안되는데????????????",draw.content);
         const videoData = draw.content;
         res.status(200).set({
             'Content-Type': 'video/webm',

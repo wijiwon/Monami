@@ -4,6 +4,7 @@ const { Room } = require("../models");
 
 exports.isRoom = async(req,res,next)=>{
     try {
+
         const { decode } = req;
         console.log("현재 로그인한 아이디는????????",decode.id)
         // 현재 게임 중인 방에서 내가 방장일 경우, 해당 방의 정보가 전해진다.
@@ -16,9 +17,10 @@ exports.isRoom = async(req,res,next)=>{
             for (const i of room) {
                 const userInRoom = i.dataValues.users_in_room;
                 console.log("userInRoom?????????",userInRoom);
+
                 // console.log("userInRoom에 정말 속해있니?????????",userInRoom.split(','));
                 // console.log("userInRoom에 속해있니?????????",userInRoom.split(',').includes(decode.id.toString()));
-                if(userInRoom && userInRoom.split(',').includes(decode.id.toString())){
+     if(userInRoom && userInRoom.split(',').includes(decode.id.toString())){
                     console.log("%%%%%%%%%%%%%%%%%%%",i.dataValues)
                     req.room = i.dataValues;
                     next();
@@ -27,6 +29,7 @@ exports.isRoom = async(req,res,next)=>{
                 // ---- 속해있지 않을 때 보낼 메세지 작성 ※제대로 작동안됨 ---------
                 return res.send("게임방에 속해있지 않습니다. 다시 접속해주세요")
             }
+
         }
         else{
             req.room = roomManager;
@@ -39,3 +42,4 @@ exports.isRoom = async(req,res,next)=>{
         console.log(error)
     }
 }
+

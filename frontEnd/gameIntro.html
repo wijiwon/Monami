@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>game page</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .questions,
+    .drawings {
+      width: 100vw;
+      height: 100vh;
+      border: 3px solid red;
+      box-sizing: border-box;
+    }
+    .questions {
+      display: none;
+    }
+    .questions .row1,
+    .drawings .rows1 {
+      width: 90%;
+      height: 15%;
+      border: 1px solid forestgreen;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      left: 50%;
+      transform: translate(-50%);
+    }
+
+    .row1 .users,
+    .row1 .time,
+    .rows1 .users,
+    .rows1 .time {
+      width: 120px;
+      height: 120px;
+      border: 1px solid slateblue;
+    }
+
+    .questions .row2 {
+      position: relative;
+      width: 100%;
+      height: 53%;
+      border: 1px solid hotpink;
+    }
+
+    .row2 .question1,
+    .row2 .question2 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 400px;
+      border: 3px solid goldenrod;
+    }
+
+    .questions .row3 {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      height: 30%;
+      border: 1px solid darkblue;
+    }
+
+
+    .row3 #question {
+      width: 700px;
+      height: 50px;
+      font-size: 20px;
+    }
+
+    .row3 button {
+      width: 100px;
+      height: 50px;
+      font-size: 20px;
+    }
+
+    .rows1 .view_question {
+      width: 800px;
+      height: 70px;
+      border-bottom: 3px solid;
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 70px;
+    }
+
+    .drawings .rows2 {
+      width: 100%;
+      height: 70%;
+      border: 1px solid darkmagenta;
+      display: flex;
+    }
+
+    .rows2 .colors,
+    .rows2 .brushs {
+      position: relative;
+      width: 20%;
+      height: 100%;
+      border: 1px solid violet;
+    }
+
+    .colors .colors2,
+    .brushs .brushs2 {
+      position: absolute;
+      top: 50%;
+      left: 60%;
+      transform: translate(-50%, -50%);
+      width: 50%;
+      height: 400px;
+      border: 2px solid;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    .colors2 .colorbox,
+    .brushs2 .brushbox {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      border: 1px solid;
+      margin: 10px;
+    }
+
+    .colorbox .brushColor {
+      width: 90%;
+      height: 90%;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+    }
+
+    .brushbox .brushSize {
+
+      background-color: black;
+
+      border-radius: 50%;
+
+      position: absolute;
+
+      top: 50%;
+
+      left: 50%;
+
+      transform: translate(-50%, -50%);
+
+      cursor: pointer;
+
+    }
+
+    .rows2 .bord {
+
+      position: relative;
+
+      width: 60%;
+
+      height: 100%;
+
+      border: 1px solid blue;
+
+    }
+
+    .bord #canvas {
+
+      border: 1px solid;
+
+      position: absolute;
+
+      top: 50%;
+
+      left: 50%;
+
+      transform: translate(-50%, -50%);
+
+    }
+
+    .drawings .rows3 {
+
+      position: relative;
+
+      width: 100%;
+
+      height: 10%;
+
+      border: 1px solid seagreen;
+
+    }
+
+    .rows3 button {
+
+      position: absolute;
+
+      width: 100px;
+
+      height: 50px;
+
+      font-size: 20px;
+
+      top: 50%;
+
+      left: 50%;
+
+      transform: translate(-50%, -50%);
+
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- 첫 제시어 입력하는 화면 -->
+
+  <div class="questions">
+    <!-- row1: 최상단영역 - 총인원(좌), 라운드 시간(우)이 표시된다. -->
+    <div class="row1">
+      <div class="users">유저인원</div>
+      <div class="time">라운드시간</div>
+    </div>
+
+    <!-- row2: 중간 영역 - 첫 제시어 입력 시 로딩이 나오고, 다음 제시어 입력 시, 그림이 나온다. -->
+
+    <div class="row2">
+      <!-- question1: 첫 제시어 입력 시 나타나는 로딩화면 -->
+      <div class="question1">
+        <img style="width: 300px; height: 300px;" src="http://127.0.0.1:4000/sample.gif" alt="로딩">
+      </div>
+
+      <!-- question2: 제시어 입력 시 나타나는 그림(영상) -->
+
+      <div class="question2">
+        <video src=""></video>
+      </div>
+    </div>
+
+    <!-- row3: 하단영역 - 제시어를 입력하는 영역. 제시어를 입력하는 input과 버튼이 있다. -->
+
+    <div class="row3">
+      <div>
+        <input type="text" name="question" id="question" placeholder="제시어를 입력하세요!">
+        <button>등록</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 그림 그리는 화면 -->
+
+  <div class="drawings">
+    <div class="rows1">
+      <div class="users">유저인원</div>
+      <div class="view_question">넘겨받은 제시어</div>
+      <div class="time">라운드시간</div>
+    </div>
+
+    <div class="rows2">
+      <div class="colors">
+        <div class="colors2">
+          <div class="colorbox">
+            <div style="background-color: white;" class="brushColor" data-color="white"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: black;" class="brushColor" data-color="black"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: red;" class="brushColor" data-color="red"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: pink;" class="brushColor" data-color="pink"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: orangered;" class="brushColor" data-color="orangered"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: yellow;" class="brushColor" data-color="yellow"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: green;" class="brushColor" data-color="green"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: blue;" class="brushColor" data-color="blue"></div>
+          </div>
+
+          <div class="colorbox">
+            <div style="background-color: purple;" class="brushColor" data-color="purple"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="bord">
+
+        <canvas id="canvas"></canvas>
+
+      </div>
+
+      <div class="brushs">
+        <div class="brushs2">
+
+          <!-- 지우개 부분. 아직 구현 안됨 -->
+
+          <div class="brushbox">
+            <div class="eraser">e</div>
+          </div>
+
+          <div class="brushbox">
+            <div class="erasers">E</div>
+          </div>
+
+          <div class="brushbox">
+            <div style="width: 5px; height: 5px;" class="brushSize" data-size="5"></div>
+          </div>
+
+          <div class="brushbox">
+            <div style="width: 10px; height: 10px;" class="brushSize" data-size="10"></div>
+          </div>
+
+          <div class="brushbox">
+            <div style="width: 15px; height: 15px;" class="brushSize" data-size="15"></div>
+          </div>
+
+          <div class="brushbox">
+            <div style="width: 20px; height: 20px;" class="brushSize" data-size="20"></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="rows3">
+
+      <button id="complete">완료</button>
+
+    </div>
+
+    <video style="width: 300px; height: 200px;" id="video_recorded" controls style="border: 1px solid black;"
+      src=""></video>
+
+    <button id="play">재생</button>
+
+  </div>
+
+</body>
+
+<script>
+
+  // html에서 canvas 태크를 가져온다.
+  const canvas = document.getElementById("canvas");
+
+  // getContext: 그래픽 렌더링 컨텍스트를 가져오는 메소드. 2d를 가져온다.
+  const ctx = canvas.getContext("2d");
+
+
+
+
+  // canvas 영역 지정(css로는 X. 그림 그릴 때 마우스와 좌표가 안맞을 수 있음)
+  canvas.width = 900;
+  canvas.height = 600;
+
+
+  //브러쉬 사이즈와 컬러들을 담는 div를 불러오는 변수.
+  const brushSize = document.querySelector('.brushs2');
+  const brushColor = document.querySelector('.colors2');
+
+  let drawing = false;        // 기본 값은 종료상태이다.
+
+
+
+
+  // ----- 브러쉬 사이즈를 변경하는 함수 ------------------------------------------------------------------
+
+  //------- 읽어온 브러쉬 사이즈를 업데이트 하는 함수 --------------------------------
+
+  let updateBrushSize = (e) => {
+    ctx.lineWidth = e;
+  }
+
+  //-------------------------------------------------------------------------------
+
+  //------- 읽어온 브러쉬 색상을 업데이트 하는 함수 ---------------------------------
+
+  let updateBrushColor = (e) => {
+    ctx.strokeStyle = e;
+  }
+  //-------------------------------------------------------------------------------
+
+
+
+
+  //------ HTML에 저장된 브러쉬 사이즈를 읽어오는 함수 -------------------------------
+
+  const changeBrush = (e) => {
+
+    // 클릭으로 선택한 target의 클래스가 brushSize가 아니라면 return
+
+    if (!e.target.classList.contains("brushSize")) return;
+
+    // dataset.size: 'datasetd'을 사용하면 해당 요소의 'data-'접두사를 가진 속성의 값을 가져올 수 있다.
+
+    // 따라서, 'data-size'의 속성을 읽어올 수 있는 것이다.
+
+    const brushSized = e.target.dataset.size;
+    updateBrushSize(brushSized);
+
+  }
+
+  // ------------------------------------------------------------------------------
+
+  // ------- HTML에 저장된 브러쉬 컬러를 읽어오는 함수 ------------------------------
+
+  const changeColor = (e) => {
+
+    if (!e.target.classList.contains("brushColor")) return;
+    const selectColor = e.target.dataset.color;
+    updateBrushColor(selectColor);
+
+  }
+
+  // ------------------------------------------------------------------------------
+
+  //-----------------------------------------------------------------------------------------------------
+
+
+  // 브러쉬 크기 버튼의 click함수 실행
+  brushSize.addEventListener("click", changeBrush);
+
+  // 브러쉬 색상 버튼의 click함수 실행
+  brushColor.addEventListener("click", changeColor);
+
+  // ----------- 그림을 그리는 함수 -----------------------------------------------------------------------
+
+  // ------- 그림 그리는 시작을 하는 함수 ----------------------
+
+  const startDrawing = (e) => {
+
+    drawing = true;
+
+    // getBoundingClientRect: 캔버스 요소의 위치와 크기를 가져온다.
+
+    // canvas영역과의 간격을 없애기 위해 선택한 좌표값에서 빼준다.
+    const canvasRect = canvas.getBoundingClientRect();
+    lastX = e.clientX - canvasRect.left;
+    lastY = e.clientY - canvasRect.top;
+    // console.log(e)
+  }
+
+  //----------------------------------------------------------
+
+
+
+
+  // ------ 그림 그리는 동작을 종료하는 함수 ------------------
+  const stopDrawing = () => {
+    drawing = false;
+  }
+  // -------------------------------------------------------
+
+
+
+
+  // ------- 그림 그리는 동작을 하는 함수 -----------------------
+
+  const draw = (e) => {
+    // console.log(e);
+    // const x = e.offsetX;
+    // const y = e.offsetY;
+    const canvasRect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - canvasRect.left;
+    const mouseY = e.clientY - canvasRect.top;
+
+    if (!drawing) return;
+
+    // beginPath: 경로를 시작하는 메소드. 현재 경로가 초기화 되고, 이후의 그리기 명령으로 새로운 경로를 생성한다.
+    ctx.beginPath();
+
+    // moveTo: 시작점 설정
+    ctx.moveTo(lastX, lastY);
+
+    // lineTo: 끝점 설정
+    ctx.lineTo(mouseX, mouseY);
+
+    // stroke: 선 그리기
+    ctx.stroke();
+
+    // lineWidth: 선 굵기를 설정
+    // ctx.lineWidth = 10;
+    // lineCap: 선의 끝 모양 설정 (butt: 선 끝이 직선(기본값) / round: 선 끝이 반원 / square: 선 끝이 사각형)
+    ctx.lineCap = "round";
+    // strokeStyle: 선 색상 설정
+    // ctx.strokeStyle = "black";
+    lastX = mouseX;
+    lastY = mouseY;
+    // 그림을 그릴 때 마다 그림그리는 동작을 기록한다.
+    // recordedFrames.push(canvas.toDataURL('image/webp', 1.0));
+  }
+
+  // 기본 선 굵기, 컬러 값
+  ctx.lineWidth = 10;
+  ctx.strokeStyle = "black";
+  //-----------------------------------------------------------------------------------------------------
+
+
+
+
+  //----------- 그림 그릴 마우스의 상태지정 ---------------------------------------------------------------
+  canvas.addEventListener("mousedown", startDrawing);     //마우스를 누르면 대기상태가 된다.
+  canvas.addEventListener("mouseup", stopDrawing);     //마우스 떼면 종료상태가 된다.
+  canvas.addEventListener("mouseout", stopDrawing);     //마우스가 캔버스 영역에서 나가면 종료상태가 된다.
+  canvas.addEventListener("mousemove", draw);     //마우스를 누른 상태로 움직이면 그림그리는 함수가 동작한다.
+  //-----------------------------------------------------------------------------------------------------
+
+  // 그림그리기는 동작을 기록하기 위한 배열 생성
+  let recordedFrames = [];
+  let mediaRecorder;
+
+  // 비디오 녹화 시작
+
+  function startRecording() {
+    const canvasStream = canvas.captureStream();
+    mediaRecorder = new MediaRecorder(canvasStream, { mimeType: 'video/webm' });
+    mediaRecorder.ondataavailable = (e) => {
+      recordedFrames.push(e.data);
+    };
+    mediaRecorder.start();
+  }
+
+  // 비디오 재생
+
+  function playVideo() {
+    const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
+    const videoURL = URL.createObjectURL(videoBlob);
+    const videoElement = document.getElementById('video_recorded');
+    videoElement.src = videoURL;
+    videoElement.play();
+  }
+
+  // 비디오 녹화 종료
+  function stopRecording() {
+    mediaRecorder.stop();
+    // playVideo();
+  }
+
+  const completeBtn = document.getElementById('complete');
+  const playBtn = document.getElementById('play');
+  window.addEventListener('DOMContentLoaded', startRecording);
+  completeBtn.addEventListener('click', stopRecording);
+  playBtn.addEventListener('click', playVideo);
+</script>
+
+</html>

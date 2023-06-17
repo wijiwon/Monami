@@ -13,25 +13,34 @@
         }
 
         .questions,
-        .drawings {
+
+        .drawings,
+        .gameResult {
             width: 100vw;
             height: 100vh;
             border: 3px solid red;
             box-sizing: border-box;
         }
 
-        .questions.pop,
-        .drawings.pop {
-            display: block;
-        }
 
-        .drawings,
+        /* 페이지 3개 껐다 켜 */
         .questions {
+            display: block;
             display: none;
         }
 
+        .drawings {
+            display: block;
+            display: none;
+        }
+
+        .gameResult {
+            display: block;
+        }
+
         .questions .row1,
-        .drawings .rows1 {
+        .drawings .rows1,
+        .gameResult .row1 {
             width: 90%;
             height: 15%;
             border: 1px solid forestgreen;
@@ -47,7 +56,8 @@
         .row1 .users,
         .row1 .time,
         .rows1 .users,
-        .rows1 .draw_time {
+
+        .rows1 .time {
             width: 120px;
             height: 120px;
             border: 1px solid slateblue;
@@ -89,6 +99,7 @@
         }
 
         .row3 button {
+
             width: 100px;
             height: 50px;
             font-size: 20px;
@@ -197,12 +208,55 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+
+        .gameResult .row1 {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 15%;
+            border: 1px solid forestgreen;
+        }
+        .row1 .playerImage{
+            background-color: yellowgreen;
+            width: 15%;
+            height: 100%;
+        }
+        .gameResult .row2 {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            height: 70%;
+            border: 1px solid hotpink;
+        }
+
+        .row2 .player,
+        .row2 .gameBoard {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 45%;
+            height: 100%;
+            border: 3px solid goldenrod;
+        }
+
+        .gameResult .row3 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 15%;
+            border: 1px solid darkblue;
+        }
     </style>
 </head>
 
 <body>
     <!-- 첫 제시어 입력하는 화면 -->
-    <div class="questions pop">
+
+    <div class="questions">
+
         <!-- row1: 최상단영역 - 총인원(좌), 라운드 시간(우)이 표시된다. -->
         <div class="row1">
             <!-- <div class="users">유저인원</div> -->
@@ -237,16 +291,36 @@
         <div class="rows2">
             <div class="colors">
                 <div class="colors2">
-                    <div class="colorbox"><div style="background-color: white;" class="brushColor" data-color="white"></div></div>
-                    <div class="colorbox"><div style="background-color: black;" class="brushColor" data-color="black"></div></div>
-                    <div class="colorbox"><div style="background-color: red;" class="brushColor" data-color="red"></div></div>
-                    <div class="colorbox"><div style="background-color: pink;" class="brushColor" data-color="pink"></div></div>
-                    <div class="colorbox"><div style="background-color: orangered;" class="brushColor" data-color="orangered"></div></div>
-                    <div class="colorbox"><div style="background-color: yellow;" class="brushColor" data-color="yellow"></div></div>
-                    <div class="colorbox"><div style="background-color: green;" class="brushColor" data-color="green"></div></div>
-                    <div class="colorbox"><div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div></div>
-                    <div class="colorbox"><div style="background-color: blue;" class="brushColor" data-color="blue"></div></div>
-                    <div class="colorbox"><div style="background-color: purple;" class="brushColor" data-color="purple"></div></div>
+                    <div class="colorbox">
+                        <div style="background-color: white;" class="brushColor" data-color="white"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: black;" class="brushColor" data-color="black"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: red;" class="brushColor" data-color="red"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: pink;" class="brushColor" data-color="pink"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: orangered;" class="brushColor" data-color="orangered"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: yellow;" class="brushColor" data-color="yellow"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: green;" class="brushColor" data-color="green"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: blue;" class="brushColor" data-color="blue"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: purple;" class="brushColor" data-color="purple"></div>
+                    </div>
                 </div>
             </div>
             <div class="bord">
@@ -283,6 +357,29 @@
             src=""></video>
         <button id="play">재생</button>
     </div>
+    <!-- 결과 보여주는 화면 -->
+    <div class="gameResult">
+        <div class="row1">
+            <div class="playerImage">
+                <img style="width: 100px; height: 100px;" src="http://127.0.0.1:4000/monami.png" alt="게임 로고" id="gamelogo">
+            </div>
+        </div>
+        <div class="row2">
+            <!-- Player 정보 -->
+            <div class="player">
+                <div class="playerName">플레이어명</div>
+
+            </div>
+            <!-- Game 결과 -->
+            <div class="gameBoard">
+                <canvas id="resultCanvas"></canvas>
+            </div>
+        </div>
+        <div class="row3">
+            <button id="restart">다시하기</button>
+        </div>
+    </div>
+
 </body>
 <script>
     // html에서 canvas 태크를 가져온다.
@@ -404,7 +501,8 @@
     let mediaRecorder;
 
     // 비디오 녹화 시작
-    async function startRecording() {
+
+    function startRecording() {
         const canvasStream = canvas.captureStream();
         mediaRecorder = new MediaRecorder(canvasStream, { mimeType: 'video/webm' });
 
@@ -412,128 +510,32 @@
             recordedFrames.push(e.data);
         };
 
-
         mediaRecorder.start();
     }
 
-    async function createVideoURL() {
-        const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
-            // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
-        const formData = new FormData();
-        formData.append('file', videoBlob);
-
-        await axios.post('http://127.0.0.1:4000/gameplay', formData , {
-            withCredentials: true,
-            "Content-Type": "multipart/form-data"
-        }).then((e) => {
-            console.log(e.data)
-            console.log("아현이짱짱맨")
-        }).catch((err) => {
-            console.log(err)
-        })
-        // return URL.createObjectURL(videoBlob);
-    }
-
     // 비디오 재생
-    async function playVideo() {
+    function playVideo() {
+        const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
+        const videoURL = URL.createObjectURL(videoBlob);
         const videoElement = document.getElementById('video_recorded');
-        await axios.get('http://127.0.0.1:4000/gameplay/viewVideo', {
-            responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
-            withCredentials: true
-        }).then((e)=>{
-            const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
-            const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
-            videoElement.src = videoSrc;
-            videoElement.play();
-        }).catch((err)=>{
-            console.log(err)
-        })
-        
-        // videoElement.src = videoURL;
-        // videoElement.play();
+
+        videoElement.src = videoURL;
+        videoElement.play();
     }
 
     // 비디오 녹화 종료
-    async function stopRecording() {
-        mediaRecorder.onstop = (e) => {
-            const videoURL = createVideoURL();
-            // playBtn.addEventListener('click',playVideo);
-        };
+    function stopRecording() {
         mediaRecorder.stop();
-    } 
-    
+        // playVideo();
+    }
+
     const completeBtn = document.getElementById('complete');
     const playBtn = document.getElementById('play');
-    
-    
+
+
     window.addEventListener('DOMContentLoaded', startRecording);
-    // completeBtn.addEventListener('click', () => {
-    //     stopRecording();
-    // });
-    
-    playBtn.addEventListener('click',playVideo);
-
-
-
-
-
-    // ------------------------------------------------------------------------------------------------------
-    // 그림 그리는 시간 타이머 ---------------------------------------
-    let time = 10;      // 10초
-    let sec = "";
-    let questionTime = true;    // 제시어 입력하는 시간
-    let drawingTime = false;    // 그림그리는 시간
-
-    const drawingFun = async()=>{
-        if (drawingTime == true){
-            let time = 10;  
-            let DrawingTimer = setInterval(()=>{
-                sec = time;
-                document.querySelector('.draw_time').innerHTML = sec + "초";
-                time--;
-        
-                if(time < 0){
-                    clearInterval(DrawingTimer);
-                    document.querySelector('.draw_time').innerHTML = "시간종료";
-                    // stopRecording();
-                    drawingTime = false;
-                    questionTime = true;
-                    document.querySelector(".drawings").classList.toggle('pop');
-                    document.querySelector(".questions").classList.toggle('pop'); 
-                    questionFun();
-                }
-            },1000);        
-        }
-    }
-
-    
-    //--------- 제시어 입력하는 구문 ------------------------------------------------------------
-
-
-    const questionFun = async()=>{
-        if(questionTime == true){
-            let time = 10;  
-            let QuestionTimer = setInterval(()=>{
-                sec = time;
-                document.querySelector('.time').innerHTML = sec + "초";
-                time--;
-        
-                if(time < 0){
-                    clearInterval(QuestionTimer);
-                    document.querySelector('.time').innerHTML = "시간종료";
-                    questionTime = false;
-                    drawingTime = true;
-                    document.querySelector(".drawings").classList.toggle('pop');
-                    document.querySelector(".questions").classList.toggle('pop'); 
-                    drawingFun();
-                }
-            },1000);       
-        }
-    }
-    questionFun();
-
-
-
+    completeBtn.addEventListener('click', stopRecording);
+    playBtn.addEventListener('click', playVideo);
 </script>
 
 </html>

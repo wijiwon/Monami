@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const { allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation} = require("../controllers/boardControllers")
+    const { allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation , pagenationView} = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
     const { islogin } = require("../middleware/isLogin");
 
@@ -68,10 +68,23 @@
     // 👇 게시판 목록에서 기본으로 보여주기 | 절대 변경금지 
     routers.get('/list' , islogin , boardListPages)
 
-// [get] 게시판 > 페이지네이션 구현
+// [get] 게시판 > 페이지네이션 | 2page 클릭하면, 이쪽으로 오게
     routers.get('/list/page' , islogin , pagenation)    
         // query 방식에서는 ? 붙이지 않아도 됨. 
 
+// [get] 페이지 클릭하면 > 해당 페이지만 보여주기 
+    // routers.get('/list/pagenation' , islogin , pagenationView)
+    // 📛 router 간 역할 설명 필요 📛📛📛📛📛📛 
+
+// [페이지 보여주는 법, 경로 처리] AWS 배포시 발생할 수 있는 문제 예방
+    // 1) AWS 배포하게 되면, '모든 요청'은 '서버' 로 통일해줘야 
+    // 2) 클라이언트가 '페이지를 요청' 하게 되면, 
+        // a) '라우터에서 바로'
+        // b) sendFile 로 보내주면 됨. 
+    // routers.get('/list' , islogin , (req, res) => {
+    //     res.sendFile(path.join( __dirname, "../../frontEnd/boardItem.html"))
+    // })
+    
 
 
 module.exports = routers

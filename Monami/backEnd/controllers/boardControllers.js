@@ -538,10 +538,16 @@ exports.boardListPages = async (req, res) => {
         try {
             // 0) 데이터 들어오는 값 확인
                 console.log("@pagenation 입성 💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️")
-                console.log(req.query.page)
+                console.log("query 문에서 받아졌나요~" , req.query)     // { num: 'page_btn_3'}
+                console.log("query 문에서 받아졌나요~" , req.query.num)     // page_btn_3
+                // console.log("query 문에서 받아졌나요~" , req.query.num.split('_')[2] )     // 3
+                // console.log("query 문에서 받아졌나요~" , req.query.page)
             
+                // 한 페이지당 몇개 포스팅?
+                const postsPerPage = 10;
+
                 // 사용자가 보고싶어서 누른 페이지
-                const page = req.query.page
+                const page = req.query.num
 
                 // 한 페이지에서 몇 개의 포스팅을 보이게 할 것 인가. 
                 const limit = postsPerPage     // 임시📛 
@@ -551,10 +557,10 @@ exports.boardListPages = async (req, res) => {
 
 
             // 1) 로그인 유저 
-                const loginUser = {
-                    _userTable_ID : _userTable_ID, 
-                    _userTable_userId : _userTable_userId
-                }
+                // const loginUser = {
+                //     _userTable_ID : _userTable_ID, 
+                //     _userTable_userId : _userTable_userId
+                // }
 
 
             // 2) sequelize 페이지네이션  
@@ -566,20 +572,66 @@ exports.boardListPages = async (req, res) => {
                     {model : Comment},
                     {model : User}
                 ], 
-                order : [["createAt" , "DESC"]]     // 최신순이 위로 오도록
+                order : [["createdAt" , "DESC"]]     // 최신순이 위로 오도록
             });
+            console.log( "@pagenation , sequelize 에서 필요한거 받나? ", postsWithCommentsUsers)
 
 
             // 5) 합치기 
-                const result = {
-                    loginUser : loginUser, 
-                    postsWithCommentsUsers : postsWithCommentsUsers, 
-                    // post : postsByAllUser,  // 🔵 
-                }
-                console.log("@pagenation | 데이터 다 나가고 있니" , result)
+                const result = postsWithCommentsUsers
+                    
+                console.log("@pagenation | 데이터 다 나가고 있니")
+                // console.log("@pagenation | 데이터 다 나가고 있니" , result)
 
             // 5) 클라이언트에 보내기 
-                res.json(result)
+                // a) res.json로 redirect 보내면서, 2) result 를 담아서 보내자
+                    // res.json({ 
+                    //     redirectURL: `http://127.0.0.1:4000/board/list` ,
+                    //     result : result
+                    // });                    
+                    // [내가 원하는 것]
+                        // 1) 게시판 목록 페이지가 나오면서, 2) 데이터 까지 같이 넘어가는 것
+
+                // a-1) 시도 
+                    // /board/list 로 보내보자
+                        // 하고 싶은건 기본 목록 페이지로, 데이터 들고가기
+                        // 그러면, 어디로 가게 되나? 
+                        // 그냥, 기본 list 를 그리게 되나? 
+                        // 어디로 가서 어떻게 실행되는가, 이건 redirect 에서도 만났던 문제 😥😥😥
+                    // res.json({
+                    //     redirectURL : "http://127.0.0.1:4000/board/list", 
+                    //     result : result
+                    // })
+                    // 👉 안 나온다. 
+
+                // a-2 ) 시도 
+                    // 새롭게 라우터를 파서, 그 경로로 오면, 이것만 처리하게 
+                    res.json({
+                            // redirectURL : "http://127.0.0.1:4000/board/list/pagenation", 
+                            data : result
+                        })
+
+                    // // 2) [클라이언트에 기재] redirect 방식 -> 🔵 작동함 | 다만 새로고침이 싫음 
+                    //     const redirectURL = response.request.responseURL;
+                    //     console.log("redirectURL 이게 어떻게 넘어오지? 🕵️‍♂️ @boardItem" , redirectURL)
+                    //     console.log("redirectURL 이게 어떻게 넘어오지? 🕵️‍♂️ @boardItem" , response.request.responseURL)
+                    //     window.location.href = redirectURL;
+
+                
+                // b) sendFile 버전
+                    // res.sendFile(path.join (__dirname , "../../frontEnd/boardList.html"));
+                    // 그런데, 📛 sendFile 은 data 를 담아서 넘기지 못 함 
+                    
+                // b-1) sendFile + data 넘기기 버전
+                    // 그런데, 📛 sendFile 은 data 를 담아서 넘기지 못 함 
+
+
+                // c) redirect + result 로 데이터 넘기고 -> redirect 페이지에서 sendfile 해야 하나
+
+
+                // d) 자, 예전에, 넘겨줄 페이지 + 데이터 를 어떻게 가져왔었는지 보자 ⭐⭐⭐ 
+                        
+
             
         } catch (error) {
             
@@ -587,3 +639,21 @@ exports.boardListPages = async (req, res) => {
         }
 
     }
+
+
+// 특정 페이지로 들어왔을 때 보여주기
+exports.pagenationView = (req, res) => {
+
+    try {
+        console.log("@pagenationView 입성")
+        console.log(req.result)
+        console.log(req.result[0].id)   // 첫 번째 item 의 id 
+        console.log(req.result[1].title)   // 두 번째 item 의 title
+    
+        // console.log(req.result)
+    } catch (error) {
+        console.log(error)
+        
+    }
+
+}

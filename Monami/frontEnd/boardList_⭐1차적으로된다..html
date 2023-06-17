@@ -139,7 +139,7 @@
 
 
 // getView 함수 
-    async function getView(arrPostWithCommentUser , page_num=1) {
+    async function getView(arrPostWithCommentUser) {
 
         try {
 
@@ -180,7 +180,9 @@
 
 
                     // b-1) 새롭게 시도 | 여기에 아예, 페이지네이션 시작하기 | 기본 디폴트로 1 시작하기
-                        // const page_num = 1    // 기본값을 우선 1로 하려고 ✅ | 여기를 매개변수화 ✅                 
+
+                    const page_num = 1    // 기본값을 우선 1로 하려고 ✅ | 여기를 매개변수화 ✅ 
+                    
                     const {data} = await axios.get(`http://127.0.0.1:4000/board/list/page?num=${page_num}` , {
                         withCredentials : true,
                     })
@@ -203,7 +205,7 @@
                                 
                 // 3) 잘 들어왔는지 확인        
                     
-                    // console.log("@boardList > getView() 들어오는거 확인 🙆‍♂️ " , data)
+                    console.log("@boardList > getView() 들어오는거 확인 🙆‍♂️ " , data)
                     
                     // // a) login한 user 확인  
                     //     // loginUserData = data.loginUser
@@ -212,34 +214,34 @@
 
                     // // b) post 테이블에서 필요한 데이터 확인 
                     //     // 제목
-                            console.log("제목" , data.data[0].title)       // 첫번째 글 
+                            console.log("제목" , data.result[0].title)       // 첫번째 글 
                         
                     //     // 글쓴이 
                     //         // 이 게시글의 user_id 를 가져온다. 
-                            console.log("글쓴이" , data.data[0].user_id)     // dj
+                            console.log("글쓴이" , data.result[0].user_id)     // dj
                             
                     //     // 작성일자
-                            // console.log(data.data[0].createdAt)       // 2023-06-15T05:51:56.000Z
-                            console.log("작성일자" , data.data[0].createdAt.split('T')[0])       // 2023-06-15
+                            // console.log(data.result[0].createdAt)       // 2023-06-15T05:51:56.000Z
+                            console.log("작성일자" , data.result[0].createdAt.split('T')[0])       // 2023-06-15
                             
                     //     // views 
-                            console.log("view" , data.data[0].views)       // 1
+                            console.log("view" , data.result[0].views)       // 1
                             
                     //     // likes 숫자 
-                            console.log("likes" , data.data[0].likes)       // 16
+                            console.log("likes" , data.result[0].likes)       // 16
 
                     // // c) user 테이블에서 필요한 데이터 
                     //     // 유저 프로필 이미지 
                     //         // profile_img 속성에서 가져오면 됨
-                            console.log("프로필이미지" , data.data[0].User.profile_img)       // http://127.0.0.1:4000/monami.png
+                            console.log("프로필이미지" , data.result[0].User.profile_img)       // http://127.0.0.1:4000/monami.png
 
                     //     // 유저 경험치 
-                            console.log("유저경험치" , data.data[0].User.exp)        // 0
+                            console.log("유저경험치" , data.result[0].User.exp)        // 0
                             
                     
                     // // d) comment 테이블에서 필요한 데이터 
                     //     // 댓글수
-                            console.log("댓글수" , data.data[0].Comments.length)     // 51        // 0
+                            console.log("댓글수" , data.result[0].Comments.length)     // 51        // 0
                 
                 
             // 3-1) 보내줄 데이터 확인 ✅✅ 
@@ -277,7 +279,7 @@
 
             // 4) '배열통 확정' | ✅ 이 부분에서 '좋아요 순, 조회수 순, 등으로 변경 가능'
                 // 👉 이건 이제 sequelize - include 에서 해왔음 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
-                const arrPostWithCommentUser = data.data
+                const arrPostWithCommentUser = data.result
                 console.log("배열통확인" , arrPostWithCommentUser)
 
 
@@ -421,7 +423,7 @@
 
 
 // 🔹 view 초기화 시키는 함수 | 이게 없으면 누적되어서 나옴 
-    initializedView = async (arrPostWithCommentUser , page_num) => {
+    initializedView = (arrPostWithCommentUser) => {
 
         // post 내용들 전부 비우기
             posts_wrapper.innerHTML = ``;
@@ -429,7 +431,7 @@
         // page1, page2 .. 버튼 전부 지우기 
             page_navigation.innerHTML = ``;
 
-        await getView(arrPostWithCommentUser , page_num)
+        getView(arrPostWithCommentUser)
     }
 
 
@@ -441,38 +443,28 @@
 let pageShow = () => {
     const pageNumBtns = document.getElementsByClassName('pageNumBtn');
 
-        // [새로운 시도] 보여주는 함수 이제 만들었으니, 그걸 써보기
-        Array.from(pageNumBtns).forEach((btn) => {
-            btn.onclick = async (event) => {
-                const clickedPage = event.target.id.split('_')[2];
-                getView(clickedPage)
-            }
-        })
-
-
-        // [과거코드]
-            // Array.from(pageNumBtns).forEach((btn) => {
-            //     btn.onclick = async (event) => {
-            //         console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
-            //         console.log(event.target.id);
-                    
-            //         const page_num = event.target.id;
+    Array.from(pageNumBtns).forEach((btn) => {
+        btn.onclick = async (event) => {
+            console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
+            console.log(event.target.id);
+            
+            const page_num = event.target.id;
+        
+            await axios.get(`http://127.0.0.1:4000/board/list/page?num=${page_num}`)
+            .then((response) => {
                 
-            //         await axios.get(`http://127.0.0.1:4000/board/list/page?num=${page_num}`)
-            //         .then((response) => {
-                        
-            //             // 내가 원하는 데이터를 '배열통' 으로 받아오기
-            //             console.log(response.data.result);
-            //             console.log("🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴")
+                // 내가 원하는 데이터를 '배열통' 으로 받아오기
+                console.log(response.data.result);
+                console.log("🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴")
 
-            //             // '배열통' 을 '매개변수' 로 꽂아주기
-            //             arrPostWithCommentUser = response.data.result       // 📛 전역변수 주의
+                // '배열통' 을 '매개변수' 로 꽂아주기
+                arrPostWithCommentUser = response.data.result       // 📛 전역변수 주의
 
-            //             initializedView(arrPostWithCommentUser)
-                        
-            //         });
-            //     }
-            // });
+                initializedView(arrPostWithCommentUser)
+                
+            });
+        }
+    });
 }
         // [과거 코드]
             // let pageShow = () => {
@@ -525,14 +517,11 @@ let pageShow = () => {
             // 1) 초기화된게 실행 되어야 하고 ⭐⭐⭐ 
             // 2) 매개변수를 받아야 한다. ⭐⭐⭐ 
             // 3) 음... 
+        await getView();
 
-        pageterm = 5
-        await initializedView( arrPostWithCommentUser , pageterm );
+        
 
     })
-
-
-
 
 
 

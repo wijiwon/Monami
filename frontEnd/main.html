@@ -201,6 +201,7 @@
     try {
       const res = await axios.get("/main/hi", { withCredentials: true });
       console.log("getloginaccess response:", res);
+      console.log("res.data.login? :",res.data.login);
       if (res.data.login) {
         // user is logged in
         loginSuccess.style.display = "block";
@@ -242,7 +243,9 @@
   }
 
   function handleUserRankings(userDatas) {
+    console.log("userDatas : ?" ,userDatas);
     userDatas.forEach((e, index) => {
+      console.log("e??????",e);
       if (index === 0) {
         user_rank.innerHTML += `
             <div>

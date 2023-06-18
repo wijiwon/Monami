@@ -26,7 +26,7 @@ const { error } = require('console');
             const {file, body} = req;
             
             console.log("req 에서 file, body 분리 됐나 확인 👇 @boardController")
-            console.log("req.body, req.file : " , req.body, req.file)
+            // console.log("req.body, req.file : " , req.body, req.file)
 
             // console.log("req.decode 값 확인 👇 @boardController")
             // console.log(req.decode)
@@ -108,7 +108,8 @@ const { error } = require('console');
         try {
             // 0) 필요한 값 확인 및 할당
                 console.log("@ boardController > boardItemView 입성")
-                console.log("islogin 실행 후 값 들어오는지 보자 💁‍♀️" ,  req.decode)
+                console.log("islogin 실행 후 값 들어오는지 보자 💁‍♀️" )
+                // console.log("islogin 실행 후 값 들어오는지 보자 💁‍♀️" ,  req.decode)
 
                 const _userTable_ID = req.decode.id 
                 const _userTable_userId = req.decode.user_id 
@@ -130,7 +131,8 @@ const { error } = require('console');
                     ]
                 });
 
-                console.log(" userWithPosts 데이터 확인 @boardItemView" , userWithPosts)
+                console.log(" userWithPosts 데이터 확인 @boardItemView" )
+                // console.log(" userWithPosts 데이터 확인 @boardItemView" , userWithPosts)
             
             // 2) Post 테이블에서, data 가져오기
                 const postWithComments = await Post.findOne({
@@ -169,7 +171,8 @@ const { error } = require('console');
                     loginUser : loginUser,
                     // comment : comment,
                 }
-                console.log("게시글 상세에서 보여줄 데이터가 다 들어있나 @boardItemView" , result)
+                console.log("게시글 상세에서 보여줄 데이터가 다 들어있나 @boardItemView")
+                // console.log("게시글 상세에서 보여줄 데이터가 다 들어있나 @boardItemView" , result)
             
             // 6) 결과 보내기 
                 res.json(result)
@@ -211,12 +214,12 @@ const { error } = require('console');
         try {
             // 1) 저장할 데이터 확인
                 console.log("@@@ boardController > boardCommentCreate 진입!")
-                console.log("🛴 클라에서 axios 로 받은거  보기" , req.body);
-                console.log("| 댓글 내용 " , req.body.content)
-                console.log("| 댓글 작성한 유저 id" , req.body.user_primaryKey)
-                console.log("| 댓글의 '대상이 되는 게시글 id'" , req.body.post_primaryKey)
-                console.log("| 대댓글의 경우 '대상이 되는 댓글 id' : 1) 원본댓글 = 0 , 2) 대댓글은, '타겟 댓글의 comment 테이블 id' 가 들어와야함" , req.body.id_of_targetComment)
-                console.log("| writer_of_targetComment : 대댓글의 타겟 댓글 작성자 id" , req.body.writer_of_targetComment)
+                // // console.log("🛴 클라에서 axios 로 받은거  보기" , req.body);
+                // console.log("| 댓글 내용 " , req.body.content)
+                // console.log("| 댓글 작성한 유저 id" , req.body.user_primaryKey)
+                // console.log("| 댓글의 '대상이 되는 게시글 id'" , req.body.post_primaryKey)
+                // console.log("| 대댓글의 경우 '대상이 되는 댓글 id' : 1) 원본댓글 = 0 , 2) 대댓글은, '타겟 댓글의 comment 테이블 id' 가 들어와야함" , req.body.id_of_targetComment)
+                // console.log("| writer_of_targetComment : 대댓글의 타겟 댓글 작성자 id" , req.body.writer_of_targetComment)
                 
                 // 댓글 내용
                 // const temp_write = req.body.content;
@@ -314,7 +317,8 @@ const { error } = require('console');
                 const originalCommentID = await Comment.findAll({
                     where : {id_of_targetComment : req.query.id_of_targetComment}
                 });
-                console.log("대댓글 작성중 | 해당 게시글에 작성한 모든 대댓글" , originalCommentID)
+                console.log("대댓글 작성중 | 해당 게시글에 작성한 모든 대댓글")
+                // console.log("대댓글 작성중 | 해당 게시글에 작성한 모든 대댓글" , originalCommentID)
 
             // 결과 보내기 
                 res.json(originalCommentID)
@@ -332,12 +336,15 @@ const { error } = require('console');
 
         try {
             // 필요한 데이터 도착 확인
+            console.log("📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌")
             console.log("@controllers > likesBtn 입성")
-            // console.log("req.body 📌" , req.body)
+            console.log("req.body 📌" , req)
+            console.log("req.body 📌" , req.body)
             // console.log("req.body likeClickUserID📌" , req.body.likeClickUserID)
             // console.log("req.body likeClickUserUserID📌" , req.body.likeClickUserUserID)
             // console.log("req.body clickedPostID📌" , req.body.clickedPostID)
             
+
             const clickedPostID = req.body.clickedPostID;
             const clickedPostUserID = req.body.likeClickUserUserID;
             console.log("clickedPostID📌" , clickedPostID)  // 🔵 clickedPostID📌 65
@@ -362,9 +369,10 @@ const { error } = require('console');
                 const clickeUserUpdatePost = await post.update( {likeClickUser : clickedPostUserID} );
 
                 // 유저 업데이트 한거 확인 
+                console.log("좋아요 클릭버튼 유저 업데이트 완료" );
                 console.log("좋아요 클릭버튼 유저 업데이트 완료" , clickeUserUpdatePost);
                 
-                // 서버에 보내기
+                // 클라에 보내기
                 res.json()
 
             // [과거 코드] 작동함 🔵 | 다만, post.findBypk 가 반복되는 것 같아 줄여보기 
@@ -469,8 +477,8 @@ exports.boardListPages = async (req, res) => {
         // 1) 로그인한 유저 정보 
             const _userTable_ID = req.decode.id 
             const _userTable_userId = req.decode.user_id 
-            console.log("@boardListPages | _userTable_ID " , _userTable_ID)
-            console.log("@boardListPages | _userTable_userId " , _userTable_userId)
+            // console.log("@boardListPages | _userTable_ID " , _userTable_ID)
+            // console.log("@boardListPages | _userTable_userId " , _userTable_userId)
 
             const loginUser = {
                 _userTable_ID : _userTable_ID, 
@@ -538,8 +546,8 @@ exports.boardListPages = async (req, res) => {
         try {
             // 0) 데이터 들어오는 값 확인
                 console.log("@pagenation 입성 💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️")
-                console.log("query 문에서 받아졌나요~" , req.query)     // { num: 'page_btn_3'}
-                console.log("query 문에서 받아졌나요~" , req.query.num)     // page_btn_3
+                // console.log("query 문에서 받아졌나요~" , req.query)     // { num: 'page_btn_3'}
+                // console.log("query 문에서 받아졌나요~" , req.query.num)     // page_btn_3
                 // console.log("query 문에서 받아졌나요~" , req.query.num.split('_')[2] )     // 3
                 // console.log("query 문에서 받아졌나요~" , req.query.page)
             
@@ -574,7 +582,8 @@ exports.boardListPages = async (req, res) => {
                 ], 
                 order : [["createdAt" , "DESC"]]     // 최신순이 위로 오도록
             });
-            console.log( "@pagenation , sequelize 에서 필요한거 받나? ", postsWithCommentsUsers)
+            console.log( "@pagenation , sequelize 에서 필요한거 받나? ")
+            // console.log( "@pagenation , sequelize 에서 필요한거 받나? ", postsWithCommentsUsers)
 
 
             // 5) 합치기 
@@ -646,9 +655,9 @@ exports.pagenationView = (req, res) => {
 
     try {
         console.log("@pagenationView 입성")
-        console.log(req.result)
-        console.log(req.result[0].id)   // 첫 번째 item 의 id 
-        console.log(req.result[1].title)   // 두 번째 item 의 title
+        // console.log(req.result)
+        // console.log(req.result[0].id)   // 첫 번째 item 의 id 
+        // console.log(req.result[1].title)   // 두 번째 item 의 title
     
         // console.log(req.result)
     } catch (error) {

@@ -370,7 +370,7 @@
 
     // })
     const roomPopup = document.querySelector('.roompopup_ready');
-
+    let nowRoomNUm=0;
     // Create a new MutationObserver instance
     const observer = new MutationObserver((mutationsList) => {
         for (const mutation of mutationsList) {
@@ -379,12 +379,14 @@
                 if (currentClasses.contains('test')) {
                     const roomExitButton = document.querySelector('.roomBtn_member.pop .roomExit');
                     roomExitButton.addEventListener('click', () => {
-                        socket.emit('exitRoom');
+                        console.log("여기까지안옴 ㅋ");
+                        socket.emit('exitRoom',nowRoomNUm);
+                        socket.emit('getreadyuser');
                         console.log("dd");
-                        asd1('.readyUser');
+                        // asd1('.readyUser');
                         console.log("asdsad");
                     })
-                    asdf1(tmp, '.readyUser');
+                    // asdf1(tmp, '.readyUser');
 
                 }
             }
@@ -457,7 +459,7 @@
             test3.style.display = "block";
         }, 3000);
         setTimeout(() => {
-            window.location.href = "http://127.0.0.1:5501/Monami/frontEnd/maingame.html";
+            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/maingame.html";
         }, 4000);
         
     })
@@ -476,7 +478,7 @@
         test2.style.display = "none";
         test3.style.display = "block";
         setTimeout(() => {
-            window.location.href = "http://127.0.0.1:5501/Monami/frontEnd/maingame.html";
+            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/maingame.html";
 
         }, 1000);
     })
@@ -671,7 +673,10 @@
                 element.addEventListener('click', () => {
                     console.log("ㅇㅇ눌리긴함");
                     const roomNum = element.textContent;
+                    nowRoomNUm=roomNum;
                     joinRoom(roomNum);
+                   
+                 
                 })
             })
         } catch (error) {

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>game page</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
     <style>
         body {
             margin: 0;
@@ -35,7 +36,8 @@
         }
 
         .gameResult {
-            display: block;
+            display: none;
+
         }
 
         .questions .row1,
@@ -216,11 +218,13 @@
             height: 15%;
             border: 1px solid forestgreen;
         }
-        .row1 .playerImage{
+
+        .row1 .playerImage {
             background-color: yellowgreen;
             width: 15%;
             height: 100%;
         }
+
         .gameResult .row2 {
             display: flex;
             justify-content: space-around;
@@ -361,7 +365,8 @@
     <div class="gameResult">
         <div class="row1">
             <div class="playerImage">
-                <img style="width: 100px; height: 100px;" src="http://127.0.0.1:4000/monami.png" alt="게임 로고" id="gamelogo">
+                <img style="width: 100px; height: 100px;" src="http://127.0.0.1:4000/monami.png" alt="게임 로고"
+                    id="gamelogo">
             </div>
         </div>
         <div class="row2">
@@ -382,6 +387,14 @@
 
 </body>
 <script>
+    const data = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
+        withCredentials: true
+    }).then((e) => {
+        console.log("응애");
+        console.log(e);
+    })
+    console.log("응애2");
+    console.log(data);
     // html에서 canvas 태크를 가져온다.
     const canvas = document.getElementById("canvas");
     // getContext: 그래픽 렌더링 컨텍스트를 가져오는 메소드. 2d를 가져온다.

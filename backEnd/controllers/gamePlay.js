@@ -62,3 +62,16 @@ exports.viewVideo = async(req,res)=>{
     }
 }
 
+exports.getUserinfo= async(req,res)=>{
+    try {
+        const { room } = req;
+        console.log(room);
+        console.log("지금 방 정보를 확인할 수 있다고???",room)
+        res.send({_room:room});
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    
+}

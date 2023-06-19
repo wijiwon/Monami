@@ -106,8 +106,9 @@
       console.log("머여",e);
       if (e.data == "중복된 닉네임입니다") {
         alert("중복된 닉네임입니다");
+      }else{
+        window.location.reload();
       }
-      window.location.reload();
     }).catch((err)=>{
       console.log("업로드 버튼 오류",err);
     })

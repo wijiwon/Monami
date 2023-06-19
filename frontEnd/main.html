@@ -288,8 +288,8 @@
       loginSuccess.style.display = "block";
       beforeLogin.style.display = "none";
 
-      username.innerHTML = res.data.login.username;
-      img_file.src = res.data.login.profile_img;
+      username.innerHTML = res.data.userInfo.username;
+      img_file.src = res.data.userInfo.profile_img;
     } else {
       // user is not logged in
       loginSuccess.style.display = "none";

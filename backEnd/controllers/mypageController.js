@@ -68,7 +68,7 @@ exports.imgUpdate = async(req,res)=>{
 
     if (file) {
       console.log("파일 있졍",file);
-      await User.update({username:nickName ,profile_img:"http://127.0.0.1:4000/img/"+file.filename},{where : {user_id : decode.user_id}})
+      await User.update({username:nickName ,profile_img:"/img/"+file.filename},{where : {user_id : decode.user_id}})
     }else{
       console.log("뭔디",decode.profile_img);
       await User.update({username:nickName ,profile_img:upload},{where : {user_id : decode.user_id}})

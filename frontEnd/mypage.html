@@ -106,6 +106,7 @@
       console.log("머여",e);
       if (e.data.message == "중복된 닉네임입니다") {
         alert("중복된 닉네임입니다");
+        nameChange.value = "";
       }else{
         window.location.reload();
       }

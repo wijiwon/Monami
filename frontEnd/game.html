@@ -210,11 +210,13 @@
             height: 15%;
             border: 1px solid forestgreen;
         }
-        .row1 .playerImage{
+
+        .row1 .playerImage {
             background-color: yellowgreen;
             width: 15%;
             height: 100%;
         }
+
         .gameResult .row2 {
             display: flex;
             justify-content: space-around;
@@ -283,16 +285,36 @@
         <div class="rows2">
             <div class="colors">
                 <div class="colors2">
-                    <div class="colorbox"><div style="background-color: white;" class="brushColor" data-color="white"></div></div>
-                    <div class="colorbox"><div style="background-color: black;" class="brushColor" data-color="black"></div></div>
-                    <div class="colorbox"><div style="background-color: red;" class="brushColor" data-color="red"></div></div>
-                    <div class="colorbox"><div style="background-color: pink;" class="brushColor" data-color="pink"></div></div>
-                    <div class="colorbox"><div style="background-color: orangered;" class="brushColor" data-color="orangered"></div></div>
-                    <div class="colorbox"><div style="background-color: yellow;" class="brushColor" data-color="yellow"></div></div>
-                    <div class="colorbox"><div style="background-color: green;" class="brushColor" data-color="green"></div></div>
-                    <div class="colorbox"><div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div></div>
-                    <div class="colorbox"><div style="background-color: blue;" class="brushColor" data-color="blue"></div></div>
-                    <div class="colorbox"><div style="background-color: purple;" class="brushColor" data-color="purple"></div></div>
+                    <div class="colorbox">
+                        <div style="background-color: white;" class="brushColor" data-color="white"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: black;" class="brushColor" data-color="black"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: red;" class="brushColor" data-color="red"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: pink;" class="brushColor" data-color="pink"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: orangered;" class="brushColor" data-color="orangered"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: yellow;" class="brushColor" data-color="yellow"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: green;" class="brushColor" data-color="green"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: blue;" class="brushColor" data-color="blue"></div>
+                    </div>
+                    <div class="colorbox">
+                        <div style="background-color: purple;" class="brushColor" data-color="purple"></div>
+                    </div>
                 </div>
             </div>
             <div class="bord">
@@ -333,7 +355,8 @@
     <div class="gameResult">
         <div class="row1">
             <div class="playerImage">
-                <img style="width: 100px; height: 100px;" src="http://127.0.0.1:4000/monami.png" alt="게임 로고" id="gamelogo">
+                <img style="width: 100px; height: 100px;" src="http://127.0.0.1:4000/monami.png" alt="게임 로고"
+                    id="gamelogo">
             </div>
         </div>
         <div class="row2">
@@ -460,7 +483,8 @@
     ctx.strokeStyle = "black";
 
     //-----------------------------------------------------------------------------------------------------
-
+    // gamestep: 게임 단계
+    let gamestep = 1;
     //----------- 그림 그릴 마우스의 상태지정 ---------------------------------------------------------------
     canvas.addEventListener("mousedown", startDrawing);     //마우스를 누르면 대기상태가 된다.
     canvas.addEventListener("mouseup", stopDrawing);     //마우스 떼면 종료상태가 된다.
@@ -484,40 +508,58 @@
 
         mediaRecorder.start();
     }
-
+    
+    
     async function createVideoURL() {
         const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
-            // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
+        // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
         const formData = new FormData();
         formData.append('file', videoBlob);
 
-        await axios.post('http://127.0.0.1:4000/gameplay', formData , {
+
+        const response = await axios.post('http://127.0.0.1:4000/gameplay', formData, {
             withCredentials: true,
             "Content-Type": "multipart/form-data"
-        }).then((e) => {
-            console.log(e.data)
-            console.log("아현이짱짱맨")
-        }).catch((err) => {
-            console.log(err)
         })
+        console.log("데이터 제에발 와주라....",response);
+        const { drawing, lastDrawing } = response.data;
+
+        console.log("lastDrawing", lastDrawing);
+        console.log("drawing", drawing);
+        console.log("drawing", drawing.user_primaryKey);
+
+
+        await axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+            withCredentials: true
+        })
+
+
+        // .then((e) => {
+        //     console.log("정신차려어어억 언제까지 붙잡을거야아아악",e.data.lastDrawing)
+        //     a = e.data.lastDrawing;
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
         // return URL.createObjectURL(videoBlob);
+
+
     }
 
     // 비디오 재생
     async function playVideo() {
         const videoElement = document.getElementById('video_recorded');
-        await axios.get('http://127.0.0.1:4000/gameplay/viewVideo', {
+        axios.get('http://127.0.0.1:4000/gameplay/viewVideo', {
             responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
             withCredentials: true
-        }).then((e)=>{
+        }).then((e) => {
             const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
             const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
             videoElement.src = videoSrc;
             videoElement.play();
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err)
         })
-        
+
         // videoElement.src = videoURL;
         // videoElement.play();
     }
@@ -529,18 +571,18 @@
             // playBtn.addEventListener('click',playVideo);
         };
         mediaRecorder.stop();
-    } 
-    
+    }
+
     const completeBtn = document.getElementById('complete');
     const playBtn = document.getElementById('play');
-    
-    
+
+
     window.addEventListener('DOMContentLoaded', startRecording);
     // completeBtn.addEventListener('click', () => {
     //     stopRecording();
     // });
-    
-    playBtn.addEventListener('click',playVideo);
+
+    playBtn.addEventListener('click', playVideo);
 
 
 
@@ -548,65 +590,249 @@
 
     // ------------------------------------------------------------------------------------------------------
     // 그림 그리는 시간 타이머 ---------------------------------------
-    let time = 10;      // 10초
-    let sec = "";
-    let questionTime = true;    // 제시어 입력하는 시간
-    let drawingTime = false;    // 그림그리는 시간
+    // let time = 10;      // 10초
+    // let sec = "";
+    // let questionTime = true;    // 제시어 입력하는 시간
+    // let drawingTime = false;    // 그림그리는 시간
 
-    const drawingFun = async()=>{
-        if (drawingTime == true){
-            let time = 10;  
-            let DrawingTimer = setInterval(()=>{
-                sec = time;
-                document.querySelector('.draw_time').innerHTML = sec + "초";
-                time--;
-        
-                if(time < 0){
-                    clearInterval(DrawingTimer);
-                    document.querySelector('.draw_time').innerHTML = "시간종료";
-                    // stopRecording();
-                    drawingTime = false;
-                    questionTime = true;
-                    document.querySelector(".drawings").classList.toggle('pop');
-                    document.querySelector(".questions").classList.toggle('pop'); 
-                    questionFun();
-                }
-            },1000);        
-        }
-    }
+    // const drawingFun = async () => {
+    //     if (drawingTime == true) {
+    //         let time = 10;
+    //         axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+    //             responseType: 'json',
+    //             withCredentials: true
+    //         }).then((e) => {
+    //             // 제시어가 배열형태로 불러와진다. 순서는 room에 들어온 유저 순서대로 [제시어id, 제시어, 유저id]가 불러와짐
+    //             console.log("제시어가 불러와지나????", e.data)
+    //         }).catch((err) => {
+    //             console.log(err)
+    //         })
+    //         let DrawingTimer = setInterval(() => {
+    //             sec = time;
+    //             document.querySelector('.draw_time').innerHTML = sec + "초";
+    //             time--;
 
-    
-    //--------- 제시어 입력하는 시간 타이머 -----------------------------
-    const questionFun = async()=>{
-        if(questionTime == true){
-            let time = 10;  
-            let QuestionTimer = setInterval(()=>{
-                sec = time;
-                document.querySelector('.time').innerHTML = sec + "초";
-                time--;
-                
-                if(time < 0){
-                    clearInterval(QuestionTimer);
-                    document.querySelector('.time').innerHTML = "시간종료";
-                    questionInput();
-                    questionTime = false;
-                    drawingTime = true;
-                    document.querySelector(".drawings").classList.toggle('pop');
-                    document.querySelector(".questions").classList.toggle('pop'); 
-                    drawingFun();
-                }
-            },1000);       
-        }
-    }
-    questionFun();
-    
-    //--------- 제시어 입력하는 구문 ------------------------------------------------------------
-    function questionInput(){
+
+    //             if (time < 0) {
+    //                 clearInterval(DrawingTimer);
+    //                 document.querySelector('.draw_time').innerHTML = "시간종료";
+    //                 stopRecording();
+    //                 drawingTime = false;
+    //                 questionTime = true;
+    //                 document.querySelector(".drawings").classList.toggle('pop');
+    //                 document.querySelector(".questions").classList.toggle('pop');
+    //                 // questionFun();
+    //             }
+    //         }, 1000);
+    //     }
+    // }
+
+
+    // //--------- 제시어 입력하는 시간 타이머 -----------------------------
+    // const questionFun = async () => {
+    //     if (questionTime == true) {
+    //         let time = 10;
+    //         let QuestionTimer = setInterval(() => {
+    //             sec = time;
+    //             document.querySelector('.time').innerHTML = sec + "초";
+    //             time--;
+
+    //             if (time < 0) {
+    //                 clearInterval(QuestionTimer);
+    //                 document.querySelector('.time').innerHTML = "시간종료";
+    //                 questionInput();
+    //                 questionTime = false;
+    //                 drawingTime = true;
+    //                 document.querySelector(".drawings").classList.toggle('pop');
+    //                 document.querySelector(".questions").classList.toggle('pop');
+    //                 // drawingFun();
+    //             }
+    //         }, 1000);
+    //     }
+    // }
+    // // questionFun();
+
+    //--------- 첫번쨰 제시어 입력하는 구문 ------------------------------------------------------------
+    function firstQuestionInput() {
         const queInput = document.getElementById('question');
-        console.log("인풋으로 입력받은 데이터는????",queInput.value)
-        axios.post('http://127.0.0.1:4000/gameplay/InputQuestion')
+        console.log("인풋으로 입력받은 데이터는????", queInput.value)
+        const queInputV = queInput.value;
+        axios.post('http://127.0.0.1:4000/gameplay/InputQuestion', { value: queInputV }, {
+            withCredentials: true
+        })
     }
-    
+
+
+    // 게임 로직 순서에 따른 함수 구현 ------------------------------------------------------------
+
+    const StepOne = () => {
+        console.log("--------------------------1단계------------------------------");
+        // 제시어 입력시간 타이머 설정, 시간이 경과되면 그림을 입력할 수 있는 화면으로 바뀐다.------
+        let time = 3;
+        let QuestionTimer = setInterval(() => {
+            document.querySelector('.time').innerHTML = time + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(QuestionTimer);
+                document.querySelector('.time').innerHTML = "시간종료";
+                // 입력한 제시어의 값이 db로 넘어간다.
+                firstQuestionInput();
+                document.querySelector(".drawings").classList.toggle('pop');
+                document.querySelector(".questions").classList.toggle('pop');
+                //--------------------------------------------------------------------
+                gamestep = 2;
+                startGame();
+            }
+        }, 1000);
+    };
+
+
+    let viewIndex;
+    const StepTwo = () => {
+        console.log("--------------------------2단계------------------------------");
+        let time = 3;
+        axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+            responseType: 'json',
+            withCredentials: true
+        }).then((e) => {
+            // 제시어가 배열형태로 불러와진다. 순서는 room에 들어온 유저 순서대로 [제시어id, 제시어, 유저id]가 불러와짐
+            // console.log("제시어가 불러와지나????", e.data)
+            const MyID = e.data.userID;
+            const questions = e.data.questionData;
+
+            // console.log("내 아이디 값은????", MyID)
+            // console.log("이 방의 제시어들은????", questions)
+
+            const MyIndex = questions.findIndex((i)=>i[i.length - 1] == MyID);
+            const lastIndex = questions.length - 1
+            // console.log("내 인덱스가 나왔을까???", MyIndex)
+            
+            // 내가 첫 번째 인덱스면
+            if(MyIndex == 0){
+                viewIndex = questions[lastIndex];
+                // console.log("나는 첫 인덱스라 마지막 인덱스 봐야해!!!",viewIndex)
+                document.querySelector('.view_question').innerHTML = viewIndex[1];
+            }
+            else{
+                viewIndex = questions[MyIndex - 1];
+                // console.log("내 이전의 인덱스는????", viewIndex)
+                // console.log("내 이전의 인덱스는????", viewIndex[1])
+                document.querySelector('.view_question').innerHTML = viewIndex[1];
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+
+        let DrawingTimer = setInterval(() => {
+            document.querySelector('.draw_time').innerHTML = time + "초";
+            time--;
+            if (time < 0) {
+                // 그린 그림이 db에 저장된다.
+                stopRecording();
+                clearInterval(DrawingTimer);
+                document.querySelector('.draw_time').innerHTML = "시간종료";
+                document.querySelector(".drawings").classList.toggle('pop');
+                document.querySelector(".questions").classList.toggle('pop');
+                
+                //--------------------------------------------------------------------
+                gamestep = 3;
+                startGame();
+            }
+        }, 1000);
+    }
+
+
+    const StepThree = () => {
+        console.log("--------------------------3단계------------------------------");
+
+        let time = 3;
+        let QuestionTimer = setInterval(() => {
+            document.querySelector('.time').innerHTML = time + "초";
+            time--;
+
+            if (time < 0) {
+                clearInterval(QuestionTimer);
+                document.querySelector('.time').innerHTML = "시간종료";
+                // 입력한 제시어의 값이 db로 넘어간다.
+                // firstQuestionInput();
+                document.querySelector(".drawings").classList.toggle('pop');
+                document.querySelector(".questions").classList.toggle('pop');
+        //--------------------------------------------------------------------
+        gamestep = 4;
+        startGame();
+            }
+        }, 1000);
+    };
+
+
+    const StepFour = () => {
+        console.log("--------------------------4단계------------------------------");
+
+
+        //--------------------------------------------------------------------
+        gamestep = 5;
+        startGame();
+    };
+
+
+
+    const StepFive = () => {
+        console.log("--------------------------5단계------------------------------");
+
+
+        //--------------------------------------------------------------------
+        gamestep = 6;
+        startGame();
+    }
+
+
+    const gameEnd = () => {
+        console.log("--------------------------리플레이------------------------------");
+
+
+        //--------------------------------------------------------------------
+        // ----다시 하기 클릭은 없는게 좋겠어요..... 방 id 새로 부여해야 하는데 그게 될까여,,,? 그냥 나가기로하죠.....
+
+
+    }
+
+
+
+
+    //-------- 게임 구현 로직 ------------------------------------------------------------------
+
+
+    const startGame = () => {
+        if (gamestep == 1) {
+            // 첫 번째 제시어를 입력받는다.
+            StepOne();
+        }
+        else if (gamestep == 2) {
+            // 첫 번째 제시어로 그림을 그린다.
+            StepTwo();
+        }
+        else if (gamestep == 3) {
+            // 그린 그림을 보고 제시어를 입력한다.
+            StepThree();
+        }
+        else if (gamestep == 4) {
+            // 입력한 제시어로 그림을 그린다.
+            StepFour();
+        }
+        else if (gamestep == 5) {
+            // 최종적으로 그린 그림으로 정답을 입력한다.
+            StepFive();
+        }
+        else {
+            gameEnd();
+        }
+    }
+    startGame();
+
+
+
+
 </script>
 
 </html>

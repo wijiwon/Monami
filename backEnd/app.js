@@ -29,7 +29,7 @@ app.use("/img", express.static(path.join(__dirname, "image")));
 
 
 app.use(cors({
-    origin:"http://127.0.0.1:5501",
+    origin:"http://127.0.0.1:5500",
     credentials:true
 }
 ));

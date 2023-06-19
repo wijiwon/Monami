@@ -104,7 +104,7 @@
       "Content-Type" : "multipart/form-data"
     }).then((e)=>{
       console.log("머여",e);
-      if (e.data == "중복된 닉네임입니다") {
+      if (e.data.message == "중복된 닉네임입니다") {
         alert("중복된 닉네임입니다");
       }else{
         window.location.reload();

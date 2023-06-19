@@ -44,6 +44,7 @@ exports.postImg = multer({
 exports.imgUpdate = async(req,res)=>{
   const {file,decode} = req;
   const {nickName,upload} = req.body;
+  
   // console.log(req);
   console.log("업로듕",upload);
   try {

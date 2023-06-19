@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 
 exports.joinUser = async(req,res)=>{
   try {
+    
     const { user_id, user_pw, username } = req.body.data;
     const user = await User.findOne({where : {user_id}})
     const usernamecheck = await User.findOne({where : {username}});

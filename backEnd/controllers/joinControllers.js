@@ -6,11 +6,13 @@ exports.joinUser = async(req,res)=>{
   try {
     const { user_id, user_pw, username } = req.body.data;
     const user = await User.findOne({where : {user_id}})
-
+    const user_name = await User.findOne({where : {username}})
     if (user !== null) {
       console.log(user_id,"중복된 아이디");
       return res.json({message:"중복된 아이디 입니다"});
     }
+
+    
     
     // 정규식
     // const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;

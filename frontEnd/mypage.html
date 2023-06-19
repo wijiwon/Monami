@@ -104,6 +104,10 @@
       "Content-Type" : "multipart/form-data"
     }).then((e)=>{
       window.location.reload();
+      console.log("머여",e.data);
+      if (e.data == "사용중인 닉네임 입니다") {
+        alert("사용중인 닉네임 입니다");
+      }
     }).catch((err)=>{
       console.log("업로드 버튼 오류",err);
     })

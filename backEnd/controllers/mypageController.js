@@ -47,6 +47,13 @@ exports.imgUpdate = async(req,res)=>{
   // console.log(req);
   console.log("업로듕",upload);
   try {
+    const existingUsername = await User.findOne({where: {username : nickName}});
+
+    if (existingUsername) {
+      console.log("마이페이지 컨트롤러 중복닉네임있음",nickName);
+      return res.status(400).json({message: "사용중인 닉네임 입니다"});
+    }
+
     if (file) {
       console.log("파일 있졍",file);
       await User.update({username:nickName ,profile_img:"http://127.0.0.1:4000/img/"+file.filename},{where : {user_id : decode.user_id}})

@@ -45,7 +45,10 @@
   <button id="uploadBtn">등록하기</button>
 </body>
 <script>
-  window.onload = getMypage();
+  window.onload = async function(){
+    await getMypage();
+  } 
+    
 
   async function getMypage() {
     try {

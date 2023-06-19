@@ -51,7 +51,7 @@ exports.imgUpdate = async(req,res)=>{
 
     if (existingUsername) {
       console.log("마이페이지 컨트롤러 중복닉네임있음",nickName);
-      return res.status(400).json({message: "사용중인 닉네임 입니다"});
+      return res.json({message: "중복된 닉네임입니다"})
     }
 
     if (file) {

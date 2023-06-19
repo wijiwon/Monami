@@ -1,14 +1,17 @@
 const router = require('express').Router();
 const { islogin } = require('../middleware/isLogin')
 const { isRoom } = require("../middleware/isRoom")
-const { DrawingAdd, viewVideo, firstQuestionInput, DrawQueUpdate, QuestionView } = require('../controllers/gamePlay')
+const { DrawingAdd, viewVideo, firstQuestionInput, DrawQueUpdate, QuestionView ,getUserinfo } = require('../controllers/gamePlay')
+
 
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// 캔버스에 그린 그림을 db에 저장
-router.post('/', islogin, isRoom, upload.single('file'), DrawingAdd)
+
+router.post('/', islogin, isRoom, upload.single('file'), DrawingAdd);
+
+router.get('/getUserinfo',islogin,isRoom,getUserinfo);
 
 // 저장된 그림을 video로 보여줌 
 router.get('/viewVideo',viewVideo)

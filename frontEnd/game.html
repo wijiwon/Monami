@@ -26,7 +26,7 @@
         .questions.pop,
         .drawings.pop,
         .gameResult.pop {
-            display: block;
+            display: none;
         }
 
         .drawings,
@@ -35,7 +35,9 @@
             display: none;
 
         }
-
+        .gameResult{
+            display: block;
+        }
         .questions .row1,
         .drawings .rows1,
         .gameResult .row1 {
@@ -932,7 +934,7 @@
 
     const gameEnd = () => {
         console.log("--------------------------리플레이------------------------------");
-
+        
 
         //--------------------------------------------------------------------
         // ----다시 하기 클릭은 없는게 좋겠어요..... 방 id 새로 부여해야 하는데 그게 될까여,,,? 그냥 나가기로하죠.....

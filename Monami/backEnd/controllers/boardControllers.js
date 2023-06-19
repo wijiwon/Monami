@@ -338,7 +338,8 @@ const { error } = require('console');
             // 필요한 데이터 도착 확인
             console.log("📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌")
             console.log("@controllers > likesBtn 입성")
-            console.log("req.body 📌" , req)
+            console.log("req 📌" , req)
+            console.log("req.data 📌" , req.data)
             console.log("req.body 📌" , req.body)
             // console.log("req.body likeClickUserID📌" , req.body.likeClickUserID)
             // console.log("req.body likeClickUserUserID📌" , req.body.likeClickUserUserID)
@@ -349,7 +350,7 @@ const { error } = require('console');
             const clickedPostUserID = req.body.likeClickUserUserID;
             console.log("clickedPostID📌" , clickedPostID)  // 🔵 clickedPostID📌 65
             console.log("clickedPostID📌" , clickedPostUserID)  
-
+            console.log(req.body.data)
 
 
             // [새로운 시도] 🔵 작동함 | 

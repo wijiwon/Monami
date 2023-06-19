@@ -1022,9 +1022,7 @@
                     // 게시글 전체 container div 
                         const post_container = document.createElement('div');
                         post_container.classList.add("post_container")      
-                        post_container.id = `post_container_${element.id}`      
-                            // 해당 게시글 id
-                            // 확실해❓❓❓ 👉 응 맞음 
+                        post_container.id = `post_container_${element.id}`      // 해당 게시글 id
                         
                     // post 설명하는 div | ex) 제목, 댓글 수, 글쓴이 등이 이 아래로 들어갈 것 임 들어감
                         const post_desc_container = document.createElement('div');
@@ -1059,10 +1057,6 @@
 
 
                     // 2️⃣ post_desc_container 안에 들어가는 것들
-                        // 게시글 ID 
-                            // const savePostID = document.createElement('div');
-                            // savePostID.id = `savePostID_${element.id}`
-
                         // 제목 container
                             const title_container = document.createElement('div');
                             title_container.id = `title_container_${element.id}`
@@ -1217,38 +1211,9 @@
                     const clickedPostID = event.target.id.split('_')[1]
                         console.log("clickedPostID 확인" , event.target.id.split('_')[1])   // clickedPostID 확인 58
                         console.log(clickedPostID)  // 58
-
-                        // 이슈 
-                            // 과연, 버튼을 클릭했을 때 나오는 숫자가, 진짜 그 게시물의 post ID 인가? 
-                            // 그 태그의 id 일 것 
-                            // 그러면, 저 내용에 post ID 를 묻혀 놓고, 보이게는 안 하면 되는거 아냐? ⭐⭐⭐⭐⭐⭐
     
                     // clickedLikeBtn 이 버튼 id 에 대해 숫자 증가해주세요~ 
                     await IncreaseLikeNum(clickedPostID)
-
-                    // 그리고 다시 그려주세요 
-                        // 필요한 이유 : 이걸 안 하면, 새로고침 해야, 좋아요가 올라감 
-                        
-                        // [시도 1] 
-                            // initializedView(arrPostWithCommentUser, clickedPage) 
-                            // 안 돼 📛 
-
-                        // [시도 2] 
-                            // await initializedView( );
-                                // [해석]
-                                    // 된다! 🔵🔵🔵  
-                                    // 음. 왜 되는거지? 
-                                    // 우선, await 를 써줬기 때문인가? 
-                                // 문제점
-                                    // 그냥, 한 번 밖에 안 된다. 
-                                    // 그러면, 그냥 새로고침 하는게 나으려나? 
-
-                        // [시도 3]
-                            // 이걸로 선택 ⭐⭐⭐⭐⭐⭐⭐⭐ 
-                            // 어차피, 다시 데이터를 가져올 때, 다시 그릴 때, 화면이 한번 깜빡인다. 
-                            // 그럴거면, 그냥 '새로고침' 하게 하면 될듯
-                            window.location.reload();
-                        
                 }
             })
             
@@ -1262,28 +1227,21 @@
     const IncreaseLikeNum = async (clickedPostID) => {
 
         try {
-            console.log("IncreaseLikeNum 함수 들어왔음!")
-
-
-            // [새로 짜는 코드] 변경하는 이유 : FormData 로 보내니까, 문제가 있었던 것 같음. | 변경 후 작동함 🔵
-                const data = {
-                    clickedPostID : clickedPostID
-                }
+            // 전송시킬 동적 form 데이터 만들기 
+            const form = new FormData();    // form 객체 생성
+            form.append("clickedPostID" , clickedPostID);    // 키값 : clickedPostID, value : clickedPostID 
             
-                // [과거 코드] 전송시킬 동적 form 데이터 만들기 | 안 되어서 수정 ✅  
-                    // const data = new FormData();    // form 객체 생성
-                    // data.append("clickedPostID" , clickedPostID);    // 키값 : clickedPostID, value : clickedPostID 
-
-
             // 서버로 보내기
-            await axios.post("http://127.0.0.1:4000/board/likes" , data , {
+            await axios.post("http://127.0.0.1:4000/board/likes" , form , {
                 withCredentials : true,
-                "Content-Type" : "json/application"     // form 에 담길 데이터 타입 설정
+                // "Content-Type" : "json/application"     // form 에 담길 데이터 타입 설정
             })
             
             // 다시 그려주기? 
                 // 그러려면, clickedPage 이걸, 전역변수화?
                 initializedView(arrPostWithCommentUser, clickedPage)
+
+
 
         } catch (error) {
             console.log(error)

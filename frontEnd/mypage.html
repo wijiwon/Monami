@@ -104,10 +104,10 @@
       "Content-Type" : "multipart/form-data"
     }).then((e)=>{
       console.log("머여",e);
-      // if (e.data == "중복된 닉네임입니다") {
-      //   alert("중복된 닉네임입니다");
-      // }
-      // window.location.reload();
+      if (e.data == "중복된 닉네임입니다") {
+        alert("중복된 닉네임입니다");
+      }
+      window.location.reload();
     }).catch((err)=>{
       console.log("업로드 버튼 오류",err);
     })

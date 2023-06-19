@@ -187,10 +187,36 @@ const { error } = require('console');
     exports.boardParamsView = async (req, res) => {
         try {
             // 1) 값 들어오는지 확인 
-            console.log("@Controller > boardParamsView 입장 👇 ")
-            // console.log("req.params.id 확인👉" , req.params.id)
-        
-            // 2) boardItem 보여주기 
+                console.log("@Controller > boardParamsView 입장 👇 ")
+                // console.log("req.params.id 확인👉" , req.params.id)
+
+                console.log("게시글 클릭한 유저 = view 1 증가, 누구? " , req.params.id_post)
+
+            // 2) 이걸 거쳤다 = 봤다 = view 1 증가! 
+
+                // 클릭된 게시글 ID 
+                    const clickedPostID = req.params.id_post
+            
+                // post 테이블에서 postid 에 해당하는 row 찾기 | 좋아요 버튼 증가에서 만든거 가져옴 ✅
+                const post = await Post.findByPk(clickedPostID)
+                
+                // 찾았는데 없으면 에러 메시지
+                if(!post) {
+                    console.log("그 포스트 id 에 해당하는 포스트 없어");
+                    return
+                }
+
+                // 있으면, views 속성 값 1 증가 
+                await post.increment('views' , {by : 1});
+                
+                // 클릭한 유저 이름을 추가 👉 여기에선 굳이 할 필요는 없음 | 좀 더 심도있는 데이터 분석을 하려면 필요 
+                    // const clickeUserUpdatePost = await post.update( {likeClickUser : clickedPostUserID} );
+
+                // views 업데이트 한거 확인 
+                console.log("조회수 숫자 업데이트 함!" );
+                
+
+            // 3) boardItem 보여주기 
                 // [지금 버전] sendFile | 그냥 file 을 직접 보낸다.
                     res.sendFile(path.join(__dirname , "../../frontEnd/boardItem.html"))
                     // [효과] ⭐⭐⭐⭐⭐⭐ 
@@ -667,3 +693,19 @@ exports.pagenationView = (req, res) => {
     }
 
 }
+
+
+
+// [게시판 목록] [get] 기본 페이지 보여주기 
+    exports.defaultView = (req, res) => {
+
+
+        // 1) 데이터 가져오기 
+
+
+        // 2) 데이터 랑 주소랑 같이 보내기 
+
+
+
+        res.sendFile(path.join(__dirname , "../../frontEnd/boardList.html"))
+    }

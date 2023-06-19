@@ -270,7 +270,7 @@
 
     /* ✍✍ 적용하기 | js 완성된 post 에 적용 */
     .post_container {
-        background-color: lightgreen;
+        /* background-color: lightgreen; */
         /* width: 300px; */
         /* height: 500px; */
         /* display: inline-block; */
@@ -349,6 +349,9 @@
         margin: 0 -1rem;
             /* margin 의 반대로, 
                 즉, 축소되는게 아니라, 옆으로 확장! */
+        overflow-x: hidden;
+        overflow-y: hidden;
+        
     }
 
     /* 🔹 [레퍼런스] 각 카드 item | item 간 정렬 | item 내부 desc를 위에서 아래로 내리기 위해 direction 을 세로로 함 */
@@ -474,6 +477,7 @@
         display: flex;
         justify-content: center;
         padding-bottom: 3rem;
+        
     }
 
 
@@ -493,6 +497,32 @@
 
 
     }
+
+
+
+/* post 항목으로 마우스 올라가면 👉 클릭 될 수 있게 하기 */
+    .link_container_BTN {
+        /* 바로 이 위에 어떻게 놓이게 할까 */
+            position: absolute;
+                /* [문제 상황] 
+                    게시글 card 를 클릭하면 -> 상세 페이지로 이동 하게 하고 싶었음. 
+
+                    [시도해본 것]                
+                    position: fixed; 👉 이건 그냥 화면에 딱 고정이니까, 안 돼!
+                    position : absolute 로 그 위치에 고정시키니까 됨 ⭐⭐ */
+
+        cursor: pointer;
+        width: 20em;
+        height: 25em;
+    }
+
+    /* ⭐ 호버 디자인도 해보고 싶어 ⭐⭐⭐ */
+    .link_container_BTN:hover{
+        /* background-color: blue; */
+    }
+
+
+
 
 
 
@@ -581,7 +611,7 @@
 
                 <!-- share drawing! -->
                 <div class="right_wrapper_item shareBtn_wrap">
-                    <button class="shareBtn"> Share Work</button>
+                    <button id="shareWorkBtn" class="shareBtn"> Share Work</button>
                 </div>
     
                 <!-- profile -->
@@ -873,9 +903,7 @@
 
 // getView 함수 
     async function getView(arrPostWithCommentUser , page_num = 1 ) {
-
         try {
-
             // 1. 필요한 데이터 가져오기 
 
                 // 1) 넘길 데이터 준비 
@@ -917,10 +945,7 @@
                     const {data} = await axios.get(`http://127.0.0.1:4000/board/list/page?num=${page_num}` , {
                         withCredentials : true,
                     })
-
                     console.log("@boardList > getView() 들어오는거 확인 🙆‍♂️ " , data)
-
-
 
                         // // b) 요청하기 [예전버전]
                         // const {data} = await axios.get("http://127.0.0.1:4000/board/list" , {
@@ -1035,7 +1060,7 @@
                     // [🔹 마크업 구조 정리]
                                 // posts_wrapper 이 div 안으로 다 append 된다. 
                                 // posts_wrapper 안에 ✅아이템별로 post_container✅ 가 만들어짐
-                                // ✅post_container✅ 안에 1) figure 태그 2) desc 설명 태그 가 형제 
+                                // ✅post_container✅ 안에 1) figure 태그 2) desc 설명 태그 3) 포스트로 이동하는 A 태그는 테스트 📛📛 가 형제 
                                 // desc 설명 태그 안에 1) 제목, 댓글 수, 글쓴이 등이 들어감
                     
                     // 1️⃣ post 에 유저가 올린 사진 container | figure 태그 안에 들어가는 것들
@@ -1135,7 +1160,22 @@
                                 // 3) 이러한 post_container 는 하나의 아이템이 될 것 임
                                 // 4) 이 아이템은 posts_wrapper 에 붙임
 
-                    // 3️⃣ 'posts_wrapper' 에,  게시글 하나를 담은 post_container 를 붙이기 
+                    // 4️⃣ post 하나 마다 A 태그 심기 
+                            
+                            // A태그 링크 container
+                            const link_container = document.createElement('a');
+                            // Post id 를 a 태그 주소에 넣어주기
+                            const id_post = element.id
+                            link_container.href = `http://127.0.0.1:4000/board/item/${id_post}`
+
+                            link_container.classList.add('link_container_BTN')
+                            link_container.id = `link_container_${element.id}`
+                            // 가게 하는 주소 입력해야 함 ✅ 
+                            post_container.appendChild(link_container)
+
+
+
+                    // 5️⃣  'posts_wrapper' 에,  게시글 하나를 담은 post_container 를 붙이기 
                     posts_wrapper.appendChild(post_container)
 
                 });
@@ -1165,16 +1205,11 @@
                     // page_navigation.appendChild(temp_aTag)
             
             // 8) 사용자가 1을 클릭하면 -> 첫 번째 배열을 렌더통에 넣기
-                
-                
-
-
                     
         } catch (error) {
             console.log(error)
         }
     }
-
 
 
 // 🔹 1page, 2page 보여주는 함수 
@@ -1185,9 +1220,7 @@
                 <button class="pageNumBtn" id="page_btn_${i}"> ${i}page </button>
                 `    
         }
-        
     }
-
 
 
 // 🔹 view 초기화 시키는 함수 | 이게 없으면 누적되어서 나옴 
@@ -1370,6 +1403,13 @@
 
 
 
+// 🔹 Share Work 클릭하면, 글쓰기 페이지로 이동   
+    shareWorkBtn.onclick = () => {
+            window.location.href = 'http://127.0.0.1:5500/Monami/frontEnd/boardCreate.html'
+    }
+
+
+
 
 
 // 🔹 getView 실행 
@@ -1384,9 +1424,11 @@
 
         await initializedView( );
 
-        await findClickedBtn()
+        await findClickedBtn();
 
     })
+
+
 
 
 

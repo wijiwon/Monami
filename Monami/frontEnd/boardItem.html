@@ -16,12 +16,197 @@
 
 <style>
 
+/* 기본 CSS 설정 */
+body {
+        -webkit-font-smoothing: antialiased;
+    }
 
-    /* #comment_container{
-        background-color: goldenrod;
-        width: 700px;
-        height: 500px;
-    } */
+    body, div, span, button, a, p, ul, figure, li {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    
+    ul, li {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    button {
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+
+
+
+/* ---------------------- 기본 CSS ☝☝☝ -------------------------- */
+
+
+.contents_wrap {
+    /* background-color: yellow; */
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ------------- 👇 header 👇 ---------------- */
+.header { 
+    height: 2.5rem;
+    background-color: rgba(0, 0, 0, 0.8);
+
+    display: flex;
+    align-items: center;
+}
+
+.boardItem_closeBtn_wrap {
+    width: 2rem;
+    height: 2rem;
+    /* background-color: yellow; */
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* 왼쪽 다 먹고 -> 오른쪽에서 조금 떼어내기 */
+    margin-left: auto;
+    margin-right: 0.5rem;
+}
+
+
+/* ------------- 👇 main content 👇 ---------------- */
+
+.main_contents {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    /* 가운데로 오게 하기 */
+    margin: 0 auto;
+
+    /* max-width: 1127px; */
+    min-height: 100vh;
+    background-color: lightblue;
+}
+
+
+/* <!-- 🔹 1)  top profile | saved | like -->*/
+
+.topProfile_actionBnts_container { 
+    height: 5rem;
+    width: 40rem;
+        /* 이 부분 크기 설정이 살짝 확신이 없음 😥  */
+    background-color: greenyellow;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topProfile_container { 
+    flex-shrink: 0;
+    width: 5rem;
+        /* width 에 고정값을 주고 flex-shrink 를 주면, 유지된다. */
+    height: 5rem;
+    
+    background-color: gray;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.title_userID_wrap { 
+    flex-grow: 1;
+        /* 빈 공간을 이 녀석이 채우게 된다. */
+
+    background-color: lightseagreen;
+}
+
+
+.userAction_Btns_wrap {
+    flex-shrink: 0;
+    width: 10rem;
+    
+    display: flex;
+    justify-content: space-evenly;
+    background-color: gray;
+}
+
+.userAction_Btns { 
+    width: 4rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+}
+
+.savedBtn { 
+    background-color: lightcyan;
+}
+
+.likeBtn {
+    background-color : lightpink;
+}
+
+
+.profile_image {
+
+    width: 3.5rem;
+    height: 3.5rem;
+    
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 50% 50%;
+}
+
+
+/* 🔹 2)  이미지 넣기  */
+
+.main_image_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: blue;
+}
+
+.main_image { 
+    width: 40rem;
+    height: 30rem;
+    
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+}
+
+.main_textContent {
+    flex-grow: 1;
+
+}
+
+
+
+
+
+
+
+
+
+/* ------------------ 👇👇 footer 👇👇  --------------------- */
+
+.footer {
+    height: 5rem;
+    background-color: gold;
+}
 
 
 </style>
@@ -29,10 +214,118 @@
 <body>
 
 
+
+<!-- 🔹 전체 콘텐츠 -->
+
+    <div class="contents_wrap">
+
+
+    <!-- 1. header -->
+        <!-- [할 것] 검은색 테두리 처리 하면 될 것 같음 -->
+
+        <header class="header">
+            
+            <div class="boardItem_closeBtn_wrap">
+                <a href="#" class="boardItem_closeBtn">✅</a>
+            </div>
+            
+        </header>
+
+
+    <!-- 2. main content-->
+        <section class="main_contents">
+
+
+            <!-- 1) top profile | saved | like -->
+                <section class="topProfile_actionBnts_container">
+
+                    <!-- 1) 왼쪽 영역 -->
+                <div class="topProfile_container">
+                    
+                    <figure class="profile_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);"> </figure>
+
+                </div>
+
+                    <!-- 2) 가운데 영역 -->
+                    <div class="title_userID_wrap">
+                        <div class="title_userName"> <span id="username"> 제목 </span> </div>
+                        <div> 아이디 | 배치를 먼저 하자  </div>
+                    </div>
+
+                    <!-- 3) 오른쪽 영역 -->
+                    <div class="userAction_Btns_wrap">
+                        <button class="savedBtn userAction_Btns"> Saved </button>
+                        <button class="likeBtn userAction_Btns"> 🧡Like </button>
+                    </div>
+                    
+
+
+                </section>
+
+
+            <!-- 2) 이미지 -->
+            <div class="main_image_container">
+                <figure class="main_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+
+                </figure>
+            </div>
+
+
+            <!-- 3) text 설명  -->
+                <section class="main_textContent">
+
+                    <p>lksadfjlkasdjflkjalskdfjlkdsajf</p>
+
+                </section>
+
+
+            <!-- 4) main profile -->
+                <section class="mainProfile">
+
+                </section>
+
+
+            <!-- 5) 댓글 -->
+                <section class="user_comment">
+
+
+                </section>
+
+
+            <!-- 6) more by Bethany Heck -->
+                <section class="recommendPosts">
+
+                </section>
+
+
+        </section>
+
+
+    <!-- 3. footer -->
+        <footer class="footer">
+
+        </footer>
+
+</div>
+
+
+<!-- 👇👇👇👇👇👇👇👇 예전에 작성한 거 👇👇👇👇👇👇👇👇👇👇👇  -->
+
+
+
     <h1> 캐치 마인드 </h1>
 
     <!-- 오른쪽에 배치 -->
-    <a href="http://127.0.0.1:5500/Monami/frontEnd/boardList.html"> <button>글 목록</button> </a> <br><br>
+        <!-- 과거 코드 -->
+            <!-- <a href="http://127.0.0.1:5500/Monami/frontEnd/boardList.html"> <button>글 목록</button> </a> <br><br> -->
+    
+        <!-- 새롭게 시도 | 필요한 이유 : 1) 모든 요청이 '서버' 로 들어가게 해야 2) 데이터를 업데이트 받아서 그려줄 수 있음  -->
+            <a href="http://127.0.0.1:4000/board/list/view"> <button>글 목록</button> </a> <br><br>
+            <!-- [해석] 
+                1) 지금, url 네이밍이 좀 이상하긴 함. | 나중에 다시 정리해봐야 겠음 😥😥😥  
+
+                -->
+
 
         <!-- [✅ todo] 글 목록으로 이동하게 해야 함 -->
 

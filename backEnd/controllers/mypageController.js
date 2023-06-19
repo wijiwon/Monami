@@ -52,8 +52,8 @@ exports.imgUpdate = async(req,res)=>{
     const currentUser = await User.findOne({where: {user_id : decode.user_id}});
     console.log("현 사용자",currentUser);
     if (!currentUser) {
-      console.log("중복된 닉네임입니다");
-      return res.json({message: "중복된 닉네임입니다"});
+      console.log("제공된 사용자 ID로 사용자를 찾을 수 없습니다");
+      return res.json({message: "사용자를 찾을 수 없습니다"});
     }
 
     // 제출된 닉네임이 현재 닉네임과 같지 않은 경우, 중복 닉네임을 확인합니다
@@ -62,7 +62,7 @@ exports.imgUpdate = async(req,res)=>{
       
       if (existingUsername) {
         console.log("마이 페이지 컨트롤러에서 닉네임 중복", nickName);
-        return res.json({message: "닉네임이 중복입니다"});
+        return res.json({message: "중복된 닉네임입니다"});
       }
     }
 

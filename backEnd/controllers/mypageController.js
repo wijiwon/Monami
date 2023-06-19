@@ -50,10 +50,10 @@ exports.imgUpdate = async(req,res)=>{
   try {
     // 먼저, 현재 사용자를 찾습니다
     const currentUser = await User.findOne({where: {user_id : decode.user_id}});
-
+    console.log("현 사용자",currentUser);
     if (!currentUser) {
-      console.log("제공된 사용자 ID로 사용자를 찾을 수 없습니다");
-      return res.json({message: "사용자를 찾을 수 없습니다"});
+      console.log("중복된 닉네임입니다");
+      return res.json({message: "중복된 닉네임입니다"});
     }
 
     // 제출된 닉네임이 현재 닉네임과 같지 않은 경우, 중복 닉네임을 확인합니다

@@ -4,7 +4,7 @@ class Question extends Sequelize.Model{
     static init(sequelize){
         return super.init({
             content: {
-                type: Sequelize.STRING(100),
+                type: Sequelize.TEXT,
                 allowNull: false
             },
             connect_id: {

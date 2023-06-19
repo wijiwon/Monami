@@ -31,7 +31,7 @@ exports.DrawingAdd = async (req, res) => {
             room_primaryKey: room.id
         });
         const lastDrawing = drawing.id;
-        console.log("내가 서버에서 보내준 그림의 id 값은?????????", lastDrawing)
+        // console.log("내가 서버에서 보내준 그림의 id 값은?????????", lastDrawing)
         // res.sendStatus(200);
         res.status(200).json({ drawing, lastDrawing });
 
@@ -44,7 +44,9 @@ exports.DrawingAdd = async (req, res) => {
 //그림을 보여주는 함수
 exports.viewVideo = async (req, res) => {
     try {
-        const draw = await Drawing.findOne({ where: { id: 41 } });
+        const { Drawid } = req.body;
+        console.log("나는 그림아이디가 필요해..... 보내줘어어억",Drawid)
+        const draw = await Drawing.findOne({ where: { id: Drawid } });
         // console.log("왜 재생안되는데????????????",draw.content);
         const videoData = draw.content;
         res.status(200).set({
@@ -101,13 +103,14 @@ exports.firstQuestionInput = async (req, ree) => {
         const { value } = req.body;
         const { decode } = req;
         const { room } = req;
-        // console.log("값이 잘 받아와 질까요???????", value)
-        // console.log("값이 잘 받아와 질까요???????", decode.id)
-        // console.log("값이 잘 받아와 질까요???????", room.id)
+        console.log("값이 잘 받아와 질까요???????", value)
+        console.log("값이 잘 받아와 질까요???????", decode.id)
+        console.log("값이 잘 받아와 질까요???????", room.id)
         const question2 = await Question.findOne({ where: { user_primaryKey: decode.id, room_primaryKey: room.id } })
+        console.log("왜 이래 우리 사이 좋았잖아,,,,,,,",question2)
         if (question2 == null) {
             // 해당 방, 해당 유저가 입력한 제시어가 없으면 question db에 생성한다.
-            // console.log("어서와 제시어는 처음이지?????")
+            console.log("어서와 제시어는 처음이지?????")
             await Question.create({
                 content: value,
                 user_primaryKey: decode.id,
@@ -131,12 +134,45 @@ exports.firstQuestionInput = async (req, ree) => {
     }
 }
 
+
+// 두 번째 제시어를 입력하는 함수
+exports.TwoQuestionInput = async (req,res)=>{
+    const { room } = req;
+    const {id, value, queValue} = req.body;
+    console.log("정답 입력자 아이디는????????", id);
+    console.log("정답은????????", value);
+    console.log("제시어의 아이디는????????", queValue);
+
+    // 현재 제시어의 데이터값
+    const isQue = await Question.findOne({where: {room_primaryKey: room.id, id: queValue}})
+    console.log("현재 제시어는??????????",isQue.dataValues.content);
+    // 제시어의 content 값
+    const isCon = isQue.dataValues.content;
+    // content값 배열화
+    const isArr = isCon.split(',');
+    console.log("배열이 잘 완성되었을까요????? ㄷㄱㄷㄱㄷㄱ",isArr)
+    
+    const Insert = [];
+    Insert.push(isCon);
+    Insert.push(id);
+    Insert.push(value);
+    console.log("정답 입력자 아이디랑 정답 내용이 잘 들어갈까요????? ㄷㄱㄷㄱㄷㄱ",Insert)
+    const content = Insert.toString();
+    console.log("문자열????? ㄷㄱㄷㄱㄷㄱ",content)
+
+    await Question.update({content : content}, {where: {id:queValue}})
+
+}
+
+
+
+
 //제시어를 보여주는 함수
 exports.QuestionView = async (req, res) => {
     try {
         const { room, decode } = req;
         const isroomQue = await Question.findAll({ where: { room_primaryKey: room.id } })
-        console.log("제시어를 보여줄 수 있겠니??????", isroomQue)
+        // console.log("제시어를 보여줄 수 있겠니??????", isroomQue)
         // 반환해야하는 것
         // content - html에서 그림그릴 때 사용
         // id - 그림 저장할 때 question id찾아서 그림의 id값을 넣어줘야 함

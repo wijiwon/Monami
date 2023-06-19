@@ -281,7 +281,9 @@
     handleUserRankings(res.data.user);
     // Handle posts here
     handlePosts(res.data.posts);
-    
+
+    console.log("이건멀까",res.data.login);
+
     if (res.data.login) {
       // user is logged in
       loginSuccess.style.display = "block";
@@ -345,7 +347,7 @@
       user_pw.value = ""
       // gamebtn.style.display = "block"
 
-      console.log(e);
+      console.log("로그인할떄?",e);
 
       if (e.data.token) {
         console.log("!@#$#$^%@#^@#$%@#$%@#%?!@?!@?");

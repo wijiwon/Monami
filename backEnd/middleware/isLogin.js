@@ -6,7 +6,7 @@ exports.islogin = async(req,res,next)=>{
   //값이 암호화된 토큰만 풀어주면 바로 사용가능
   //req.session 대신 쿠키값 읽기
   if (req.rawHeaders.filter(header => header.toLowerCase().includes('token')).length == 0) {
-    console.log("여기?");
+    // console.log("여기?");
     next();
   }else{
 

@@ -58,6 +58,7 @@ exports.viewVideo = async (req, res) => {
         //     'Content-Length': videoData.length
         // });
         // res.end(videoData);
+
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -207,4 +208,17 @@ exports.QuestionView = async (req, res) => {
         console.log(error)
     }
 
+}
+exports.getUserinfo= async(req,res)=>{
+    try {
+        const { room } = req;
+        console.log(room);
+        console.log("지금 방 정보를 확인할 수 있다고???",room)
+        res.send({_room:room});
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    
 }

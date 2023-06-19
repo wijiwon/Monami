@@ -274,17 +274,16 @@
   async function getloginaccess() {
     try {
     const res = await axios.get("/main/hi", { withCredentials: true });
-    console.log("getloginaccess response:", res);
-    console.log("res.data.login? :", res.data.login);
+    console.log("res.data.login? :", res.data);
     
     // Handle user rankings here
     handleUserRankings(res.data.user);
     // Handle posts here
     handlePosts(res.data.posts);
 
-    console.log("이건멀까",res.data.login);
+    console.log("이건멀까",res.data.userInfo);
 
-    if (res.data.login) {
+    if (res.data.userInfo) {
       // user is logged in
       loginSuccess.style.display = "block";
       beforeLogin.style.display = "none";

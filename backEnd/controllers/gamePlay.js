@@ -211,11 +211,18 @@ exports.QuestionView = async (req, res) => {
 }
 exports.getUserinfo= async(req,res)=>{
     try {
-        const { room } = req;
-        console.log(room);
-        console.log("지금 방 정보를 확인할 수 있다고???",room)
-        res.send({_room:room});
+        console.log("req임")
+        console.log(req)
+        const { id } = req.body;
+        console.log(id);
+        let adf=[];
+        for(let i =0;i<id.length;i++){
+            let Que = await User.findOne({ where: { id: id[i] } })
+            adf.push(Que);
+        }
+        console.log(adf);
 
+        res.json(adf);
     } catch (error) {
         console.log(error);
     }

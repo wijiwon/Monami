@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>game page</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
     <style>
         body {
             margin: 0;
@@ -32,6 +33,7 @@
         .questions,
         .gameResult {
             display: none;
+
         }
 
         .questions .row1,
@@ -387,6 +389,14 @@
 
 </body>
 <script>
+    // const data = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
+    //     withCredentials: true
+    // }).then((e) => {
+    //     console.log("응애");
+    //     console.log(e);
+    // })
+    // console.log("응애2");
+    // console.log(data);
     // html에서 canvas 태크를 가져온다.
     const canvas = document.getElementById("canvas");
     // getContext: 그래픽 렌더링 컨텍스트를 가져오는 메소드. 2d를 가져온다.
@@ -513,79 +523,189 @@
 
         mediaRecorder.ondataavailable = (e) => {
             recordedFrames.push(e.data);
+            console.log("끝났음?")
         };
 
-
+        mediaRecorder.onstop = () => {
+            // stop() 메서드 호출이 완료된 후에 실행되는 비동기 작업 처리
+            clearCanvas();
+            createVideoURL().then(() => {
+                console.log("그림이 성공적으로 생성되었다.")
+                // 비디오 URL 생성 후 추가 작업 수행
+                // createVideoURL();
+            }).catch((error) => {
+                console.log("앙금모띠~")
+                console.log(error);
+                // 에러 처리
+            });
+        };
         mediaRecorder.start();
     }
 
+    let anggimo = 0;
 
     async function createVideoURL() {
-        const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
-        // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
-        const formData = new FormData();
-        formData.append('file', videoBlob);
+        console.log("createVideoURL", "createVideoURL emfdjdha");
+
+        try {
+            const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
+            // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
+            console.log("dshjdfhjkdfhjkadfshjkadfshjkladsjkhl", videoBlob);
+            const formData = new FormData();
+            formData.append('file', videoBlob);
+
+            // setTimeout(() => {
+            //     const response = axios.post('http://127.0.0.1:4000/gameplay', formData, {
+            //     withCredentials: true,
+            //     "Content-Type": "multipart/form-data"
+            // });
+            // }, 3000);
+            const response = await axios.post('http://127.0.0.1:4000/gameplay', formData, {
+                withCredentials: true,
+                "Content-Type": "multipart/form-data"
+            });
+            console.log("데이터 제에발 와주라....", response);
+            const { drawing, lastDrawing } = response.data;
+            console.log("내가 방금 그린 그림의 id -", lastDrawing);
+            anggimo = lastDrawing;
+            console.log("내가 방금 그린 그림의 data", drawing);
+            console.log("내 id 값 - ", drawing.user_primaryKey);
+            console.log("그림저장완!!!!!!!!!!!");
+
+            console.log(viewIndex);
+            // console.log("createVideoURL data", response.data);
+
+            // await axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+            //     withCredentials: true
+            // } );
+
+            // setTimeout(() => {
+            //     axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+            //     withCredentials: true
+            // });    
+            // }, 4000);
+
+            await axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+                withCredentials: true
+            });
+            console.log("그림저장완!!!!!!!!!!!");
 
 
-        const response = await axios.post('http://127.0.0.1:4000/gameplay', formData, {
-            withCredentials: true,
-            "Content-Type": "multipart/form-data"
-        })
-        // console.log("데이터 제에발 와주라....", response);
-        const { drawing, lastDrawing } = response.data;
-
-        console.log("내가 방금 그린 그림의 id -", lastDrawing);
-        console.log("내가 방금 그린 그림의 data", drawing);
-        console.log("내 id 값 - ", drawing.user_primaryKey);
-        console.log("그림저장완!!!!!!!!!!!");
-
-
-
-        axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
-            withCredentials: true
-        })
-
-
-        // .then((e) => {
-        //     console.log("정신차려어어억 언제까지 붙잡을거야아아악",e.data.lastDrawing)
-        //     a = e.data.lastDrawing;
-        // }).catch((err) => {
-        //     console.log(err)
-        // })
-        // return URL.createObjectURL(videoBlob);
-
-
+            console.log("비디오 URL 생성 완료");
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+
+    // async function createVideoURL() {
+    //     console.log("createVideoURL", "createVideoURL emfdjdha")
+
+    //     try {
+    //         const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
+    //         // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
+    //         const formData = new FormData();
+    //         formData.append('file', videoBlob);
+
+
+    //         const response = await axios.post('http://127.0.0.1:4000/gameplay', formData, {
+    //             withCredentials: true,
+    //             "Content-Type": "multipart/form-data"
+    //         })
+    //         console.log("데이터 제에발 와주라....", response);
+    //         const { drawing, lastDrawing } = response.data;    
+    //         console.log("내가 방금 그린 그림의 id -", lastDrawing);
+    //         console.log("내가 방금 그린 그림의 data", drawing);
+    //         console.log("내 id 값 - ", drawing.user_primaryKey);
+    //         console.log("그림저장완!!!!!!!!!!!");
+
+    //                 // console.log("createVideoURL data", response.data);
+
+
+
+
+    //                 axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+    //                     withCredentials: true
+    //                 })
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+
+
+    //     //console.log("videoURL", data);
+
+
+    //     // .then((e) => {
+    //     //     console.log("정신차려어어억 언제까지 붙잡을거야아아악",e.data.lastDrawing)
+    //     //     a = e.data.lastDrawing;
+    //     // }).catch((err) => {`
+    //     //     console.log(err)
+    //     // })
+    //     // return URL.createObjectURL(videoBlob);
+
+    // }
 
     // 비디오 재생
     async function playVideo(index) {
         const videoElement = document.getElementById('DrawVideo');
         console.log("비디오재생의 인덱스느느느느느느는", index)
-        axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
-            responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
-            withCredentials: true
-        }).then((e) => {
-            const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+
+        try {
+            const response = await axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+                responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+                withCredentials: true
+            });
+            const videoData = new Blob([response.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+            console.log("그림data----------", response.data)
             const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
             videoElement.src = videoSrc;
             videoElement.play();
-        }).catch((err) => {
-            console.log(err)
-        })
+            // 할당한 url을 해제한다.
+            URL.revokeObjectURL(videoData);
+
+        } catch (error) {
+            console.log("playVideo 오류")
+            console.log(error)
+
+        }
+
+        // axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+        //     responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+        //     withCredentials: true
+        // }).then((e) => {
+        //     const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+        //     console.log("그림data----------",e.data)
+        //     const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+        //     videoElement.src = videoSrc;
+        //     videoElement.play();
+        //     // 할당한 url을 해제한다.
+        //     URL.revokeObjectURL(videoData);
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
 
         // videoElement.src = videoURL;
         // videoElement.play();
     }
 
-    // 비디오 녹화 종료
     async function stopRecording() {
-        mediaRecorder.onstop = (e) => {
-            const videoURL = createVideoURL();
-            // playBtn.addEventListener('click',playVideo);
-        };
+        console.log("stopRecording");
         mediaRecorder.stop();
-        clearCanvas();
     }
+
+
+
+    // 비디오 녹화 종료
+    // async function stopRecording() {
+    //     console.log("stopRecoding 들어옴");
+    //     mediaRecorder.onstop = async (e) => {
+    //         await createVideoURL();
+
+    //     };
+    //     mediaRecorder.stop();
+    //     console.log("stoprecoding ", mediaRecorder);
+    //     clearCanvas();
+    // }
 
     // 캔버스 전체 지우기 함수
     const clearCanvas = () => {
@@ -596,12 +716,12 @@
     const playBtn = document.getElementById('play');
 
 
-    window.addEventListener('DOMContentLoaded', startRecording);
+    // window.addEventListener('DOMContentLoaded', startRecording);
     // completeBtn.addEventListener('click', () => {
     //     stopRecording();
     // });
 
-    playBtn.addEventListener('click', playVideo);
+    // playBtn.addEventListener('click', playVideo);
 
 
     //--------- 첫번쨰 제시어 입력하는 구문 ------------------------------------------------------------
@@ -637,7 +757,7 @@
         let QuestionTimer = setInterval(() => {
             document.querySelector('.time').innerHTML = time + "초";
             time--;
-
+            console.log(gamestep);
             if (time < 0) {
                 clearInterval(QuestionTimer);
                 document.querySelector('.time').innerHTML = "시간종료";
@@ -654,7 +774,10 @@
 
 
     const StepTwo = async () => {
-        console.log("--------------------------2단계------------------------------");
+
+        console.log("--------------------------2 / 4단계------------------------------");
+        console.log(gamestep);
+
         let time = 10;
         await axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
             responseType: 'json',
@@ -672,18 +795,77 @@
             const lastIndex = questions.length - 1
             console.log("내가 입력한 제시어의 인덱스 - ", MyIndex)
 
-            // 내가 첫 번째 인덱스면
-            if (MyIndex == 0) {
-                viewIndex = questions[lastIndex];
-                console.log("내가 보는 제시어의 인덱스 - ",viewIndex)
-                document.querySelector('.view_question').innerHTML = viewIndex[1];
+
+            // 2단계이면
+            if (gamestep === 2) {
+                console.log(gamestep);
+                startRecording()
+                console.log("--------------------------찐찐찐 2단계------------------------------");
+                // 내가 첫 번째 인덱스면
+                if (MyIndex == 0) {
+                    console.log(gamestep);
+
+                    viewIndex = questions[lastIndex];
+                    console.log("내가 보는 제시어의 인덱스 - ", viewIndex)
+                    document.querySelector('.view_question').innerHTML = viewIndex[1];
+                }
+                else {
+                    console.log(gamestep);
+
+                    viewIndex = questions[MyIndex - 1];
+                    console.log("내가 보는 제시어의 인덱스 - ", viewIndex)
+                    // console.log("내 이전의 인덱스는????", viewIndex[1])
+                    document.querySelector('.view_question').innerHTML = viewIndex[1];
+                }
             }
-            else {
-                viewIndex = questions[MyIndex - 1];
-                console.log("내가 보는 제시어의 인덱스 - ", viewIndex)
-                // console.log("내 이전의 인덱스는????", viewIndex[1])
-                document.querySelector('.view_question').innerHTML = viewIndex[1];
+            // 4단계이면
+            else if (gamestep === 4) {
+                startRecording()
+                console.log("--------------------------찐찐찐 4단계------------------------------");
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                // const targetIndex = (MyIndex + 2) % questions.length;
+                // console.log("이번 타겟의 인덱스 - ", targetIndex)
+
+                // const isTarget = questions[targetIndex];
+                // console.log("이번 타겟의 data - ", isTarget)
+
+                // viewIndex = isTarget;
+                // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+
+
+                // let isContent = isTarget[1];
+                // isContent = isContent.split(',')
+                // console.log("콘텐츠값은??????", isContent)
+                // const isQue = isContent[isContent.length - 1];
+                // console.log("제시어값은??????", isQue)
+                // document.querySelector('.view_question').innerHTML = isQue;
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
+
+                // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
+                
+                let targetIndex;
+                if (MyIndex == 0) {
+                    targetIndex = 1;
+                }
+                else {
+                    targetIndex = 0;
+                }
+
+                const isTarget = questions[targetIndex];
+                console.log("이번 타겟의 data - ", isTarget)
+
+                viewIndex = isTarget;
+                // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+
+                let isContent = isTarget[1];
+                isContent = isContent.split(',')
+                console.log("콘텐츠값은??????", isContent)
+                const isQue = isContent[isContent.length - 1];
+                console.log("제시어값은??????", isQue)
+                document.querySelector('.view_question').innerHTML = isQue;
             }
+
+
         }).catch((err) => {
             console.log(err)
         })
@@ -694,20 +876,35 @@
             // if (time < 1) {
             //     stopRecording();
             // }
-            if (time < 0) {
+            if (time == 0) {
+                console.log("------------------나는 이제 그림을 저장할거야------------------")
                 // 그린 그림이 db에 저장된다.
                 clearInterval(DrawingTimer);
-                stopRecording();
-                document.querySelector('.draw_time').innerHTML = "시간종료";
-                document.querySelector(".drawings").classList.toggle('pop');
-                document.querySelector(".questions").classList.toggle('pop');
-                document.querySelector(".question1").classList.toggle('pop');
-                document.querySelector(".question2").classList.toggle('pop');
 
+                await stopRecording();
+                document.querySelector('.draw_time').innerHTML = "시간종료";
                 //--------------------------------------------------------------------
-                gamestep = 3;
-                startGame();
+                console.log(gamestep);
+
+                if (gamestep === 2) {
+                    console.log("------------------2단계 끝------------------")
+                    document.querySelector(".drawings").classList.toggle('pop');
+                    document.querySelector(".questions").classList.toggle('pop');
+                    document.querySelector(".question1").classList.toggle('pop');
+                    document.querySelector(".question2").classList.toggle('pop');
+                    gamestep = 3;
+                    startGame();
+                }
+                else if (gamestep === 4) {
+                    console.log("------------------4단계 끝------------------")
+                    document.querySelector(".drawings").classList.toggle('pop');
+                    document.querySelector(".questions").classList.toggle('pop');
+                    gamestep = 5;
+                    startGame();
+                }
+
             }
+            console.log(gamestep);
         }, 1000);
     }
 
@@ -728,15 +925,20 @@
             // console.log("제시어가 불러와지나????", e.data)
             MyID = e.data.userID;
             const questions = e.data.questionData;
-
+            console.log(e);
             console.log("내 아이디 값 - ", MyID)
             console.log("이 방의 제시어들 - ", questions)
 
             const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
             const lastIndex = questions.length - 1
-            // console.log("내 인덱스가 나왔을까???", MyIndex)
+            console.log("내 인덱스가 나왔을까???", MyIndex)
 
-            const targetIndex = (MyIndex + 3) % questions.length;
+            //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
+            // const targetIndex = (MyIndex + 3) % questions.length;
+
+            // ##########두명이서 할 경우 3라운드에서는 내 인덱스의 값이 들어와야 한다.#############
+            const targetIndex = MyIndex;
+
             console.log("이번 타겟의 인덱스 값 - ", targetIndex)
 
             viewIndex = questions[targetIndex];
@@ -801,15 +1003,37 @@
             const lastIndex = questions.length - 1
             console.log("내 인덱스가 나왔을까???", MyIndex)
 
-            const targetIndex = (MyIndex + 2) % questions.length;
-            console.log("이번 타겟의 인덱스 - ", targetIndex)
+            //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
+            // const targetIndex = (MyIndex + 2) % questions.length;
+            // const targetIndex = (MyIndex + 2) % questions.length;
+            // console.log("이번 타겟의 인덱스 - ", targetIndex)
+
+            // const isTarget = questions[targetIndex];
+            // console.log("이번 타겟의 data - ", isTarget)
+
+            // viewIndex = isTarget;
+            // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+
+            // let isContent = isTarget[1];
+            // isContent = isContent.split(',')
+            // console.log("콘텐츠값은??????", isContent)
+            // const isQue = isContent[isContent.length - 1];
+            // console.log("제시어값은??????", isQue)
+            // document.querySelector('.view_question').innerHTML = isQue;
+
+            // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
+            if (MyIndex == 0) {
+                const targetIndex = 1;
+            }
+            else {
+                const targetIndex = 0;
+            }
 
             const isTarget = questions[targetIndex];
             console.log("이번 타겟의 data - ", isTarget)
 
-            viewIndex = isTarget[0];
-            console.log("question에 저장할건데 question의 id값 - ", viewIndex)
-
+            viewIndex = isTarget;
+            // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
 
             let isContent = isTarget[1];
             isContent = isContent.split(',')
@@ -818,28 +1042,34 @@
             console.log("제시어값은??????", isQue)
             document.querySelector('.view_question').innerHTML = isQue;
 
+            // 추가한부분
+            try {
+                let time = 10;
+                let DrawingTimer = setInterval(async () => {
+                    document.querySelector('.draw_time').innerHTML = time + "초";
+                    time--;
+
+                    if (time < 0) {
+                        clearInterval(DrawingTimer);
+                        stopRecording();
+                        document.querySelector('.draw_time').innerHTML = "시간종료";
+                        //그림을 그려 Drawing db에 입력한다.
+                        document.querySelector(".drawings").classList.toggle('pop');
+                        document.querySelector(".questions").classList.toggle('pop');
+
+                        //--------------------------------------------------------------------
+                        gamestep = 5;
+                        startGame();
+                    }
+                }, 1000);
+
+            } catch (error) {
+                console.log(error);
+            }
         }).catch((err) => {
             console.log(err)
         })
 
-        let time = 10;
-        let QuestionTimer = setInterval(() => {
-            document.querySelector('.draw_time').innerHTML = time + "초";
-            time--;
-
-            if (time < 0) {
-                clearInterval(QuestionTimer);
-                document.querySelector('.draw_time').innerHTML = "시간종료";
-                //그림을 그려 Drawing db에 입력한다.
-                stopRecording();
-                document.querySelector(".drawings").classList.toggle('pop');
-                document.querySelector(".questions").classList.toggle('pop');
-
-                //--------------------------------------------------------------------
-                gamestep = 5;
-                startGame();
-            }
-        }, 1000);
 
     };
 
@@ -871,7 +1101,14 @@
             const lastIndex = questions.length - 1
             console.log("내 인덱스가 나왔을까???", MyIndex)
 
-            const targetIndex = (MyIndex + 1) % questions.length;
+
+            //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
+            //    const targetIndex = (MyIndex + 1) % questions.length;
+            // ##########두명이서 할 경우 5라운드에서는 내 인덱스의 값이 들어와야 한다.#############
+            const targetIndex = MyIndex;
+
+
+
             console.log("이번 타겟은??????", targetIndex)
 
             viewIndex = questions[targetIndex];
@@ -928,13 +1165,14 @@
         // ----다시 하기 클릭은 없는게 좋겠어요..... 방 id 새로 부여해야 하는데 그게 될까여,,,? 그냥 나가기로하죠.....
 
 
+
     }
 
 
 
 
-    //-------- 게임 구현 로직 ------------------------------------------------------------------
 
+    //-------- 게임 구현 로직 ------------------------------------------------------------------
 
     const startGame = () => {
         if (gamestep === 1) {
@@ -958,7 +1196,8 @@
         else if (gamestep === 4) {
             // 입력한 제시어로 그림을 그린다.
             setTimeout(() => {
-                StepFour();
+                // StepFour();
+                StepTwo();
                 console.log("조금 기다려");
             }, 1000);
         }

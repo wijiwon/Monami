@@ -363,6 +363,7 @@
     const exit = document.querySelector('.roomExit');
     const title = document.getElementById('title');
     const createRoom = document.querySelector('.createRoom');
+    const create=document.querySelector('.create');
 
     // roomExitButton.addEventListener('click',()=>{
     //     console.log("나가버릴꺼야~");
@@ -377,10 +378,10 @@
                 const currentClasses = mutation.target.classList;
                 if (currentClasses.contains('test')) {
                     const roomExitButton = document.querySelector('.roomBtn_member.pop .roomExit');
-                    roomExitButton.addEventListener('click',()=>{
+                    roomExitButton.addEventListener('click', () => {
                         socket.emit('exitRoom');
                         console.log("dd");
-                         asd1('.readyUser');
+                        asd1('.readyUser');
                         console.log("asdsad");
                     })
                     asdf1(tmp, '.readyUser');
@@ -402,6 +403,9 @@
             console.log(titlevalue);
         })
     })
+    // create.addEventListener('click',()=>{
+    //     console.log("방만들기 버튼 눌림");
+    // })
     // async function RoomView() {
     //     try {
     //         const data = await axios.get('http://127.0.0.1:4000/gameready', {
@@ -438,6 +442,24 @@
     gamestarts.addEventListener('click', () => {
         socket.emit('gamestart')
         // window.location.href="http://127.0.0.1:5501/frontEnd/maingame.html";
+    })
+    socket.on('hostgamestart',()=>{
+        console.log("여기오긴하냐.")
+        setTimeout(() => {
+            test1.style.display = "block";
+        }, 1000);
+        setTimeout(() => {
+            test1.style.display = "none";
+            test2.style.display = "block";
+        }, 2000);
+        setTimeout(() => {
+            test2.style.display = "none";
+            test3.style.display = "block";
+        }, 3000);
+        setTimeout(() => {
+            window.location.href = "http://127.0.0.1:5500/frontEnd/game.html";
+        }, 4000);
+        
     })
     socket.on('gamestart1', () => {
         console.log("안녕")

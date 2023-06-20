@@ -468,7 +468,7 @@ body {
         <header class="header">
             
             <div class="boardItem_closeBtn_wrap">
-                <a href="http://127.0.0.1:4000/board/list/view" class="boardItem_closeBtn"> ❎ </a>
+                <a href="#" class="boardItem_closeBtn">✅</a>
             </div>
             
         </header>
@@ -490,28 +490,14 @@ body {
 
                     <!-- 2) 가운데 영역 -->
                     <div class="title_userID_wrap">
-                        
-                        <!-- 1) 윗 부분 : a) 제목 b) 좋아요 c) view 수 -->
-                        <div class="title_nums_wrap"> 
-                            제목 <span id="post_title">  </span> 
-                            좋아요 수 <span id="post_likes">  </span>
-                            views 수 <span id="post_views">  </span>
-                        </div>
-
-                        <!-- <div class="title_userName"> <span id="username"> 제목 | 좋아요 수 | views 수 |  </span> </div> -->
-
-                        <!-- 2) 아랫 부분 : a) 유저 아이디 b) exp 수  -->
-                        <div class="userName_nums_wrap"> 
-                            유저의 아이디 <span id="username"> </span>
-                            exp <span id="user_exp"> </span>
-                        </div>
-
+                        <div class="title_userName"> <span id="username"> 제목 </span> </div>
+                        <div> 아이디 | 배치를 먼저 하자  </div>
                     </div>
 
                     <!-- 3) 오른쪽 영역 -->
                     <div class="userAction_Btns_wrap">
                         <button class="savedBtn userAction_Btns"> Saved </button>
-                        <button class="likeBtn userAction_Btns" id="post_likesBtn"> 🧡Like </button>
+                        <button class="likeBtn userAction_Btns"> 🧡Like </button>
                     </div>
                     
 
@@ -521,22 +507,17 @@ body {
 
             <!-- 2) 이미지 -->
             <div class="main_image_container">
-                <!-- [과거 코드] -->
-                    <figure id="main_image" class="main_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                <figure class="main_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
 
-                    </figure>
-            
-                <!-- [시도] -->
-                    
+                </figure>
             </div>
 
 
             <!-- 3) text 설명  -->
                 <section class="main_textContent">
-                    <p id="post_content">
-                        <!-- 글 내용을 가져온다. ✅ -->
+                    <p> I wrote an essay about how designers can better use type to form their grids and compositions. It's got tons of case studies of designs from folks like Eric Hu, Jessica Svendsen and Lou Dorfsman, who were and are the masters of this technique. Hope you'll check it out!
+                        <a href="#">https://medium.com/@BethanyHeck/structural-typography-26f00c19e2f0</a>
                     </p>
-
                 </section>
 
 
@@ -619,7 +600,7 @@ body {
             <!-- <a href="http://127.0.0.1:5500/Monami/frontEnd/boardList.html"> <button>글 목록</button> </a> <br><br> -->
     
         <!-- 새롭게 시도 | 필요한 이유 : 1) 모든 요청이 '서버' 로 들어가게 해야 2) 데이터를 업데이트 받아서 그려줄 수 있음  -->
-            <!-- <a href="http://127.0.0.1:4000/board/list/view"> <button>글 목록</button> </a> <br><br> -->
+            <a href="http://127.0.0.1:4000/board/list/view"> <button>글 목록</button> </a> <br><br>
             <!-- [해석] 
                 1) 지금, url 네이밍이 좀 이상하긴 함. | 나중에 다시 정리해봐야 겠음 😥😥😥  
 
@@ -628,30 +609,30 @@ body {
 
         <!-- [✅ todo] 글 목록으로 이동하게 해야 함 -->
 
-    <!-- <div> 작성자 : <span id="username"> </span> </div> <br><br>  -->
+    <div> 작성자 : <span id="username"> </span> </div> <br><br> 
         <!-- 가져올 곳 : User 테이블의 username 열 -->
         
-    <!-- <div> 조회수 : <span id="post_views"> </span> </div> <br><br> -->
+    <div> 조회수 : <span id="post_views"> </span> </div> <br><br>
         <!-- 가져올 곳 : Post 테이블의 views 열 -->
         
-    <!-- <div> exp : <span id="user_exp"> </span> </div> <br><br> -->
+    <div> exp : <span id="user_exp"> </span> </div> <br><br>
         <!-- 가져올 곳 : User 테이블의 exp 열 -->
         
 
     <div>
-        <!-- <div> 👍 : <span id="post_likes"> </span> </div>  <br>   -->
+        <div> 👍 : <span id="post_likes"> </span> </div>  <br>  
         <!-- 가져올 곳 : Post 테이블의 likeClickUser 의 개수 -->
     
-        <!-- <div> <button id="post_likesBtn">🧡좋아요클릭버튼</button> </div> <br><br> -->
+        <div> <button id="post_likesBtn">🧡좋아요클릭버튼</button> </div> <br><br>
         <!-- 보낼 곳 : 클릭하면, Post 테이블의 likeClickUser 에, user_id, name, id 를 보낸다. -->
         <!-- 📛 foreignKey 와 현재 api 설정 된거 확인해야 이 부분이 깔끔할 듯 -->
     
     </div>
         
-    <!-- <div> 제목 : <span id="post_title"> </span> </div> <br><br> -->
+    <div> 제목 : <span id="post_title"> </span> </div> <br><br>
         <!-- 가져올 곳 : Post 테이블의 content -->
 
-    <!-- <div> 내용 : <span id="post_content"> </span> </div> <br><br> -->
+    <div> 내용 : <span id="post_content"> </span> </div> <br><br>
         <!-- 가져올 곳 : Post 테이블의 content -->
         
     <span> 사진 : <img id="posts_img" src="">  </span> <br><br><br><br>
@@ -1100,9 +1081,6 @@ body {
 
                         })
 
-                        // 4) 본문 사진 가져오기 
-                            const figure = document.getElementById("main_image")
-                            figure.style.backgroundImage = `url(http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile})`
 
 
                         //     // 입력창 테두리

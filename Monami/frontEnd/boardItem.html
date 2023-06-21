@@ -95,7 +95,7 @@ body {
 
     width: 50rem;
     min-height: 180vh;
-    background-color: lightblue;
+    /* background-color: lightblue; */
 }
 
 
@@ -484,7 +484,8 @@ body {
                     <!-- 1) 왼쪽 영역 -->
                 <div class="topProfile_container">
                     
-                    <figure class="profile_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);"> </figure>
+                    <!-- <figure id="top_profile_image" class="profile_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);"> </figure> -->
+                    <figure id="top_profile_image" class="profile_image"> </figure>
 
                 </div>
 
@@ -522,7 +523,7 @@ body {
             <!-- 2) 이미지 -->
             <div class="main_image_container">
                 <!-- [과거 코드] -->
-                    <figure id="main_image" class="main_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                    <figure id="posts_img" class="main_image" >
 
                     </figure>
             
@@ -545,7 +546,8 @@ body {
 
                 <!-- 프로필 이미지 -->
                 <div class="mainProfile_container topProfile_container ">
-                    <figure class="mainProfile profile_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);"> </figure>
+                    <!-- <figure class="mainProfile profile_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);"> </figure> -->
+                    <figure id="main_profile_image" class="mainProfile profile_image" > </figure>
                 </div>
                 
                 <!-- 실선 -->
@@ -612,7 +614,7 @@ body {
 
 
 
-    <h1> 캐치 마인드 </h1>
+    <!-- <h1> 캐치 마인드 </h1> -->
 
     <!-- 오른쪽에 배치 -->
         <!-- 과거 코드 -->
@@ -654,7 +656,7 @@ body {
     <!-- <div> 내용 : <span id="post_content"> </span> </div> <br><br> -->
         <!-- 가져올 곳 : Post 테이블의 content -->
         
-    <span> 사진 : <img id="posts_img" src="">  </span> <br><br><br><br>
+    <!-- <span> 사진 : <img id="posts_img" src="">  </span> <br><br><br><br> -->
         <!-- 가져올 곳 : Post 테이블의 content -->
         <!-- 📛 img 태그를 가져오는게 맞겠지? -->
     
@@ -714,6 +716,8 @@ body {
 
         // 대댓글 작성시, 대댓글이 붙어야 하는 원본 댓글 'DIV ID'
         let reComment_originalCommentDIV = "";
+
+        // 유저 프로필 이미지 
 
     // 이것들은 없어도 되지 않나? 👇 
     let userData = {};
@@ -795,9 +799,14 @@ body {
                 loginUser_ID = loginUserData._userTable_ID
                 loginUser_UserID = loginUserData._userTable_userId
 
+            // 🔹 변수 할당 
+                postId = postsData.id
+                console.log("현재 게시글 ID" , postId)
+
 
             // 3) 이 user 가 적은 post 데이터 중 ⭐방금적은 글 = postID⭐ 에 해당하는 것 가져오기 
-                const postingByUser = postsByUser.find(item => item.id == postId);
+                // const postingByUser = postsByUser.find(item => item.id == postId);
+                const postingByUser = postsData;
                     // [해석]
                         // User 테이블 중 -> 해당 user 가 적은 post 를 foreignKey 로 모두 가져온다. 
                         // 그걸 postsByUser 에 담는다. (배열 안에 객체가 있는 형태)
@@ -816,7 +825,7 @@ body {
                     
             // 5) innerHTML 로 붙여주기    
                 // 작성자
-                    username.innerHTML = userData.user_id;
+                    username.innerHTML = postsData.user_id;
                     // [📛 개선해야 할 것]
                         // user_id 를 가져와야 하는지 
                         // 닉네임을 가져와야 하는지, foreignKey 는 어떻게 되는지 현재 불분명
@@ -832,7 +841,7 @@ body {
                         // post_likes.innerHTML = "임시 1 | 이 부분이 null 이면, 아래게 안 읽힘. 그러면, table column 처리를 해주는게 맞을 수도?";
                     // now 
                         // 테이블에 좋아요 컬럼 추가한 버전 
-                        post_likes.innerHTML = postingByUser.likes;
+                        post_likes.innerHTML = postsData.likes;
 
                     // [📛 궁금한 것]
                         // 왜, 이걸 주석처리하면, 밑에, '제목' 부분이 보이게 될까? 
@@ -846,28 +855,38 @@ body {
                 // 제목 
                     // const lastOfPost = postsData[postsData.length - 1];
                         // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
-                        post_title.innerHTML = postingByUser.title;
+                        post_title.innerHTML = postsData.title;
                     // [주의] 직접 innerHTML 에 넣으면, '문자열이 아닌 경우' 안 나올 수 있음. 
 
 
                 // 게시글 내용 
                     // const lastOfPost = postsData[postsData.length - 1];
-                    const temp_content = postingByUser.content
+                    const temp_content = postsData.content
                         // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
                     post_content.innerHTML = temp_content
                         // [📛 개선해야 할 것]
                             // 바로 지금 작성한 유저가 한건지는
 
 
-                // 업로드한 이미지 (사진)
-                    tempImgFile = postingByUser.post_img;
-                    posts_img.src = `http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile}`;
+                // 업로드한 이미지 (사진) | 이거랑 밑에거랑 중복인가? ❓❓❓ 
+                    // tempImgFile = postsData.post_img;
+                    // console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀" , tempImgFile)
+                    // posts_img.src = `http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile}`;
                         // [📛 개선해야 할 것]
                             // 주소를 넣으면, 어떻게 '렌더' 되게 할지. 뭔가 추가적으로 필요함
                             // 그리고, 이것도, '방금 업로드한 최신의 것' 을 가져와야 하나
 
+                // 유저 프로필 사진 
+                    // 1) 지금 현재 포스팅의 주인인 유저의 프로필 주소
+                    console.log( "🎏🟩🎏 프로필 이미지 주소" ,  `${data.post.User.profile_img}`)
+                    const profileImgUrl = data.post.User.profile_img
+                        // 주의 | 이 부분이 자주 틀렸음 😥 
+
+                    // 2) 각 댓글을 게재한유저의 프로필 주소는 다시 설정해야 할거 같은데 😥😥 
+
+                
                 // 게시글 조회수
-                    post_views.innerHTML = postingByUser.views;
+                    post_views.innerHTML = postsData.views;
                     // [📛 개선 해야할 것]
                         // '제목 클릭' 하면, 조회수가 올라갈 수 있게 만들어야 함. 
                         // 게시글이 올라가는 거 (CREATE 먼저)
@@ -927,8 +946,8 @@ body {
                             // a) 왼쪽 li wrap 中 유저 프로필 이미지
                                 const comment_profileImg_container = document.createElement('div')
                                 comment_profileImg_container.classList.add('comment_profileImg_container')
+                                
                                 const comment_profileImg = document.createElement('figure')
-                                const profileImgUrl = 'https://mblogthumb-phinf.pstatic.net/20150202_200/chaejhh_14228749759824Pb16_JPEG/1904120_319466048255650_4915401899013116122_n.jpg?type=w2'
                                 comment_profileImg.style.backgroundImage = `url(${profileImgUrl})`
 
                                 comment_profileImg.classList.add('comment_profileImg')
@@ -1100,10 +1119,24 @@ body {
 
                         })
 
-                        // 4) 본문 사진 가져오기 
-                            const figure = document.getElementById("main_image")
-                            figure.style.backgroundImage = `url(http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile})`
+                        // 4) 본문 사진 및 프로필 가져오기
+                            // 본문에 들어갈 사진 가져오기 | 위에서 아래로 내렸는데, 혹시 에러날 수도 📛📛 
+                                tempImgFile = postsData.post_img;
+                                console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀" , tempImgFile)
+                                const main_figure = document.getElementById("posts_img")
+                                main_figure.style.backgroundImage = `url(http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile})`
+                                // http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile}
 
+                            // top 프로필 이미지 가져오기 
+                                // 1) top 부분 | 맨 위에 있는 프로필 이미지
+                                const top_currentPostUserImg = document.getElementById('top_profile_image')
+                                top_currentPostUserImg.style.backgroundImage = `url(${profileImgUrl})`
+                                
+                                // 2) main 부분 | 댓글 바로 위에 있는 프로필 이미지 
+                                const main_currentPostUserImg = document.getElementById('main_profile_image')
+                                main_currentPostUserImg.style.backgroundImage = `url(${profileImgUrl})`
+                            
+                                
 
                         //     // 입력창 테두리
                         //     const reComment_container = document.createElement('div')
@@ -1434,14 +1467,15 @@ body {
             const result = await axios.post("http://127.0.0.1:4000/board/comment/create" , data , {
                     withCredentials : true ,      // withCredentials 필수 ⭐⭐
                     headers : {"Content-Type" : "application/json"}
-                } , {
-                }).then((response) => {
-                    // AWAIT 랑 THEN, 이랑 같이 쓰면 안 되는거 같은데 우선... 음... 😥😥  
+                });
+                    // , {
+                    // }).then((response) => {
+                        // AWAIT 랑 THEN, 이랑 같이 쓰면 안 되는거 같은데 우선... 음... 😥😥  
 
-                    console.log("@boardItem 작성한 댓글 ID 가 뭡니까! 🕵️‍♂️" , response.data.newComment.id)
+                    console.log("@boardItem 작성한 댓글 ID 가 뭡니까! 🕵️‍♂️" , result.data.newComment.id)
                     
                     // 새로 작성한 댓글의 ID
-                    commentId = response.data.newComment.id
+                    commentId = result.data.newComment.id
                         // [문제점]
                             // 1) 댓글을 작성한 후 -> 대댓글을 작성하면 -> commentID 가 여기에서 채워짐 
                             // 2) 다만, 바로 대댓글로 가면 -> '어떤 원본 댓글에 대해 작성한건지.' 모른다. ⭐⭐⭐
@@ -1449,7 +1483,8 @@ body {
 
 
                     // 대댓글 방식 응용
-                        getAPI();
+                        await getAPI();
+                        await window.location.reload();
                     
 
                     // [예전 방식] 작동하긴 함 🔵  
@@ -1481,7 +1516,7 @@ body {
                         //         // console.log("redirectURL 이게 어떻게 넘어오지? 🕵️‍♂️ @boardItem" , response.request.responseURL)
                         //         // window.location.href = redirectURL;
                                 
-                });
+                
                 
         } catch (error) {
             console.log(error)
@@ -1507,6 +1542,7 @@ body {
                     await saveComment();    
                         // ⭐⭐⭐⭐⭐ 비동기처리로써 기다린다 이렇게 쓰는구나
 
+                    await window.location.reload()
                     console.log("현재 클릭된, 대댓글, 작성완료, 버튼 💫 " , reCommentClickedBtnID)
                 })
             });

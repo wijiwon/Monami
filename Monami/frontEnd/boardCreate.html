@@ -15,6 +15,116 @@
 
 
 
+
+
+.content_background {
+    position: fixed;
+
+    background-color: rgba(0, 0, 0, 0.3);
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.content_wrapper { 
+    width: 80vh;
+    height: 87vh;
+
+    border-radius: 1em;
+    padding: 0.8em 2em;
+
+    background-color: whitesmoke;
+}
+
+
+
+.post_img_title {
+    background-color: thistle;
+}
+
+
+.post_img_upload_Container { 
+    background-color: palegoldenrod;
+    width: 100%;
+    height: 30%;
+    border-radius: 0.5em;
+
+    
+}
+
+.main_contents_wrap {
+    background-color: magenta;
+    height: 85%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+.post_1st_wrap {
+    /* flex-shrink: 0; */
+
+    height: 100%;
+    width: 40%;
+    background-color: lawngreen;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+}
+
+
+#post_img_pv{ 
+    width: 95%;
+    height: 95%;
+}
+
+
+.post_2nd_wrap {
+    background-color: lightgray;
+    height: 100%;
+    width: 55%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+
+.postTile_wrap  {
+    background-color: tan;
+    /* display: flex; */
+    /* flex-direction: column; */
+}
+
+
+.text_input{
+    width: 80%;
+    height: 3em;
+}
+
+
+.postText_wrap { 
+    background-color: thistle;
+}
+
+.postTags_wrap { 
+    background-color: tomato;
+}
+
+.postWriteBtn_wrap { 
+    background-color: burlywood;
+}
+
 </style>
 
 
@@ -22,33 +132,119 @@
 
 <body>
 
+
+
+
+<!--  뒷 배경 | ✅ 뒤에 gif 넣거나 | 아니면, 여기처럼, 이미지 넣고 -> 그 다음 팝업 띄워도 될 듯 -->
+    <div class="content_background">
+
+    <!-- 하얀색 글쓰는 곳 -->
+    <div class="content_wrapper">
+
+        <!-- 1. 맨위 제목 영역 : final touches | -->
+            <div class="post_img_title">
+                <h2>Final touches</h2>
+            </div>
+
+
+
+        <!-- 2. 메인 콘텐츠 : 제목, 사진 올리기, 내용 등 -->
+        <div class="main_contents_wrap">
+
+            <!-- 2.1 왼쪽 영역 | 미리보기 사진 올라감 -->
+                <div class="post_1st_wrap">
+                    <!-- 1) 사진 올라가는 영역 -->
+                        <div class="post_img_upload_Container">
+                                
+                            <p> Thumnail Preview </p>
+                            
+                            <!-- b) 미리보기 나오는 영역 | 사진 올라가는 영역에 고정 되어야 함 -->
+                            <img id="post_img_pv" onerror="style.display='none'" alt="">
+                            <!-- [해석] 
+                                onerror="style.display='none'
+                                1) img에 이미지가 없을때 나오는 엑박을 안보이게 해줌 
+                                2) 없어도 되긴 하는 것 같은데, 우선, 해놓음 
+                            -->
+
+                            <!-- a) 파일 올리는 부분 -->
+                            <input type="file" id="post_img"> <br>
+                        
+                        </div>
+                </div>
+
+            <!-- 2.2 오른쪽 영역 | 제목, 설명, 태그, -->
+        
+                <div class="post_2nd_wrap"> 
     
+                    <!-- 1) 제목 -->
+                    <div class="postTile_wrap">
+                        <label for=""> Title  </label> <br>
+                        <input type="text" id="title" placeholder="Add Titles" class="text_input"> <br>
+                        <div class="suggested_wrap" > <span class="suggested_title" > Suggested : </span> <span class="suggested_title_examples"> 팡팡에서 가지볶음밥 기다리기 </span> </div>
+                    </div>
 
-    <!-- 제목 -->
-    <label for="">제목</label>
-    <input type="text" id="title"> <br>
+                    <!-- 2) 본문 -->
+                    <div class="postText_wrap">
+                        <label for=""> Description (minimum 200) </label> <br> 
+                        <input type="text" id="content" class="text_input" placeholder="Add description"> <br>
+                        <div class="suggested_wrap" > <span class="suggested_desc" > Suggested : </span> <span class="suggested_desc_examples"> 팡팡 가지 볶음밥, 유튜브, 주방장, 어묵 맛집, 밑반찬 맛집, 교수님, 양조절 실패, 맛조절만 성공, 대기 시간 조절 실패, 희한하게 또 가게 됨 </span> </div>
 
-    <!-- 본문 -->
-    <label for="">본문</label> 
-    <input type="text" id="content"> <br>
+                    </div>
+    
+                    <!-- 3) 태그 -->
+                    <div class="postTags_wrap">
+                        <label for=""> Tags (maximum 20) </label> <br>
+                        <input type="text" id="tags" class="text_input" placeholder="Add tags">
+                        <div class="suggested_wrap" > <span class="suggested_tags" > Suggested : </span> <span class="suggested_tag_examples">friend, alien, animal, animation, monster</span> </div>
 
-    <br>
+                    </div>
+    
+                    <!-- 4) 글쓰기 버튼 -->
+                    <div class="postWriteBtn_wrap">
+                        <button id="writeBtn"> 글쓰기 </button>
+                    </div>
+    
+                </div>            
+
+        </div>
+
+
+
+
+        </div>
+    </div>
+
+
+    <!-- 👇👇 여기부터는 예전 코드 | 이제 keep 👇👇 -->
+
+        <!-- 제목 -->
+        <!-- <label for="">제목</label>
+        <input type="text" id="title"> <br> -->
+
+        <!-- 본문 -->
+        <!-- <label for="">본문 | minimum 200</label> 
+        <input type="text" id="content"> <br> -->
+
+        <!-- 태그 -->
+        <!-- <label for=""> tags | maximum 20 , 추천 태그 </label>
+        <input type="text" id="tags"> -->
+
+        <!-- <br> -->
 
     <!-- 사진 -->
-    <input type="file" id="post_img"> <br>
-
+    <!-- <input type="file" id="post_img"> <br> -->
 
     <!-- 사진 미리보기 ✅ -->
-    <img id="post_img_pv" onerror="style.display='none'" alt="">
+    <!-- <img id="post_img_pv" onerror="style.display='none'" alt=""> -->
         <!-- [해석] 
                 onerror="style.display='none'
                     1) img에 이미지가 없을때 나오는 엑박을 안보이게 해줌 
                     2) 없어도 되긴 하는 것 같은데, 우선, 해놓음 
             -->
-    <br>
+    <!-- <br> -->
 
     <!-- 글쓰기 버튼 -->
-    <button id="writeBtn"> 글쓰기 </button>
+    <!-- <button id="writeBtn"> 글쓰기 </button> -->
 
 
 </body>
@@ -113,11 +309,14 @@
 
         console.log("[@boardCreate.html] 게시글 제목, 본문, 사진 들어오고 있는지 : " , title.value, content.value, post_img.files[0])
 
+
         // axios 전송 | await 붙여야❓❓ 
-        axios.post("http://127.0.0.1:4000/board/create" , form, { 
+        await axios.post("http://127.0.0.1:4000/board/create" , form, { 
             
             // type 설정 : 설정에 따라, 서버가 기대하는 값이 달라짐
             "Content-Type" : "multipart/form-data",
+            withCredentials: true,  // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+
                 // [해석] 헤더의 내용으로, 인코딩된, 폼 데이터로 전송한다고 설정
                 // [주의] : 만약, 텍스트 데이터면, json/application 으로, 이것과 다르게 설정해야 함
             

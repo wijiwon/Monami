@@ -18,7 +18,7 @@
 
 
 // [create] 게시판 글쓰기 
-    routers.post('/create' ,  Upload.single("post_img") ,  boardCreate );
+    routers.post('/create' , islogin, Upload.single("post_img") ,  boardCreate );
         // [해석]
             // [POST 요청 경로 및 페이지] http://127.0.0.1:8007/board/create | boardCreate.html
 

@@ -84,16 +84,23 @@
     }
 
 /* 3. 로고 */
+
+    .main_image_container {
+        width: 300px;
+        height: 70px;
+        background-color: yellow;
+    }
+
     .main_logo {
         /* background-color: blue; */
 
         width: 200px;
         height: 50px;
-        background-size: 50%;
+        
+
         background-position: center;
         background-repeat: no-repeat;
-
-        
+        background-size: cover;
     }
 
 
@@ -589,8 +596,9 @@
             </ul>
 
             <!-- main logo  -->
-            <figure class="main_logo" style="background-image: url(../backEnd/image/dribbble_logo.jpg)";>
-                <!-- <img src="../backEnd/image/dribbble_logo.jpg" alt=""> -->
+            <figure  class="main_logo" style="background-image: url(http://127.0.0.1:5500/Monami/backEnd/image/monami.png);">
+                <!-- style 속성에서 url 은 꼭, 'http://127.0.0.1:5500/Monami/backEnd/image/monami.png' 이렇게 full name 으로 써야 함 -->
+
             </figure >
                 <!-- 로고 교체 필요함 ✅ -->
 
@@ -1405,7 +1413,7 @@
 
 // 🔹 Share Work 클릭하면, 글쓰기 페이지로 이동   
     shareWorkBtn.onclick = () => {
-            window.location.href = 'http://127.0.0.1:5500/Monami/frontEnd/boardCreate.html'
+            window.location.href = "http://127.0.0.1:4000/board/create"
     }
 
 

@@ -14,6 +14,18 @@ const { error } = require('console');
 
 // [READ] 글쓰기 페이지 보여주기 
     exports.boardCreateView = async(req, res) => {
+
+        if (req.decode && req.decode.id) {
+            console.log("req.decode.id 👉👉👉👉👉" , req.decode.id )
+        } else {
+            console.log("req.decode is undefined.")
+        }
+
+
+        console.log("☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝☝")
+        console.log(req.decode)
+        console.log(req.decode.id)
+
         console.log("🎏🎏🎏🎏🎏🎏🎏 여기까지 옴!!!!! ")
         res.redirect("http://127.0.0.1:5500/Monami/frontEnd/boardCreate.html")
 }
@@ -22,9 +34,18 @@ const { error } = require('console');
 // [CREATE] 게시판 글쓰기 
     exports.boardCreate = async (req, res) => {
 
+
+        if (req.decode && req.decode.id) {
+            console.log("req.decode.id 👉👉👉👉👉" , req.decode.id )
+        } else {
+            console.log("req.decode is undefined.")
+        }
+
         // 1) 저장할 데이터 솎아내기 
-            const {file, body} = req;
+        console.log("📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌" , req);
+        const {file, body} = req;
             
+            console.log("req.decode.id 👉👉👉👉👉" , req.decode.id )
             console.log("req 에서 file, body 분리 됐나 확인 👇 @boardController")
             // console.log("req.body, req.file : " , req.body, req.file)
 
@@ -35,7 +56,7 @@ const { error } = require('console');
         // 2) sequelize 상속받은 Post 객체로 쿼리 날리기 
         try {
             const newPost = await Post.create({
-                user_id : 'dj', 
+                user_id : req.decode.user_id, 
                     // req.decode 로 변환 가능 
                     // 임의로 넣음 ✅✅
                     // login 성공하면 👉 거기에서 가져오기 ✅✅ 
@@ -54,7 +75,7 @@ const { error } = require('console');
                     // [추가할 일]
                         // item 덩어리가 클릭되면 > 여기가 숫자가 올라가게 하기 
 
-                user_primaryKey : 2,    // 현재 dj 가 id 2번이라 임시로
+                user_primaryKey : req.decode.id,    // 현재 dj 가 id 2번이라 임시로
                     // [TODO ✅]
                         // islogin 에서 가져오기? 
                         // user 가 만들어지는 순간 id 를 파악해서 가져오기 
@@ -68,9 +89,24 @@ const { error } = require('console');
                 title : body.title, 
                 content : body.content, 
                 post_img : file.filename,       
-                    // [해석] 이 주소를 img 태그의 src 에 넣으면 보여진다. 
-
+                    // [해석] 이 주소를 img 태그의 src 에 넣으면 보여진다.
+                    
             })
+
+
+            // POST 생성 후 User 의 exp 1 증가 | ⭐⭐⭐⭐⭐⭐⭐⭐ 
+                const user = await User.findOne(
+                    {where : {id : req.decode.id}}
+                );
+
+                if (user) {
+                    user.exp += 1
+                    await user.save();
+                } else { 
+                    console.log("exp 증가 저장 못 했어")
+                }
+
+
                 
             // 3) 사용자가 봤으면 하는 화면으로 redirect 시키기
                 
@@ -109,7 +145,7 @@ const { error } = require('console');
             // 0) 필요한 값 확인 및 할당
                 console.log("@ boardController > boardItemView 입성")
                 console.log("islogin 실행 후 값 들어오는지 보자 💁‍♀️" )
-                // console.log("islogin 실행 후 값 들어오는지 보자 💁‍♀️" ,  req.decode)
+                console.log("islogin 실행 후 값 들어오는지 보자 💁‍♀️" ,  req.decode)
 
                 const _userTable_ID = req.decode.id 
                 const _userTable_userId = req.decode.user_id 
@@ -141,7 +177,8 @@ const { error } = require('console');
                         // 여기에 지금 작성중인 postId 값이 넘어와야 함 
                         // axios 를 통해 넘어올 수 밖에 없는데? 
                     include : [
-                        {model : Comment}
+                        {model : Comment} , 
+                        {model : User}
                     ]
                 });
 
@@ -360,6 +397,7 @@ const { error } = require('console');
 // 좋아요 버튼 
     exports.likesBtn = async (req,res) => {
 
+        const _likeClickUsers = []
         try {
             // 필요한 데이터 도착 확인
             console.log("📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌")
@@ -380,27 +418,54 @@ const { error } = require('console');
 
 
             // [새로운 시도] 🔵 작동함 | 
-                // post 테이블에서 postid 에 해당하는 row 찾기
+
+                // 1. post 테이블에서 postid 에 해당하는 row 찾기
                 const post = await Post.findByPk(clickedPostID)
                 
-                // 찾았는데 없으면 에러 메시지
-                if(!post) {
-                    console.log("그 포스트 id 에 해당하는 포스트 없어");
-                    return
+                    // 1.1 찾았는데 없으면 에러 메시지
+                    if(!post) {
+                        console.log("그 포스트 id 에 해당하는 포스트 없어");
+                        return
+                    }
+
+
+                // 2. 
+                    // 기존 체크 이력 확인 
+                        // clickedPostUserID 이 값이 post테이블의 clickedPostID값  likeClickUser 속성값 안에 있니? 
+                const clickedPostData = await Post.findOne({
+                    where : {
+                        id : clickedPostID
+                    }
+                })
+                console.log("🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌 클릭된 게시글에 들어있는 것 : " , clickedPostData)
+
+                if (clickedPostData) {
+                    _likeClickUsers.push(clickedPostData.likeClickUser.split(','));
+                }
+                console.log("🙌🙌🙌🙌🙌🙌 이 게시글에 좋아요를 클릭한 유저들 모음 :" , _likeClickUsers)
+
+                if (_likeClickUsers[0].includes(clickedPostUserID)) {
+                    console.log("좋아요 중복 클릭임!🙅‍♀️🙅‍♂️")
+                } else {
+                    // 있으면, likes 속성 값 1 증가 
+                    await post.increment('likes' , {by : 1});
+                    
+                    // 클릭한 유저 이름을 추가 
+                    _likeClickUsers.push(clickedPostUserID)
+                    console.log("좋아요 클릭 유저 추가" , _likeClickUsers)
+
+                    const clickeUserUpdatePost = await post.update( {likeClickUser : _likeClickUsers.join(',')} );
+    
+                    // 유저 업데이트 한거 확인 
+                    console.log("좋아요 클릭버튼 유저 업데이트 완료" );
+                    console.log("좋아요 클릭버튼 유저 업데이트 완료" , clickeUserUpdatePost);
+                    
+                    // 클라에 보내기
+                    res.json()
+
                 }
 
-                // 있으면, likes 속성 값 1 증가 
-                await post.increment('likes' , {by : 1});
                 
-                // 클릭한 유저 이름을 추가 
-                const clickeUserUpdatePost = await post.update( {likeClickUser : clickedPostUserID} );
-
-                // 유저 업데이트 한거 확인 
-                console.log("좋아요 클릭버튼 유저 업데이트 완료" );
-                console.log("좋아요 클릭버튼 유저 업데이트 완료" , clickeUserUpdatePost);
-                
-                // 클라에 보내기
-                res.json()
 
             // [과거 코드] 작동함 🔵 | 다만, post.findBypk 가 반복되는 것 같아 줄여보기 
 
@@ -579,7 +644,7 @@ exports.boardListPages = async (req, res) => {
                 // console.log("query 문에서 받아졌나요~" , req.query.page)
             
                 // 한 페이지당 몇개 포스팅?
-                const postsPerPage = 10;
+                const postsPerPage = 32;
 
                 // 사용자가 보고싶어서 누른 페이지
                 const page = req.query.num

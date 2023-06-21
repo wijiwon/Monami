@@ -14,36 +14,95 @@
     #nameChange{
       display: none;
     }
-
     .file{
       display: none;
     }
+    .gameMain {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100vh;
+    }
+    .header, .footer {
+      flex: 1;
+      padding: 20px;
+      border: 3px solid #fff;
+      background-color: #0e4734;
+    }
+    .container {
+      flex: 2;
+      display: flex;
+      justify-content: space-around;
+      padding: 20px;
+      border: 3px solid #fff;
+      background-color: #0e4734;
+    }
+    .sidebar, .middlebar, .rightbar {
+      flex: 1;
+      margin: 10px;
+      padding: 20px;
+      border: 3px solid #fff;
+      background-color: #0e4734;
+    }
+    .middlebar {
+      flex: 2;
+    }
   </style>
-</head>
-<body>
-  <h1>마이페이지</h1>
-  <a href="/main">메인페이지</a>
-  <div>
-    <img src="" alt="" id="img_file">
-  </div>
+  </head>
+  <body>
+    <div class="mypageAll">
+      <div class="header">
+        메인화면 이동
+        <img style="width: 1100px; height: 110px;" src="#" alt="">
+      </div>
+    </div>
 
-    <button class="img_change" id="img_change">이미지 변경</button>
+    <div class="container">
+      <div class="sidebar">
+        왼쪽
+      </div>
 
-    <input class="file" type="file" id="file" onchange="readURL(this);">
+      <div class="middlebar">
+        <div>
+          <img src="" alt="" id="img_file">
+        </div>
 
+        <div class="user_info">
+          <div>
+            <button class="img_change" id="img_change">이미지 변경</button>
+            <input class="file" type="file" id="file" onchange="readURL(this);">
+          </div>
   
-  <div>
-    <span>닉네임 : </span>
-    <span id="user_name"></span>
-    <input type="text" id="nameChange">
-    <button id="nickChange">닉네임 변경</button>
-  </div>
-  <div>
-    <span>my exp : </span>
-    <span id="user_exp"></span>
-  </div>
-  <button id="uploadBtn">등록하기</button>
-</body>
+          <div>
+            <span>닉네임 : </span>
+            <span id="user_name"></span>
+            <input type="text" id="nameChange">
+            <button id="nickChange">닉네임 변경</button>
+          </div>
+  
+          <div>
+            <span>my exp : </span>
+            <span id="user_exp"></span>
+          </div>
+        </div>
+        
+        <div>
+          <button id="uploadBtn">등록하기</button>
+          <a href="/main">메인페이지</a>
+        </div>
+
+      </div>
+
+      <div class="rightbar">
+        오른쪽
+      </div>
+    </div>
+
+    <div class="footer">
+      footer
+    </div>
+
+  </body>
 <script>
   window.onload = async function(){
     await getMypage();

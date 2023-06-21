@@ -801,18 +801,19 @@
                 console.log(gamestep);
                 startRecording()
                 console.log("--------------------------찐찐찐 2단계------------------------------");
-                // 내가 첫 번째 인덱스면
-                if (MyIndex == 0) {
+                // 내가 마지막 인덱스면 0번 인덱스를 가리키고
+                if (MyIndex == lastIndex) {
                     console.log(gamestep);
 
-                    viewIndex = questions[lastIndex];
+                    viewIndex = questions[0];
                     console.log("내가 보는 제시어의 인덱스 - ", viewIndex)
                     document.querySelector('.view_question').innerHTML = viewIndex[1];
                 }
+                // 마지막 인덱스가 아니면 내 다음의 인덱스를 가리킨다.
                 else {
                     console.log(gamestep);
 
-                    viewIndex = questions[MyIndex - 1];
+                    viewIndex = questions[MyIndex + 1];
                     console.log("내가 보는 제시어의 인덱스 - ", viewIndex)
                     // console.log("내 이전의 인덱스는????", viewIndex[1])
                     document.querySelector('.view_question').innerHTML = viewIndex[1];
@@ -823,33 +824,8 @@
                 startRecording()
                 console.log("--------------------------찐찐찐 4단계------------------------------");
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                // const targetIndex = (MyIndex + 2) % questions.length;
-                // console.log("이번 타겟의 인덱스 - ", targetIndex)
-
-                // const isTarget = questions[targetIndex];
-                // console.log("이번 타겟의 data - ", isTarget)
-
-                // viewIndex = isTarget;
-                // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
-
-
-                // let isContent = isTarget[1];
-                // isContent = isContent.split(',')
-                // console.log("콘텐츠값은??????", isContent)
-                // const isQue = isContent[isContent.length - 1];
-                // console.log("제시어값은??????", isQue)
-                // document.querySelector('.view_question').innerHTML = isQue;
-                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
-
-                // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
-                
-                let targetIndex;
-                if (MyIndex == 0) {
-                    targetIndex = 1;
-                }
-                else {
-                    targetIndex = 0;
-                }
+                const targetIndex = (MyIndex + 2) % questions.length;
+                console.log("이번 타겟의 인덱스 - ", targetIndex)
 
                 const isTarget = questions[targetIndex];
                 console.log("이번 타겟의 data - ", isTarget)
@@ -857,12 +833,38 @@
                 viewIndex = isTarget;
                 // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
 
+
                 let isContent = isTarget[1];
                 isContent = isContent.split(',')
                 console.log("콘텐츠값은??????", isContent)
                 const isQue = isContent[isContent.length - 1];
                 console.log("제시어값은??????", isQue)
                 document.querySelector('.view_question').innerHTML = isQue;
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
+
+                // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
+                
+                // let targetIndex;
+                // if (MyIndex == 0) {
+                //     targetIndex = 1;
+                // }
+                // else {
+                //     targetIndex = 0;
+                // }
+                
+                // const isTarget = questions[targetIndex];
+                // console.log("이번 타겟의 data - ", isTarget)
+                
+                // viewIndex = isTarget;
+                // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+                
+                // let isContent = isTarget[1];
+                // isContent = isContent.split(',')
+                // console.log("콘텐츠값은??????", isContent)
+                // const isQue = isContent[isContent.length - 1];
+                // console.log("제시어값은??????", isQue)
+                // document.querySelector('.view_question').innerHTML = isQue;
+                //#######################################################################################
             }
 
 
@@ -934,10 +936,12 @@
             console.log("내 인덱스가 나왔을까???", MyIndex)
 
             //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            // const targetIndex = (MyIndex + 3) % questions.length;
+            const targetIndex = (MyIndex + 3) % questions.length;
+            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
             // ##########두명이서 할 경우 3라운드에서는 내 인덱스의 값이 들어와야 한다.#############
-            const targetIndex = MyIndex;
+            // const targetIndex = MyIndex;
+            //###################################################################################
 
             console.log("이번 타겟의 인덱스 값 - ", targetIndex)
 
@@ -1004,30 +1008,8 @@
             console.log("내 인덱스가 나왔을까???", MyIndex)
 
             //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            // const targetIndex = (MyIndex + 2) % questions.length;
-            // const targetIndex = (MyIndex + 2) % questions.length;
-            // console.log("이번 타겟의 인덱스 - ", targetIndex)
-
-            // const isTarget = questions[targetIndex];
-            // console.log("이번 타겟의 data - ", isTarget)
-
-            // viewIndex = isTarget;
-            // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
-
-            // let isContent = isTarget[1];
-            // isContent = isContent.split(',')
-            // console.log("콘텐츠값은??????", isContent)
-            // const isQue = isContent[isContent.length - 1];
-            // console.log("제시어값은??????", isQue)
-            // document.querySelector('.view_question').innerHTML = isQue;
-
-            // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
-            if (MyIndex == 0) {
-                const targetIndex = 1;
-            }
-            else {
-                const targetIndex = 0;
-            }
+            const targetIndex = (MyIndex + 2) % questions.length;
+            console.log("이번 타겟의 인덱스 - ", targetIndex)
 
             const isTarget = questions[targetIndex];
             console.log("이번 타겟의 data - ", isTarget)
@@ -1041,6 +1023,29 @@
             const isQue = isContent[isContent.length - 1];
             console.log("제시어값은??????", isQue)
             document.querySelector('.view_question').innerHTML = isQue;
+            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+            // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
+            // if (MyIndex == 0) {
+            //     const targetIndex = 1;
+            // }
+            // else {
+            //     const targetIndex = 0;
+            // }
+
+            // const isTarget = questions[targetIndex];
+            // console.log("이번 타겟의 data - ", isTarget)
+
+            // viewIndex = isTarget;
+            // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+
+            // let isContent = isTarget[1];
+            // isContent = isContent.split(',')
+            // console.log("콘텐츠값은??????", isContent)
+            // const isQue = isContent[isContent.length - 1];
+            // console.log("제시어값은??????", isQue)
+            // document.querySelector('.view_question').innerHTML = isQue;
+            //#########################################################################################
 
             // 추가한부분
             try {
@@ -1103,9 +1108,11 @@
 
 
             //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            //    const targetIndex = (MyIndex + 1) % questions.length;
+               const targetIndex = (MyIndex + 1) % questions.length;
+            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             // ##########두명이서 할 경우 5라운드에서는 내 인덱스의 값이 들어와야 한다.#############
-            const targetIndex = MyIndex;
+            // const targetIndex = MyIndex;
+            //###################################################################################
 
 
 

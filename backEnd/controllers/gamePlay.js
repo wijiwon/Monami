@@ -31,8 +31,11 @@ exports.DrawingAdd = async (req, res) => {
             room_primaryKey: room.id
         });
         const lastDrawing = drawing.id;
+        const drawing2 = await Drawing.findOne({where : {id : lastDrawing}});
         // console.log("내가 서버에서 보내준 그림의 id 값은?????????", lastDrawing)
         // res.sendStatus(200);
+        console.log({data : { drawing, lastDrawing }}, "22222222222222222222222222222")
+        console.log(drawing2, "22222222222222222222222222222")
         res.status(200).json({ drawing, lastDrawing });
 
     } catch (error) {
@@ -47,8 +50,9 @@ exports.viewVideo = async (req, res) => {
         const { Drawid } = req.body;
         console.log("나는 그림아이디가 필요해..... 보내줘어어억",Drawid)
         const draw = await Drawing.findOne({ where: { id: Drawid } });
-        // console.log("왜 재생안되는데????????????",draw.content);
+        console.log("왜 재생안되는데????????????",draw);
         const videoData = draw.content;
+        console.log(videoData.toString("base64"), "222222222222222222221321321312312");
         res.status(200).set({
             'Content-Type': 'video/webm',
             'Content-Length': videoData.length
@@ -60,8 +64,8 @@ exports.viewVideo = async (req, res) => {
         // res.end(videoData);
 
     } catch (error) {
+        console.log("viewVideodddd")
         console.log(error);
-        res.sendStatus(500);
     }
 }
 
@@ -88,7 +92,7 @@ exports.DrawQueUpdate = async (req, res) => {
         console.log("제시어 내용도 잘 나올까?????", queContent);
 
         await Question.update({content: queContent.toString()}, {where: {id: queNum}})
-
+        res.send();
 
 
     } catch (error) {
@@ -98,7 +102,7 @@ exports.DrawQueUpdate = async (req, res) => {
 
 
 // 첫 번째 제시어를 입력하는 함수
-exports.firstQuestionInput = async (req, ree) => {
+exports.firstQuestionInput = async (req, res) => {
     try {
         const { value } = req.body;
         const { decode } = req;
@@ -129,6 +133,7 @@ exports.firstQuestionInput = async (req, ree) => {
 
 
         // }
+        res.send()
     } catch (error) {
         console.log(error);
     }
@@ -137,30 +142,35 @@ exports.firstQuestionInput = async (req, ree) => {
 
 // 두 번째 제시어를 입력하는 함수
 exports.TwoQuestionInput = async (req,res)=>{
-    const { room } = req;
-    const {id, value, queValue} = req.body;
-    console.log("정답 입력자 아이디는????????", id);
-    console.log("정답은????????", value);
-    console.log("제시어의 아이디는????????", queValue);
-
-    // 현재 제시어의 데이터값
-    const isQue = await Question.findOne({where: {room_primaryKey: room.id, id: queValue}})
-    console.log("현재 제시어는??????????",isQue.dataValues.content);
-    // 제시어의 content 값
-    const isCon = isQue.dataValues.content;
-    // content값 배열화
-    const isArr = isCon.split(',');
-    console.log("배열이 잘 완성되었을까요????? ㄷㄱㄷㄱㄷㄱ",isArr)
+    try {
+        const { room } = req;
+        const {id, value, queValue} = req.body;
+        console.log("정답 입력자 아이디는????????", id);
+        console.log("정답은????????", value);
+        console.log("제시어의 아이디는????????", queValue);
     
-    const Insert = [];
-    Insert.push(isCon);
-    Insert.push(id);
-    Insert.push(value);
-    console.log("정답 입력자 아이디랑 정답 내용이 잘 들어갈까요????? ㄷㄱㄷㄱㄷㄱ",Insert)
-    const content = Insert.toString();
-    console.log("문자열????? ㄷㄱㄷㄱㄷㄱ",content)
-
-    await Question.update({content : content}, {where: {id:queValue}})
+        // 현재 제시어의 데이터값
+        const isQue = await Question.findOne({where: {room_primaryKey: room.id, id: queValue}})
+        console.log("현재 제시어는??????????",isQue.dataValues.content);
+        // 제시어의 content 값
+        const isCon = isQue.dataValues.content;
+        // content값 배열화
+        const isArr = isCon.split(',');
+        console.log("배열이 잘 완성되었을까요????? ㄷㄱㄷㄱㄷㄱ",isArr)
+        
+        const Insert = [];
+        Insert.push(isCon);
+        Insert.push(id);
+        Insert.push(value);
+        console.log("정답 입력자 아이디랑 정답 내용이 잘 들어갈까요????? ㄷㄱㄷㄱㄷㄱ",Insert)
+        const content = Insert.toString();
+        console.log("문자열????? ㄷㄱㄷㄱㄷㄱ",content)
+    
+        await Question.update({content : content}, {where: {id:queValue}})
+        res.send();
+    } catch (error) {
+        
+    }
 
 }
 

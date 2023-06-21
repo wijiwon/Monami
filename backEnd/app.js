@@ -28,21 +28,21 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use("/img", express.static(path.join(__dirname, "image")));
 
-app.use(cors({
-    origin:"youdonghee.shop",
-    credentials: true
-}));
+// app.use(cors({
+//     origin:"youdonghee.shop",
+//     credentials: true
+// }));
 
 // 수정중 입니다
 // app.use(cookieParser());
 
 
 
-// app.use(cors({
-//     origin:"http://127.0.0.1:5501",
-//     credentials:true
-// }
-// ));
+app.use(cors({
+    origin:"http://127.0.0.1:5501",
+    credentials:true
+}
+));
 
 app.use(session({
     name: "token",

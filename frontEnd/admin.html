@@ -8,24 +8,87 @@
   <title>Document</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
+<style>
 
+  .tablee{
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    /* border: solid 3px green; */
+  }
+  .tablee th{
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+  }
+  .tablee td {
+    border: 2px solid #dddddd;
+    padding: 8px
+  }
+  .tablee tr:nth-child(even) {
+  background-color: #e2f5d3;
+  }
+
+  .headerCelll,
+  .celll{
+    border: 2px solid #dddddd;
+  }
+
+  .tablee td:first-child {
+    background-color:  #4CAF50;
+}
+/* Styling the button */
+.approveBtn {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition-duration: 0.4s; /* Optional for smooth transition */
+}
+
+/* Changing the color on hover */
+.approveBtn:hover {
+    background-color: #45a049;
+}
+</style>
 <body>
-  <h1>어드민 페이지</h1>
 
-  회원가입했을때 회원 정보들 불러와서
-  테이블만들어주기
-  foreach 로 회원 정보 그려주고
-  수락 거절 만들고
-  수락하면 숫자 1올려줌
   <h1 class="noUser" id="noUser">회원가입 한 유저가 없습니다</h1>
-  <div id="adminTableContainer">
-    <table>
-      <tr>
-        <th>헤더</th>
+
+  <div class="adminTableContainer" id="adminTableContainer">
+    <table class="tablee">
+      <tr class="headerRoww">
+        <th class="headerCelll">헤더1</th>
+        <th class="headerCelll">헤더2</th>
+        <th class="headerCelll">헤더3</th>
+        <th class="headerCelll">헤더4</th>
+        <th class="headerCelll">헤더5</th>
       </tr>
-      <tr>
-        <td>td</td>
+      <tr class="roww">
+        <td class="celll">td1</td>
+        <td class="celll">td2</td>
+        <td class="celll">td3</td>
+        <td class="celll">td4</td>
+        <td class="celll">
+          <button class="approveBtn">승인</button>
+        </td>
       </tr>
+      <tr class="roww">
+        <td class="celll">td1</td>
+        <td class="celll">td2</td>
+        <td class="celll">td3</td>
+        <td class="celll">td4</td>
+        <td class="celll">
+          <button>승인</button>
+        </td>
+      </tr>
+
     </table>
 
   </div>
@@ -65,11 +128,13 @@
           actionsHeaderCell.textContent = "승인";
           headerRow.appendChild(actionsHeaderCell);
           actionsHeaderCell.classList.add("actionsHeaderCell");
+          // actionsHeaderCell 랑 똑같이 스타일주면됨
           table.appendChild(headerRow);
   
           // row (tr,td)
           data.forEach((item) => {
             const row = document.createElement("tr");
+            row.classList.add("roww");
             // 값만 뽑기
             Object.values(item).forEach((value) => {
               const cell = document.createElement("td");

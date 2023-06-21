@@ -28,7 +28,7 @@
     if (userPw1 !== userPw2) {
       alert("비밀번호 불일치");
     }
-    axios.post('http://127.0.0.1:4000/join',{
+    axios.post('/join',{
       
       data : {
         user_id : user_id.value,
@@ -39,7 +39,13 @@
     }).then((e)=>{
       console.log(e);
       if (e.data == "완료") {
-        window.location.href = "http://127.0.0.1:5501/frontEnd/main.html"
+        window.location.href = "/main"
+      }
+      if (e.data == "중복된 아이디 입니다") {
+        alert("중복된 아이디 입니다");
+      }
+      if (e.data == "중복된 닉네임입니다") {
+        alert("중복된 닉네임입니다");
       }
     })
   }

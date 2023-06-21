@@ -22,7 +22,7 @@
 </head>
 <body>
   <h1>마이페이지</h1>
-  <a href="http://127.0.0.1:5500/Monami/frontEnd/main.html">메인페이지</a>
+  <a href="/main">메인페이지</a>
   <div>
     <img src="" alt="" id="img_file">
   </div>
@@ -45,11 +45,14 @@
   <button id="uploadBtn">등록하기</button>
 </body>
 <script>
-  window.onload = getMypage();
+  window.onload = async function(){
+    await getMypage();
+  } 
+    
 
   async function getMypage() {
     try {
-      const data = await axios.get("http://127.0.0.1:4000/mypage",{
+      const data = await axios.get("/mypage/hi",{
         withCredentials : true,
       }).then((e)=>{
         // console.log();
@@ -99,11 +102,17 @@
       form.append("nickName",user_name.innerHTML);
     }
     
-    axios.post("http://127.0.0.1:4000/mypage",form,{
+    axios.post("/mypage",form,{
       withCredentials:true,
       "Content-Type" : "multipart/form-data"
     }).then((e)=>{
-      window.location.reload();
+      console.log("머여",e);
+      if (e.data.message == "중복된 닉네임입니다") {
+        alert("중복된 닉네임입니다");
+        nameChange.value = "";
+      }else{
+        window.location.reload();
+      }
     }).catch((err)=>{
       console.log("업로드 버튼 오류",err);
     })

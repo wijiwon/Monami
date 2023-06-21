@@ -1,9 +1,7 @@
 const router = require("express").Router();
-
-const { mainloginaccess } = require("../controllers/mainControllers");
 const { islogin } = require("../middleware/isLogin");
+const { gameStart } = require("../controllers/gameStartControlloer");
 
-router.get('/',islogin,mainloginaccess);
-
+router.get('/', islogin, gameStart);
 
 module.exports = router;

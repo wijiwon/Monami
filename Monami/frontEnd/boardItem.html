@@ -389,8 +389,16 @@ body {
 .comment_timeCheck {
     color: gray;
     font-size: 0.7rem;
+    margin-left: 1em;
 }
 
+
+.comment_time_title {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
 
 
 /* 각 댓글 항목 li 中 대댓글 버튼 */
@@ -948,7 +956,10 @@ body {
                                 comment_profileImg_container.classList.add('comment_profileImg_container')
                                 
                                 const comment_profileImg = document.createElement('figure')
-                                comment_profileImg.style.backgroundImage = `url(${profileImgUrl})`
+
+                                // 지금 대댓글에 달린 user 정보가 필요해 ⭐⭐⭐ 
+                                const commentProfileImgUrl = comment.User.profile_img
+                                comment_profileImg.style.backgroundImage = `url(${commentProfileImgUrl})`
 
                                 comment_profileImg.classList.add('comment_profileImg')
                                 comment_profileImg.id = `comment_profileImg_ID_${comment.id}`
@@ -963,15 +974,26 @@ body {
                                     const comment_timeCheck = document.createElement('div');
                                     comment_timeCheck.classList.add("comment_timeCheck")
                                     comment_timeCheck.id = `comment_timeCheck_ID_${comment.id}` 
-                                    comment_timeCheck.textContent = 'today | 1 week ago | created at 11:07'
-                                    comment_item_rightWrap.appendChild(comment_timeCheck)
+                                    
+                                    const comment_time_title = document.createElement('div');
+                                    comment_time_title.classList.add('comment_time_title')
+
+                                    // 날짜 계산 해서 넣기 
+                                        // 그날 이면 => today | 색깔빨강 
+                                        // ex) 7minutes, 1hour, 
+                                    comment_timeCheck.textContent = ` | created at : ${comment.createdAt.split('T')[0]} | `
+
+                                    comment_time_title.appendChild(comment_timeCheck)
+                                    comment_item_rightWrap.appendChild(comment_time_title)
+                                    // comment_userID.appendChild(comment_timeCheck)
 
                                 // b-1) 오른쪽 li wrap 中 유저 아이디 | 레퍼런스에는 제목이 들어감 
                                     const comment_userID = document.createElement('div')
                                     comment_userID.classList.add('comment_userID')
                                     comment_userID.id = `comment_userID_ID_${comment.id}`
-                                    comment_userID.textContent = 'testUSERID | test | test | test';
-                                    comment_item_rightWrap.appendChild(comment_userID)
+                                    comment_userID.textContent = comment.writer_of_targetComment;
+                                    comment_time_title.appendChild(comment_userID)
+                                    comment_item_rightWrap.appendChild(comment_time_title)
                                 
                                 // b-2) 오른쪽 li wrap 中 댓글 본문 
                                     const temp_div = document.createElement('div');
@@ -1779,6 +1801,8 @@ body {
     // update 함수 실행
     post_likesBtn.onclick = () => {
         updateLikes();
+        window.location.reload()
+        
         console.log("좋아요 함수 실행👍👍👍")
     }
 

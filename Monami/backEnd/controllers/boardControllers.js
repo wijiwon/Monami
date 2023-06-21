@@ -178,8 +178,13 @@ const { error } = require('console');
                         // 여기에 지금 작성중인 postId 값이 넘어와야 함 
                         // axios 를 통해 넘어올 수 밖에 없는데? 
                     include : [
-                        {model : Comment} , 
-                        {model : User}
+                        {   
+                            model : Comment , 
+                            include : {model : User}
+                        } , 
+                        {   
+                            model : User
+                        }
                     ]
                 });
 
@@ -207,7 +212,7 @@ const { error } = require('console');
                     user : userWithPosts, 
                     post : postWithComments,
                     loginUser : loginUser,
-                    // comment : comment,
+                    comment : postWithComments,
                 }
                 console.log("게시글 상세에서 보여줄 데이터가 다 들어있나 @boardItemView")
                 // console.log("게시글 상세에서 보여줄 데이터가 다 들어있나 @boardItemView" , result)
@@ -410,11 +415,15 @@ const { error } = require('console');
             // console.log("req.body likeClickUserUserID📌" , req.body.likeClickUserUserID)
             // console.log("req.body clickedPostID📌" , req.body.clickedPostID)
             
+            console.log( "req 에 뭐가 들었나?" , req.decode ) 
+            console.log( "req.decode.id 여기에는? 🚀🚀🚀🚀🚀" , req.decode.id ) 
 
             const clickedPostID = req.body.clickedPostID;
-            const clickedPostUserID = req.body.likeClickUserUserID;
+            // const clickedPostUserID = req.body.likeClickUserUserID;
+            const clickedPostUserID = req.decode.user_id;
             console.log("clickedPostID📌" , clickedPostID)  // 🔵 clickedPostID📌 65
-            console.log("clickedPostID📌" , clickedPostUserID)  
+            console.log("clickedPostUserID" , clickedPostUserID)  
+            console.log("clickedPostUserID 를 갖고 오고 싶었음." , req.decode.id)  
             console.log(req.body.data)
 
 
@@ -429,26 +438,32 @@ const { error } = require('console');
                         return
                     }
 
-
-                // 2. 
-                    // 기존 체크 이력 확인 
-                        // clickedPostUserID 이 값이 post테이블의 clickedPostID값  likeClickUser 속성값 안에 있니? 
+                // 2. 기존 체크 이력 확인 
+                    // [해석] clickedPostUserID 이 값이 post테이블의 clickedPostID값  likeClickUser 속성값 안에 있니? 
                 const clickedPostData = await Post.findOne({
                     where : {
                         id : clickedPostID
                     }
                 })
-                console.log("🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌🙌 클릭된 게시글에 들어있는 것 : " , clickedPostData)
+                    console.log("🙌🙌🙌 클릭된 게시글에 들어있는 것 : " , clickedPostData)
+                    console.log("방금 클릭한 게시글에 기존 좋아요 클릭 유저 : " , clickedPostData.likeClickUser)
 
-                if (clickedPostData) {
+
+                // 3. 기존에 좋아요 클릭한 유저 있는지 여부 확인 -> 비어있으면, 좋아요 명단에 추가
+                if (clickedPostData.likeClickUser != null) {
                     _likeClickUsers.push(clickedPostData.likeClickUser.split(','));
                 }
-                console.log("🙌🙌🙌🙌🙌🙌 이 게시글에 좋아요를 클릭한 유저들 모음 :" , _likeClickUsers)
+                    console.log("🙌🙌🙌🙌🙌🙌 이 게시글에 좋아요를 클릭한 유저들 모음 :" , _likeClickUsers)
 
-                if (_likeClickUsers[0].includes(clickedPostUserID)) {
-                    console.log("좋아요 중복 클릭임!🙅‍♀️🙅‍♂️")
-                } else {
-                    // 있으면, likes 속성 값 1 증가 
+
+                // 4. '좋아요 기존 명단' vs '방금 클릭한 유저' 비교 
+                    // 👉 포함되어 있지 않다면 -> 1) 좋아요 1 증가 실행 2) 좋아요 명단에 추가 
+
+                if (_likeClickUsers.length == 0 || !_likeClickUsers[0].includes(clickedPostUserID)) {
+
+                    console.log("텅 비었거나, 포함되어 있지 않거나 👉 like increase 1 가능한 상황")
+                    
+                    // 중복 클릭 아니면, likes 속성 값 1 증가 
                     await post.increment('likes' , {by : 1});
                     
                     // 클릭한 유저 이름을 추가 
@@ -458,17 +473,16 @@ const { error } = require('console');
                     const clickeUserUpdatePost = await post.update( {likeClickUser : _likeClickUsers.join(',')} );
     
                     // 유저 업데이트 한거 확인 
-                    console.log("좋아요 클릭버튼 유저 업데이트 완료" );
                     console.log("좋아요 클릭버튼 유저 업데이트 완료" , clickeUserUpdatePost);
-                    
-                    // 클라에 보내기
-                    res.json()
 
+                } else {
+                    console.log("좋아요 중복 클릭임!🙅‍♀️🙅‍♂️")
                 }
-
                 
+                // 클라에 보내기
+                res.json({message : 'success'})
 
-            // [과거 코드] 작동함 🔵 | 다만, post.findBypk 가 반복되는 것 같아 줄여보기 
+                // [과거 코드] 작동함 🔵 | 다만, post.findBypk 가 반복되는 것 같아 줄여보기 
 
                     // // post 테이블의 좋아요 컬럼에 저장하기 : 특정 게시글에 특정 열 값을 추가! 해야 함.
                     //     await Post.findByPk(clickedPostID)
@@ -531,14 +545,26 @@ const { error } = require('console');
                     //         .catch ((error) => {
                     //             console.log(error)
                     //         });
-
-
         } catch (error) {
             console.log(error)
         }
-
     }
 
+    // 좋아요 증가 하는 함수 
+    likeIncrease = async () => { 
+        // 중복 클릭 아니면, likes 속성 값 1 증가 
+        await post.increment('likes' , {by : 1});
+
+        // 클릭한 유저 이름을 추가 
+        _likeClickUsers.push(clickedPostUserID)
+        console.log("좋아요 클릭 유저 추가" , _likeClickUsers)
+
+        const clickeUserUpdatePost = await post.update( {likeClickUser : _likeClickUsers.join(',')} );
+
+        // 유저 업데이트 한거 확인 
+        console.log("좋아요 클릭버튼 유저 업데이트 완료" );
+        console.log("좋아요 클릭버튼 유저 업데이트 완료" , clickeUserUpdatePost);
+    }
 
 
 
@@ -673,7 +699,10 @@ exports.boardListPages = async (req, res) => {
                     {model : Comment},
                     {model : User}
                 ], 
-                order : [["createdAt" , "DESC"]]     // 최신순이 위로 오도록
+                // order : [["views" , "DESC"]]     // '조회수' 가 '제일 위' 로 오도록
+                // order : [["likes" , "DESC"]]     // '좋아요' 가 '제일 위' 로 오도록
+                order : [["createdAt" , "DESC"]]     // '최신순' 이 '제일 위' 로 오도록
+                
             });
             console.log( "@pagenation , sequelize 에서 필요한거 받나? ")
             // console.log( "@pagenation , sequelize 에서 필요한거 받나? ", postsWithCommentsUsers)

@@ -285,6 +285,17 @@
     }
 
 
+    .likesBtn { 
+
+        width: 100%;
+        padding: 0.5em;
+        /* height: 20px; */
+        background-color: yellow;
+
+    }
+
+
+
 /* 🔵 각각의 아이템 하위 > '사진' 넣는 부분 */
     /* 🔹 레퍼런스 | figure 태그 | style 속성으로 이미지를 갖고 오고 있음. */
     .card_list_image {
@@ -520,7 +531,7 @@
 
         cursor: pointer;
         width: 20em;
-        height: 25em;
+        height: 20em;
     }
 
     /* ⭐ 호버 디자인도 해보고 싶어 ⭐⭐⭐ */
@@ -911,6 +922,9 @@
 
 // getView 함수 
     async function getView(arrPostWithCommentUser , page_num = 1 ) {
+
+
+
         try {
             // 1. 필요한 데이터 가져오기 
 
@@ -1232,70 +1246,91 @@
 
 
 // 🔹 view 초기화 시키는 함수 | 이게 없으면 누적되어서 나옴 
-    initializedView = async (arrPostWithCommentUser , page_num) => {
-
-        // post 내용들 전부 비우기
-            posts_wrapper.innerHTML = "";
-
-        // page1, page2 .. 버튼 전부 지우기 
-            page_navigation.innerHTML = "";
-
-        await getView(arrPostWithCommentUser , page_num)
+    initializedView = (arrPostWithCommentUser , page_num) => {
+        return new Promise ( async (resolve, reject) => {
+            try {
+                // post 내용들 전부 비우기
+                    posts_wrapper.innerHTML = "";
+        
+                // page1, page2 .. 버튼 전부 지우기 
+                    page_navigation.innerHTML = "";
+        
+                await getView(arrPostWithCommentUser , page_num)
+    
+                resolve()
+                
+            } catch (error) {
+                reject(error)
+            }
+        }
+        )
     }
 
 
 // 🔹 좋아요 버튼 클릭하면 -> id 찾고 -> like 증가 함수 찾기
-    const findClickedBtn = async () => {
+    const findClickedBtn = () => {
+        return new Promise ( async(resolve, reject) => {
 
-        try {
-            // 좋아요 버튼 모두 가져오기
-            const likesButtons = document.getElementsByClassName('likesBtn')
-            console.log("좋아요 버튼 있어? 📌 " , likesButtons)
-
-            // 배열 만들어서 -> 하나씩 돌면서 -> 숫자 증가시키는 기능 붙이기
-            Array.from(likesButtons).forEach((btn) => {
-                btn.onclick = async (event) => {
-                    const clickedPostID = event.target.id.split('_')[1]
-                        console.log("clickedPostID 확인" , event.target.id.split('_')[1])   // clickedPostID 확인 58
-                        console.log(clickedPostID)  // 58
-
-                        // 이슈 
-                            // 과연, 버튼을 클릭했을 때 나오는 숫자가, 진짜 그 게시물의 post ID 인가? 
-                            // 그 태그의 id 일 것 
-                            // 그러면, 저 내용에 post ID 를 묻혀 놓고, 보이게는 안 하면 되는거 아냐? ⭐⭐⭐⭐⭐⭐
-    
-                    // clickedLikeBtn 이 버튼 id 에 대해 숫자 증가해주세요~ 
-                    await IncreaseLikeNum(clickedPostID)
-
-                    // 그리고 다시 그려주세요 
-                        // 필요한 이유 : 이걸 안 하면, 새로고침 해야, 좋아요가 올라감 
-                        
-                        // [시도 1] 
-                            // initializedView(arrPostWithCommentUser, clickedPage) 
-                            // 안 돼 📛 
-
-                        // [시도 2] 
-                            // await initializedView( );
-                                // [해석]
-                                    // 된다! 🔵🔵🔵  
-                                    // 음. 왜 되는거지? 
-                                    // 우선, await 를 써줬기 때문인가? 
-                                // 문제점
-                                    // 그냥, 한 번 밖에 안 된다. 
-                                    // 그러면, 그냥 새로고침 하는게 나으려나? 
-
-                        // [시도 3]
-                            // 이걸로 선택 ⭐⭐⭐⭐⭐⭐⭐⭐ 
-                            // 어차피, 다시 데이터를 가져올 때, 다시 그릴 때, 화면이 한번 깜빡인다. 
-                            // 그럴거면, 그냥 '새로고침' 하게 하면 될듯
-                            window.location.reload();
-                        
-                }
-            })
             
-        } catch (error) {
-            console.log(error)
-        }
+            try {
+                // 좋아요 버튼 모두 가져오기
+                const likesButtons = document.getElementsByClassName('likesBtn')
+                console.log("좋아요 버튼 있어? 📌 " , likesButtons)
+    
+                // 배열 만들어서 -> 하나씩 돌면서 -> 숫자 증가시키는 기능 붙이기
+                Array.from(likesButtons).forEach((btn) => {
+                    btn.onclick = async (event) => {
+                        const clickedPostID = event.target.id.split('_')[1]
+                            console.log("clickedPostID 확인" , event.target.id.split('_')[1])   // clickedPostID 확인 58
+                            console.log(clickedPostID)  // 58
+    
+                            // 이슈 
+                                // 과연, 버튼을 클릭했을 때 나오는 숫자가, 진짜 그 게시물의 post ID 인가? 
+                                // 그 태그의 id 일 것 
+                                // 그러면, 저 내용에 post ID 를 묻혀 놓고, 보이게는 안 하면 되는거 아냐? ⭐⭐⭐⭐⭐⭐
+        
+                        // clickedLikeBtn 이 버튼 id 에 대해 숫자 증가 해주세요~ 
+                        await IncreaseLikeNum(clickedPostID)
+                        
+                        
+                        // window.location.href = 'http://127.0.0.1:4000/board/list/view'
+                        // 그리고 다시 그려주세요 
+                            // 필요한 이유 : 이걸 안 하면, 새로고침 해야, 좋아요가 올라감 
+                            
+                            // [시도 1] 
+                                // initializedView(arrPostWithCommentUser, clickedPage) 
+                                // 안 돼 📛 
+    
+                            // [시도 2] 
+                                // await initializedView( );
+                                    // [해석]
+                                        // 된다! 🔵🔵🔵  
+                                        // 음. 왜 되는거지? 
+                                        // 우선, await 를 써줬기 때문인가? 
+                                    // 문제점
+                                        // 그냥, 한 번 밖에 안 된다. 
+                                        // 그러면, 그냥 새로고침 하는게 나으려나? 
+    
+                            // [시도 3]
+                                // 이걸로 선택 ⭐⭐⭐⭐⭐⭐⭐⭐ 
+                                // 어차피, 다시 데이터를 가져올 때, 다시 그릴 때, 화면이 한번 깜빡인다. 
+                                // 그럴거면, 그냥 '새로고침' 하게 하면 될듯
+                        // await window.location.reload();
+                            
+                    }
+                })
+                
+            } catch (error) {
+                console.log(error)
+            }
+
+
+            // 완료
+            resolve()
+            }
+        )
+        // console.log("지금 로그인 한 유저 👉 " , req.decode.id);
+
     }
 
 
@@ -1317,22 +1352,32 @@
 
 
             // 서버로 보내기
-            await axios.post("http://127.0.0.1:4000/board/likes" , data , {
+            const result = await axios.post("http://127.0.0.1:4000/board/likes" , data , {
                 withCredentials : true,
                 "Content-Type" : "json/application"     // form 에 담길 데이터 타입 설정
             })
             
+            console.log( "result.data.message🎏🎏🎏" , result.data.message )
+            if (result.data.message == 'success') {
+                window.location.reload()                
+            }
+
+            // await getView(arrPostWithCommentUser)
             // 다시 그려주기? 
                 // 그러려면, clickedPage 이걸, 전역변수화?
-                initializedView(arrPostWithCommentUser, clickedPage)
+            
+            
+            // try {
+            //     await initializedView (arrPostWithCommentUser, clickedPage)
+            //     window.location.reload()
+            // } catch (error) {
+            //     console.log(error)
+            // }
 
         } catch (error) {
             console.log(error)
         }
-
     }
-
-
 
 
 // 🔹 page navigation ex) 1page, 2page 클릭하면, 보내는 함수 
@@ -1346,7 +1391,6 @@
                     initializedView(arrPostWithCommentUser, clickedPage)
                 }
             })
-
 
             // [과거코드]
                 // Array.from(pageNumBtns).forEach((btn) => {
@@ -1416,10 +1460,6 @@
             window.location.href = "http://127.0.0.1:4000/board/create"
     }
 
-
-
-
-
 // 🔹 getView 실행 
     document.addEventListener('DOMContentLoaded' , async function() {
         
@@ -1432,7 +1472,13 @@
 
         await initializedView( );
 
-        await findClickedBtn();
+        try {
+            await findClickedBtn();
+            // window.location.reload()
+
+        } catch (error) {
+            console.log(error)
+        }
 
     })
 

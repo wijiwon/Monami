@@ -659,12 +659,6 @@ exports.boardListPages = async (req, res) => {
 }
 
 
-
-
-
-
-
-
 // [GET] 페이지네이션
     exports.pagenation = async (req, res) => {
 
@@ -704,23 +698,70 @@ exports.boardListPages = async (req, res) => {
 
             // 2) sequelize 페이지네이션  
 
-
-            const postsWithCommentsUsers = await Post.findAll({
-
-                limit : limit,        // 한 페이지에 몇 개의 포스팅이 보이게 할 것 인가
-                offset : offset,        // post 에서, 몇 번째 POST ID 에서 찾을 것 인가 
-                include : [
-                    {model : Comment},
-                    {model : User}
-                ], 
-                order : [[`${orderOption}` , "DESC"]]     // '들어온값' 이 '제일 위' 로 오도록
-                // order : [["views" , "DESC"]]     // '조회수' 가 '제일 위' 로 오도록
-                // order : [["likes" , "DESC"]]     // '좋아요' 가 '제일 위' 로 오도록
-                // order : [["createdAt" , "DESC"]]     // '최신순' 이 '제일 위' 로 오도록
+            if (orderOption === 'views') {
+                let postsWithCommentsUsers = await Post.findAll({
+    
+                    limit : limit,        // 한 페이지에 몇 개의 포스팅이 보이게 할 것 인가
+                    offset : offset,        // post 에서, 몇 번째 POST ID 에서 찾을 것 인가 
+                    include : [
+                        {model : Comment},
+                        {model : User}
+                    ], 
+                    // order : [[`${orderOption}` , "DESC"]]     // '들어온값' 이 '제일 위' 로 오도록
+                    order : [["views" , "DESC"]]     // '조회수' 가 '제일 위' 로 오도록
+                    // order : [["likes" , "DESC"]]     // '좋아요' 가 '제일 위' 로 오도록
+                    // order : [["createdAt" , "DESC"]]     // '최신순' 이 '제일 위' 로 오도록
+                    
+                });
+                // console.log( "@pagenation , sequelize 에서 필요한거 받나? ")
+                // console.log( "@pagenation , sequelize 에서 필요한거 받나? ", postsWithCommentsUsers)
+            } else if (orderOption === 'likes') {
+                let postsWithCommentsUsers = await Post.findAll({
+    
+                    limit : limit,        // 한 페이지에 몇 개의 포스팅이 보이게 할 것 인가
+                    offset : offset,        // post 에서, 몇 번째 POST ID 에서 찾을 것 인가 
+                    include : [
+                        {model : Comment},
+                        {model : User}
+                    ], 
+                    // order : [[`${orderOption}` , "DESC"]]     // '들어온값' 이 '제일 위' 로 오도록
+                    // order : [["views" , "DESC"]]     // '조회수' 가 '제일 위' 로 오도록
+                    order : [["likes" , "DESC"]]     // '좋아요' 가 '제일 위' 로 오도록
+                    // order : [["createdAt" , "DESC"]]     // '최신순' 이 '제일 위' 로 오도록
+                    
+                });
+            } else if (orderOption === 'createdAt') {
+                let postsWithCommentsUsers = await Post.findAll({
+    
+                    limit : limit,        // 한 페이지에 몇 개의 포스팅이 보이게 할 것 인가
+                    offset : offset,        // post 에서, 몇 번째 POST ID 에서 찾을 것 인가 
+                    include : [
+                        {model : Comment},
+                        {model : User}
+                    ], 
+                    // order : [[`${orderOption}` , "DESC"]]     // '들어온값' 이 '제일 위' 로 오도록
+                    // order : [["views" , "DESC"]]     // '조회수' 가 '제일 위' 로 오도록
+                    // order : [["likes" , "DESC"]]     // '좋아요' 가 '제일 위' 로 오도록
+                    order : [["createdAt" , "DESC"]]     // '최신순' 이 '제일 위' 로 오도록
+                    
+                });
+            } else {
+                let postsWithCommentsUsers = await Post.findAll({
+    
+                    limit : limit,        // 한 페이지에 몇 개의 포스팅이 보이게 할 것 인가
+                    offset : offset,        // post 에서, 몇 번째 POST ID 에서 찾을 것 인가 
+                    include : [
+                        {model : Comment},
+                        {model : User}
+                    ], 
+                    // order : [[`${orderOption}` , "DESC"]]     // '들어온값' 이 '제일 위' 로 오도록
+                    // order : [["views" , "DESC"]]     // '조회수' 가 '제일 위' 로 오도록
+                    // order : [["likes" , "DESC"]]     // '좋아요' 가 '제일 위' 로 오도록
+                    order : [["createdAt" , "DESC"]]     // '최신순' 이 '제일 위' 로 오도록
                 
-            });
-            // console.log( "@pagenation , sequelize 에서 필요한거 받나? ")
-            // console.log( "@pagenation , sequelize 에서 필요한거 받나? ", postsWithCommentsUsers)
+            
+            }
+            
 
 
             // 5) 합치기 
@@ -821,30 +862,3 @@ exports.pagenationView = (req, res) => {
 
         res.sendFile(path.join(__dirname , "../../frontEnd/boardList.html"))
     }
-
-// [게시판 목록] [get] 기본 페이지 보여주기 
-    exports.likesView = (req, res) => {
-
-        console.log("likesView controller 입성!⭐⭐⭐⭐⭐⭐")
-        // 1) 데이터 가져오기 
-
-
-        // 2) 데이터 랑 주소랑 같이 보내기 
-
-        res.sendFile(path.join(__dirname , "../../frontEnd/boardList_likes.html"))
-    }
-
-    
-// [게시판 목록] [get] 기본 페이지 보여주기 
-    exports.viewOrderView = (req, res) => {
-
-        console.log("viewOrderView controller 입성!⭐⭐⭐⭐⭐⭐")
-        // 1) 데이터 가져오기 
-
-
-        // 2) 데이터 랑 주소랑 같이 보내기 
-
-        res.sendFile(path.join(__dirname , "../../frontEnd/boardList_views.html"))
-    }
-
-    

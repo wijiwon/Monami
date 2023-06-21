@@ -117,10 +117,11 @@ const { error } = require('console');
                     // [해석]
                         // Post 의 create를 사용 -> newPost 인스턴스가 만들어짐 ⭐⭐⭐
                         // newPost 인스턴스에서 만들어진 테이블 속성에 접근이 가능 ⭐⭐⭐
-            
+                
                 // id 값 포함해서 redirect 시키기
                     // [시도] - 라우터로 보내보기
                         res.json({ redirectURL: `http://127.0.0.1:4000/board/item/${id_post}` });
+                        // res.json({ redirectURL: `http://127.0.0.1:4000/board/item/${id_post}` });
                             // [해석]
                                 // ⭐⭐⭐ 포트를 4000 으로 해야 > 클라이언트에서 보내고, 라우터로 들어간다. 
 

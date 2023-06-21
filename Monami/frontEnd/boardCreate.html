@@ -45,8 +45,18 @@
 
 
 
-.post_img_title {
+.post_img_title_wrap {
     background-color: thistle;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.content_closeBtn { 
+    margin-left: auto;
+    cursor: pointer;
 }
 
 
@@ -141,10 +151,18 @@
     <!-- 하얀색 글쓰는 곳 -->
     <div class="content_wrapper">
 
-        <!-- 1. 맨위 제목 영역 : final touches | -->
-            <div class="post_img_title">
-                <h2>Final touches</h2>
+        <!-- 1. 맨위 제목 영역 : final touches | 취소 버튼 -->
+            <div class="post_img_title_wrap">
+                
+                <!-- 1) 제목 -->
+                <h2 class="post_img_title">Final touches</h2>
+
+                <!-- 2) 취소버튼 -->
+                <div class="content_closeBtn" id="closeBtn">
+                    ❎
+                </div>
             </div>
+
 
 
 
@@ -215,36 +233,36 @@
     </div>
 
 
-    <!-- 👇👇 여기부터는 예전 코드 | 이제 keep 👇👇 -->
+        <!-- 👇👇 여기부터는 예전 코드 | 이제 keep 👇👇 -->
 
-        <!-- 제목 -->
-        <!-- <label for="">제목</label>
-        <input type="text" id="title"> <br> -->
+            <!-- 제목 -->
+            <!-- <label for="">제목</label>
+            <input type="text" id="title"> <br> -->
 
-        <!-- 본문 -->
-        <!-- <label for="">본문 | minimum 200</label> 
-        <input type="text" id="content"> <br> -->
+            <!-- 본문 -->
+            <!-- <label for="">본문 | minimum 200</label> 
+            <input type="text" id="content"> <br> -->
 
-        <!-- 태그 -->
-        <!-- <label for=""> tags | maximum 20 , 추천 태그 </label>
-        <input type="text" id="tags"> -->
+            <!-- 태그 -->
+            <!-- <label for=""> tags | maximum 20 , 추천 태그 </label>
+            <input type="text" id="tags"> -->
 
+            <!-- <br> -->
+
+        <!-- 사진 -->
+        <!-- <input type="file" id="post_img"> <br> -->
+
+        <!-- 사진 미리보기 ✅ -->
+        <!-- <img id="post_img_pv" onerror="style.display='none'" alt=""> -->
+            <!-- [해석] 
+                    onerror="style.display='none'
+                        1) img에 이미지가 없을때 나오는 엑박을 안보이게 해줌 
+                        2) 없어도 되긴 하는 것 같은데, 우선, 해놓음 
+                -->
         <!-- <br> -->
 
-    <!-- 사진 -->
-    <!-- <input type="file" id="post_img"> <br> -->
-
-    <!-- 사진 미리보기 ✅ -->
-    <!-- <img id="post_img_pv" onerror="style.display='none'" alt=""> -->
-        <!-- [해석] 
-                onerror="style.display='none'
-                    1) img에 이미지가 없을때 나오는 엑박을 안보이게 해줌 
-                    2) 없어도 되긴 하는 것 같은데, 우선, 해놓음 
-            -->
-    <!-- <br> -->
-
-    <!-- 글쓰기 버튼 -->
-    <!-- <button id="writeBtn"> 글쓰기 </button> -->
+        <!-- 글쓰기 버튼 -->
+        <!-- <button id="writeBtn"> 글쓰기 </button> -->
 
 
 </body>
@@ -299,52 +317,60 @@
 // 🔹 글쓰기 버튼 클릭시 axios post 요청 
     writeBtn.onclick = async () => {
         
-        // form 인스턴스 생성
-        const form = new FormData();
-
-        // form 객체 안에 데이터 append 하기
-        form.append("title" , title.value);
-        form.append("content" , content.value);
-        form.append("post_img" , post_img.files[0]);
-
-        console.log("[@boardCreate.html] 게시글 제목, 본문, 사진 들어오고 있는지 : " , title.value, content.value, post_img.files[0])
-
-
-        // axios 전송 | await 붙여야❓❓ 
-        await axios.post("http://127.0.0.1:4000/board/create" , form, { 
-            
-            // type 설정 : 설정에 따라, 서버가 기대하는 값이 달라짐
-            "Content-Type" : "multipart/form-data",
-            withCredentials: true,  // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
-
-                // [해석] 헤더의 내용으로, 인코딩된, 폼 데이터로 전송한다고 설정
-                // [주의] : 만약, 텍스트 데이터면, json/application 으로, 이것과 다르게 설정해야 함
-            
-            // isLogin 관련 설정
-            // "Authorization": `Bearer ${token}`
-                // ⭐⭐⭐⭐⭐ 이걸 추가 해야 > 미들웨어 islogin 에서   const authHeader = req.headers.authorization 이 값이 안 비어있게 됨 ⭐⭐⭐⭐⭐
-
-        }).then( (e) => {
-            
-            // redirect 를 수동으로 처리하기 ⭐⭐⭐ 
-                const redirectURL = e.data.redirectURL;
+        try {
+            // form 인스턴스 생성
+            const form = new FormData();
+    
+            // form 객체 안에 데이터 append 하기
+            form.append("title" , title.value);
+            form.append("content" , content.value);
+            form.append("post_img" , post_img.files[0]);
+    
+            console.log("[@boardCreate.html] 게시글 제목, 본문, 사진 들어오고 있는지 : " , title.value, content.value, post_img.files[0])
+    
+    
+            // axios 전송 | await 붙여야❓❓ 
+            const e = await axios.post("http://127.0.0.1:4000/board/create" , form, { 
                 
-                console.log("redirectURL 이게 어떻게 넘어오지? @boardCreate" , redirectURL)
-                window.location.href = redirectURL;
-                    // [이렇게 하는 이유] ⭐⭐⭐⭐⭐⭐⭐⭐
-                        // axios 를 통해서 post 요청을 보내고, redirect 를 하면, 
-                        // axios 통신에 의해, 브라우저가 자동으로 redirect 를 안하는 경우가 생김. 
-                        // 따라서, 서버에서 redirect 할 url 을 json 형식으로 보내고, 그걸 수동으로 처리 해야 함. 
-                        // 다만, 이게 꼭 필요한가? 다른 방법은 없나? 
-            console.log("axios post 잘 전달했고, redirect 수동으로 잘 처리함 🙆‍♂️")
-        }).catch((err) => {
-            console.log(err)
-        })
-
+                // type 설정 : 설정에 따라, 서버가 기대하는 값이 달라짐
+                "Content-Type" : "multipart/form-data",
+                withCredentials: true,  // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+    
+                    // [해석] 헤더의 내용으로, 인코딩된, 폼 데이터로 전송한다고 설정
+                    // [주의] : 만약, 텍스트 데이터면, json/application 으로, 이것과 다르게 설정해야 함
+                
+                // isLogin 관련 설정
+                // "Authorization": `Bearer ${token}`
+                    // ⭐⭐⭐⭐⭐ 이걸 추가 해야 > 미들웨어 islogin 에서   const authHeader = req.headers.authorization 이 값이 안 비어있게 됨 ⭐⭐⭐⭐⭐
+            })
+            // }).then( (e) => {
+                
+                // redirect 를 수동으로 처리하기 ⭐⭐⭐ 
+                    const redirectURL = e.data.redirectURL;
+                    
+                    console.log("redirectURL 이게 어떻게 넘어오지? @boardCreate" , redirectURL)
+                    window.location.href = redirectURL;
+                        // [이렇게 하는 이유] ⭐⭐⭐⭐⭐⭐⭐⭐
+                            // axios 를 통해서 post 요청을 보내고, redirect 를 하면, 
+                            // axios 통신에 의해, 브라우저가 자동으로 redirect 를 안하는 경우가 생김. 
+                            // 따라서, 서버에서 redirect 할 url 을 json 형식으로 보내고, 그걸 수동으로 처리 해야 함. 
+                            // 다만, 이게 꼭 필요한가? 다른 방법은 없나? 
+                console.log("axios post 잘 전달했고, redirect 수동으로 잘 처리함 🙆‍♂️")
+            
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
-
+// 🔹 취소버튼 누르면 -> 게시글 목록으로 이동하기 
+    closeBtn.onclick = () => {
+        try {
+            window.location.href = 'http://127.0.0.1:4000/board/list/view'
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
 

@@ -154,6 +154,7 @@ io.on('connection', (socket) => {
         console.log("나가기", clientsInRoom);
         console.log(roomNum);
         console.log("rooms[roomNum],exitRoom",rooms[roomNum])
+        rooms[roomNum].usernickname.length=0;
         for (let i = 0; i < userid.length; i++) {
             for (let n = 0; n < userid.length; n++) {
                 if (userid[i].userid == clientsInRoom[n]) {
@@ -161,7 +162,7 @@ io.on('connection', (socket) => {
                 }
             }
         }
-        socket.to(roomName).emit('getreadyuser', username);
+        socket.to(roomName).emit('getreadyuser', rooms[roomNum].usernickname);
         // Perform any additional actions or emit events as needed
     });
  
@@ -221,7 +222,9 @@ io.on('connection', (socket) => {
         //         }
         //     }
         // }
-        rooms[roomNum].usernickname=[];
+        console.log(rooms);
+        rooms[roomNum].usernickname.length=0;
+        console.log(rooms);
         for (let i = 0; i < clientsInRoom.length; i++) {
             if(socket.id ==clientsInRoom[i])
             {

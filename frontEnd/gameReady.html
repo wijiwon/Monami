@@ -381,7 +381,6 @@
                     roomExitButton.addEventListener('click', () => {
                         console.log("여기까지안옴 ㅋ");
                         socket.emit('exitRoom',nowRoomNUm);
-                        socket.emit('getreadyuser');
                         console.log("dd");
                         // asd1('.readyUser');
                         console.log("asdsad");
@@ -441,7 +440,11 @@
     })
 
 
-    gamestarts.addEventListener('click', () => {
+    gamestarts.addEventListener('click',async () => {
+        await axios.post('http://127.0.0.1:4000/gameready/gamestatupdatae', { id :nowRoomNUm },
+            {
+                withCredentials: true
+            })
         socket.emit('gamestart')
         // window.location.href="http://127.0.0.1:5501/frontEnd/maingame.html";
     })
@@ -459,12 +462,11 @@
             test3.style.display = "block";
         }, 3000);
         setTimeout(() => {
-<<<<<<< HEAD
-            window.location.href = "http://127.0.0.1:5501/frontEnd/game.html";
-=======
+           // window.location.href = "http://127.0.0.1:5501/frontEnd/game.html";
 
-            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/maingame.html";
->>>>>>> 78b68759ad72c88d519aae9084fb535629f7706f
+
+           // window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/maingame.html";
+            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
         }, 4000);
         
     })
@@ -483,13 +485,9 @@
         test2.style.display = "none";
         test3.style.display = "block";
         setTimeout(() => {
-<<<<<<< HEAD
-            window.location.href = "http://127.0.0.1:5501/frontEnd/game.html";
-=======
 
-            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/maingame.html";
+            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
 
->>>>>>> 78b68759ad72c88d519aae9084fb535629f7706f
 
         }, 1000);
     })
@@ -778,11 +776,17 @@
             }).then((e) => {
                 console.log(e);
                 let num = e.data.id
+                nowRoomNUm=num;
                 socket.emit('createRoom',e.data);
-                joinRoom(num);
+                setTimeout(() => {
+                    joinRoom(num);
+                }, 200);
+                console.log("??여기는 실행되었는가?");
+           
                 
             })
         }, 100);
+       
 
     }
     //--------------------------------------------------------------------------------------------------

@@ -156,3 +156,13 @@ exports.getHost = async(req,res)=>{
     }
 }
 
+exports.gamestatupdatae=async(req,res)=>{
+    try {
+        const {id}=req.body;
+        console.log("gamestatupdatae",id);
+        await Room.update({play:1},{where:{id:id}});
+        res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}

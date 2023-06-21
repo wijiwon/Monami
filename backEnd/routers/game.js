@@ -11,7 +11,7 @@ const upload = multer({ storage: storage });
 
 router.post('/', islogin, isRoom, upload.single('file'), DrawingAdd);
 
-router.get('/getUserinfo',islogin,isRoom,getUserinfo);
+router.post('/getUserinfo',islogin,getUserinfo);
 
 // 저장된 그림을 video로 보여줌 
 router.post('/viewVideo',viewVideo)

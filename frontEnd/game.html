@@ -26,18 +26,20 @@
         .questions.pop,
         .drawings.pop,
         .gameResult.pop {
-            display: none;
+            display: block;
         }
 
         .drawings,
         .questions,
         .gameResult {
-            display: none;
+            display: block;
 
         }
-        .gameResult{
-            display: block;
+
+        .gameResult {
+            display: none;
         }
+
         .questions .row1,
         .drawings .rows1,
         .gameResult .row1 {
@@ -391,6 +393,17 @@
 
 </body>
 <script>
+
+    let gmaeplayer = [];
+    let replay = [];
+    const socket = io.connect('http://localhost:4000');
+    const playerName = document.querySelector('.playerName');
+    console.log("d");
+    socket.on('THrowGameMember', (tmp) => {
+        console.log(tmp);
+        console.log(tmp.rooms[tmp.roomNum].usernickname);
+    })
+
     // const data = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
     //     withCredentials: true
     // }).then((e) => {
@@ -820,6 +833,7 @@
                     // console.log("내 이전의 인덱스는????", viewIndex[1])
                     document.querySelector('.view_question').innerHTML = viewIndex[1];
                 }
+
             }
             // 4단계이면
             else if (gamestep === 4) {
@@ -1168,17 +1182,117 @@
 
     const gameEnd = () => {
         console.log("--------------------------리플레이------------------------------");
-        
+        // Change children with "block" to "none" and vice versa
 
+        // Add "none" class to elements with class "questions", "drawings", and "gameResult"
+        document.querySelectorAll('.questions, .drawings, .gameResult').forEach(element => {
+            element.classList.add('none');
+        });
+
+        // Remove "none" class from elements with class "questions", "drawings", and "gameResult"
+        document.querySelectorAll('.questions.none, .drawings.none, .gameResult.none').forEach(element => {
+            element.classList.remove('none');
+        });
+
+        // Add "block" class to elements with class "gameResult"
+        document.querySelector('.gameResult').classList.add('block');
+
+        getthing()
         //--------------------------------------------------------------------
         // ----다시 하기 클릭은 없는게 좋겠어요..... 방 id 새로 부여해야 하는데 그게 될까여,,,? 그냥 나가기로하죠.....
+
+        replaying();
+         
+       socket.on('replaySelect1', (tmp) => {
+            console.log("replaySelect1", tmp);
+            console.log(replay[tmp]);
+        })
+
 
 
 
     }
 
+    async function getthing() {
+        axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+            responseType: 'json',
+            withCredentials: true
+        }).then((e) => {
+            console.log("마지막 기능 e");
+            for (let i = 0; i < e.data.questionData.length; i++) {
+                gmaeplayer.push(e.data.questionData[i][2]);
+                console.log("gmaeplayer", gmaeplayer);
+                let obj = {}
+                obj.gmaeplayerID = e.data.questionData[i][2];
+                obj.content = e.data.questionData[i][1];
+                obj.nickname = "";
+                replay[i] = { ...obj };
 
 
+            }
+            console.log(replay);
+            gething2();
+        })
+    }
+    getthing();
+    async function gething2() {
+        try {
+            await axios.post('http://127.0.0.1:4000/gameplay/getUserinfo', { id: gmaeplayer }, {
+                responseType: 'json',
+                withCredentials: true
+            }).then((e) => {
+                console.log("여기에 접근하는가?");
+                console.log(e)
+                for (let i = 0; i < e.data.length; i++) {
+                    gmaeplayer[i] = (e.data[i].username)
+                    replay[i].nickname = e.data[i].username;
+                }
+                console.log(gmaeplayer);
+            })
+            console.log(replay);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+
+    async function fetchData() {
+        try {
+
+            const response = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
+                withCredentials: true
+            });
+
+            console.log("mite")
+            console.log(response);
+            console.log(response.data._room.room_manager);
+            // gmaeplayer[0]=response.data._room.room_manager;
+            // 소켓전송ㄴ
+            socket.emit('rein', response.data._room.id);
+            console.log("들어가벌임", response.data._room.id)
+            console.log(gmaeplayer)
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+function repalying(){
+    gmaeplayer.forEach((element, index) => {
+        console.log(element);
+        let li = document.createElement('li');
+        li.innerHTML = element;
+        li.addEventListener('click', () => {
+            console.log("클릭됌", element);
+            let sdkiojw = index;
+            socket.emit('replaySelect', sdkiojw);
+        })
+        playerName.appendChild(li);
+    })
+
+
+}
+   
 
 
     //-------- 게임 구현 로직 ------------------------------------------------------------------

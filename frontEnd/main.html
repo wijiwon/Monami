@@ -143,7 +143,7 @@
             <div class="button_box">
               <button id="loginBtn">로그인</button>
               <button id="joinBtn"
-                onclick="location.href='http://127.0.0.1:5500/frontEnd/join.html'">회원가입</button>
+                onclick="location.href='http://127.0.0.1:5501/frontEnd/join.html'">회원가입</button>
             </div>
           </div>
 
@@ -159,7 +159,7 @@
             <div class="user_box">
               <img src="" alt="" id="img_file" class="profileImg">
               <button id="joinBtn"
-                onclick="location.href='http://127.0.0.1:5500/frontEnd/mypage.html'">마이페이지</button>
+                onclick="location.href='http://127.0.0.1:5501/frontEnd/mypage.html'">마이페이지</button>
               <button id="logoutBtn">로그아웃</button>
             </div>
 
@@ -287,7 +287,7 @@
       }
       if (e.data.message == "어드민") {
 
-        window.location.href = "http://127.0.0.1:5500/frontEnd/admin.html"
+        window.location.href = "http://127.0.0.1:5501/frontEnd/admin.html"
       }
 
       if (e.data.message == "로그인할 수 없습니다 (승인대기중)") {
@@ -325,12 +325,13 @@
   const gamestart = document.querySelector('.gamebtn');
 
 
+
   gamestart.onclick = () => {
     if (!document.cookie) {
       alert("로그인이 필요합니다")
     }
     else {
-      window.location.href = "http://127.0.0.1:5500/frontEnd/gameReady.html"
+      window.location.href = "http://127.0.0.1:5501/frontEnd/gameReady.html"
     }
   }
 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    #img_file{
+      width: 300px;
+      height: 300px;
+    }
+    #nameChange{
+      display: none;
+    }
+
+    .file{
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>마이페이지</h1>
+  <a href="http://127.0.0.1:5500/Monami/frontEnd/main.html">메인페이지</a>
+  <div>
+    <img src="" alt="" id="img_file">
+  </div>
+
+    <button class="img_change" id="img_change">이미지 변경</button>
+
+    <input class="file" type="file" id="file" onchange="readURL(this);">
+
+  
+  <div>
+    <span>닉네임 : </span>
+    <span id="user_name"></span>
+    <input type="text" id="nameChange">
+    <button id="nickChange">닉네임 변경</button>
+  </div>
+  <div>
+    <span>my exp : </span>
+    <span id="user_exp"></span>
+  </div>
+  <button id="uploadBtn">등록하기</button>
+</body>
+<script>
+  window.onload = getMypage();
+
+  async function getMypage() {
+    try {
+      const data = await axios.get("http://127.0.0.1:4000/mypage",{
+        withCredentials : true,
+      }).then((e)=>{
+        // console.log();
+        // ** innerhtml 은 한번만 실행된다.
+        user_name.innerHTML = e.data.login.username;
+        user_exp.innerHTML = e.data.login.exp;
+        img_file.src = e.data.login.profile_img;
+        // nameChange.placeholder =  e.data.login.username;
+        nameChange.value =  e.data.login.username;
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // 미리보기
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('img_file').src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  nickChange.onclick =()=>{
+    console.log("asdf",nameChange.value);
+    user_name.style.display = "none";
+    nameChange.style.display = "block";
+    nickChange.style.display = "none";
+  }
+
+  uploadBtn.onclick = ()=>{
+    const form = new FormData();
+    // console.log("qlqlql",user_name.innerHTML);
+    if (file.files.length > 0) {
+      form.append("upload",file.files[0]);
+    } else {
+      console.log("보내져?");
+      form.append("upload",img_file.src);
+    }
+
+    if (nameChange.value.trim() !== "") {
+      form.append("nickName",nameChange.value);
+    }else{
+      form.append("nickName",user_name.innerHTML);
+    }
+    
+    axios.post("http://127.0.0.1:4000/mypage",form,{
+      withCredentials:true,
+      "Content-Type" : "multipart/form-data"
+    }).then((e)=>{
+      window.location.reload();
+    }).catch((err)=>{
+      console.log("업로드 버튼 오류",err);
+    })
+  }
+
+  img_change.onclick= ()=>{
+    file.style.display = "block";
+    img_change.style.display = "none";
+  }
+
+</script>
+</html>

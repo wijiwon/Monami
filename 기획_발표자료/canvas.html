@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>캔버스 예시</title>
+
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            background-color:rgb(47, 47, 70);
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        canvas{
+            /* width: 500px;
+            height: 500px; */
+            border: 1px solid;
+            background-color: white;
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            transform: translate(-50%,-50%);
+        }
+        .brushSize,
+        .brushColor{
+            height: 30px;
+            margin: 5;
+            border: 1px solid;
+            cursor: pointer;
+        }
+        .brushSize{
+            width: 30px;
+        }
+        .brushColor{
+            width: 60px;
+        }
+        .brushSizes,
+        .brushColors{
+            display: flex;
+            width: auto;
+            height: 30px;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+            background-color: white;
+        }
+        .brushSizes{
+            bottom: 15%;
+        }
+        .brushColors{
+            bottom: 10%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="brushSizes">
+        <div class="brushSize" data-size="5">5</div>
+        <div class="brushSize" data-size="10">10</div>
+        <div class="brushSize" data-size="15">15</div>
+        <div class="brushSize" data-size="20">20</div>
+    </div>
+    <div class="brushColors">
+        <!-- 전체 지우개 넣기 -->
+        <div class="brushColor" data-color="white">지우개</div>
+        <div class="brushColor" data-color="black">black</div>
+        <div class="brushColor" data-color="red">red</div>
+        <div class="brushColor" data-color="pink">pink</div>
+        <div class="brushColor" data-color="orangered">orange</div>
+        <div class="brushColor" data-color="yellow">yellow</div>
+        <div class="brushColor" data-color="green">green</div>
+        <div class="brushColor" data-color="skyblue">sky</div>
+        <div class="brushColor" data-color="blue">blue</div>
+        <div class="brushColor" data-color="purple">purple</div>
+    </div>
+    <div id="complete">완료</div>
+    <div id="play">재생</div>
+
+    <video id="video_recorded" controls style="border: 1px solid black;"></video>
+</body>
+<script src="./canvas_2.js"></script>
+</html>

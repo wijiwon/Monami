@@ -7,6 +7,249 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 </head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    .questions,
+
+    .drawings,
+    .gameResult {
+        width: 100vw;
+        height: 100vh;
+        border: 3px solid red;
+        box-sizing: border-box;
+    }
+
+    .questions.pop,
+    .drawings.pop,
+    .gameResult.pop {
+        display: none;
+    }
+
+    .drawings,
+    .questions,
+    .gameResult {
+        display: none;
+
+    }
+    .gameResult{
+        display: block;
+    }
+    .questions .row1,
+    .drawings .rows1,
+    .gameResult .row1 {
+        width: 90%;
+        height: 15%;
+        border: 1px solid forestgreen;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+    }
+
+    .row1 .users,
+    .row1 .time,
+    .rows1 .users,
+    .rows1 .draw_time {
+        width: 120px;
+        height: 120px;
+        border: 1px solid slateblue;
+    }
+
+    .questions .row2 {
+        position: relative;
+        width: 100%;
+        height: 53%;
+        border: 1px solid hotpink;
+    }
+
+    .row2 .question1,
+    .row2 .question2 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 400px;
+        border: 3px solid goldenrod;
+
+    }
+
+    .questions .row3 {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: 30%;
+        border: 1px solid darkblue;
+    }
+
+    .row3 #question {
+        width: 700px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    .row3 button {
+        width: 100px;
+        height: 50px;
+        font-size: 20px;
+    }
+
+
+    .rows1 .view_question {
+        width: 800px;
+        height: 70px;
+        border-bottom: 3px solid;
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 70px;
+    }
+
+    .drawings .rows2 {
+        width: 100%;
+        height: 70%;
+        border: 1px solid darkmagenta;
+        display: flex;
+    }
+
+    .rows2 .colors,
+    .rows2 .brushs {
+        position: relative;
+        width: 20%;
+        height: 100%;
+        border: 1px solid violet;
+    }
+
+    .colors .colors2,
+    .brushs .brushs2 {
+        position: absolute;
+        top: 50%;
+        left: 60%;
+        transform: translate(-50%, -50%);
+        width: 50%;
+        height: 400px;
+        border: 2px solid;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .colors2 .colorbox,
+    .brushs2 .brushbox {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        border: 1px solid;
+        margin: 10px;
+    }
+
+    .colorbox .brushColor {
+        width: 90%;
+        height: 90%;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+    }
+
+    .brushbox .brushSize {
+        background-color: black;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+    }
+
+    .rows2 .bord {
+        position: relative;
+        width: 60%;
+        height: 100%;
+        border: 1px solid blue;
+    }
+
+    .bord #canvas {
+        border: 1px solid;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .drawings .rows3 {
+        position: relative;
+        width: 100%;
+        height: 10%;
+        border: 1px solid seagreen;
+    }
+
+    .rows3 button {
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        font-size: 20px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .gameResult .row1 {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 15%;
+        border: 1px solid forestgreen;
+    }
+
+    .row1 .playerImage {
+        background-color: yellowgreen;
+        width: 15%;
+        height: 100%;
+    }
+
+    .gameResult .row2 {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: 70%;
+        border: 1px solid hotpink;
+    }
+
+    .row2 .player,
+    .row2 .gameBoard {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 45%;
+        height: 100%;
+        border: 3px solid goldenrod;
+    }
+
+    .gameResult .row3 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 15%;
+        border: 1px solid darkblue;
+    }
+</style>
 <body>
     
     <p>메인 게임임</p>
@@ -20,24 +263,49 @@
     <input id="pain2" type="text">
     <label for="">ans2</label>
     <input id="ans2" type="text">
+    <div class="gameResult">
+        <div class="row1">
+            <div class="playerImage">
+                <img style="width: 100px; height: 100px;" src="http://127.0.0.1:4000/monami.png" alt="게임 로고"
+                    id="gamelogo">
+            </div>
+        </div>
+        <div class="row2">
+            <!-- Player 정보 -->
+            <div class="player">
+                <div class="playerName">플레이어명</div>
+
+            </div>
+            <!-- Game 결과 -->
+            <div class="gameBoard">
+                <canvas id="resultCanvas"></canvas>
+            </div>
+        </div>
+        <div class="row3">
+            <button id="restart">다시하기</button>
+        </div>
+    </div>
 
 
 
 
 
 </body>
-<script>
+<script> 
     const socket = io.connect('http://localhost:4000');
+    const playerName=document.querySelector('.playerName');
     console.log("d");
     socket.on('THrowGameMember',(tmp)=>{
         console.log(tmp);
         console.log(tmp.rooms[tmp.roomNum].usernickname);
     } )
-
+    
+    let mibanjang="";
     let whoisme="지원";
     let myindex=0;
     let mynickname="지원"
     let gmaeplayer=["현욱","임자","지원","동희","정현"]
+    let replay=["현욱 content","임자 content","지원 content","동희 content","정현 content"];
         async function fetchData() {
   try {
     
@@ -45,10 +313,13 @@
       withCredentials: true
     });
     
-    console.log("mite");
+    console.log("mite")
+    console.log(response);
     console.log(response.data._room.room_manager);
     // gmaeplayer[0]=response.data._room.room_manager;
-    
+    // 소켓전송ㄴ
+    socket.emit('rein',response.data._room.id);
+    console.log("들어가벌임",response.data._room.id)
     console.log(gmaeplayer) 
     
   } catch (error) {
@@ -106,6 +377,22 @@ fetchData();
     console.log(`${gmaeplayer[seq]}의 3. 그림을을보고`)
 
     console.log("seq3",[seq],gmaeplayer[seq],`${"4.저장받게될 답"}`,`${gmaeplayer[myindex]}`);
+
+    gmaeplayer.forEach((element,index)=>{
+        console.log(element);
+        let li=document.createElement('li');
+        li.innerHTML=element;
+        li.addEventListener('click',()=>{
+            console.log("클릭됌",element);
+            let sdkiojw=index;
+            socket.emit('replaySelect',sdkiojw);
+        })
+        playerName.appendChild(li);
+    }) 
+
+    socket.on('replaySelect1',(tmp)=>{
+        console.log("replaySelect1",tmp);
+    })
 
     // 마지막 리플레이 읽어올때는 첫번쨰 유저의 contet 를싹다 불러와서 그걸 기준으로 getpost요청해서 정보를 불러온다. 
     // 혹은 모든 플레이가 끝나는 순간 해당하는 방에있는 그림을 모두 불러와서저장한다. 모든유저에게 그런다음

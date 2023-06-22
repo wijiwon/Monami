@@ -18,7 +18,7 @@ router.get('/',(req,res)=>{
 
 router.post('/', islogin, isRoom, upload.single('file'), DrawingAdd);
 
-router.get('/getUserinfo',islogin,isRoom,getUserinfo);
+router.post('/getUserinfo',islogin,isRoom,getUserinfo);
 
 // 저장된 그림을 video로 보여줌 
 router.post('/viewVideo',viewVideo)

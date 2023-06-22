@@ -371,7 +371,7 @@
 
     // })
     const roomPopup = document.querySelector('.roompopup_ready');
-
+    let nowRoomNUm=0;
     // Create a new MutationObserver instance
     const observer = new MutationObserver((mutationsList) => {
         for (const mutation of mutationsList) {
@@ -380,12 +380,13 @@
                 if (currentClasses.contains('test')) {
                     const roomExitButton = document.querySelector('.roomBtn_member.pop .roomExit');
                     roomExitButton.addEventListener('click', () => {
-                        socket.emit('exitRoom');
+                        console.log("여기까지안옴 ㅋ");
+                        socket.emit('exitRoom',nowRoomNUm);
                         console.log("dd");
-                        asd1('.readyUser');
+                        // asd1('.readyUser');
                         console.log("asdsad");
                     })
-                    asdf1(tmp, '.readyUser');
+                    // asdf1(tmp, '.readyUser');
 
                 }
             }
@@ -440,7 +441,11 @@
     })
 
 
-    gamestarts.addEventListener('click', () => {
+    gamestarts.addEventListener('click',async () => {
+        await axios.post('http://127.0.0.1:4000/gameready/gamestatupdatae', { id :nowRoomNUm },
+            {
+                withCredentials: true
+            })
         socket.emit('gamestart')
         // window.location.href="http://127.0.0.1:5501/frontEnd/maingame.html";
     })
@@ -458,7 +463,11 @@
             test3.style.display = "block";
         }, 3000);
         setTimeout(() => {
-            window.location.href = "http://127.0.0.1:5500/frontEnd/game.html";
+           // window.location.href = "http://127.0.0.1:5501/frontEnd/game.html";
+
+
+           // window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/maingame.html";
+            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
         }, 4000);
         
     })
@@ -477,6 +486,9 @@
         test2.style.display = "none";
         test3.style.display = "block";
         setTimeout(() => {
+
+            //window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
+
             window.location.href = "/game/hi";
 
         }, 1000);
@@ -672,7 +684,10 @@
                 element.addEventListener('click', () => {
                     console.log("ㅇㅇ눌리긴함");
                     const roomNum = element.textContent;
+                    nowRoomNUm=roomNum;
                     joinRoom(roomNum);
+                   
+                 
                 })
             })
         } catch (error) {
@@ -757,12 +772,25 @@
         // }).catch((err)=>{
         //     console.log(err);
         // })
+
         axios.post("/gameready/gethost", { title: titlevalue }, {
             withCredentials: true
         }).then((e) => {
-            console.log(e);
-            let num = e.data.id
-            joinRoom(num);
+                console.log(e);
+                let num = e.data.id
+                nowRoomNUm=num;
+                socket.emit('createRoom',e.data);
+                setTimeout(() => {
+                    joinRoom(num);
+                }, 200);
+                console.log("??여기는 실행되었는가?");
+           
+                
+            })
+        }, 100);//then((e) => {
+            //console.log(e);
+            //let num = e.data.id
+            //joinRoom(num);
 
         })
     }

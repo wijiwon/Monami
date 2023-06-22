@@ -182,7 +182,7 @@ io.on('connection', (socket) => {
     socket.on('createRoom', (num) => {
         console.log("num",num);
         console.log("adsfads", rooms);
-        console.log(rooms[0]);
+        console.log(rooms);
 
         const newRoom = {
             room_Num: num.id,
@@ -236,7 +236,7 @@ io.on('connection', (socket) => {
         //     }
         // }
         console.log(rooms);
-        rooms[roomNum].usernickname.length=0;
+        // rooms[roomNum].usernickname.length=0;
         console.log(rooms);
         for (let i = 0; i < clientsInRoom.length; i++) {
             if(socket.id ==clientsInRoom[i])

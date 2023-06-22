@@ -862,7 +862,8 @@ exports.boardListPages = async (req, res) => {
                     {model : Comment},
                     {model : User}
                 ], 
-                order : [[`${orderOption}` , "DESC"]]     // '들어온값' 이 '제일 위' 로 오도록
+                order : [[`${orderOption}` , "ASC"]]     // 오름차순
+                // order : [[`${orderOption}` , "DESC"]]     // 내림차순
                 // order : [["views" , "DESC"]]     // '조회수' 가 '제일 위' 로 오도록
                 // order : [["likes" , "DESC"]]     // '좋아요' 가 '제일 위' 로 오도록
                 // order : [["createdAt" , "DESC"]]     // '최신순' 이 '제일 위' 로 오도록

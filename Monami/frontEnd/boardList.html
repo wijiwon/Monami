@@ -1479,6 +1479,9 @@ try {
             try {
                 console.log("initializedView @boardList.html")
 
+                const posts_wrapper = document.querySelector("#posts_wrapper")
+                const page_navigation = document.querySelector('#page_navigation')
+
                 // post 내용들 전부 비우기
                     posts_wrapper.innerHTML = "";
         
@@ -1695,6 +1698,8 @@ try {
                 btn.onclick = async (event) => {
                     const clickedPage = event.target.id.split('_')[2];
                     initializedView(arrPostWithCommentUser, clickedPage, _order_option)
+                    getView(arrPostWithCommentUser, clickedPage, _order_option)
+                    
                 }
             })
 

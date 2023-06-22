@@ -42,6 +42,7 @@
     }
 
     .gamebtn {
+      display: none;
       width: 220px;
       height: 35px;
       margin: 20px auto;
@@ -341,7 +342,7 @@
                 <h1 class="gamebtn_in" id="gamebtn">게임시작</h1>
               </div>
 
-              <div style="display: block;" class="beforeLogin" id="beforeLogin">
+              <div class="beforeLogin" id="beforeLogin">
                 <div class="beforeLoginBox">
                   
                 <div class="input_box">
@@ -361,7 +362,7 @@
 
               </div>
 
-              <div style="display: none;" class="loginSuccess" id="loginSuccess">
+              <div class="loginSuccess" id="loginSuccess">
 
                 <div class="profile_text">
                   <h1>
@@ -527,7 +528,7 @@
     }).then((e) => {
       user_id.value = ""
       user_pw.value = ""
-      // gamebtn.style.display = "block"
+      gamebtn.style.display = "block"
 
       console.log("로그인할떄?", e);
 

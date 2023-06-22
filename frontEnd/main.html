@@ -469,8 +469,8 @@
 
       if (res.data.userInfo) {
         // user is logged in
-        // loginSuccess.style.display = "block";
-        // beforeLogin.style.display = "none";
+        loginSuccess.style.display = "block";
+        beforeLogin.style.display = "none";
 
         username.innerHTML = res.data.userInfo.username;
         img_file.src = res.data.userInfo.profile_img;

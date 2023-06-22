@@ -901,7 +901,7 @@
             const roomList = document.querySelector('.roomList');
             roomArr.forEach((el, index) => {
                 // el의 play값을 받아, 해당 방이 게임대기인지, 게임중인지를 표시한다.
-                const play2 = "";
+                let play2 = "";
                 if (el.play == '0') {
                     play2 = "시작 대기 중"
                 }

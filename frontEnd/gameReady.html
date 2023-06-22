@@ -26,7 +26,7 @@
             height: 100vh;
             box-sizing: border-box;
             background-color: rgb(205, 228, 255);
-            background-image: url(http://127.0.0.1:4000/img/gameback.png);
+            background-image: url(/img/gameback.png);
         }
 
         .view1 {
@@ -68,7 +68,7 @@
             width: 1500px;
             height: 580px;
             /* border: 1px solid darkblue; */
-            background-image: url(http://127.0.0.1:4000/img/school_big.png);
+            background-image: url(/img/school_big.png);
         }
 
         .inrow2 {
@@ -113,7 +113,7 @@
             top: 24%;
             width: 280px;
             height: 140px;
-            background-image: url(http://127.0.0.1:4000/img/makeroom.png);
+            background-image: url(/img/makeroom.png);
         }
 
         .row2 .roomDiv,
@@ -133,7 +133,7 @@
             width: 600px;
             height: 400px;
             border: 1px solid rgb(31, 22, 155);
-            /* background-image: url(http://127.0.0.1:4000/img/ground.png); */
+            /* background-image: url(/img/ground.png); */
         }
 
         .userDiv .userInfo,
@@ -151,7 +151,7 @@
         .userDiv .chat {
             position: relative;
             height: 200px;
-            background-image: url(http://127.0.0.1:4000/img/chat.png);
+            background-image: url(/img/chat.png);
         }
 
         .chatBox,
@@ -201,10 +201,10 @@
         }
         .userList{
             position: relative;
-            background-image: url(http://127.0.0.1:4000/img/gusback_1.png);
+            background-image: url(/img/gusback_1.png);
         }
         .myProfile{
-            background-image: url(http://127.0.0.1:4000/img/gusback_2.png);
+            background-image: url(/img/gusback_2.png);
         }
 
         .myProfile {
@@ -259,7 +259,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            background-image: url(http://127.0.0.1:4000/img/gameRPop_1.png);
+            background-image: url(/img/gameRPop_1.png);
         }
 
         .roompopup_creat.pop {
@@ -320,7 +320,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
-            background-image: url(http://127.0.0.1:4000/img/gameRPop_2.png);
+            background-image: url(/img/gameRPop_2.png);
         }
 
         .roompopup_ready.pop {
@@ -373,7 +373,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background-image: url(http://127.0.0.1:4000/img/door.png);
+            background-image: url(/img/door.png);
 
         }
 
@@ -381,7 +381,7 @@
             width: 220px;
             height: 240px;
             /* border: 1px solid; */
-            background-image: url(http://127.0.0.1:4000/img/indoor.png);
+            background-image: url(/img/indoor.png);
             /* cursor: pointer; */
             position: absolute;
             z-index: 0;
@@ -445,7 +445,7 @@
             justify-content: space-between;
             overflow: visible;
             overflow-x: hidden;
-            /* background-image: url(http://127.0.0.1:4000/img/school.png); */
+            /* background-image: url(/img/school.png); */
 
         }
 
@@ -525,7 +525,7 @@
         <div class="row1">
             <!-- 메인화면 이동 -->
             <a href="/main"> <!--배포용 주소-->
-                <img class="headerLogo" src="http://127.0.0.1:4000/img/main_Logo.png" alt="로고">
+                <img class="headerLogo" src="/img/main_Logo.png" alt="로고">
             </a>
             <div class="flag">
                 <div class="createRoom">방만들기</div> <!-- 방을 생성할 수 있는 버튼 -->
@@ -683,7 +683,7 @@
     // })
     // async function RoomView() {
     //     try {
-    //         const data = await axios.get('http://127.0.0.1:4000/gameready', {
+    //         const data = await axios.get('/gameready', {
     //             withCredentials: true
     //         })
 
@@ -1038,7 +1038,7 @@
                 const RoomExit = document.querySelector(".roomExit")
                 RoomExit.onclick = () => {
                     RoomPop.classList.toggle('pop')
-                    // axios.post('http://127.0.0.1:4000/gameready/roomDel', { id: title.value }, {
+                    // axios.post('/gameready/roomDel', { id: title.value }, {
                     //     withCredentials: true,
                     //     "Content-Type": "application/json"
                     // })
@@ -1050,7 +1050,7 @@
             console.log(err);
         })
         // form 데이터로 보내는데 form-data로 설정하지 않아서 생긴 이슈 - form에 json값으로 바꿔줌
-        // axios.post("http://127.0.0.1:4000/gameready/create", form, {
+        // axios.post("/gameready/create", form, {
         //     withCredentials : true,
         //     // "Content-Type": "application/json"
         // }).then((e)=>{

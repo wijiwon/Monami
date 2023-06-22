@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <style>
     body {
@@ -266,7 +266,7 @@
     <div class="gameResult">
         <div class="row1">
             <div class="playerImage">
-                <img style="width: 100px; height: 100px;" src="http://127.0.0.1:4000/monami.png" alt="게임 로고"
+                <img style="width: 100px; height: 100px;" src="/monami.png" alt="게임 로고"
                     id="gamelogo">
             </div>
         </div>
@@ -309,7 +309,7 @@
         async function fetchData() {
   try {
     
-    const response = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
+    const response = await axios.get('/gameplay/getUserinfo', {
       withCredentials: true
     });
     
@@ -402,7 +402,7 @@ fetchData();
     
 
     // // 현재 접속중인 유저의 정보를 가져온다. 
-    // await axios.get('http://127.0.0.1:4000/gameready/userInfo', {
+    // await axios.get('/gameready/userInfo', {
     //     withCredentials: true
     // })
     // 현재 유저의 정보를 받아옴 
@@ -423,24 +423,24 @@ fetchData();
     // 
     
     // 
-    // await axios.post('http://127.0.0.1:4000/gamePlay/ansInput', { question: ans }, {
+    // await axios.post('/gamePlay/ansInput', { question: ans }, {
     //     withCredentials: true,
     //     "Content-Type": "application/json"
     // })
 
-    // await axios.post('http://127.0.0.1:4000/gamePlay/input', { id: num }, {
+    // await axios.post('/gamePlay/input', { id: num }, {
     //     withCredentials: true,
     //     "Content-Type": "application/json"
     // })
-    // await axios.post('http://127.0.0.1:4000/gamePlay/input', { id: num }, {
+    // await axios.post('/gamePlay/input', { id: num }, {
     //     withCredentials: true,
     //     "Content-Type": "application/json"
     // })
-    // await axios.post('http://127.0.0.1:4000/gamePlay/input', { id: num }, {
+    // await axios.post('/gamePlay/input', { id: num }, {
     //     withCredentials: true,
     //     "Content-Type": "application/json"
     // })
-    // await axios.post('http://127.0.0.1:4000/gamePlay/input', { id: num }, {
+    // await axios.post('/gamePlay/input', { id: num }, {
     //     withCredentials: true,
     //     "Content-Type": "application/json"
     // })
@@ -454,10 +454,10 @@ fetchData();
 
        
         
-        // await axios.get('http://127.0.0.1:4000/gameready', {
+        // await axios.get('/gameready', {
         //         withCredentials: true
         //     })
-        // await axios.post('http://127.0.0.1:4000/gameready/roomchoice', { id: num }, {
+        // await axios.post('/gameready/roomchoice', { id: num }, {
         //                     withCredentials: true,
         //                     "Content-Type": "application/json"
         //                 }).then((e) => {

@@ -6,17 +6,157 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    /* 유지체 */
+    @font-face {
+      font-family: 'HSYuji-Regular';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+        /* 고양체 */
+        @font-face {
+    font-family: 'Goyang';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Goyang.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    } 
+
+    body {
+      font-family: 'HSYuji-Regular';
+      background-color: #fffbae;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 150%;
+      background-image: url(http://127.0.0.1:4000/img/backgroundIMG.png);
+      background-size: cover;
+    }
+
+    .header {
+      width: 100%;
+      height: 130px;
+      /* border: solid 3px rgb(181, 255, 71); */
+      position: relative;
+    }
+
+    .headerLogo {
+      width: 600px;
+      height: 100px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .container {
+      /* border: solid 3px rgb(26, 44, 248); */
+      height: 150vh;
+      position: relative;
+    }
+    .SketchBook{
+      width: 1400px;
+      height: 1000px;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translate(-50%);
+      background-image: url(http://127.0.0.1:4000/img/sketchbook_2.png);
+    }
+    .inSketchBook{
+      position: absolute;
+      width: 1200px;
+      height: 765px;
+      left: 50%;
+      top: 150px;
+      transform: translate(-50%);
+      margin: 10px;
+      padding: 20px;
+    }
+    .user_info {
+      position: absolute;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url(http://127.0.0.1:4000/img/mypageBack.png);
+    justify-content: center;
+    }
+    button{
+    cursor: pointer;
+    border: 3px dashed white;
+    border-radius: 2em;
+    background-color: rgb(255, 190, 106);
+    width: 138px;
+    height: 53px;
+    font-size: 24px;
+    font-family: 'Goyang';
+    }
+
+    button:hover{
+      border-radius: 2em;
+      cursor: pointer;
+      background-color: rgb(252, 171, 65);
+      color: white
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      font-family: 'HSYuji-Regular';
+      background-color:  rgba(252, 171, 65, 0.548);
+      margin: 10px 0;
+      padding: 10px;
+      /* width: 80%; */
+      border-radius: 5px;
+      border: none;
+      font-size: 19px;
+      caret-color: rgb(177, 102, 5);
+    }
+    input:focus {
+    outline-color: white;
+    }
+    label{
+      font-size: 20px;
+    }
+    .fontcolor{
+      color: rgb(247, 128, 17);
+    }
+  </style>
 </head>
 <body>
-  <label for="">아이디 모냐미?</label>
-  <input type="text" id="user_id"> <br>
-  <label for="">비밀번호 모냐미?</label>
-  <input type="password" id="user_pw"> <br>
-  <label for="">비밀번호 한번 더 모냐미?</label>
-  <input type="password" id="user_pw2"> <br>
-  <label for="">닉네임 모냐미?</label>
-  <input type="text" id="username"> <br>
-  <button id="signBtn">회원가입</button>
+  <div>
+    <div class="header">
+      <a href="/main"> <!--배포용 주소-->
+        <img class="headerLogo" src="http://127.0.0.1:4000/img/main_Logo.png" alt="로고">
+      </a>
+    </div>
+    <div class="container">
+      <div class="SketchBook">
+        <div class="inSketchBook">
+          <div class="user_info">
+            <h1>회원가입</h1>
+        <label for=""><span class="fontcolor">아이디</span> 를 입력해주세요 </label>
+        <input type="text" id="user_id"> <br>
+        <label for=""><span class="fontcolor">비밀번호</span>를 입력해주세요 </label>
+        <input type="password" id="user_pw"> <br>
+        <label for=""><span class="fontcolor">비밀번호</span> 한번 더 입력해주세요</label>
+        <input type="password" id="user_pw2"> <br>
+        <label for=""><span class="fontcolor">닉네임</span>을 입력해주세요</label>
+        <input type="text" id="username"> <br>
+        <button id="signBtn">회원가입</button>
+
+          </div>
+            
+      </div>
+      </div>
+    </div>
+
+  </div>
+
 </body>
 <script>
   signBtn.onclick = ()=>{

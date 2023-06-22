@@ -52,7 +52,9 @@
       /* background-color: #0e4734; */
       background-image: url(http://127.0.0.1:4000/img/gamestart.png);
     }
-
+    .gamebtn_in{
+      margin-top: 5px;
+    }
     .beforeLogin,
     .loginSuccess {
       position: absolute;
@@ -77,34 +79,49 @@
 
     input[type="text"],
     input[type="password"] {
+      font-family: 'HSYuji-Regular';
+      background-color: #b7f8d051 ;
       margin: 10px 0;
       padding: 10px;
       width: 80%;
       border-radius: 5px;
       border: none;
-      font-size: 15px;
+      font-size: 17px;
+      caret-color: white;
     }
+    input:focus {
+    outline-color: white;
+    }
+
     label{
       font-size: 20px;
       color: #000;
     }
-    button {
+
+    .loginBtn {
       margin-top: 20px;
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
       background-color: #198141;
-      color: #ffffff;
+      color: white;
       font-weight: 600;
       font-family: 'HSYuji-Regular';
     }
 
-    button:hover,
-    .gamebtn:hover {
+      /* font-weight: 300; */
+    button:hover{
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: white;
+      color: #198141;
+    }
+
+    .gamebtn_in:hover {
       border-radius: 20px;
       cursor: pointer;
-      background-color: #c2c2c2;
-      color: #e3e2d5;
+      background-color: white;
+      color: #fd97a8;
     }
 
     a {
@@ -120,10 +137,10 @@
       color: #000000;
     }
 
-    .gameMain {
+    /* .gameMain {
       /* border: solid 3px tomato; */
 
-    }
+    /* } */ 
 
     .header {
       width: 100%;
@@ -214,14 +231,14 @@
       text-align: center;
       line-height: 20px;
       font-size: 12px;
-      color: #000;
+      color: #264efe68;
       opacity: 1;
-      background: rgba(0, 0, 0, 0.2);
+      background: #26d3fe68;
     }
 
     .swiper-pagination-bullet-active {
       color: #fff;
-      background: #019267;
+      background: #26d3fe;
     }
 
     .swiperDiv {
@@ -320,7 +337,9 @@
         <div class="inSketchBook">
           <div class="sidebar">
             <div class="login_box">
-              <h1 class="gamebtn" id="gamebtn">게임시작</h1>
+              <div class="gamebtn">
+                <h1 class="gamebtn_in" id="gamebtn">게임시작</h1>
+              </div>
 
               <div style="display: block;" class="beforeLogin" id="beforeLogin">
                 <div class="beforeLoginBox">
@@ -334,8 +353,8 @@
                   <input type="password" id="user_pw"> <br>
                 </div>
                 <div class="button_box">
-                  <button id="loginBtn">로그인</button>
-                  <button id="joinBtn" onclick="location.href='/join'">회원가입</button>
+                  <button class="loginBtn" id="loginBtn">로그인</button>
+                  <button class="loginBtn" id="joinBtn" onclick="location.href='/join'">회원가입</button>
                 </div>
 
               </div>

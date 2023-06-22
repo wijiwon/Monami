@@ -15,13 +15,14 @@
       font-weight: normal;
       font-style: normal;
     }
+
     /* 고양체 */
     @font-face {
-    font-family: 'Goyang';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Goyang.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
+      font-family: 'Goyang';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Goyang.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
 
     #img_file {
       width: 350px;
@@ -31,21 +32,21 @@
     #nameChange {
       display: none;
     }
-    #uploadBtn{
+
+    #uploadBtn {
       padding: 10px;
       font-size: 35px;
       position: absolute;
       border: 4px dashed white;
       line-height: 5px;
-    bottom: 60px;
-    right: 65px;
+      bottom: 60px;
+      right: 65px;
 
     }
 
     body {
       font-family: 'HSYuji-Regular';
       background-color: #fffbae;
-      color: #4e4e4e;
       text-align: center;
       margin: 0;
       padding: 0;
@@ -58,6 +59,8 @@
     .file {
       display: none;
     }
+
+
 
     .gameMain {
       display: flex;
@@ -82,15 +85,6 @@
       transform: translate(-50%, -50%);
     }
 
-    /* 
-    .container {
-      flex: 2;
-      display: flex;
-      justify-content: space-around;
-      padding: 20px;
-      border: 3px solid #fff;
-    } */
-    /* background-color: #0e4734; */
 
     .container {
       /* border: solid 3px rgb(26, 44, 248); */
@@ -164,33 +158,88 @@
     }
 
     .MyInfo {
-      width: 280px;
+      width: 310px;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      align-items: center;
     }
 
-    button{
+
+    button {
+      cursor: pointer;
       border: 3px dashed white;
-    border-radius: 2em;
-    background-color: rgb(255, 190, 106);
+      border-radius: 2em;
+      background-color: rgb(255, 190, 106);
       width: 200px;
       height: 70px;
       font-family: 'Goyang';
     }
-    .MyInfo input{
+
+    button:hover {
+      border-radius: 2em;
+      cursor: pointer;
+      background-color: rgb(252, 171, 65);
+      color: white
+    }
+
+    .MyInfo input {
       border-radius: 2em;
       font-size: 16px
     }
 
-    .userImg input{
+    .userImg input {
 
       font-size: 17px;
     }
+
     .user_info button {
       width: 115px;
-    height: 35px;
-    font-size: 20px;
+      height: 35px;
+      font-size: 20px;
+    }
+
+    .fontcolor {
+      color: rgb(247, 128, 17);
+    }
+
+    input[type="text"] {
+      font-family: 'HSYuji-Regular';
+      background-color: rgba(252, 171, 65, 0.548);
+      margin: 10px 0;
+      padding: 10px;
+      /* width: 80%; */
+      border-radius: 5px;
+      border: none;
+      font-size: 19px;
+      caret-color: rgb(177, 102, 5);
+    }
+
+    input:focus {
+      outline-color: white;
+    }
+
+    .filesfake {
+      display: none;
+    }
+
+    .file-label {
+      display: inline-block;
+      cursor: pointer;
+      border: 3px dashed white;
+      border-radius: 2em;
+      background-color: rgb(255, 190, 106);
+      width: 115px;
+      height: 35px;
+      font-size: 20px;
+      font-family: 'Goyang';
+    }
+
+    .file-label:hover {
+      border-radius: 2em;
+      cursor: pointer;
+      background-color: rgb(252, 171, 65);
+      color: white;
     }
   </style>
 </head>
@@ -203,6 +252,7 @@
         <img class="headerLogo" src="http://127.0.0.1:4000/img/main_Logo.png" alt="로고">
       </a>
     </div>
+
     <div class="container">
       <div class="SketchBook">
         <div class="inSketchBook">
@@ -210,13 +260,18 @@
             <div class="userImg">
               <img src="" alt="" id="img_file">
               <button class="img_change" id="img_change">이미지 변경</button>
-              <input class="file" type="file" id="file" onchange="readURL(this);">
+              <div class="file" id="file">
+
+                <label for="files" class="file-label">Choose File</label>
+                <input class="filesfake" type="file" id="files" onchange="readURL(this);">
+              </div>
+
             </div>
 
             <div class="userNick">
               <div class="MyInfo">
                 <div class="MyNick">
-                  <span>닉네임 : </span>
+                  <span class="fontcolor">닉네임 : </span>
                   <span id="user_name">나는동희</span>
                 </div>
                 <input type="text" id="nameChange">
@@ -224,13 +279,13 @@
               </div>
 
               <div class="MyExp">
-                <span>my exp : </span>
+                <span class="fontcolor">my exp : </span>
                 <span id="user_exp">1238</span>
               </div>
             </div>
 
           </div>
-            <button id="uploadBtn">등록하기</button>
+          <button id="uploadBtn">등록하기</button>
         </div>
       </div>
     </div>

@@ -566,18 +566,7 @@
                         <!-- 채팅 내용이 보이는 영역 -->
                         <div class="chatBox">
                             <ul id="messages">
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
-                                <li>adsrfadf</li>
+
                             </ul>
                         </div>
                         <!-- 채팅을 입력하는 영역 -->
@@ -869,7 +858,7 @@
         tmp.forEach(element => {
             console.log(element.userid);
             const li = document.createElement('li');
-            li.textContent = `${element._nickname}, ${element.userid}`;
+            li.textContent = `${element._nickname}`;
             User_idlist.appendChild(li);
         });
 
@@ -897,7 +886,6 @@
             })
             console.log(data);
             const roomArr = data.data;
-            console.log(roomArr)
             const roomList = document.querySelector('.roomList');
             roomArr.forEach((el, index) => {
                 // el의 play값을 받아, 해당 방이 게임대기인지, 게임중인지를 표시한다.
@@ -932,7 +920,8 @@
                         const title = el2.querySelector('.room_title').textContent;
                         // const usernum = el2.querySelector('.room_usernum').textContent;
                         const play = el2.querySelector('.room_play').textContent;
-
+                        nowRoomNUm=num;
+                        joinRoom(num);
                         // let usernum2 = [];
                         // usernum2.push(usernum);
                         // console.log(usernum)
@@ -966,18 +955,18 @@
             }
 
             );
-            const roomNumElements = document.getElementsByClassName('room_num');
-            console.log(roomNumElements);
-            Array.from(roomNumElements).forEach((element) => {
-                element.addEventListener('click', () => {
-                    console.log("ㅇㅇ눌리긴함");
-                    const roomNum = element.textContent;
-                    nowRoomNUm=roomNum;
-                    joinRoom(roomNum);
+            // const roomNumElements = document.getElementsByClassName('room_num');
+            // console.log(roomNumElements);
+            // Array.from(roomNumElements).forEach((element) => {
+            //     element.addEventListener('click', () => {
+            //         console.log("ㅇㅇ눌리긴함");
+            //         const roomNum = element.textContent;
+            //         nowRoomNUm=roomNum;
+            //         joinRoom(roomNum);
                    
                  
-                })
-            })
+            //     })
+            // })
         } catch (error) {
             console.log(error);
         }

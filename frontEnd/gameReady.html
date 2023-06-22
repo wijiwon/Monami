@@ -16,6 +16,9 @@
             padding: 0;
             width: 100vw;
             height: 100vh;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
         }
 
         .view1 {
@@ -35,11 +38,12 @@
         }
 
         .row1 {
-            height: 15%;
+            height: 120px;
             border: 1px solid violet;
         }
 
         .row2 {
+            width: 1500px;
             height: 50%;
             border: 1px solid darkblue;
         }
@@ -294,27 +298,24 @@
                 <p>User List</p>
                 <ul id="User_id"></ul>
             </div>
-        </div>
-        <!-- 페이지의 하단 영역. 접속중인 유저간의 전체 채팅과 현재 로그인한 유저의 정보를 확인할 수 있고, 게임페이지 홈으로 이동할 수 있다. -->
-        <div class="row3">
-            <!-- 접속 중인 전체유저 채팅-->
-            <div class="chat">
-                <!-- 채팅 내용이 보이는 영역 -->
-                <div class="chatBox"></div>
-                <!-- 채팅을 입력하는 영역 -->
-                <div class="chatInsert">
-                    <input id="message-input" type="text" placeholder="Type your message">
-                    <input type="text" id="receiver-id" placeholder="Receiver ID or username">
-                    <button id="send-button">Send</button>
-
-                    <ul id="messages"></ul>
-
-                </div>
-            </div>
-            <!-- 유저가 로그인한 계정의 정보가 노출되는 영역. 홈으로 버튼을 누르면 게임 메인페이지로 이동한다. -->
-            <div class="myProfile">
-                <div class="myProfile2"></div>
-            </div>
+                        <!-- 접속 중인 전체유저 채팅-->
+                        <div class="chat">
+                            <!-- 채팅 내용이 보이는 영역 -->
+                            <div class="chatBox"></div>
+                            <!-- 채팅을 입력하는 영역 -->
+                            <div class="chatInsert">
+                                <input id="message-input" type="text" placeholder="Type your message">
+                                <input type="text" id="receiver-id" placeholder="Receiver ID or username">
+                                <button id="send-button">Send</button>
+            
+                                <ul id="messages"></ul>
+            
+                            </div>
+                        </div>
+                        <!-- 유저가 로그인한 계정의 정보가 노출되는 영역. 홈으로 버튼을 누르면 게임 메인페이지로 이동한다. -->
+                        <div class="myProfile">
+                            <div class="myProfile2"></div>
+                        </div>
         </div>
     </div>
     <!-- 방 만들기 버튼을 누르면 켜지는 팝업. 방을 생성할 수 있다. -->

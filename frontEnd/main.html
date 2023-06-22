@@ -82,10 +82,12 @@
       width: 80%;
       border-radius: 5px;
       border: none;
-      background-color: #e3e2d5;
-      color: #ea3c4f;
+      font-size: 15px;
     }
-
+    label{
+      font-size: 20px;
+      color: #000;
+    }
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -291,6 +293,10 @@
       left: 50%;
       transform: translate(-50%);
     }
+
+    .beforeLoginBox{
+      margin-top: 65%;
+    }
   </style>
 </head>
 
@@ -316,7 +322,9 @@
             <div class="login_box">
               <h1 class="gamebtn" id="gamebtn">게임시작</h1>
 
-              <div style="display: none;" class="beforeLogin" id="beforeLogin">
+              <div style="display: block;" class="beforeLogin" id="beforeLogin">
+                <div class="beforeLoginBox">
+                  
                 <div class="input_box">
                   <span id="idAlert"></span>
                   <label for="">아이디</label>
@@ -329,9 +337,12 @@
                   <button id="loginBtn">로그인</button>
                   <button id="joinBtn" onclick="location.href='/join'">회원가입</button>
                 </div>
+
               </div>
 
-              <div style="display: block;" class="loginSuccess" id="loginSuccess">
+              </div>
+
+              <div style="display: none;" class="loginSuccess" id="loginSuccess">
 
                 <div class="profile_text">
                   <h1>

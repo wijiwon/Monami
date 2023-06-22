@@ -537,7 +537,7 @@
                 <div class="roomDiv">
                     <div style="display: flex;" class="roomList">
                         <div class="roomlists">
-                            <div class="room_num">${el.id}</div>
+                            <!-- <div class="room_num">${el.id}</div> -->
                                 <!-- <div class="indoor">
                                     <div class="room_manager">${el.room_manager}</div>
                                     <div class="room_play">${play2}</div>
@@ -583,7 +583,7 @@
                         <!-- 채팅을 입력하는 영역 -->
                         <div class="chatInsert">
                             <input id="message-input" type="text" placeholder="Type your message">
-                            <!-- <input type="text" id="receiver-id" placeholder="Receiver ID or username"> -->
+                            <input type="text" id="receiver-id" placeholder="Receiver ID or username">
                             <button id="send-button">Send</button>
                         </div>
                     </div>
@@ -895,6 +895,7 @@
             const data = await axios.get('/gameready/hi', {
                 withCredentials: true
             })
+            console.log(data);
             const roomArr = data.data;
             const roomList = document.querySelector('.roomList');
             roomArr.forEach((el, index) => {

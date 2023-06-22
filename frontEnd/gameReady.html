@@ -442,7 +442,7 @@
 
 
     gamestarts.addEventListener('click',async () => {
-        await axios.post('http://127.0.0.1:4000/gameready/gamestatupdatae', { id :nowRoomNUm },
+        await axios.post('/gameready/gamestatupdatae', { id :nowRoomNUm },
             {
                 withCredentials: true
             })
@@ -467,7 +467,8 @@
 
 
            // window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/maingame.html";
-            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
+            // window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
+            window.location.href="/gameplay";
         }, 4000);
         
     })
@@ -489,7 +490,7 @@
 
             //window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
 
-            window.location.href = "/game/hi";
+            window.location.href = "/gameplay";
 
         }, 1000);
     })

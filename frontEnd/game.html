@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>game page</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <style>
         body {
             margin: 0;
@@ -399,7 +399,7 @@
 
     let gmaeplayer = [];
     let replay = [];
-    const socket = io.connect('http://localhost:4000');
+    const socket = io.connect('/');
     const playerName = document.querySelector('.playerName');
     console.log("d");
     // socket.on('THrowGameMember', (tmp) => {
@@ -578,7 +578,7 @@
             //     "Content-Type": "multipart/form-data"
             // });
             // }, 3000);
-            const response = await axios.post('http://127.0.0.1:4000/gameplay', formData, {
+            const response = await axios.post('/gameplay', formData, {
                 withCredentials: true,
                 "Content-Type": "multipart/form-data"
             });
@@ -603,7 +603,7 @@
             // });    
             // }, 4000);
 
-            await axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+            await axios.post('/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
                 withCredentials: true
             });
             console.log("그림저장완!!!!!!!!!!!");
@@ -669,7 +669,7 @@
         console.log("비디오재생의 인덱스느느느느느느는", index)
 
         try {
-            const response = await axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+            const response = await axios.post('/gameplay/viewVideo', { Drawid: index }, {
                 responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
                 withCredentials: true
             });
@@ -711,7 +711,7 @@
         console.log("비디오재생의 인덱스느느느느느느는", index)
 
         try {
-            const response = await axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+            const response = await axios.post('/gameplay/viewVideo', { Drawid: index }, {
                 responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
                 withCredentials: true
             });
@@ -790,7 +790,7 @@
         const queInput = document.getElementById('question');
         const queInputV = queInput.value;
         console.log("1단계 - 입력받은 첫 제시어", queInput.value)
-        axios.post('http://127.0.0.1:4000/gameplay/InputQuestion', { value: queInputV }, {
+        axios.post('/gameplay/InputQuestion', { value: queInputV }, {
             withCredentials: true
         })
         queInput.value = "";
@@ -799,7 +799,7 @@
     //-------- 두 번째 제시어 입력하는 구문 -----------------------------------------------------------
     function TwoQuestionInput(id, value, que) {
         console.log("유저 아이디, 정답, 제시어아이디 보낸다???", id, value, que)
-        axios.post('http://127.0.0.1:4000/gameplay/TwoQuestionInput', { id: id, value: value, queValue: que }, {
+        axios.post('/gameplay/TwoQuestionInput', { id: id, value: value, queValue: que }, {
             withCredentials: true
         })
         const queInput = document.getElementById('question');
@@ -839,7 +839,7 @@
         console.log(gamestep);
 
         let time = 10;
-        await axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        await axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -981,7 +981,7 @@
         // 타겟 제시어 아이디 값
         let targetID;
 
-        axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -1052,7 +1052,7 @@
     const StepFour = async () => {
         console.log("--------------------------4단계------------------------------");
         // 그 다음 순서의 제시어를 보여준다.
-        await axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        await axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -1152,7 +1152,7 @@
         // 타겟 제시어 아이디 값
         let targetID;
 
-        axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -1316,7 +1316,7 @@
     }
 
     async function getthing() {
-        await axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        await axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -1338,7 +1338,7 @@
     }
     async function gething2() {
         try {
-            await axios.post('http://127.0.0.1:4000/gameplay/getUserinfo', { id: gmaeplayer }, {
+            await axios.post('/gameplay/getUserinfo', { id: gmaeplayer }, {
                 responseType: 'json',
                 withCredentials: true
             }).then((e) => {
@@ -1367,7 +1367,7 @@
     async function fetchData() {
         try {
 
-            const response = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
+            const response = await axios.get('/gameplay/getUserinfo', {
                 withCredentials: true
             });
 

@@ -19,6 +19,7 @@ const gameRouter = require("./routers/game");
 app.use(express.urlencoded({ extended: false }))
 
 // 이미지 파일을 등록할 폴더 경로
+// hi
 
 app.use("/img", express.static(path.join(__dirname, "image")));
 

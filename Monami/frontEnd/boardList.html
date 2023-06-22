@@ -1201,12 +1201,14 @@
                         // 음... 
                         // 우선, 그러면, 페이지네이션? 음. 그러면, 이 url 에 대해서 query 를 붙여야 하나? 
 
-
-                    tags_item.appendChild(tags_keywordBtn)
+                    
+                    // tags_item 이것 중에서 0~5 번째만 선택 👉 tags_item_container appendchild 
+                    if( index < 6) {
+                        tags_item.appendChild(tags_keywordBtn)
+                    }
+                    console.log( "태그들🌻🌻🌻" , tags_item)
+                    
                     tags_item_container.appendChild(tags_item)
-
-
-
                 });
 
                 

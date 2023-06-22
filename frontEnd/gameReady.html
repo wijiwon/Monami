@@ -249,9 +249,9 @@
             position: relative;
             width: 600px;
             height: 600px;
-            border: 3px solid;
+            /* border: 3px solid; */
             z-index: 3;
-            background-color: white;
+            /* background-color: white; */
         }
 
         .roompopup_creat {
@@ -259,6 +259,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
+            background-image: url(http://127.0.0.1:4000/img/gameRPop_1.png);
         }
 
         .roompopup_creat.pop {
@@ -292,6 +293,26 @@
             flex-direction: column;
             align-items: center;
             cursor: pointer;
+            font-size: 20px;
+            font-family: 'HSYuji-Regular';
+            line-height: 2;
+            border: 2px dashed rgb(196, 140, 201);
+            border-radius: 2em;
+            background-color: rgb(255, 218, 247);
+        }
+        .roomExit, .roomStart{
+            width: 100px;
+            border: 1px solid;
+            height: 40px;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 2;
+            border: 2px dashed rgb(113, 164, 212);
+            border-radius: 2em;
+            background-color: rgb(165, 207, 255);
         }
 
         .roompopup_ready {
@@ -299,6 +320,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-evenly;
+            background-image: url(http://127.0.0.1:4000/img/gameRPop_2.png);
         }
 
         .roompopup_ready.pop {
@@ -308,7 +330,7 @@
         .roompopup_ready .readyUser {
             width: 70%;
             height: 50%;
-            border: 1px solid;
+            /* border: 1px solid; */
         }
 
         .roompopup_ready .roomBtn_leader,
@@ -479,7 +501,10 @@
         li{
             list-style: none;
         }
-        
+        .readyUser li{
+            list-style: none;
+            font-size: 20px;
+        }
     </style>
 </head>
 
@@ -511,6 +536,17 @@
             <div class="inrow2">
                 <div class="roomDiv">
                     <div style="display: flex;" class="roomList">
+                        <div class="roomlists">
+                            <div class="room_num">${el.id}</div>
+                                <div class="indoor">
+                                    <div class="room_manager">${el.room_manager}</div>
+                                    <div class="room_play">${play2}</div>
+                                </div>
+                                <div class="door">
+                                    
+                                    <div class="room_title">${el.title}</div>
+                                </div>
+                            </div>
                     </div>
                 </div>
                 <div class="userDiv">

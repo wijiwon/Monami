@@ -324,9 +324,10 @@
             // form 객체 안에 데이터 append 하기
             form.append("title" , title.value);
             form.append("content" , content.value);
+            form.append("tags" , tags.value);
             form.append("post_img" , post_img.files[0]);
     
-            console.log("[@boardCreate.html] 게시글 제목, 본문, 사진 들어오고 있는지 : " , title.value, content.value, post_img.files[0])
+            console.log("[@boardCreate.html] 게시글 제목, 본문, 사진 들어오고 있는지 : " , title.value, content.value, tags.value, post_img.files[0])
     
     
             // axios 전송 | await 붙여야❓❓ 

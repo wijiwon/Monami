@@ -20,6 +20,12 @@ class Post extends Sequelize.Model{
                 type: Sequelize.STRING(300),
                 allowNull: false
             },
+
+            // 게시글 작성과 함께 올리는 '태그들' 
+            tags : {
+                type : Sequelize.STRING(200), 
+                allowNull : false
+            },
             
             // 게시글에 올리는 '사진'
             post_img: {

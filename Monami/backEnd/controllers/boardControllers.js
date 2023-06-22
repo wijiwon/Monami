@@ -5,6 +5,10 @@ const {User, Post , Comment} = require('../models/index');
 const path = require("path");
 const { error } = require('console');
 
+
+const { Op } = require('sequelize');    // 태그 검색 하기 위해 필요 
+
+
 // [READ] 게시판에서 모든 게시글 보여주기 
     exports.allBoardView = async (req, res) => {
         // 보여주는 쿼리 쓰고 
@@ -88,6 +92,7 @@ const { error } = require('console');
 
                 title : body.title, 
                 content : body.content, 
+                tags : body.tags,
                 post_img : file.filename,       
                     // [해석] 이 주소를 img 태그의 src 에 넣으면 보여진다.
                     
@@ -684,6 +689,10 @@ exports.boardListPages = async (req, res) => {
                 // 한 페이지당 몇개 포스팅?;
                 const postsPerPage = 32;
 
+                // 사용자가 선택한 태그 
+
+                // const tags = "음식"
+
                 // 사용자가 보고싶어서 누른 페이지
                 const page = req.query.num
                 console.log("페이지 잘 들어오나 ✍✍✍✍✍✍✍✍" , page)
@@ -695,17 +704,22 @@ exports.boardListPages = async (req, res) => {
                 const offset = limit * (page - 1)
 
 
-            // 1) 로그인 유저 
-                // const loginUser = {
-                //     _userTable_ID : _userTable_ID, 
-                //     _userTable_userId : _userTable_userId
-                // }
+            // 1) tags 하기 위한 설정 
+                // let tagCondition = undefined;
+
+                // if (tags) {
+                //     tagCondition = { [Op.like]: `%${tags}%` };
+                // } 
+                    // tags 에 값이 있으면 -> tagCondition 이 업데이트 
+                    // tags 에 값이 없으면 -> undefined  
 
 
             // 2) sequelize 페이지네이션  
 
-
             const postsWithCommentsUsers = await Post.findAll({
+                // where : {
+                //     tags : tagCondition     // tags 속성 기준으로 찾기
+                // }, 
 
                 limit : limit,        // 한 페이지에 몇 개의 포스팅이 보이게 할 것 인가
                 offset : offset,        // post 에서, 몇 번째 POST ID 에서 찾을 것 인가 
@@ -787,7 +801,141 @@ exports.boardListPages = async (req, res) => {
         }
 
     }
+    
 
+// [GET] 태그 누르면 보이는 페이지네이션 | ⭐⭐⭐ EXPORT 해줘야 해
+    exports.tagsPagenation = async (req, res) => {
+
+        try {
+            // 0) 데이터 들어오는 값 확인
+                console.log("@tagsPagenation 입성 💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️💁‍♀️")
+                // console.log("query 문에서 받아졌나요~" , req.query)     // { num: 'page_btn_3'}
+                // console.log("query 문에서 받아졌나요~" , req.query.num)     // page_btn_3
+                // console.log("query 문에서 받아졌나요~" , req.query.num.split('_')[2] )     // 3
+                // console.log("query 문에서 받아졌나요~" , req.query.page)
+            
+
+                // 정렬시 선택한 것
+                const orderOption = req.query.order  // views, likes, createdAt 중 하나가 들어와야 함
+                console.log("orderOption 잘 들어오나🚀🚀🚀🚀🚀🚀" , orderOption)
+                
+                // 한 페이지당 몇개 포스팅?;
+                const postsPerPage = 32;
+
+                // 사용자가 선택한 태그 
+
+                // const tags = "음식"
+                const tags = req.query.tags
+                console.log("tags 잘 들어오나? 🙌🙌" , tags)
+
+                // 사용자가 보고싶어서 누른 페이지
+                const page = req.query.num
+                console.log("페이지 잘 들어오나 ✍✍✍✍✍✍✍✍" , page)
+
+                // 한 페이지에서 몇 개의 포스팅을 보이게 할 것 인가. 
+                const limit = postsPerPage     // 임시📛 
+
+                // Post 테이블 중 '어디에서 부터' 데이터를 가져올 것 인가.
+                const offset = limit * (page - 1)
+
+
+            // 1) tags 하기 위한 설정 
+                let tagCondition = undefined;
+
+                if (tags) {
+                    tagCondition = { [Op.like]: `%${tags}%` };
+                } 
+                    // tags 에 값이 있으면 -> tagCondition 이 업데이트 
+                    // tags 에 값이 없으면 -> undefined  
+
+
+            // 2) sequelize 페이지네이션  
+
+            const postsWithCommentsUsers = await Post.findAll({
+                where : {
+                    tags : tagCondition     // tags 속성 기준으로 찾기
+                }, 
+
+                limit : limit,        // 한 페이지에 몇 개의 포스팅이 보이게 할 것 인가
+                offset : offset,        // post 에서, 몇 번째 POST ID 에서 찾을 것 인가 
+                include : [
+                    {model : Comment},
+                    {model : User}
+                ], 
+                order : [[`${orderOption}` , "DESC"]]     // '들어온값' 이 '제일 위' 로 오도록
+                // order : [["views" , "DESC"]]     // '조회수' 가 '제일 위' 로 오도록
+                // order : [["likes" , "DESC"]]     // '좋아요' 가 '제일 위' 로 오도록
+                // order : [["createdAt" , "DESC"]]     // '최신순' 이 '제일 위' 로 오도록
+                
+            });
+            // console.log( "@pagenation , sequelize 에서 필요한거 받나? ")
+            // console.log( "@pagenation , sequelize 에서 필요한거 받나? ", postsWithCommentsUsers)
+
+
+            // 5) 합치기 
+                const result = postsWithCommentsUsers
+                    
+                console.log("@tags pagenation | 데이터 다 나가고 있니")
+                console.log("@tags pagenation |💨💨💨💨💨💨💨💨💨💨💨" , result)
+
+            // 5) 클라이언트에 보내기 
+                // a) res.json로 redirect 보내면서, 2) result 를 담아서 보내자
+                    // res.json({ 
+                    //     redirectURL: `http://127.0.0.1:4000/board/list` ,
+                    //     result : result
+                    // });                    
+                    // [내가 원하는 것]
+                        // 1) 게시판 목록 페이지가 나오면서, 2) 데이터 까지 같이 넘어가는 것
+
+                // a-1) 시도 
+                    // /board/list 로 보내보자
+                        // 하고 싶은건 기본 목록 페이지로, 데이터 들고가기
+                        // 그러면, 어디로 가게 되나? 
+                        // 그냥, 기본 list 를 그리게 되나? 
+                        // 어디로 가서 어떻게 실행되는가, 이건 redirect 에서도 만났던 문제 😥😥😥
+                    // res.json({
+                    //     redirectURL : "http://127.0.0.1:4000/board/list", 
+                    //     result : result
+                    // })
+                    // 👉 안 나온다. 
+
+                // a-2 ) 시도 
+                    // 새롭게 라우터를 파서, 그 경로로 오면, 이것만 처리하게 
+                    
+                    
+                    res.json({
+                            // redirectURL : "http://127.0.0.1:4000/board/list/pagenation", 
+                            data : result
+                        })
+
+                    // // 2) [클라이언트에 기재] redirect 방식 -> 🔵 작동함 | 다만 새로고침이 싫음 
+                    //     const redirectURL = response.request.responseURL;
+                    //     console.log("redirectURL 이게 어떻게 넘어오지? 🕵️‍♂️ @boardItem" , redirectURL)
+                    //     console.log("redirectURL 이게 어떻게 넘어오지? 🕵️‍♂️ @boardItem" , response.request.responseURL)
+                    //     window.location.href = redirectURL;
+
+                
+                // b) sendFile 버전
+                    // res.sendFile(path.join (__dirname , "../../frontEnd/boardList.html"));
+                    // 그런데, 📛 sendFile 은 data 를 담아서 넘기지 못 함 
+                    
+                // b-1) sendFile + data 넘기기 버전
+                    // 그런데, 📛 sendFile 은 data 를 담아서 넘기지 못 함 
+
+
+                // c) redirect + result 로 데이터 넘기고 -> redirect 페이지에서 sendfile 해야 하나
+
+
+                // d) 자, 예전에, 넘겨줄 페이지 + 데이터 를 어떻게 가져왔었는지 보자 ⭐⭐⭐ 
+                        
+
+            
+        } catch (error) {
+            
+            console.log(error)
+        }
+
+    }
 
 // 특정 페이지로 들어왔을 때 보여주기
 exports.pagenationView = (req, res) => {

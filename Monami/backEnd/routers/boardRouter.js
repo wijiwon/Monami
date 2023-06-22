@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const {  viewOrderView, likesView , allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation , pagenationView , defaultView} = require("../controllers/boardControllers")
+    const {  viewOrderView, likesView , allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation , pagenationView , defaultView, tagsPagenation} = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
     const { islogin } = require("../middleware/isLogin");
 
@@ -71,6 +71,11 @@
 // [get] 게시판 > 페이지네이션 | 2page 클릭하면, 이쪽으로 오게
     routers.get('/list/page' , islogin , pagenation)    
         // query 방식에서는 ? 붙이지 않아도 됨. 
+        
+// [get] 게시판 > 페이지네이션 | 2page 클릭하면, 이쪽으로 오게
+    routers.get('/list/page/tags' , islogin , tagsPagenation)    
+        // query 방식에서는 ? 붙이지 않아도 됨. 
+
 
 // [get] 게시판 > 우선, 페이지만 | createdAt 최근
     routers.get('/list/view' , islogin , defaultView)

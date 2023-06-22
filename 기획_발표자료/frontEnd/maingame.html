@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+</head>
+<body>
+    
+    <p>메인 게임임</p>
+    <label for="">suggest</label>
+    <input id="suggest" type="text">
+    <label for="">paint</label>
+    <input id="paint" type="text">
+    <label for="">ans1</label>
+    <input id="ans1" type="text">
+    <label for="">pain2</label>
+    <input id="pain2" type="text">
+    <label for="">ans2</label>
+    <input id="ans2" type="text">
+
+
+
+
+
+</body>
+<script>
+    const socket = io.connect('http://localhost:4000');
+    console.log("d");
+    socket.on('THrowGameMember',(tmp)=>{
+        console.log(tmp);
+        console.log(tmp.rooms[tmp.roomNum].usernickname);
+    } )
+
+    let whoisme="지원";
+    let myindex=0;
+    let mynickname="지원"
+    let gmaeplayer=["현욱","임자","지원","동희","정현"]
+        async function fetchData() {
+  try {
+    
+    const response = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
+      withCredentials: true
+    });
+    
+    console.log("mite");
+    console.log(response.data._room.room_manager);
+    // gmaeplayer[0]=response.data._room.room_manager;
+    
+    console.log(gmaeplayer) 
+    
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+fetchData();
+    let suggest=document.getElementById('suggest');
+    let ans="";
+    suggest.addEventListener('input',()=>{
+        ans=suggest.value;
+    })
+    let playerSuggest=`${whoisme}의 제시어:${ans}`
+    // post 요청으로 primaryuser에 자신을 넣은뒤 create 해준다. 그리고 백틱 그대로 값을 처음에 넣어준다. 
+    for(let i = 0 ; i<gmaeplayer.length;i++)
+    {
+        console.log(i)
+        if(whoisme==gmaeplayer[i]){
+            console.log(gmaeplayer[i]);
+            myindex=i;
+        }
+        
+    }
+    console.log("whoisme",whoisme);
+    console.log("myindex",myindex);
+    
+    // paint라고 쓰인 그림과 정답은 다 화면에서 입력받는것이다. 
+    if(gmaeplayer[gmaeplayer.length-1]==mynickname) // 내가 배열의 마지막 유저라는 소리다. 
+    {
+        // Get 요청으로 where gmaeplayer[myindex-1] 의 제시어를 불러온다. 
+        // post로 그림을 드로잉에 저장 
+        // post로 where gameplayer[0]의 행에 드로잉을 그려준다.
+        let paint= `${"1."}${whoisme}${":그림 "}`
+        console.log("내가",`${gmaeplayer[myindex-1]}`,"제시어을보고 ")
+        console.log("나한테 저장받게될사람",gmaeplayer[0],"의 행에",paint);
+
+    }else{ // 내가 배열의 마지막 유저가 이나라는 소리다. 
+        let paint= `${"1."}${whoisme}${":그림 "}`
+        // where gameplater[myindex-1]
+        console.log("내가",`${gmaeplayer[myindex-1]}`,"제시어을보고 ")
+        console.log("나한테 저장받게될사람",gmaeplayer[myindex-1],"의 행에",paint);
+    }
+    
+    let seq=(myindex+3)%gmaeplayer.length;
+    console.log(`${gmaeplayer[seq]}의 1. 그림을보고`) // get 요청으로 where gameplayer[seq] 의 content 를 받아온다음 , 기준으로 split 해준다음 1.을기준으로 한번더 split그 값을 보여준다
+    console.log("seq",[seq],gmaeplayer[seq],`${"2.저장받게될 답"}`,`${gmaeplayer[myindex]}`); // post 요청으로 where gmaeplayer[seq] room primarykey  2. 저장받게될 답 에 input값을 넣어주고 백틱형태로 붙여준다. concat사용 하면 가능
+    //post whwere gameplayer[seq],rommkey
+
+    seq=(myindex+2)%gmaeplayer.length;
+    console.log(`${gmaeplayer[seq]}의 2. 정답을을보고`) //위와 동일한방식
+    console.log("seq2",[seq],gmaeplayer[seq],`${"3.저장받게될 그림"}`,`${gmaeplayer[myindex]}`);
+
+    seq=(myindex+1)%gmaeplayer.length;
+    console.log(`${gmaeplayer[seq]}의 3. 그림을을보고`)
+
+    console.log("seq3",[seq],gmaeplayer[seq],`${"4.저장받게될 답"}`,`${gmaeplayer[myindex]}`);
+
+    // 마지막 리플레이 읽어올때는 첫번쨰 유저의 contet 를싹다 불러와서 그걸 기준으로 getpost요청해서 정보를 불러온다. 
+    // 혹은 모든 플레이가 끝나는 순간 해당하는 방에있는 그림을 모두 불러와서저장한다. 모든유저에게 그런다음
+    // 소켓으로 어떤유저를 클릭했는지 보여준다음 해당하는 유저에서 값을 꺼내 보여준다 .
+    
+
+    
+
+    // // 현재 접속중인 유저의 정보를 가져온다. 
+    // await axios.get('http://127.0.0.1:4000/gameready/userInfo', {
+    //     withCredentials: true
+    // })
+    // 현재 유저의 정보를 받아옴 
+    // tmp.rooms[tmp.roomNum].usernickname
+    // 받아온 순서대로 post 요청으로 생성해준다 한유저당 한행을 
+    // content에 다적어넣는다 
+    // 제시어,1.유저이름:그림(drawing에 저장된 거 불러오기 id),2.유저아룸:정답,3.유저이름:그림4.유저이름:정답 
+    // id는 room_primarykey 로 추가해준다.  또한 유저의 총길이를 connect id에 저장해준다. 
+    // 제시어를 입력 input태그의 value값으로 받으면 유저닉네임이랑 일치하는 곧에 post요청으로 해당하는 유저의 content 제시어 자리에 정답을 추가 한다. gusdnr22:사과,goldenbeer:오렌지,gusdnr205:키위
+    // 답을 get요청으로 다시받아와서 자신이 마지막[connectid-1] 유저일경우 배열기준 0번재 유저의 그림에 마지막 유저의 그림이 저장된다. ex) 사과,1.gusdnr205:그림,
+    // 저장하는것을 기준으로 하자면 자신이 i 번쨰 유저라면 내가 그린 그림이 i-1 유저의 그림에 저장된다. 
+    // 내가( i + 3) % connectid 의 번쨰 사람이라면  i 번쨰 유저의 1. 유저이름 그림을 보고 정답을 말하고 i번쨰 유저의 2.에 저장해준다. 
+    // 내가( i + 2) % connectid 의 번쨰 사람이라면  i 번쨰 유저의 2. 유저이름 정답을 보고 그림을 그리고 i번쨰 유저의 3.에 저장해준다.
+    // 내가( i + 1) % connectid 의 번쨰 사람이라면  i 번쨰 유저의 3. 유저이름 그림을 보고 정답을 말하고 i번쨰 유저의 4.에 저장해준다.
+    // 내가 몇번쨰 사람인지 판단하는게 중요 
+
+
+    // 
+    
+    // 
+    // await axios.post('http://127.0.0.1:4000/gamePlay/ansInput', { question: ans }, {
+    //     withCredentials: true,
+    //     "Content-Type": "application/json"
+    // })
+
+    // await axios.post('http://127.0.0.1:4000/gamePlay/input', { id: num }, {
+    //     withCredentials: true,
+    //     "Content-Type": "application/json"
+    // })
+    // await axios.post('http://127.0.0.1:4000/gamePlay/input', { id: num }, {
+    //     withCredentials: true,
+    //     "Content-Type": "application/json"
+    // })
+    // await axios.post('http://127.0.0.1:4000/gamePlay/input', { id: num }, {
+    //     withCredentials: true,
+    //     "Content-Type": "application/json"
+    // })
+    // await axios.post('http://127.0.0.1:4000/gamePlay/input', { id: num }, {
+    //     withCredentials: true,
+    //     "Content-Type": "application/json"
+    // })
+    
+
+
+    // window.onload = () => {
+    //     setTimeout(() => {
+    //     socket.on('THrowGameMember', )
+    
+
+       
+        
+        // await axios.get('http://127.0.0.1:4000/gameready', {
+        //         withCredentials: true
+        //     })
+        // await axios.post('http://127.0.0.1:4000/gameready/roomchoice', { id: num }, {
+        //                     withCredentials: true,
+        //                     "Content-Type": "application/json"
+        //                 }).then((e) => {
+
+        //                 }).catch((err) => {
+        //                     console.log(err);
+        //                 })
+        
+    //     function game(player) {
+    //     let tmp = player.length;
+    //     let replay = [];
+    //     let dap = [];
+    //     let painting = [];
+    //     for (let i = 0; i < tmp; i++) {
+    //         dap[i] = prompt('enter your answer');
+    //         replay[i] = {
+    //             playerSuggest:`${palyer[i]}의 제시어:${dap[i]}`  dap[i]은 questions에 content
+    //         }
+    //     }
+    //     console.log("모든 정답이 입력되었습니다");
+    //     for (let i = 0; i < tmp; i++) {
+    //         console.log(dap[i]);
+    //         if (i == 0) {
+    //             alert(dap[0]);
+    //             let asdf = prompt('그림을 그려주세요');
+    //             // 첫번째 유저의 제시어가 보여졌을때
+    //             // 마지막유저의 그림이 들어간다.
+    //             painting[i] = { paint1: `${player[tmp - 1]},${asdf}` };
+    //             replay[i].first = painting[i];
+    //         } else {
+    //             alert(dap[i])
+    //             // 두번째이후 유저이후
+    //             let asd = prompt('그림을 그려주세요');
+    //             painting[i] = { paint1: `${player[i - 1]},${asd}` };
+    //             replay[i].first = painting[i];
+    //         }
+    //     }
+    //     for (let i = 0; i < tmp; i++) {
+    //         alert(replay[i].first.paint1);
+    //         let playerIndex = (i + 3) % player.length;
+    //         let asdfa = prompt(`${player[playerIndex]}의 정답은?`);
+    //         replay[i].second = {answer:`${player[playerIndex]}, ${asdfa}`};
+    //     }
+
+    //     for (let i = 0; i < tmp; i++) {
+    //         alert(replay[i].second.answer);
+    //         let playerIndex = (i + 2) % player.length;
+    //         let asdfa = prompt(`${player[playerIndex]}의 그림그려주세용`);
+    //         replay[i].third = {paint:`${player[playerIndex]}, ${asdfa}`};
+    //     }
+    //     for (let i = 0; i < tmp; i++) {
+    //         alert(replay[i].third.paint);
+    //         let playerIndex = (i + 1) % player.length;
+    //         let asdfa = prompt(`${player[playerIndex]}의 정답은?`);
+    //         replay[i].forth = {ans:`${player[playerIndex]}, ${asdfa}`};
+    //     }
+
+
+    //     console.log(painting);
+    //     console.log(replay);
+
+
+    // }
+
+    // game(palyer);
+
+
+</script>
+</html>

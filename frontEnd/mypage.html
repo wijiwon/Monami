@@ -223,7 +223,7 @@
       display: none;
     } */
 
-    .file-label {
+    /* .file-label {
       display: inline-block;
       cursor: pointer;
       border: 3px dashed white;
@@ -233,14 +233,14 @@
       height: 35px;
       font-size: 20px;
       font-family: 'Goyang';
-    }
+    } */
 
-    .file-label:hover {
+    /* .file-label:hover {
       border-radius: 2em;
       cursor: pointer;
       background-color: rgb(252, 171, 65);
       color: white;
-    }
+    } */
   </style>
 </head>
 
@@ -263,7 +263,7 @@
               <!-- <div class="file" id="file"> -->
 
                 <!-- <label for="files" class="file-label">Choose File</label> -->
-                <input class="file" type="file" id="files" onchange="readURL(this);">
+                <input class="file" type="file" id="file" onchange="readURL(this);">
               <!-- </div> -->
 
             </div>
@@ -368,7 +368,7 @@
   }
 
   img_change.onclick = () => {
-    file.style.display = "block";
+    files.style.display = "block";
     img_change.style.display = "none";
   }
 

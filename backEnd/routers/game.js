@@ -3,10 +3,17 @@ const { islogin } = require('../middleware/isLogin')
 const { isRoom } = require("../middleware/isRoom")
 const { DrawingAdd, viewVideo, firstQuestionInput, DrawQueUpdate, QuestionView, TwoQuestionInput ,getUserinfo } = require('../controllers/gamePlay')
 
-
 const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+
+router.get('/',(req,res)=>{
+  res.sendFile("/home/ubuntu/frontEnd/game.html");
+});
+
+// router.get("/hi");
+// get : 이 주소로 써주세요 youdonghee.shop/admin/hi 
 
 
 router.post('/', islogin, isRoom, upload.single('file'), DrawingAdd);

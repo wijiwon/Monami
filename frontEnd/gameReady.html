@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameReady Page</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 
     <style>
         body {
@@ -16,6 +16,9 @@
             padding: 0;
             width: 100vw;
             height: 100vh;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
         }
 
         .view1 {
@@ -35,11 +38,12 @@
         }
 
         .row1 {
-            height: 15%;
+            height: 120px;
             border: 1px solid violet;
         }
 
         .row2 {
+            width: 1500px;
             height: 50%;
             border: 1px solid darkblue;
         }
@@ -294,27 +298,24 @@
                 <p>User List</p>
                 <ul id="User_id"></ul>
             </div>
-        </div>
-        <!-- 페이지의 하단 영역. 접속중인 유저간의 전체 채팅과 현재 로그인한 유저의 정보를 확인할 수 있고, 게임페이지 홈으로 이동할 수 있다. -->
-        <div class="row3">
-            <!-- 접속 중인 전체유저 채팅-->
-            <div class="chat">
-                <!-- 채팅 내용이 보이는 영역 -->
-                <div class="chatBox"></div>
-                <!-- 채팅을 입력하는 영역 -->
-                <div class="chatInsert">
-                    <input id="message-input" type="text" placeholder="Type your message">
-                    <input type="text" id="receiver-id" placeholder="Receiver ID or username">
-                    <button id="send-button">Send</button>
-
-                    <ul id="messages"></ul>
-
-                </div>
-            </div>
-            <!-- 유저가 로그인한 계정의 정보가 노출되는 영역. 홈으로 버튼을 누르면 게임 메인페이지로 이동한다. -->
-            <div class="myProfile">
-                <div class="myProfile2"></div>
-            </div>
+                        <!-- 접속 중인 전체유저 채팅-->
+                        <div class="chat">
+                            <!-- 채팅 내용이 보이는 영역 -->
+                            <div class="chatBox"></div>
+                            <!-- 채팅을 입력하는 영역 -->
+                            <div class="chatInsert">
+                                <input id="message-input" type="text" placeholder="Type your message">
+                                <input type="text" id="receiver-id" placeholder="Receiver ID or username">
+                                <button id="send-button">Send</button>
+            
+                                <ul id="messages"></ul>
+            
+                            </div>
+                        </div>
+                        <!-- 유저가 로그인한 계정의 정보가 노출되는 영역. 홈으로 버튼을 누르면 게임 메인페이지로 이동한다. -->
+                        <div class="myProfile">
+                            <div class="myProfile2"></div>
+                        </div>
         </div>
     </div>
     <!-- 방 만들기 버튼을 누르면 켜지는 팝업. 방을 생성할 수 있다. -->
@@ -345,7 +346,7 @@
     </div>
 </body>
 <script>
-    const socket = io.connect('http://localhost:4000');
+    const socket = io.connect('/');
 
     // ahfmrpTdjdygg
     // 모르게ㅆ어욯ㅎ
@@ -414,10 +415,10 @@
     //         })
 
     exit.addEventListener('click', async () => {
-        await axios.post('http://127.0.0.1:4000/gameready/RoomDelete', { title: titlevalue },
-            {
-                withCredentials: true
-            })
+        await axios.post('/gameready/RoomDelete', { title: titlevalue },
+        {
+            withCredentials:true
+        })
         socket.emit('madeRoom', () => {
             console.log("해결함");
         });
@@ -486,8 +487,9 @@
         test3.style.display = "block";
         setTimeout(() => {
 
-            window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
+            //window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/game.html";
 
+            window.location.href = "/game/hi";
 
         }, 1000);
     })
@@ -616,7 +618,7 @@
     // 현재 대기중, 게임중인 룸을 나타내주는 함수
     async function RoomView() {
         try {
-            const data = await axios.get('http://127.0.0.1:4000/gameready', {
+            const data = await axios.get('/gameready/hi', {
                 withCredentials: true
             })
             const roomArr = data.data;
@@ -649,7 +651,7 @@
                         // let usernum3 = usernum2.split(',') 
                         // console.log("$$$$$$$$$$$$$$$$",usernum3)
 
-                        axios.post('http://127.0.0.1:4000/gameready/roomchoice', { id: num }, {
+                        axios.post('/gameready/roomchoice', { id: num }, {
                             withCredentials: true,
                             "Content-Type": "application/json"
                         }).then((e) => {
@@ -735,7 +737,7 @@
             console.log("방생성되어서 이벤트보냄")
         })
         // joinRoom();
-        axios.post("http://127.0.0.1:4000/gameready/create", { title: title.value }, {
+        axios.post("/gameready/create", { title: title.value }, {
             withCredentials: true,
             "Content-Type": "application/json"
 
@@ -770,10 +772,10 @@
         // }).catch((err)=>{
         //     console.log(err);
         // })
-        setTimeout(() => {
-            axios.post("http://127.0.0.1:4000/gameready/gethost", { title: titlevalue }, {
-                withCredentials: true
-            }).then((e) => {
+
+        axios.post("/gameready/gethost", { title: titlevalue }, {
+            withCredentials: true
+        }).then((e) => {
                 console.log(e);
                 let num = e.data.id
                 nowRoomNUm=num;
@@ -785,13 +787,16 @@
            
                 
             })
-        }, 100);
-       
+        }, 100);//then((e) => {
+            //console.log(e);
+            //let num = e.data.id
+            //joinRoom(num);
 
+        })
     }
     //--------------------------------------------------------------------------------------------------
     //------로그인한 유저의 정보를 보여주는 부분----------------------------------------------------------
-    axios.get('http://127.0.0.1:4000/gameready/userInfo', {
+    axios.get('/gameready/userInfo', {
         withCredentials: true
     }).then((e) => {
         console.log(e)

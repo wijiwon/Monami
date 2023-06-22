@@ -1,11 +1,11 @@
-const e = require('express');
+// const e = require('express');
 const Sequelize = require("sequelize");
 const { User, Post } = require("../models");
 
 
 // 게시판 랭킹 , 유저랭킹 함수
 // 디코드 함수 가져오기
-exports.mainloginaccess = async(req,res)=>{
+exports.mainloginaccess = async(req,res,next)=>{
   try{
     // console.log(req);
     const { decode } = req;
@@ -14,8 +14,12 @@ exports.mainloginaccess = async(req,res)=>{
       await User.findOne({
         where : {user_id : decode.user_id}
       }).then((e) => {
-        res.send({  login: e });
+        req.userInfo = e;
+        next();
+        // res.send({  login: e });
       })
+    }else{
+      next();
     }
   }
   catch(err){
@@ -24,34 +28,64 @@ exports.mainloginaccess = async(req,res)=>{
 }
 exports.mainInfo = async (req, res) => {
   try {
-    // console.log("알이큐#$#$%#$%#$%",req);
-    await User.findAll({
+    const userRanking = await User.findAll({
       raw: true,
       where: {
-        joinAllow: {
-          [Sequelize.Op.not]: 2
-        }
+        joinAllow: 1
       },
       order: [['exp', 'DESC']],
       limit: 5
+    });
 
+    const posts = await Post.findAll({
+      raw: true,
+      order: [['createdAt', 'DESC']],
+      limit: 5
+    });
+
+    if (req.userInfo) {
+      res.send({ user: userRanking, posts: posts, userInfo: req.userInfo });
+    } else {
+      res.send({ user: userRanking, posts: posts });
     }
-    ).then((user) => {
-      // 내림차순 5개 가공
-      Post.findAll({
-        raw: true,
-        order: [['createdAt', 'DESC']],
-        limit: 5,
-        where: {}
-      }).then((posts) => {
-        res.send({ user: user, posts: posts });
-      })
-    })
-
   } catch (error) {
-    console.log("mainInfo 컨트롤 에러", error);
+    console.log("mainInfo control error", error);
   }
-}
+};
+
+// exports.mainInfo = async (req, res) => {
+//   try {
+//     // console.log("알이큐#$#$%#$%#$%",req);
+//     await User.findAll({
+//       raw: true,
+//       where: {
+//         joinAllow: {
+//           [Sequelize.Op.not]: 2
+//         }
+//       },
+//       order: [['exp', 'DESC']],
+//       limit: 5
+
+//     }
+//     ).then((user) => {
+//       // 내림차순 5개 가공
+//       Post.findAll({
+//         raw: true,
+//         order: [['createdAt', 'DESC']],
+//         limit: 5,
+//       }).then((posts) => {
+//         if (req.userInfo) {
+//           res.send({ user: user, posts: posts, userInfo: req.userInfo });
+//         } else {
+//           res.send({ user: user, posts: posts });
+//         }
+//       })
+//     })
+
+//   } catch (error) {
+//     console.log("mainInfo 컨트롤 에러", error);
+//   }
+// }
 
 
 // exports.logOut = async(req,res) =>{

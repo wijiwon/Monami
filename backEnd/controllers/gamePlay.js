@@ -224,12 +224,14 @@ exports.getUserinfo= async(req,res)=>{
         console.log("req임")
         console.log(req)
         const { id } = req.body;
+        const {room}=req;
         console.log(id);
         let adf=[];
         for(let i =0;i<id.length;i++){
             let Que = await User.findOne({ where: { id: id[i] } })
             adf.push(Que);
         }
+        adf.push(room);
         console.log(adf);
 
         res.json(adf);

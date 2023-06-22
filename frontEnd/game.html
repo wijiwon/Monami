@@ -14,7 +14,6 @@
         }
 
         .questions,
-
         .drawings,
         .gameResult {
             width: 100vw;
@@ -32,13 +31,11 @@
         .drawings,
         .questions,
         .gameResult {
-            display: block;
-
-        }
-
-        .gameResult {
             display: none;
+
         }
+
+
 
         .questions .row1,
         .drawings .rows1,
@@ -261,6 +258,11 @@
             height: 15%;
             border: 1px solid darkblue;
         }
+
+        #DrawresultVideo {
+            width: 500px;
+            height: 500px;
+        }
     </style>
 </head>
 
@@ -383,7 +385,9 @@
             </div>
             <!-- Game 결과 -->
             <div class="gameBoard">
-                <canvas id="resultCanvas"></canvas>
+                <div id="nickname"></div>
+                <video id="DrawresultVideo" src=""></video>
+                <!-- <canvas id="resultCanvas"></canvas> -->
             </div>
         </div>
         <div class="row3">
@@ -399,10 +403,10 @@
     const socket = io.connect('http://localhost:4000');
     const playerName = document.querySelector('.playerName');
     console.log("d");
-    socket.on('THrowGameMember', (tmp) => {
-        console.log(tmp);
-        console.log(tmp.rooms[tmp.roomNum].usernickname);
-    })
+    // socket.on('THrowGameMember', (tmp) => {
+    //     console.log(tmp);
+    //     console.log(tmp.rooms[tmp.roomNum].usernickname);
+    // })
 
     // const data = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
     //     withCredentials: true
@@ -703,6 +707,48 @@
         // videoElement.play();
     }
 
+    async function playresultVideo(index) {
+        const videoElement = document.getElementById('DrawresultVideo');
+        console.log("비디오재생의 인덱스느느느느느느는", index)
+
+        try {
+            const response = await axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+                responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+                withCredentials: true
+            });
+            const videoData = new Blob([response.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+            console.log("그림data----------", response.data)
+            const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+            videoElement.src = videoSrc;
+            videoElement.play();
+            // 할당한 url을 해제한다.
+            URL.revokeObjectURL(videoData);
+
+        } catch (error) {
+            console.log("playVideo 오류")
+            console.log(error)
+
+        }
+
+        // axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+        //     responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+        //     withCredentials: true
+        // }).then((e) => {
+        //     const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+        //     console.log("그림data----------",e.data)
+        //     const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+        //     videoElement.src = videoSrc;
+        //     videoElement.play();
+        //     // 할당한 url을 해제한다.
+        //     URL.revokeObjectURL(videoData);
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
+
+        // videoElement.src = videoURL;
+        // videoElement.play();
+    }
+
     async function stopRecording() {
         console.log("stopRecording");
         mediaRecorder.stop();
@@ -859,7 +905,7 @@
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
 
                 // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
-                
+
                 // let targetIndex;
                 // if (MyIndex == 0) {
                 //     targetIndex = 1;
@@ -867,13 +913,13 @@
                 // else {
                 //     targetIndex = 0;
                 // }
-                
+
                 // const isTarget = questions[targetIndex];
                 // console.log("이번 타겟의 data - ", isTarget)
-                
+
                 // viewIndex = isTarget;
                 // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
-                
+
                 // let isContent = isTarget[1];
                 // isContent = isContent.split(',')
                 // console.log("콘텐츠값은??????", isContent)
@@ -1124,7 +1170,7 @@
 
 
             //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-               const targetIndex = (MyIndex + 1) % questions.length;
+            const targetIndex = (MyIndex + 1) % questions.length;
             //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             // ##########두명이서 할 경우 5라운드에서는 내 인덱스의 값이 들어와야 한다.#############
             // const targetIndex = MyIndex;
@@ -1180,41 +1226,98 @@
     }
 
 
-    const gameEnd = () => {
+    const gameEnd = async () => {
         console.log("--------------------------리플레이------------------------------");
-        // Change children with "block" to "none" and vice versa
-
-        // Add "none" class to elements with class "questions", "drawings", and "gameResult"
-        document.querySelectorAll('.questions, .drawings, .gameResult').forEach(element => {
-            element.classList.add('none');
+        document.querySelectorAll('.questions.pop, .drawings.pop').forEach(element => {
+            element.classList.remove('pop');
         });
+        // // Add "block" class to elements with class "gameResult"
+        document.querySelector('.gameResult').classList.add('pop');
+        await getthing();
+        await replaying();
 
-        // Remove "none" class from elements with class "questions", "drawings", and "gameResult"
-        document.querySelectorAll('.questions.none, .drawings.none, .gameResult.none').forEach(element => {
-            element.classList.remove('none');
-        });
-
-        // Add "block" class to elements with class "gameResult"
-        document.querySelector('.gameResult').classList.add('block');
-
-        getthing()
-        //--------------------------------------------------------------------
-        // ----다시 하기 클릭은 없는게 좋겠어요..... 방 id 새로 부여해야 하는데 그게 될까여,,,? 그냥 나가기로하죠.....
-
-        replaying();
-         
-       socket.on('replaySelect1', (tmp) => {
+        socket.on('replaySelect1', (tmp) => {
             console.log("replaySelect1", tmp);
             console.log(replay[tmp]);
+            const string = replay[tmp].content;
+            const array = string.split(",");
+            const nicknametag = document.getElementById('nickname');
+            const videoElement = document.getElementById('DrawresultVideo');
+            const gameBoard = document.querySelector('.gameBoard');
+
+            function asd(){
+                const lastChild = nicknametag.lastChild;
+            if (lastChild) {
+                nicknametag.removeChild(lastChild);
+            }
+            }
+            setTimeout(() => {
+                let p = document.createElement('p');
+                p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
+                nicknametag.appendChild(p);
+            }, 1000);
+          
+           
+          
+            setTimeout(() => {
+                asd()
+                let p3 = document.createElement('p');
+                p3.innerHTML = `제시어 :${array[0]}`;
+                nicknametag.appendChild(p3);
+            }, 2000);
+        
+
+            setTimeout(() => {
+                asd();
+                let p2 = document.createElement('p');
+                p2.innerHTML = `그림그린사람 :${array[1]}`;
+                nicknametag.appendChild(p2);
+
+
+            }, 3000);
+
+            setTimeout(() => {
+                playresultVideo(array[2]);
+            }, 4000);
+            setTimeout(() => {
+                asd();
+
+                let p4 = document.createElement('p');
+
+                p4.innerHTML = `${array[3]} : ${array[4]}`;
+                nicknametag.appendChild(p4);                
+
+            }, 5000);
+
+            setTimeout(() => {
+                playresultVideo(array[6]);
+            }, 7000);
+            setTimeout(() => {
+                asd();
+
+                let p5 = document.createElement('p');
+                p5.innerHTML = `${array[7]} :${array[8]}`;
+                nicknametag.appendChild(p5);
+                
+                console.log("완료");
+            }, 8000);
+                asd();
+
+
         })
-
-
 
 
     }
 
+    function asdsf(tmp, str) {
+        const nicknametag = document.getElementById('nickname');
+        let p = document.createElement('p');
+        p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
+        nicknametag.appendChild(p)
+    }
+
     async function getthing() {
-        axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        await axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -1234,7 +1337,6 @@
             gething2();
         })
     }
-    getthing();
     async function gething2() {
         try {
             await axios.post('http://127.0.0.1:4000/gameplay/getUserinfo', { id: gmaeplayer }, {
@@ -1243,11 +1345,18 @@
             }).then((e) => {
                 console.log("여기에 접근하는가?");
                 console.log(e)
+                console.log(e.data[e.data.length - 1].id);
+                socket.emit('rein', e.data[e.data.length - 1].id);
+
                 for (let i = 0; i < e.data.length; i++) {
-                    gmaeplayer[i] = (e.data[i].username)
-                    replay[i].nickname = e.data[i].username;
+                    if (i == (e.data.length - 1)) {
+                        break;
+                    } else {
+                        gmaeplayer[i].push = e.data[i].username;
+                        replay[i].nickname = e.data[i].username;
+                    }
                 }
-                console.log(gmaeplayer);
+                console.log("gmaeplayer", gmaeplayer);
             })
             console.log(replay);
         } catch (error) {
@@ -1255,7 +1364,6 @@
         }
 
     }
-
 
     async function fetchData() {
         try {
@@ -1265,8 +1373,7 @@
             });
 
             console.log("mite")
-            console.log(response);
-            console.log(response.data._room.room_manager);
+
             // gmaeplayer[0]=response.data._room.room_manager;
             // 소켓전송ㄴ
             socket.emit('rein', response.data._room.id);
@@ -1277,22 +1384,22 @@
             console.error(error);
         }
     }
-function repalying(){
-    gmaeplayer.forEach((element, index) => {
-        console.log(element);
-        let li = document.createElement('li');
-        li.innerHTML = element;
-        li.addEventListener('click', () => {
-            console.log("클릭됌", element);
-            let sdkiojw = index;
-            socket.emit('replaySelect', sdkiojw);
+    async function replaying() {
+        await gmaeplayer.forEach((element, index) => {
+            console.log("element", element);
+            let li = document.createElement('li');
+            li.innerHTML = element;
+            li.addEventListener('click', () => {
+                console.log("클릭됌", element);
+                let sdkiojw = index;
+                socket.emit('replaySelect', sdkiojw);
+            })
+            playerName.appendChild(li);
         })
-        playerName.appendChild(li);
-    })
 
 
-}
-   
+    }
+
 
 
     //-------- 게임 구현 로직 ------------------------------------------------------------------

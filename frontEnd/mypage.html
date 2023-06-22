@@ -337,6 +337,7 @@
 
   uploadBtn.onclick = () => {
     const form = new FormData();
+    let files = document.querySelector('#files');
     // console.log("qlqlql",user_name.innerHTML);
     if (file.files.length > 0) {
       form.append("upload", file.files[0]);

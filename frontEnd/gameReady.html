@@ -945,23 +945,27 @@
                 let door = roomDiv.querySelector('.door');
                 door.addEventListener('mouseenter', function() {
                     // Add the 'opening' class to the door when the mouse enters
-                    door.classList.add('opening');
+                    if (!doorOpened) {
+                        door.classList.add('opening');
+                        doorOpened = true;
+                    }
                 });
 
                 door.addEventListener('mouseleave', function() {
                     // Remove the 'opening' class from the door when the mouse leaves
                     door.classList.remove('opening');
+                    doorOpened = false;
                 });
 
-                let doorChildren = door.querySelectorAll('*');
-                    doorChildren.forEach((child) => {
-                        child.addEventListener('mouseenter', function(event) {
-                            event.stopPropagation();
-                        });
-                        child.addEventListener('mouseleave', function(event) {
-                            event.stopPropagation();
-                        });
-                    });
+                // let doorChildren = door.querySelectorAll('*');
+                //     doorChildren.forEach((child) => {
+                //         child.addEventListener('mouseenter', function(event) {
+                //             event.stopPropagation();
+                //         });
+                //         child.addEventListener('mouseleave', function(event) {
+                //             event.stopPropagation();
+                //         });
+                //     });
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
                 let rooms = document.querySelectorAll(".roomlists");
                 // console.log("썸바리헲미이이이이이익",rooms)

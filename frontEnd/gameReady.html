@@ -874,6 +874,12 @@
     const roomCreateBtn = document.querySelector('.createRoom');    // 방 만들기 버튼
     const roomPopupCreate = document.querySelector('.roompopup_creat')  // 방 만들기 팝업
     const roomcancle = document.querySelector('.cancle');       // 방 만들기 팝업 - 취소하기 버튼
+    // 채팅방 스크롤 추가했음 (동희)
+    function scrollChatToBottom() {
+        const chatBox = document.querySelector('.chatBox');
+        chatBox.scrollTop = chatBox.scrollHeight;        
+    }
+
     // 방 만들기 버튼 클릭 시, 팝업이 토글 됨
     roomCreateBtn.onclick = () => {
         roomPopupCreate.classList.toggle('pop')
@@ -1087,12 +1093,14 @@
             const li = document.createElement('li');
             li.textContent = `${userid._nickname}님이 들어왔습니다.`
             messagesList.appendChild(li);
+            scrollChatToBottom()
         })
         socket.on('chat message', (msg) => {
             console.log("message의", msg);
             const li = document.createElement('li');
             li.textContent = `${msg.nick}: ${msg.message}`;
             messagesList.appendChild(li);
+            scrollChatToBottom()
         });
         console.log("여기까지 오니?")
         socket.emit('connectuser2', e);

@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const {  viewOrderView, likesView , allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation , pagenationView , defaultView, tagsPagenation} = require("../controllers/boardControllers")
+    const {   boardEditView, viewOrderView, likesView , allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation , pagenationView , defaultView, tagsPagenation} = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
     const { islogin } = require("../middleware/isLogin");
 
@@ -43,9 +43,10 @@
     routers.get('/item/:id_post' , islogin , boardParamsView)
     // [해석] 이걸로 연결하게 되나❓ : 응. 글 작성하면, 이걸로 연결하게 돼
 
-// [read] post_id + comment id 값 가져온 걸로, 상페, 보여주기
-    // routers.get('/item/:id_post' , boardParamsView)
-    // routers.get('/item/:id_post/:id_newComment' , boardParamsView);    
+
+// [edit] 
+    routers.get('/item/edit/:postID' , islogin, boardEditView)
+    
 
     
 // [create] 댓글 생성 

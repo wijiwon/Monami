@@ -996,4 +996,11 @@ exports.pagenationView = (req, res) => {
         res.sendFile(path.join(__dirname , "../../frontEnd/boardList_views.html"))
     }
 
-    
+
+// [게시판 수정]
+    exports.boardEditView = (req, res) => {
+
+
+        res.sendFile(path.join(__dirname , "../../frontEnd/boardItem_edit.html"))
+
+    }

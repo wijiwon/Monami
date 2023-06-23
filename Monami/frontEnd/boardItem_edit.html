@@ -463,6 +463,18 @@ body {
 
 <body>
 
+    <form method="POST" action="/update_post">
+        <!-- 1번 -->
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" value="기존 제목"> <br>
+        
+        <!-- 2번 -->
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content">기존 내용</textarea>
+        <input type="submit" value="Submit">
+
+    </form>
+    
 
 
 <!-- 🔹 전체 콘텐츠 -->
@@ -502,9 +514,18 @@ body {
                         
                         <!-- 1) 윗 부분 : a) 제목 b) 좋아요 c) view 수 -->
                         <div class="title_nums_wrap"> 
-                            제목 <span id="post_title">  </span> 
-                            좋아요 수 <span id="post_likes">  </span>
-                            views 수 <span id="post_views">  </span>
+                            
+                            <!-- 기존 코드 -->
+                            <!-- 제목 <span id="post_title">  </span>  -->
+                            <!-- 좋아요 수 <span id="post_likes">  </span> -->
+                            <!-- views 수 <span id="post_views">  </span> -->
+
+                            <!-- a) 새로운 코드 -->
+                            <label for="title">Title:</label><br>
+                            <input type="text" id="post_title" name="title" value="기존 제목">
+
+                        
+                        
                         </div>
 
                         <!-- <div class="title_userName"> <span id="username"> 제목 | 좋아요 수 | views 수 |  </span> </div> -->
@@ -519,7 +540,7 @@ body {
 
                     <!-- 3) 오른쪽 영역 -->
                     <div class="userAction_Btns_wrap">
-                        <button class="savedBtn userAction_Btns" id="post_editBtn">✍Edit </button>
+                        <button class="savedBtn userAction_Btns" id="post_editBtn">✍ 수정완료 </button>
                         <button class="likeBtn userAction_Btns" id="post_likesBtn"> 🧡Like </button>
                     </div>
                     
@@ -541,10 +562,22 @@ body {
 
 
             <!-- 3) text 설명  -->
-                <section class="main_textContent">
+            <section class="main_textContent">
+
+                    <label for="content">Content:</label><br>
+                    <textarea id="content" name="content">기존 내용</textarea>
+                    <input type="submit" value="Submit">
+
+
+
+                    
                     <p id="post_content">
                         <!-- 글 내용을 가져온다. ✅ -->
                     </p>
+
+
+
+
 
                 </section>
 
@@ -680,6 +713,7 @@ body {
         <!-- <div id="comment_container"> -->
 
         <!-- </div> -->
+
 
 
         <br>
@@ -1848,11 +1882,9 @@ body {
 
 
 // 🔹 수정 기능 
-    const post_editBtn  = document.getElementById('post_editBtn') 
-
     post_editBtn.onclick = () => {
-
-        window.location.href = `http://127.0.0.1:4000/board/item/edit/${postId}`
+        
+        window.location.href = `http://127.0.0.1:4000//board/item/edit/${postId}`
 
         // 참고 코드
             // const id_post = element.id

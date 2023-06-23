@@ -15,7 +15,7 @@ exports.joinUser = async(req,res)=>{
 
     if (usernamecheck !== null) {
       console.log(username,"중복된 닉네임");
-      return res.json({message: "중복된 닉네임입니다"})
+      return res.json({message:"중복된 닉네임입니다"})
     }
     
     // 정규식

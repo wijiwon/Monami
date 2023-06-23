@@ -4,12 +4,12 @@ class Question extends Sequelize.Model{
     static init(sequelize){
         return super.init({
             content: {
-                type: Sequelize.TEXT,
+                type: Sequelize.STRING(100),
                 allowNull: false
             },
             connect_id: {
                 type: Sequelize.INTEGER(10),
-                allowNull: true
+                allowNull: false
             }
         },
         {

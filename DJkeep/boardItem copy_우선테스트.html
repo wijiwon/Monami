@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!-- ✅ axios 설치 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+</head>
+<body>
+
+
+    <h1> 캐치 마인드 </h1>
+
+    <!-- 오른쪽에 배치 -->
+    <button>글 목록</button>  <br><br>
+        <!-- [✅ todo] 글 목록으로 이동하게 해야 함 -->
+
+    <div> 작성자 : <span id="username"> </span> </div> <br><br> 
+        <!-- 가져올 곳 : User 테이블의 username 열 -->
+        
+    <div> 조회수 : <span id="post_views"> </span> </div> <br><br>
+        <!-- 가져올 곳 : Post 테이블의 views 열 -->
+        
+    <div> exp : <span id="user_exp"> </span> </div> <br><br>
+        <!-- 가져올 곳 : User 테이블의 exp 열 -->
+        
+
+    <div>
+        <div> 👍 : <span id="post_likes"> </span> </div>  <br>  
+        <!-- 가져올 곳 : Post 테이블의 likeClickUser 의 개수 -->
+    
+        <div> <button id="post_likesBtn">🧡좋아요클릭</button> </div> <br><br>
+        <!-- 보낼 곳 : 클릭하면, Post 테이블의 likeClickUser 에, user_id, name, id 를 보낸다. -->
+        <!-- 📛 foreignKey 와 현재 api 설정 된거 확인해야 이 부분이 깔끔할 듯 -->
+    
+    </div>
+        
+    <div> 제목 : <span id="post_title"> </span> </div> <br><br>
+        <!-- 가져올 곳 : Post 테이블의 content -->
+
+    <div> 내용 : <span id="post_content"> </span> </div> <br><br>
+        <!-- 가져올 곳 : Post 테이블의 content -->
+        
+    <span> 사진 : <img id="posts_img" src="">  </span> <br><br><br><br>
+        <!-- 가져올 곳 : Post 테이블의 content -->
+        <!-- 📛 img 태그를 가져오는게 맞겠지? -->
+    
+
+    <!-- 댓글 -->
+        <span>댓글 작성된 것 : <span id="comment_read"> </span> </span> <br><br>
+            <!-- 📛 댓글 CREATE 기능 먼저 완료되면, 수행해야 함 -->
+            <!-- 가져올 곳 : comment 테이블의 content 와 connect_writer -->
+        
+        <label for=""> 댓글 작성란 : </label> 
+        <input type="text" id="comment_write"> 
+        <button id="commentWriteBtn"> 댓글 작성 완료 </button>
+            <!-- 보낼 곳 : comment 테이블의 connect_id, connect_writer, content -->
+
+        <br>
+        <br>
+
+</body>
+
+<script> 
+
+// 🔹 전역변수 
+    let path = ""
+
+    // 게시글 id
+    let postId = 0;
+        // [해석] 글쓰기 페이지에서 '완료' 하고 상세페이지로 넘어간 경우, 방금 막 완료된 id
+    
+    let userData = {};
+    let postsByUser = [] 
+    let postsData = {};
+    let commentData = "";
+    let newCommentId = 0;
+
+
+    // [getAPI 정의] 상세 글에 필요한 데이터 가져오기 
+    async function getAPI() {
+
+        try {
+            // 0) 맞춤별 페이지 보여주기 위해 URL 에서 post ID 변수 가져오기 
+                // [사전작업] boardCreate.html 에서 redirect 할 때, postID 를 붙혀서 보냄 
+                
+                // 경로 가져오기
+                let path = window.location.pathname;  // '/board/item/22'
+                
+                // 경로에서 id들 솎아내기
+                const segments = path.split('/');  // ['', 'board', 'item', '22']
+                console.log("segments 경로 솎아내기 👉👉 " , segments)
+                
+                // 게시글 id를 변수에 담기
+                let postId = segments[3];  // '22'
+                console.log("postId 확인 👲👲👲 " , postId)
+                
+                // 댓글 id 를 변수에 담기
+                // newCommentId = segments[segments.length - 1];  // '22' -> 목표는 댓글 id 가져오기 
+                // console.log("newCommentId 확인 👲👲👲 " , newCommentId)
+
+
+            // 1) axios 로 get 요청보내서, data 받아오기
+                const {data} = await axios.get("http://127.0.0.1:4000/board/item" , {
+                    withCredentials : true
+                }) 
+
+            // 2) 받아온 data 쓸 수 있게 솎아내기 
+                console.log("🙆‍♂️ 들어오는거 확인 👉👉👉" , data)
+
+            // user, post, comment 테이블 각각 가져오기  
+                userData = data.user;
+                postsByUser = userData.Posts 
+                postsData = data.post;
+                commentData = data.comment;
+                    // [주의📛]
+                        // const, let 을 붙이면 오류가 나고 있는 상황 
+                        // 그래서, 선언자를 우선 안 썼음. 
+
+                console.log("👉👉👉 userData : " , userData)
+                console.log("👉👉👉 userData - id : " , userData.id)
+                console.log("🎏🎏🎏 해당 user 가 적은 모든 posting : " , postsByUser)
+                
+                console.log("👉👉👉 postsData" , postsData)
+                console.log("👉👉👉 postsData - 제목 : " , postsData.title)
+                console.log("👉👉👉 postsData - 내용 : " , postsData.content)
+                console.log("👉👉👉 commentData : " , commentData)
+
+            // 3) post 데이터 중 postID 에 해당하는 것 가져오기 
+                const postingByUser = postsByUser.find(item => item.id == postId);
+                    // [해석]
+                        // User 테이블 중 -> 해당 user 가 적은 post 를 foreignKey 로 모두 가져온다. 
+                        // 그걸 postsByUser 에 담는다. (배열 안에 객체가 있는 형태)
+                        // 이걸, 배열을 돌면서, create 시 넘어온 postID 와 같은 객체를 뽑아낸다. 
+                    console.log("방금 적은 포스팅이 담긴 객체 👉👉 " , postingByUser)
+            
+            // 4) comment 데이터 중 newCommentId 에 해당하는 것 가져오기
+            // const commentByUser = commentData.find(item => item.id == newCommentId);
+
+                    
+            // 3) innerHTML 로 붙여주기    
+                // 작성자
+                    username.innerHTML = userData.user_id;
+                    // [📛 개선해야 할 것]
+                        // user_id 를 가져와야 하는지 
+                        // 닉네임을 가져와야 하는지, foreignKey 는 어떻게 되는지 현재 불분명
+    
+                // exp
+                    user_exp.innerHTML = userData.exp;
+                    // [📛 개선해야 할 것]
+                        // 완료하면, '게임 참여 완료' 되면 -> 이거 수치 증가 
+
+                // 좋아요 숫자
+                    // 예전 코드
+                        // post_likes.innerHTML = postsData.likeClickUser.length;
+                        // post_likes.innerHTML = "임시 1 | 이 부분이 null 이면, 아래게 안 읽힘. 그러면, table column 처리를 해주는게 맞을 수도?";
+                    // now 
+                        // 테이블에 좋아요 컬럼 추가한 버전 
+                        post_likes.innerHTML = postingByUser.likes;
+
+                    // [📛 궁금한 것]
+                        // 왜, 이걸 주석처리하면, 밑에, '제목' 부분이 보이게 될까? 
+
+                    // [📛 개선해야 할 것]
+                        // 좋아요 버튼 클릭하면 > 여기가 업데이트 되게 해야 함 
+                        // 아. CREATE 를 먼저 하자 앞으로
+                    // [진행과정]
+                        // '해당 배열의 숫자' 를 세면, 굳이, 따로, 열을 안 만들어줘도 될거 같은데?
+
+                // 제목 
+                    // const lastOfPost = postsData[postsData.length - 1];
+                        // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
+                        post_title.innerHTML = postingByUser.title;
+                    // [주의] 직접 innerHTML 에 넣으면, '문자열이 아닌 경우' 안 나올 수 있음. 
+
+
+                // 내용 
+                    // const lastOfPost = postsData[postsData.length - 1];
+                    const temp_content = postingByUser.content
+                        // 가장 최신 작성된 내용 가져오기 위해서 lastOfPost 사용
+                    post_content.innerHTML = temp_content
+                        // [📛 개선해야 할 것]
+                            // 바로 지금 작성한 유저가 한건지는
+
+
+                // 업로드한 이미지 (사진)
+                    tempImgFile = postingByUser.post_img;
+                    posts_img.src = `http://127.0.0.1:5502/Monami/backEnd/image/${tempImgFile}`;
+                    
+                    
+                    // [📛 개선해야 할 것]
+                        // 주소를 넣으면, 어떻게 '렌더' 되게 할지. 뭔가 추가적으로 필요함
+                        // 그리고, 이것도, '방금 업로드한 최신의 것' 을 가져와야 하나
+
+                // 게시글 조회수
+                    post_views.innerHTML = postingByUser.views;
+                    // [📛 개선 해야할 것]
+                        // '제목 클릭' 하면, 조회수가 올라갈 수 있게 만들어야 함. 
+                        // 게시글이 올라가는 거 (CREATE 먼저)
+        
+                // 다른 사람들이 해당 게시글에 쓴 댓글
+                    comment_read.innerHTML = commentData.content
+                    // [📛 개선 해야할 것]
+                        // 방금 접속한 id 유저가 쓴 글이라고 보장하지 못 함 
+                        // 해당 글에서 가장 최신의 것을 가져와야 하나
+                
+                        
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    // [getAPI 실행] 상세 글에 필요한 데이터 가져오기  
+        // 방식 1
+            // document.addEventListener("DOMContentLoaded", function() {
+                //     getAPI();
+                // });
+        // 방식 2
+                getAPI();
+
+
+
+    // 댓글 등록하기 
+    commentWriteBtn.onclick = async () => {
+        
+        try {
+            // 0) 필요한 데이터 확인
+                console.log("댓글 들어오니 ⏩⏩" , comment_write)
+                console.log("댓글 들어오니 ⏩⏩" , comment_write.value)
+                console.log("유저 데이터 들어오니 ⏩⏩" , userData)
+                console.log("유저 데이터 들어오니 ⏩⏩" , userData.id)
+                console.log("타겟 게시글 id 값 ⏩⏩" , postId)
+
+
+            // 1) datatype 에 맞게 변수 값 가져오기 
+                // a) 예전 방식 : 동적 form 데이터
+                    // const form = new FormData();
+    
+                    // form.append("comment_write" , comment_write.value);
+                    // console.log(comment_write.value)
+    
+                // b) data 타입 변환 
+                    const data = {
+                        // 작성한 댓글 내용
+                            content : comment_write.value,
+                            
+                        // 현재 댓글 작성하는 사람의 user id
+                            user_primaryKey : userData.id, 
+                            // [개선사항 📛]
+                                // isLogin 에서 안 가져오면, 다른 유저가 잡힐 수도 있음 ⭐⭐
+    
+                        // 댓글 작성의 대상이 되는 '타겟 게시글의 id' 값 
+                            id_of_targetPost : postId,       
+                        
+                        
+                        // 대댓글의 경우, 댓글 작성의 대상이 되는 'comment 테이블 id' 값
+                            id_of_targetComment : 1,
+                                // [✅ TODO]
+                                    // 1) '댓글 보이는 부분' 에서 '댓글 쓰기' 를 누르면 -> 이쪽으로 번호를 보내야 함 
+                                    // 2) 만약, 여기가 비어있으면, 일반댓글이고, 채워져 있으면 대댓글. 그 작업을 해줘야 함
+                        
+                        // 대댓글의 경우, 댓글 작성의 대상이 되는 'comment 작성자의 username' 값
+                            writer_of_targetComment : userData.user_id
+                            // [✅ 임시로 함]
+                            // [📛 어떻게 가져올지 고민] 
+                                // 'id_of_targetComment' 에서, id 값을 가져오면, 그걸 토대로, username 을 가져와야 할듯?
+                    
+                    }
+                    console.log("👲👲👲👲👲👲 댓글 잘 보이나" , comment_write.value)
+                
+            // 2) axios 전송
+            const result = await axios.post("http://127.0.0.1:4000/board/comment/create" , data , {
+                headers : {"Content-Type" : "application/json"}
+                // "Content-Type" : "multipart/form-data"
+
+
+            // 3) 댓글 쓴거를 보이게 하기 
+                // [TODO ✅]
+                    // 1) 지금 방금 막 쓴 댓글의 id 를 알아야 함 
+                        // create 하는 순간 인스턴스에거 가져온다. 
+                        // 그걸 여기로 보낸다. 👉 newCommentId 이거임 
+
+                    // 2) 그거를 여기로 가져와야 함 
+                        // 그걸 여기로 보낸다. 👉 newCommentId 이거임 
+
+                    // 3) 그거를 골라서 보여줘야 함 
+                        // 어케 보여주지? 
+                        // comment 중 > newCommentId 에 해당하는 값 보여주기 ✅✅  
+                    
+
+            });
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+    // 좋아요 버튼 클릭시 > 1) 숫자 및 2) update 클릭 유저  update
+        // update 함수 실행
+        post_likesBtn.onclick = () => {
+            updateLikes();
+            console.log("좋아요 함수 실행👍👍👍")
+        }
+
+        // update 함수 정의
+        async function updateLikes() {
+            
+            try {
+                // 1) 현재 접속중이면서, 클릭한 user id 가져오기  
+                    const {data} = axios.get("http://127.0.0.1:4000/board/item" , {
+                        withCredentials : true
+                    }) 
+                    const userData = data.user;
+                    const postsData = userData.Posts;
+                    const currentClickUser = postsData[0].user_id;
+                        // [📛개선할 것]
+                            // 이걸, 로그인 정보, 에서 가져와야 하지 않나? session 같은? 
+
+                // 2) 그 유저를, '좋아요 클릭 유저' 배열 안에 추가 하기
+                    postsData[0].likeClickUser.push(currentClickUser)
+                        // [📛개선할 것]
+                            // postsData[0] 이, 바로 그 게시글 임을 확증할 수 없음. 
+
+                // 3) 현재 보이는 likes 숫자 올리기 
+                    post_likes.innerHTML = postsData[0].likeClickUser.length
+                        // [📛개선할 것]
+                            // postsData[0] 이, 바로 그 게시글 임을 확증할 수 없음. 
+
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+
+
+
+</script>
+
+
+</html>

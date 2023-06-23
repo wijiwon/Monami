@@ -626,7 +626,7 @@ body {
 
     <!-- 오른쪽에 배치 -->
         <!-- 과거 코드 -->
-            <!-- <a href="http://127.0.0.1:5500/Monami/frontEnd/boardList.html"> <button>글 목록</button> </a> <br><br> -->
+            <!-- <a href="http://127.0.0.1:5502/Monami/frontEnd/boardList.html"> <button>글 목록</button> </a> <br><br> -->
     
         <!-- 새롭게 시도 | 필요한 이유 : 1) 모든 요청이 '서버' 로 들어가게 해야 2) 데이터를 업데이트 받아서 그려줄 수 있음  -->
             <!-- <a href="http://127.0.0.1:4000/board/list/view"> <button>글 목록</button> </a> <br><br> -->
@@ -727,7 +727,9 @@ body {
 
         // 유저 프로필 이미지 
 
-    // 이것들은 없어도 되지 않나? 👇 
+    // 이것들은 없어도 되지 않나? 
+        // 아냐 있어야 해 왜냐면 1) DB 에서 온게 data에 담기고 2) 이게 postsData 에 담기는데
+            // 3) 값을 바로 바로 받아야 할 때, 이게 있으면 편함 ⭐⭐ 
     let userData = {};
     let postsByUser = [] 
     let postsData = {};
@@ -879,7 +881,7 @@ body {
                 // 업로드한 이미지 (사진) | 이거랑 밑에거랑 중복인가? ❓❓❓ 
                     // tempImgFile = postsData.post_img;
                     // console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀" , tempImgFile)
-                    // posts_img.src = `http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile}`;
+                    // posts_img.src = `http://127.0.0.1:5502/Monami/backEnd/image/${tempImgFile}`;
                         // [📛 개선해야 할 것]
                             // 주소를 넣으면, 어떻게 '렌더' 되게 할지. 뭔가 추가적으로 필요함
                             // 그리고, 이것도, '방금 업로드한 최신의 것' 을 가져와야 하나
@@ -1146,8 +1148,8 @@ body {
                                 tempImgFile = postsData.post_img;
                                 console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀" , tempImgFile)
                                 const main_figure = document.getElementById("posts_img")
-                                main_figure.style.backgroundImage = `url(http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile})`
-                                // http://127.0.0.1:5500/Monami/backEnd/image/${tempImgFile}
+                                main_figure.style.backgroundImage = `url(http://127.0.0.1:5502/Monami/backEnd/image/${tempImgFile})`
+                                // http://127.0.0.1:5502/Monami/backEnd/image/${tempImgFile}
 
                             // top 프로필 이미지 가져오기 
                                 // 1) top 부분 | 맨 위에 있는 프로필 이미지
@@ -1847,19 +1849,29 @@ body {
 
 
 
-// 🔹 수정 기능 
+// 🔹 수정 페이지로 이동! 
     const post_editBtn  = document.getElementById('post_editBtn') 
 
-    post_editBtn.onclick = () => {
+    post_editBtn.onclick = (event) => {
 
-        window.location.href = `http://127.0.0.1:4000/board/item/edit/${postId}`
+        // 본인확인 
+            // 유저 아이디 vs 이걸 클릭한 사람의 아이디 비교
 
-        // 참고 코드
-            // const id_post = element.id
-            // link_container.href = `http://127.0.0.1:4000/board/item/${id_post}`
+            // 이 글을 쓴 유저의 아이디 : postsData.user_id
+            // 현재 이 글을 클릭한 사람의 아이디 : _loginUser_UserID
+
+        if (postsData.user_id === loginUser_UserID) {
+            window.location.href = `http://127.0.0.1:4000/board/item/edit/${postId}`
+        } else {
+            alert("🙅‍♀️본인글만 수정 할 수 있어요🙅‍♂️")
+        }
+
+            // 참고 코드
+                // const id_post = element.id
+                // link_container.href = `http://127.0.0.1:4000/board/item/${id_post}`
     }
-
-
+    
+    
 
 
 

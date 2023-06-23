@@ -5,6 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
     <!-- axios 로 form 태그 대신 전송 받아오기 ⭐⭐ -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -538,9 +545,9 @@
     }
 
     /* ⭐ 호버 디자인도 해보고 싶어 ⭐⭐⭐ */
-    .link_container_BTN:hover{
+    /* .link_container_BTN:hover{
         /* background-color: blue; */
-    }
+    /* } */
 
 
 
@@ -610,8 +617,8 @@
             </ul>
 
             <!-- main logo  -->
-            <figure  class="main_logo" style="background-image: url(http://127.0.0.1:5500/Monami/backEnd/image/monami.png);">
-                <!-- style 속성에서 url 은 꼭, 'http://127.0.0.1:5500/Monami/backEnd/image/monami.png' 이렇게 full name 으로 써야 함 -->
+            <figure  class="main_logo" style="background-image: url(http://127.0.0.1:5502/Monami/backEnd/image/monami.png);">
+                <!-- style 속성에서 url 은 꼭, 'http://127.0.0.1:5502/Monami/backEnd/image/monami.png' 이렇게 full name 으로 써야 함 -->
 
             </figure >
                 <!-- 로고 교체 필요함 ✅ -->
@@ -1080,7 +1087,7 @@
                             const post_image_container = document.createElement('div');
                             const post_image = document.createElement('figure');
                             post_image.classList.add('post_image');
-                            post_image.style.backgroundImage = `url(http://127.0.0.1:5500/Monami/backEnd/image/${element.post_img})`;    
+                            post_image.style.backgroundImage = `url(http://127.0.0.1:5502/Monami/backEnd/image/${element.post_img})`;    
                             post_image_container.appendChild(post_image)
 
                         // post_container 에 합치기
@@ -1313,7 +1320,7 @@ try {
                     const post_image_container = document.createElement('div');
                     const post_image = document.createElement('figure');
                     post_image.classList.add('post_image');
-                    post_image.style.backgroundImage = `url(http://127.0.0.1:5500/Monami/backEnd/image/${element.post_img})`;    
+                    post_image.style.backgroundImage = `url(http://127.0.0.1:5502/Monami/backEnd/image/${element.post_img})`;    
                     post_image_container.appendChild(post_image)
 
                 // post_container 에 합치기

@@ -311,6 +311,9 @@
       left: 50%;
       transform: translate(-50%);
     }
+    .userR{
+      margin-top: 10%;
+    }
 
     .beforeLoginBox{
       margin-top: 65%;
@@ -324,6 +327,10 @@
     .rankName, .rankExp{
       font-size: 15px;
       color: #000;
+    }
+    .rankFirst, .rankOther{
+      width: 210px;
+      height: auto;
     }
   </style>
 </head>
@@ -500,16 +507,16 @@
       console.log("e??????", e);
       if (index === 0) {
         user_rank.innerHTML += `
-            <div>
+            <div class="rankFirst">
                 <img class="rankImg" src="${e.profile_img}" alt="Profile image of ${e.username}"> <br>
-                <span class="rankName"> username : ${e.username}</span> <br>
-                <span="rankExp"> userEXP : ${e.exp}</span=> <br>
+                <div class="rankName"> username : ${e.username}</div> <br>
+                <div="rankExp"> userEXP : ${e.exp}</div=> <br>
             </div>`;
       } else {
         user_rank.innerHTML += `
-            <div>
-                <span> username : ${e.username}</span>
-                <span> userEXP : ${e.exp}</span>
+            <div class="rankOther">
+                <div> username : ${e.username}</div>
+                <div> userEXP : ${e.exp}</div>
             </div>`;
       }
     });

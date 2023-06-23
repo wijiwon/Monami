@@ -936,24 +936,28 @@
                         <div class="room_manager">${el.room_manager}</div>
                         <div class="room_play">${play2}</div>
                     </div>
-                    <div class="door">
-                        <div class="room_title">${el.title}</div>
-                    </div>`;
+                    <div class="doorAni">
+                        <div class="door">
+                            <div class="room_title">${el.title}</div>
+                        </div>
+                    </div>
+                    `;
                 
                 roomList.appendChild(roomDiv);
                 
-                let indoor = roomDiv.querySelector('.indoor');
+                let doorAni = roomDiv.querySelector('.doorAni');
+                let door = roomDiv.querySelector('.door');
 
-                indoor.addEventListener('mouseenter', function() {
+                doorAni.addEventListener('mouseenter', function() {
                     // Add the 'opening' class to the door when the mouse enters
                         if (!door.classList.contains('opening')) {
                             door.classList.add('opening');
                         }
                 });
 
-                indoor.addEventListener('mouseleave', function() {
+                doorAni.addEventListener('mouseleave', function() {
                     // Remove the 'opening' class from the door when the mouse leaves
-                    indoor.classList.remove('opening');
+                    door.classList.remove('opening');
                 });
 
                 // let doorChildren = door.querySelectorAll('*');

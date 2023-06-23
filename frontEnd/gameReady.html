@@ -375,15 +375,7 @@
             overflow: hidden;
         }
 
-        .door {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: url(/img/door.png);
-            animation: none;
-
-        }
-
+        
         .indoor {
             width: 220px;
             height: 240px;
@@ -393,7 +385,21 @@
             position: absolute;
             z-index: 0;
         }
-
+        .doorHoverContainer{
+            position: relative;
+            border: 1px solid red;
+            width: 220px;
+            height: 240px;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .door {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url(/img/door.png);
+            z-index: 2;
+        }
         .door:hover {
             /* background-color: aqua; */
             animation: slide 1s ease-in-out forwards;
@@ -545,10 +551,10 @@
                     <div style="display: flex;" class="roomList">
                         <div class="roomlists">
                             <!-- <div class="room_num">${el.id}</div> -->
-                                <!-- <div class="indoor">
+                                <!--<div class="indoor">
                                     <div class="room_manager">${el.room_manager}</div>
                                     <div class="room_play">${play2}</div>
-                                </div>
+                                    </div>
                                 <div class="door">
 
                                     <div class="room_title">${el.title}</div>
@@ -917,9 +923,11 @@
                                 <div class="room_manager">${el.room_manager}</div>
                                 <div class="room_play">${play2}</div>
                             </div>
-                            <div class="door">
-                                
-                                <div class="room_title">${el.title}</div>
+                            <div class="doorHoverContainer">
+                                <div class="door">
+                                    
+                                    <div class="room_title">${el.title}</div>
+                                    </div>
                             </div>
                         </div>`
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------

@@ -381,12 +381,12 @@
             height: 100%;
             background-image: url(/img/door.png);
 
-            transition: left 1s ease-in-out;
+            /* transition: left 1s ease-in-out; */
         }
-
+/* 
         .door.opening {
             left: 150px;
-        }
+        } */
 
         .indoor {
             width: 220px;
@@ -944,11 +944,12 @@
                 
                 let door = roomDiv.querySelector('.door');
                 door.addEventListener('mouseenter', function() {
-                    // Add the 'opening' class to the door when the mouse enters
-                    // if (!doorOpened) {
-                        door.classList.add('opening');
-                        // doorOpened = true;
-                    // }
+                    door.style.left = '150px';
+
+                    // Set a timeout to end the animation after 1 second
+                    setTimeout(function() {
+                        door.style.left = '0';
+                    }, 1000);
                 });
 
                 // door.addEventListener('mouseleave', function() {

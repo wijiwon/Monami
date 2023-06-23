@@ -380,11 +380,11 @@
             width: 100%;
             height: 100%;
             background-image: url(/img/door.png);
-
-            /* transition: left 1s ease-in-out; */
+            left: 0;
+            animation: slide 1s ease-in-out forwards;
         }
-/* 
-        .door.opening {
+
+        /* .door.opening {
             left: 150px;
         } */
 
@@ -404,7 +404,7 @@
         /* } */ 
 
 
-        /* @keyframes slide {
+        @keyframes slide {
             0% {
                 left: 0;
             }
@@ -412,7 +412,7 @@
             100% {
                 left: 150px;
             }
-        } */
+        }
 
         .roomlists .room_title,
         .roomlists .room_manager,
@@ -943,30 +943,31 @@
                 roomList.appendChild(roomDiv);
                 
                 let door = roomDiv.querySelector('.door');
-                door.addEventListener('mouseenter', function() {
-                    door.style.left = '150px';
+                let isAnimating = false;
 
-                    // Set a timeout to end the animation after 1 second
-                    setTimeout(function() {
-                        door.style.left = '0';
-                    }, 1000);
+                door.addEventListener('mouseenter', function() {
+                    // Add the 'opening' class to the door when the mouse enters
+                        if (!isAnimating) {
+                            door.classList.add('opening');
+                            isAnimating = true;
+                        }
                 });
 
-                // door.addEventListener('mouseleave', function() {
-                //     // Remove the 'opening' class from the door when the mouse leaves
-                //     door.classList.remove('opening');
-                //     doorOpened = false;
-                // });
+                door.addEventListener('mouseleave', function() {
+                    // Remove the 'opening' class from the door when the mouse leaves
+                    door.classList.remove('opening');
+                    isAnimating = false;
+                });
 
-                // let doorChildren = door.querySelectorAll('*');
-                //     doorChildren.forEach((child) => {
-                //         child.addEventListener('mouseenter', function(event) {
-                //             event.stopPropagation();
-                //         });
-                //         child.addEventListener('mouseleave', function(event) {
-                //             event.stopPropagation();
-                //         });
-                //     });
+                let doorChildren = door.querySelectorAll('*');
+                doorChildren.forEach((child) => {
+                    child.addEventListener('mouseenter', function(event) {
+                        event.stopPropagation();
+                    });
+                    child.addEventListener('mouseleave', function(event) {
+                        event.stopPropagation();
+                    });
+                });
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
                 let rooms = document.querySelectorAll(".roomlists");
                 // console.log("썸바리헲미이이이이이익",rooms)

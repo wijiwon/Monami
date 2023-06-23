@@ -35,10 +35,11 @@
                 const ext = path.extname(file.originalname)
                 
                 // 파일 이름이 겹치지 않게, 현재 시간 추가 
-                const filename = path.basename(file.originalname , ext) + "_" + Date.now() + ext;
+                const filename = path.basename(file.originalname) + "_" + Date.now() + ext;
 
                 // 완료하고 내보내기 
-                done(null, filename)
+                // done(null, filename)
+                done(null, encodeURIComponent(file.originalname))
             }
         }), 
 

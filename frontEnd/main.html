@@ -529,7 +529,8 @@
   }
 
   loginBtn.onclick = () => {
-    axios.post('/login', {
+    //%%%%%%%%%%바꿔주세요%%%%%%%%%%%%%%%%(원본: /login)
+    axios.post('http://127.0.0.1:4000/login', {
       data:
       {
         user_id: user_id.value,
@@ -584,7 +585,7 @@
   async function loginDraw(e) {
     console.log("Received token:", e.data.token);
     // 안써도 됨... login 할때 req.session == cookie 에 넣어주는 작업 이였음
-    // document.cookie = `token2=${e.data.token}; path=/`
+    document.cookie = `token2=${e.data.token}; path=/`
 
     loginSuccess.style.display = "block"
     beforeLogin.style.display = "none"

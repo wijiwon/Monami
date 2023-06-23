@@ -1084,10 +1084,13 @@
                     // 1️⃣ post 에 유저가 올린 사진 container | figure 태그 안에 들어가는 것들
 
                         // [시도] figure 태그로 하는 버전
+                            console.log("SD?SD?sssssssssssSD",element.post_img);
+
                             const post_image_container = document.createElement('div');
                             const post_image = document.createElement('figure');
                             post_image.classList.add('post_image');
-                            post_image.style.backgroundImage = `url(http://127.0.0.1:5502/Monami/backEnd/image/${element.post_img})`;    
+                            // post_image.style.backgroundImage = `url(http://127.0.0.1:4000/img/TV.png)`;    
+                            post_image.style.backgroundImage = `url(http://127.0.0.1:4000/img/${element.post_img})`;    
                             post_image_container.appendChild(post_image)
 
                         // post_container 에 합치기

@@ -16,6 +16,7 @@ const mypageRouter = require("./routers/mypageRouter");
 const adminRouter = require("./routers/adminRouter");
 const gameRouter = require("./routers/game");
 const gamestartRouter = require("./routers/gameStartRouter");
+const boardrouter = require("./routers/boardRouter");
 const { Cookie } = require('express-session');
 
 
@@ -40,7 +41,7 @@ app.use("/img", express.static(path.join(__dirname, "image")));
 
 
 app.use(cors({
-    origin:"http://127.0.0.1:5501",
+    origin:"http://127.0.0.1:5500",
     credentials:true
 }
 ));
@@ -68,6 +69,7 @@ app.use("/mypage",mypageRouter);
 app.use("/admin",adminRouter);
 app.use("/game",gameRouter);
 app.use("/gamestart",gamestartRouter);
+app.use("/board",boardrouter);
 
 sequelize.sync({ forse: false }).then(() => {
     console.log("연결성공")

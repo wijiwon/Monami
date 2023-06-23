@@ -100,7 +100,8 @@
   // 테이블 그려주는 함수
   async function drawAdminTable() {
     try {
-      await axios.get("/admin/hi", {
+      //%%%%%%%%%%%%%바꿔주세요%%%%%%%%%%%%%%%(원본: /admin/hi)
+      await axios.get("http://127.0.0.1:4000/admin/hi", {
         withCredentials: true,
       }).then((e) => {
         // 유저 데이터 다 가져와서 (어드민 빼고) 그려준다
@@ -150,7 +151,8 @@
             approveButton.addEventListener("click", () => {
               try {
                 console.log("승인:", item);
-                axios.post("/admin",{
+                //%%%%%%%%%%%%%바꿔주세요%%%%%%%%%%%%%%%(원본: /admin)
+                axios.post("http://127.0.0.1:4000/admin",{
                   // req.body.data 로 승인 거절 누른 사람 정보 전송해줌
                   data:
                   {

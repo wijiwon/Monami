@@ -168,7 +168,8 @@
     if (userPw1 !== userPw2) {
       alert("비밀번호 불일치");
     }
-    axios.post('/join',{
+    //%%%%%%%%%%%%% 바꿔주세요 %%%%%%%%%%%%%%%% (원본 /join)
+    axios.post('http://127.0.0.1:4000/join',{
       
       data : {
         user_id : user_id.value,

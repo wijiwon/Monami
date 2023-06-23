@@ -37,19 +37,13 @@ const { Op } = require('sequelize');    // 태그 검색 하기 위해 필요
 
 // [CREATE] 게시판 글쓰기 
     exports.boardCreate = async (req, res) => {
+        const {file, body, decode} = req;
+        console.log("decodedecodedecode",decode);
 
-
-        if (req.decode && req.decode.id) {
-            console.log("req.decode.id 👉👉👉👉👉" , req.decode.id )
-        } else {
-            console.log("req.decode is undefined.")
-        }
-
+        console.log(decode.user_id);
         // 1) 저장할 데이터 솎아내기 
         console.log("📌📌📌📌📌📌📌📌📌📌📌📌📌📌📌" , req);
-        const {file, body} = req;
             
-            console.log("req.decode.id 👉👉👉👉👉" , req.decode.id )
             console.log("req 에서 file, body 분리 됐나 확인 👇 @boardController")
             // console.log("req.body, req.file : " , req.body, req.file)
 
@@ -60,7 +54,7 @@ const { Op } = require('sequelize');    // 태그 검색 하기 위해 필요
         // 2) sequelize 상속받은 Post 객체로 쿼리 날리기 
         try {
             const newPost = await Post.create({
-                user_id : req.decode.user_id, 
+                user_id : decode.user_id, 
                     // req.decode 로 변환 가능 
                     // 임의로 넣음 ✅✅
                     // login 성공하면 👉 거기에서 가져오기 ✅✅ 
@@ -687,7 +681,7 @@ exports.boardListPages = async (req, res) => {
                 console.log("orderOption 잘 들어오나🚀🚀🚀🚀🚀🚀" , orderOption)
                 
                 // 한 페이지당 몇개 포스팅?;
-                const postsPerPage = 32;
+                const postsPerPage = 8;
 
                 // 사용자가 선택한 태그 
 

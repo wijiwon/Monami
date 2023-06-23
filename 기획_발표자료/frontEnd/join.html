@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <label for="">아이디 모냐미?</label>
+  <input type="text" id="user_id"> <br>
+  <label for="">비밀번호 모냐미?</label>
+  <input type="password" id="user_pw"> <br>
+  <label for="">비밀번호 한번 더 모냐미?</label>
+  <input type="password" id="user_pw2"> <br>
+  <label for="">닉네임 모냐미?</label>
+  <input type="text" id="username"> <br>
+  <button id="signBtn">회원가입</button>
+</body>
+<script>
+  signBtn.onclick = ()=>{
+    const userPw1 = user_pw.value;
+    const userPw2 = user_pw2.value;
+
+    console.log(userPw1);
+    console.log(userPw2);
+    if (userPw1 !== userPw2) {
+      alert("비밀번호 불일치");
+    }
+    axios.post('http://127.0.0.1:4000/join',{
+      
+      data : {
+        user_id : user_id.value,
+        user_pw : user_pw.value,
+        username : username.value
+      }
+
+    }).then((e)=>{
+      console.log(e);
+      if (e.data == "완료") {
+        window.location.href = "http://127.0.0.1:5501/frontEnd/main.html"
+      }
+    })
+  }
+</script>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <script src="http://localhost:4000/socket.io/socket.io.js"></script> -->
+
+</head>
+
+<body>
+  <input type="text" id="suggest">
+
+</body>
+<script>
+  // const socket = io.connect('http://localhost:4000');
+  console.log("d");
+  // socket.on('THrowGameMember',(tmp)=>{
+  //     console.log(tmp);
+  //     console.log(tmp.rooms[tmp.roomNum].usernickname);
+  // } )
+  let gmaeplayer2 = ["현욱", "임자", "지원", "동희", "정현", "아현","무헌","교수님"]
+  letitbe((gmaeplayer2[0]))
+  letitbe((gmaeplayer2[1]))
+  letitbe((gmaeplayer2[2]))
+  letitbe((gmaeplayer2[3]))
+  letitbe((gmaeplayer2[4]))
+  letitbe((gmaeplayer2[5]))
+  letitbe((gmaeplayer2[6]))
+  letitbe((gmaeplayer2[7]))
+  // letitbe((gmaeplayer2[8]))
+  
+  function letitbe(tmp) {
+
+    console.log("ff?");
+    let whoisme = tmp;
+    let myindex = 0;
+    let mynickname = tmp;
+    let gmaeplayer = ["현욱", "임자", "지원", "동희", "정현", "아현","무헌","교수님"]
+    // let gmaeplayer=["현욱","임자","지원","동희","정현"]
+    // fetchData();
+   
+    // post 요청으로 primaryuser에 자신을 넣은뒤 create 해준다. 그리고 백틱 그대로 값을 처음에 넣어준다. 
+    for (let i = 0; i < gmaeplayer.length; i++) {
+      if (whoisme ==  gmaeplayer[i]) {
+        console.log(gmaeplayer[i]);
+        myindex = i;
+      }
+
+    }
+    console.log("whoisme", whoisme);
+    console.log("myindex", myindex);
+
+    // paint라고 쓰인 그림과 정답은 다 화면에서 입력받는것이다. 
+    // 2. 첫 제시어를 불러오고 그림을 입력하는 부분
+    if (gmaeplayer[gmaeplayer.length - 1] == mynickname) //  
+    {
+      console.log("응애")
+      // Get 요청으로 where gmaeplayer[myindex-1] 의 제시어를 불러온다. 
+      // post로 그림을 드로잉에 저장 
+      // post로 where gameplayer[0]의 행에 드로잉을 그려준다.
+      let paint = `${"1."}${whoisme}${":그림 "}`
+      console.log("내가", `${gmaeplayer[0]}`, "제시어을보고 ")
+      console.log("나한테 저장받게될사람", gmaeplayer[0], "의 행에", paint);
+
+    } else {
+      let paint = `${"1."}${whoisme}${":그림 "}`
+      // where gameplater[myindex-1]
+      console.log("내가", `${gmaeplayer[myindex + 1]}`, "제시어을보고 ")
+      console.log("나한테 저장받게될사람", gmaeplayer[myindex + 1], "의 행에", paint);
+    }
+
+    // 3. 2의 그림을 보고 정답을 입력하는 부분
+    let seq = (myindex + 3) % gmaeplayer. length;
+    console.log(`${gmaeplayer[seq]}의 1. 그림을보고`) // get 요청으로 where gameplayer[seq] 의 content 를 받아온다음 , 기준으로 split 해준다음 1.을기준으로 한번더 split그 값을 보여준다
+    console.log("seq", seq, gmaeplayer[seq], `${"2.저장받게될 "}`, `${gmaeplayer[myindex]}의 답`); // post 요청으로 where gmaeplayer[seq] room primarykey  2. 저장받게될 답 에 input값을 넣어주고 백틱형태로 붙여준다. concat사용 하면 가능
+    //post whwere gameplayer[seq],rommkey
+
+    // 4. 3의 정답을 보고 그림을 입력하는 부분
+    seq = (myindex + 2) % gmaeplayer.length;
+    console.log(`${gmaeplayer[seq]}의 2. 정답을을보고`) //위와 동일한방식
+    console.log("seq2", seq, gmaeplayer[seq], `${"3.저장받게될 "}`, `${gmaeplayer[myindex]}의 그림`);
+
+    // 5. 4의 그림을 보고 최종 정받을 입력하는 부분
+    seq = (myindex + 4) % gmaeplayer.length;
+    console.log(`${gmaeplayer[seq]}의 3. 그림을을보고`)
+
+    console.log("seq3", seq, gmaeplayer[seq], `${"4.저장받게될"}`, `${gmaeplayer[myindex]}의 답`);
+
+    // 마지막 리플레이 읽어올때는 첫번쨰 유저의 contet 를싹다 불러와서 그걸 기준으로 getpost요청해서 정보를 불러온다. 
+    // 혹은 모든 플레이가 끝나는 순간 해당하는 방에있는 그림을 모두 불러와서저장한다. 모든유저에게 그런다음
+    // 소켓으로 어떤유저를 클릭했는지 보여준다음 해당하는 유저에서 값을 꺼내 보여준다 .
+  } 
+
+</script>
+
+
+
+
+
+
+<script>
+// let currentStep = 1;
+
+// const startGame = () => {
+//   if (currentStep === 1) {
+//     questionFun();
+//   } else if (currentStep === 2) {
+//     drawingFun();
+//   } else if (currentStep === 3) {
+//     answerInput();
+//   } else if (currentStep === 4) {
+//     // 다음 단계로 진행하거나 게임 종료 로직 추가
+//   }
+// };
+
+// const questionFun = () => {
+//   // 질문 입력 로직 구현
+
+//   // 단계 변경
+//   currentStep = 2;
+//   startGame();
+// };
+
+// const drawingFun = () => {
+//   // 그림 그리기 로직 구현
+
+//   // 단계 변경
+//   currentStep = 3;
+//   startGame();
+// };
+
+// const answerInput = () => {
+//   // 정답 입력 로직 구현
+
+//   // 단계 변경
+//   currentStep = 4;
+//   startGame();
+// };
+
+// // 게임 시작
+// startGame();
+
+</script>
+
+</html>

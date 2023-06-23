@@ -7,12 +7,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
   <style>
+    /* 유지체 */
+    @font-face {
+      font-family: 'HSYuji-Regular';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     body {
-      background-color: #019267;
-      color: #f6efef;
-      font-family: 'Chalkboard', 'Comic Sans MS', cursive;
+      background-color: #fffbae;
+      color: #4e4e4e;
+      font-family: 'HSYuji-Regular';
       text-align: center;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    height: 150%;
+    background-image: url(/img/backgroundIMG.png);
+    background-size: cover;
     }
 
     .profileImg {
@@ -22,51 +37,96 @@
       margin: 20px;
     }
 
-    .beforeLogin,
-    .loginSuccess,
+    .login_box {
+      position: relative;
+    }
+
     .gamebtn {
-      width: 260px;
-      height: auto;
+      /* display: none; */
+      width: 220px;
+      height: 35px;
       margin: 20px auto;
       padding: 20px;
-      border: 5px dashed #f6efef;
+      /* border: 5px dashed #e3e2d5; */
       border-radius: 5px;
-      box-shadow: 0 0 10px #000;
-      background-color: #00C897;
+      /* box-shadow: 0 0 10px #000; */
+      /* background-color: #0e4734; */
+      background-image: url(/img/gamestart.png);
+    }
+    .gamebtn_in{
+      margin-top: 5px;
+    }
+    .beforeLogin,
+    .loginSuccess {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      width: 260px;
+      height: 570px;
+      background-image: url(/img/painting.png);
+      background-repeat: no-repeat;
+      /* object-fit: coverce; */
     }
 
     .loginSuccess {
       display: none;
+      text-align: center;
+    }
+
+    .loginSuccess h1 {
+      margin-top: 80px;
+
     }
 
     input[type="text"],
     input[type="password"] {
+      font-family: 'HSYuji-Regular';
+      background-color: #b7f8d051 ;
       margin: 10px 0;
       padding: 10px;
       width: 80%;
       border-radius: 5px;
       border: none;
-      background-color: #f6efef;
+      font-size: 17px;
+      caret-color: white;
+    }
+    input:focus {
+    outline-color: white;
+    }
+
+    label{
+      font-size: 20px;
       color: #000;
     }
 
-    button {
+    .loginBtn {
       margin-top: 20px;
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
-      background-color: #f6efef;
-      color: #000;
+      background-color: #198141;
+      color: white;
+      font-weight: 600;
+      font-family: 'HSYuji-Regular';
     }
 
-    button:hover,
-    .gamebtn:hover {
+      /* font-weight: 300; */
+    button:hover{
+      border-radius: 5px;
       cursor: pointer;
-      background-color: #f6efef;
+      background-color: white;
+      color: #198141;
+    }
+
+    .gamebtn_in:hover {
+      border-radius: 20px;
+      cursor: pointer;
+      background-color: white;
+      color: #fd97a8;
     }
 
     a {
-      color: #FFF;
+      color: #ee1919;
       text-decoration: none;
     }
 
@@ -75,41 +135,202 @@
     }
 
     h1 {
-      color: #FFF;
+      color: #000000;
     }
 
-    .gameMain {
-      border: solid 3px tomato;
+    /* .gameMain {
+      /* border: solid 3px tomato; */
 
-    }
+    /* } */ 
 
     .header {
-      border: solid 3px rgb(181, 255, 71);
+      width: 100%;
+      height: 130px;
+      /* border: solid 3px rgb(181, 255, 71); */
+      position: relative;
+    }
 
+    .headerLogo {
+      width: 600px;
+      height: 100px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
     .container {
-      border: solid 3px rgb(26, 44, 248);
+      /* border: solid 3px rgb(26, 44, 248); */
+      height: 150vh;
+      position: relative;
+    }
+
+    .SketchBook {
+      /* border: solid 3px rgb(222, 26, 248); */
+      width: 1400px;
+      height: 1000px;
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translate(-50%);
+      background-image: url(/img/sketchbook_2.png);
+    }
+
+    .inSketchBook {
+      position: absolute;
+      width: 1200px;
+      height: 765px;
       display: flex;
-      height: 100vh;
+      left: 50%;
+      top: 150px;
+      transform: translate(-50%);
     }
 
     .container .sidebar {
-      border: solid 3px rgb(255, 255, 255);
+      /* border: solid 3px rgb(0, 0, 0); */
       flex: 1;
       padding: 20px;
     }
 
     .container .middlebar {
-      border: solid 3px rgb(255, 255, 255);
+      /* border: solid 3px rgb(0, 0, 0); */
       flex: 2;
       padding: 20px;
     }
 
     .container .rightbar {
-      border: solid 3px rgb(255, 255, 255);
+      /* border: solid 3px rgb(0, 0, 0); */
       flex: 1;
       padding: 20px;
+    }
+
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .swiperStyle .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .swiper-pagination-bullet {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      font-size: 12px;
+      color: #264efe68;
+      opacity: 1;
+      background: #26d3fe68;
+    }
+
+    .swiper-pagination-bullet-active {
+      color: #fff;
+      background: #26d3fe;
+    }
+
+    .swiperDiv {
+      width: 600px;
+      height: 350px;
+      position: relative;
+      background-image: url(/img/swiperDiv.png);
+    }
+
+    .boardDiv {
+      position: relative;
+      margin-top: 50px;
+      width: 600px;
+      height: 330px;
+      background-image: url(/img/boardDiv.png);
+    }
+
+    .boardDiv .boardTitle {
+      position: absolute;
+      width: 100%;
+    }
+
+    .boardDiv .boardContent {
+      /* border: 1px solid; */
+      left: 50%;
+      transform: translate(-50%);
+      width: 90%;
+      height: 200px;
+      position: absolute;
+      top: 75px;
+    }
+
+    .swiperStyle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 550px;
+      height: 300px;
+      display: inline-block;
+    }
+
+    .users_box {
+      margin-top: 170px;
+      width: 260px;
+      height: 500px;
+      /* border: 1px solid; */
+      background-image: url(/img/userL.png);
+      position: relative;
+
+    }
+
+    .users_box h1 {
+      position: absolute;
+      width: 220px;
+      top: 40px;
+      left: 50%;
+      transform: translate(-50%);
+      font-size: 33px;
+    }
+
+    .users_box .userR {
+      position: absolute;
+
+      /* border: 1px solid; */
+      width: 210px;
+      height: 340px;
+      top: 80px;
+      left: 50%;
+      transform: translate(-50%);
+    }
+    .userR{
+      margin-top: 10%;
+    }
+
+    .beforeLoginBox{
+      margin-top: 65%;
+    }
+
+    .rankImg{
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .rankName, .rankExp{
+      font-size: 17px;
+      /* color: #000; */
+    }
+    .rankFirst, .rankOther{
+      width: 210px;
+      height: auto;
     }
   </style>
 </head>
@@ -118,70 +339,107 @@
   <div class="gameMain">
     <!-- 메인화면의 헤더 부분 : 메인 페이지 이동 -->
     <div class="header">
-      메인화면 이동
-      <img style="width: 1100px; height: 110px;" src="#" alt="">
+      <!-- 메인화면 이동 -->
+      <a href="/main"> <!--배포용 주소-->
+        <img class="headerLogo" src="/img/main_Logo.png" alt="로고">
+      </a>
     </div>
+
 
 
     <!-- 메인페이지의 가운데 부분 -->
     <div class="container">
+      <!-- 스케치북 영역 -고정값- -->
+      <div class="SketchBook">
 
-      <div class="sidebar">
-        <div class="login_box">
-          <h1 class="gamebtn" id="gamebtn">게임시작</h1>
+        <div class="inSketchBook">
+          <div class="sidebar">
+            <div class="login_box">
+              <div class="gamebtn">
+                <h1 class="gamebtn_in" id="gamebtn">게임시작</h1>
+              </div>
 
-          <div class="beforeLogin" id="beforeLogin">
-            <div class="input_box">
-              <span id="idAlert"></span>
-              <label for="">아이디</label>
-              <input type="text" id="user_id"> <br>
-              <span id="pwAlert"></span>
-              <label for="">비밀번호</label>
-              <input type="password" id="user_pw"> <br>
+              <div class="beforeLogin" id="beforeLogin">
+                <div class="beforeLoginBox">
+                  
+                <div class="input_box">
+                  <span id="idAlert"></span>
+                  <label for="">아이디</label>
+                  <input type="text" id="user_id"> <br>
+                  <span id="pwAlert"></span>
+                  <label for="">비밀번호</label>
+                  <input type="password" id="user_pw"> <br>
+                </div>
+                <div class="button_box">
+                  <button class="loginBtn" id="loginBtn">로그인</button>
+                  <button class="loginBtn" id="joinBtn" onclick="location.href='/join'">회원가입</button>
+                </div>
+
+              </div>
+
+              </div>
+
+              <div class="loginSuccess" id="loginSuccess">
+
+                <div class="profile_text">
+                  <h1>
+                    <span id="username">우리워ㅓㄹ냐올</span> <br>
+                    님 안녕하세요!
+                  </h1>
+                </div>
+
+                <div class="user_box">
+                  <img src="" alt="" id="img_file" class="profileImg">
+                  <button class="loginBtn" id="joinBtn" onclick="location.href='/mypage'">마이페이지</button>
+                  <button class="loginBtn" id="logoutBtn">로그아웃</button>
+                </div>
+
+              </div>
+
+
+
             </div>
-            <div class="button_box">
-              <button id="loginBtn">로그인</button>
-              <button id="joinBtn"
-                onclick="location.href='http://127.0.0.1:5500/Monami/frontEnd/join.html'">회원가입</button>
+
+
+          </div>
+
+          <div class="middlebar">
+
+            <div class="board_box">
+
+              <div class="swiperDiv">
+                <div class="swiperStyle">
+                  <div class="swiper mySwiper">
+                    <div class="swiper-wrapper">
+                      <div class="swiper-slide">Slide 1</div>
+                      <div class="swiper-slide">Slide 2</div>
+                      <div class="swiper-slide">Slide 3</div>
+                      <div class="swiper-slide">Slide 4</div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="boardDiv">
+                <div class="boardTitle">
+                  <h1>게시판</h1>
+                </div>
+                <div class="boardContent">
+                  <span id="board_rank"></span>
+                </div>
+              </div>
+
             </div>
           </div>
 
-          <div class="loginSuccess" id="loginSuccess">
-
-            <div class="profile_text">
-              <h1>
-                <span id="username"></span>
-                님 안녕하세요!
-              </h1>
+          <div class="rightbar">
+            <div class="users_box">
+              <h1>유저랭킹 Top!</h1>
+              <div class="userR">
+                <span id="user_rank"></span>
+              </div>
             </div>
-
-            <div class="user_box">
-              <img src="" alt="" id="img_file" class="profileImg">
-              <button id="joinBtn"
-                onclick="location.href='http://127.0.0.1:5500/Monami/frontEnd/mypage.html'">마이페이지</button>
-              <button id="logoutBtn">로그아웃</button>
-            </div>
-
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-      <div class="middlebar">
-        <div class="board_box">
-          <h1>게시판 5개</h1>
-          <span id="board_rank"></span>
-        </div>
-      </div>
-
-      <div class="rightbar">
-        <div class="users_box">
-          <h1>유저랭킹 Top!</h1>
-          <div>
-            <span id="user_rank"></span>
           </div>
         </div>
       </div>
@@ -193,80 +451,92 @@
 
 
 
-
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+        renderBullet: function (index, className) {
+          return '<span class="' + className + '">' + (index + 1) + "</span>";
+        },
+      },
+      autoplay: {
+        delay: 2000,
+      }
+    });
+  </script>
 </body>
+
 <script>
+
+
   // 로그인했을때 데이터 들고와서 뿌려주는 함수
   async function getloginaccess() {
     try {
-      const data2 = await axios.get("http://127.0.0.1:4000/mainlogin", {
-        withCredentials: true,
+      const res = await axios.get("/main/hi", { withCredentials: true });
+      console.log("res.data.login? :", res.data);
 
-      }).then((e) => {
-        console.log("ㅇㅇ 님ㅈ됌", e);
-        if (e) {
-          loginSuccess.style.display = "block"
-          beforeLogin.style.display = "none"
+      // Handle user rankings here
+      handleUserRankings(res.data.user);
+      // Handle posts here
+      handlePosts(res.data.posts);
 
-          username.innerHTML = e.data.login.username;
-          img_file.src = e.data.login.profile_img;
+      console.log("이건멀까", res.data.userInfo);
 
-        }
-      })
+      if (res.data.userInfo) {
+        // user is logged in
+        loginSuccess.style.display = "block";
+        beforeLogin.style.display = "none";
+
+        username.innerHTML = res.data.userInfo.username;
+        img_file.src = res.data.userInfo.profile_img;
+      } else {
+        // user is not logged in
+        loginSuccess.style.display = "none";
+        beforeLogin.style.display = "block";
+      }
     } catch (error) {
       console.log("getloginaccess", error);
     }
   }
 
-  async function getMain() {
-    try {
-      const data = await axios.get("http://127.0.0.1:4000/main", {
-        withCredentials: true,
-      }).then((e) => {
-        console.log(e);
-        const titleNames = e.data.posts
-        const userDatas = e.data.user
+  function handleUserRankings(userDatas) {
+    console.log("userDatas : ?", userDatas);
+    userDatas.forEach((e, index) => {
+      console.log("e??????", e);
+      if (index === 0) {
+        user_rank.innerHTML += `
+            <div class="rankFirst">
+                <img class="rankImg" src="${e.profile_img}" alt="Profile image of ${e.username}"> <br>
+                <div class="rankName"> 닉네임 : ${e.username}</div>
+                <div class="rankExp"> EXP : ${e.exp}</div> 
+            </div>`;
+      } else {
+        user_rank.innerHTML += `
+            <div class="rankOther">
+                <br>
+                <div class="rankName"> 닉네임 : ${e.username}</div>
+                <div class="rankExp"> EXP : ${e.exp}</div>
+            </div>`;
+      }
+    });
+  }
 
-        titleNames.forEach((e, index) => {
-          board_rank.innerHTML += `
+  function handlePosts(titleNames) {
+    titleNames.forEach((e, index) => {
+      board_rank.innerHTML += `
         <div>
             <a href="/post/${e.id}">
-                <span> title : ${e.title}</span> 
+                <span> title : ${e.title}</span>
                 <span> user_id :${e.user_id}</span>
             </a>
         </div>`;
-        });
-
-
-        userDatas.forEach((e, index) => {
-    if (index === 0) { 
-        user_rank.innerHTML += `
-            <div>
-                <img src="${e.profile_img}" alt="Profile image of ${e.username}" style="width: 50px; height: 50px;">
-                <span> username : ${e.username}</span> 
-                <span> userEXP : ${e.exp}</span>
-            </div>`;
-    } else {
-        user_rank.innerHTML += `
-            <div>
-                <span> username : ${e.username}</span> 
-                <span> userEXP : ${e.exp}</span>
-            </div>`;
-    }
-});
-
-
-      });
-
-    } catch (error) {
-      console.log("main에러", error);
-    }
+    });
   }
 
-
-
   loginBtn.onclick = () => {
-    axios.post('http://127.0.0.1:4000/login', {
+    axios.post('/login', {
       data:
       {
         user_id: user_id.value,
@@ -276,16 +546,18 @@
     }).then((e) => {
       user_id.value = ""
       user_pw.value = ""
-      // gamebtn.style.display = "block"
+      gamebtn.style.display = "block"
 
-      console.log(e);
+      console.log("로그인할떄?", e);
 
       if (e.data.token) {
         console.log("!@#$#$^%@#^@#$%@#$%@#%?!@?!@?");
         loginDraw(e);
       }
       if (e.data.message == "어드민") {
-        window.location.href = "http://127.0.0.1:5501/Monami/frontEnd/admin.html"
+
+        //window.location.href = "http://127.0.0.1:5501/frontEnd/admin.html"
+        window.location.href = "/admin"
       }
 
       if (e.data.message == "로그인할 수 없습니다 (승인대기중)") {
@@ -305,14 +577,21 @@
   }
 
   logoutBtn.onclick = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    loginSuccess.style.display = "none"
-    beforeLogin.style.display = "block"
-    img_file.src = ""
-  }
+    axios.post("/logout", {}, {
+      withCredentials: true,
+    }).then((e) => {
+      console.log("logout?!?!", e);
+      loginSuccess.style.display = "none";
+      beforeLogin.style.display = "block";
+      img_file.src = "";
+    });
+  };
+
 
   async function loginDraw(e) {
-    document.cookie = `token=${e.data.token}; path=/`
+    console.log("Received token:", e.data.token);
+    // 안써도 됨... login 할때 req.session == cookie 에 넣어주는 작업 이였음
+    // document.cookie = `token2=${e.data.token}; path=/`
 
     loginSuccess.style.display = "block"
     beforeLogin.style.display = "none"
@@ -320,18 +599,24 @@
     username.innerHTML = e.data.userInfo.username;
     img_file.src = e.data.userInfo.profile_img;
   }
+
   const gamestart = document.querySelector('.gamebtn');
+  gamestart.addEventListener('click', () => {
+    axios.get('/gamestart', { withCredentials: true })
+      .then((e) => {
+        console.log("머임?", e);
+        if (e.data.message == "게임 스타트") {
+          window.location.href = "/gameready";
+        } else {
+          alert("로그인이 필요합니다.");
+        }
+      })
+      .catch((error) => {
+        console.error("게임시작 에러", error);
+      })
+  })
 
-  gamestart.onclick = () => {
-    if (!document.cookie) {
-      alert("로그인이 필요합니다")
-    }
-    else {
-      window.location.href = "http://127.0.0.1:5500/Monami/frontEnd/gameReady.html"
-    }
-  }
 
-  getMain();
   getloginaccess();
 </script>
 

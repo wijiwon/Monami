@@ -1,7 +1,7 @@
 
 // 전역변수
     const routers = require("express").Router();
-    const {   boardEditView, viewOrderView, likesView , allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation , pagenationView , defaultView, tagsPagenation} = require("../controllers/boardControllers")
+    const {  boardEditPost, boardEditView, viewOrderView, likesView , allBoardView , boardCreate , boardCreateView , likesBtn,  boardItemView , boardCommentCreate , boardParamsView , commentDataGet , boardListPages , pagenation , pagenationView , defaultView, tagsPagenation} = require("../controllers/boardControllers")
     const { Upload } = require("../middleware/imageUpload")   
     const { islogin } = require("../middleware/isLogin");
 
@@ -44,9 +44,11 @@
     // [해석] 이걸로 연결하게 되나❓ : 응. 글 작성하면, 이걸로 연결하게 돼
 
 
-// [edit] 
+// [edit] 게시판 수정 | 값 읽어오기 | READ
     routers.get('/item/edit/:postID' , islogin, boardEditView)
     
+// [edit] 게시판 수정 | 값 수정하기 | POST
+    routers.post('/item/edit/:postId' , islogin, boardEditPost)
 
     
 // [create] 댓글 생성 

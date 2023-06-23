@@ -801,7 +801,7 @@ exports.boardListPages = async (req, res) => {
         }
 
     }
-    
+
 
 // [GET] 태그 누르면 보이는 페이지네이션 | ⭐⭐⭐ EXPORT 해줘야 해
     exports.tagsPagenation = async (req, res) => {
@@ -997,10 +997,30 @@ exports.pagenationView = (req, res) => {
     }
 
 
-// [게시판 수정]
+// [게시판 수정] get | 기존 게시물 가져오기
     exports.boardEditView = (req, res) => {
 
-
         res.sendFile(path.join(__dirname , "../../frontEnd/boardItem_edit.html"))
+
+    }
+
+
+// [게시판 수정] post | 작성한 것 저장하기 
+    exports.boardEditPost = (req, res) => {
+
+    // 정보 가져와지는지 보기 -> 🔵 도착확인
+        console.log("@boardEditPost 도착! | 게시판 업로드 준비 완료 ") 
+
+        const title = req.body.title;
+        const desc = req.body.desc;
+        console.log(title)
+        console.log(desc)
+
+        try {
+            
+        } catch (error) {
+            
+        }
+        
 
     }

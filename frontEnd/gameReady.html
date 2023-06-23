@@ -375,7 +375,19 @@
             overflow: hidden;
         }
 
-        
+        .door {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url(/img/door.png);
+
+            transition: left 1s ease-in-out;
+        }
+
+        .door.opening {
+            left: 150px;
+        }
+
         .indoor {
             width: 220px;
             height: 240px;
@@ -385,28 +397,14 @@
             position: absolute;
             z-index: 0;
         }
-        .doorHoverContainer{
-            position: relative;
-            border: 1px solid red;
-            width: 220px;
-            height: 240px;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .door {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: url(/img/door.png);
-            z-index: 2;
-        }
-        .doorHoverContainer:hover .door {
+
+        /* .door:hover {
             /* background-color: aqua; */
-            animation: slide 1s ease-in-out forwards;
-        }
+            /* animation: slide 1s ease forwards; */
+        /* } */ 
 
 
-        @keyframes slide {
+        /* @keyframes slide {
             0% {
                 left: 0;
             }
@@ -414,7 +412,7 @@
             100% {
                 left: 150px;
             }
-        }
+        } */
 
         .roomlists .room_title,
         .roomlists .room_manager,
@@ -551,10 +549,10 @@
                     <div style="display: flex;" class="roomList">
                         <div class="roomlists">
                             <!-- <div class="room_num">${el.id}</div> -->
-                                <!--<div class="indoor">
+                                <!-- <div class="indoor">
                                     <div class="room_manager">${el.room_manager}</div>
                                     <div class="room_play">${play2}</div>
-                                    </div>
+                                </div>
                                 <div class="door">
 
                                     <div class="room_title">${el.title}</div>
@@ -916,20 +914,45 @@
                     play2 = "게임 중"
                 }
                 // console.log("------------------", el.room_manager.length)
-                roomList.innerHTML +=
-                    `<div class="roomlists">
-                        <div class="room_num">${el.id}</div>
-                            <div class="indoor">
-                                <div class="room_manager">${el.room_manager}</div>
-                                <div class="room_play">${play2}</div>
-                            </div>
-                            <div class="doorHoverContainer">
-                                <div class="door">
-                                    
-                                    <div class="room_title">${el.title}</div>
-                                    </div>
-                            </div>
-                        </div>`
+                // roomList.innerHTML +=
+                //     `<div class="roomlists">
+                //         <div class="room_num">${el.id}</div>
+                //             <div class="indoor">
+                //                 <div class="room_manager">${el.room_manager}</div>
+                //                 <div class="room_play">${play2}</div>
+                //             </div>
+                //             <div class="door">
+                                
+                //                 <div class="room_title">${el.title}</div>
+                //             </div>
+                //         </div>`
+                
+                // 문 슬라이드 추가해서 수정하는중..ㅠ
+                let roomDiv = document.createElement('div');
+                roomDiv.className = 'roomlists';
+                roomDiv.innerHTML = `
+                    <div class="room_num">${el.id}</div>
+                    <div class="indoor">
+                        <div class="room_manager">${el.room_manager}</div>
+                        <div class="room_play">${play2}</div>
+                    </div>
+                    <div class="door">
+                        <div class="room_title">${el.title}</div>
+                    </div>`;
+                
+                roomList.appendChild(roomDiv);
+                
+                let door = roomDiv.querySelector('.door');
+                door.addEventListener('mouseenter', function() {
+                    // Add the 'opening' class to the door when the mouse enters
+                    door.classList.add('opening');
+                });
+
+                door.addEventListener('mouseleave', function() {
+                    // Remove the 'opening' class from the door when the mouse leaves
+                    door.classList.remove('opening');
+                });
+
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
                 let rooms = document.querySelectorAll(".roomlists");
                 // console.log("썸바리헲미이이이이이익",rooms)

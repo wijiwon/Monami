@@ -943,20 +943,17 @@
                 roomList.appendChild(roomDiv);
                 
                 let door = roomDiv.querySelector('.door');
-                let isAnimating = false;
 
                 door.addEventListener('mouseenter', function() {
                     // Add the 'opening' class to the door when the mouse enters
-                        if (!isAnimating) {
+                        if (!door.classList.contains('opening')) {
                             door.classList.add('opening');
-                            isAnimating = true;
                         }
                 });
 
                 door.addEventListener('mouseleave', function() {
                     // Remove the 'opening' class from the door when the mouse leaves
                     door.classList.remove('opening');
-                    isAnimating = false;
                 });
 
                 let doorChildren = door.querySelectorAll('*');

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      background-color: #019267;
+      color: #f6efef;
+      font-family: 'Chalkboard', 'Comic Sans MS', cursive;
+      text-align: center;
+    }
+
+    .profileImg {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      margin: 20px;
+    }
+
+    .beforeLogin,
+    .loginSuccess,
+    .gamebtn {
+      width: 260px;
+      height: auto;
+      margin: 20px auto;
+      padding: 20px;
+      border: 5px dashed #f6efef;
+      border-radius: 5px;
+      box-shadow: 0 0 10px #000;
+      background-color: #00C897;
+    }
+
+    .loginSuccess {
+      display: none;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      margin: 10px 0;
+      padding: 10px;
+      width: 80%;
+      border-radius: 5px;
+      border: none;
+      background-color: #f6efef;
+      color: #000;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #f6efef;
+      color: #000;
+    }
+
+    button:hover,
+    .gamebtn:hover {
+      cursor: pointer;
+      background-color: #f6efef;
+    }
+
+    a {
+      color: #FFF;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    h1 {
+      color: #FFF;
+    }
+
+    .gameMain {
+      border: solid 3px tomato;
+
+    }
+
+    .header {
+      border: solid 3px rgb(181, 255, 71);
+
+    }
+
+    .container {
+      border: solid 3px rgb(26, 44, 248);
+      display: flex;
+      height: 100vh;
+    }
+
+    .container .sidebar {
+      border: solid 3px rgb(255, 255, 255);
+      flex: 1;
+      padding: 20px;
+    }
+
+    .container .middlebar {
+      border: solid 3px rgb(255, 255, 255);
+      flex: 2;
+      padding: 20px;
+    }
+
+    .container .rightbar {
+      border: solid 3px rgb(255, 255, 255);
+      flex: 1;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="gameMain">
+    <!-- 메인화면의 헤더 부분 : 메인 페이지 이동 -->
+    <div class="header">
+      메인화면 이동
+      <img style="width: 1100px; height: 110px;" src="#" alt="">
+    </div>
+
+
+
+    <!-- 메인페이지의 가운데 부분 -->
+    <div class="container">
+
+      <div class="sidebar">
+        <div class="login_box">
+          <h1 class="gamebtn" id="gamebtn">게임시작</h1>
+
+          <div class="beforeLogin" id="beforeLogin">
+            <div class="input_box">
+              <span id="idAlert"></span>
+              <label for="">아이디</label>
+              <input type="text" id="user_id"> <br>
+              <span id="pwAlert"></span>
+              <label for="">비밀번호</label>
+              <input type="password" id="user_pw"> <br>
+            </div>
+            <div class="button_box">
+              <button id="loginBtn">로그인</button>
+              <button id="joinBtn"
+                onclick="location.href='http://127.0.0.1:5500/frontEnd/join.html'">회원가입</button>
+            </div>
+          </div>
+
+          <div class="loginSuccess" id="loginSuccess">
+
+            <div class="profile_text">
+              <h1>
+                <span id="username"></span>
+                님 안녕하세요!
+              </h1>
+            </div>
+
+            <div class="user_box">
+              <img src="" alt="" id="img_file" class="profileImg">
+              <button id="joinBtn"
+                onclick="location.href='http://127.0.0.1:5500/frontEnd/mypage.html'">마이페이지</button>
+              <button id="logoutBtn">로그아웃</button>
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+
+      <div class="middlebar">
+        <div class="board_box">
+          <h1>게시판 5개</h1>
+          <span id="board_rank"></span>
+        </div>
+      </div>
+
+      <div class="rightbar">
+        <div class="users_box">
+          <h1>유저랭킹 Top!</h1>
+          <div>
+            <span id="user_rank"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+</body>
+<script>
+  // 로그인했을때 데이터 들고와서 뿌려주는 함수
+  async function getloginaccess() {
+    try {
+      const data2 = await axios.get("http://127.0.0.1:4000/mainlogin", {
+        withCredentials: true,
+
+      }).then((e) => {
+        console.log("ㅇㅇ 님ㅈ됌", e);
+        if (e) {
+          loginSuccess.style.display = "block"
+          beforeLogin.style.display = "none"
+
+          username.innerHTML = e.data.login.username;
+          img_file.src = e.data.login.profile_img;
+
+        }
+      })
+    } catch (error) {
+      console.log("getloginaccess", error);
+    }
+  }
+
+  async function getMain() {
+    try {
+      const data = await axios.get("http://127.0.0.1:4000/main", {
+        withCredentials: true,
+      }).then((e) => {
+        console.log(e);
+        const titleNames = e.data.posts
+        const userDatas = e.data.user
+
+        titleNames.forEach((e, index) => {
+          board_rank.innerHTML += `
+        <div>
+            <a href="/post/${e.id}">
+                <span> title : ${e.title}</span> 
+                <span> user_id :${e.user_id}</span>
+            </a>
+        </div>`;
+        });
+
+
+        userDatas.forEach((e, index) => {
+    if (index === 0) { 
+        user_rank.innerHTML += `
+            <div>
+                <img src="${e.profile_img}" alt="Profile image of ${e.username}" style="width: 50px; height: 50px;">
+                <span> username : ${e.username}</span> 
+                <span> userEXP : ${e.exp}</span>
+            </div>`;
+    } else {
+        user_rank.innerHTML += `
+            <div>
+                <span> username : ${e.username}</span> 
+                <span> userEXP : ${e.exp}</span>
+            </div>`;
+    }
+});
+
+
+      });
+
+    } catch (error) {
+      console.log("main에러", error);
+    }
+  }
+
+
+
+  loginBtn.onclick = () => {
+    axios.post('http://127.0.0.1:4000/login', {
+      data:
+      {
+        user_id: user_id.value,
+        user_pw: user_pw.value
+
+      }
+    }).then((e) => {
+      user_id.value = ""
+      user_pw.value = ""
+      // gamebtn.style.display = "block"
+
+      console.log(e);
+
+      if (e.data.token) {
+        console.log("!@#$#$^%@#^@#$%@#$%@#%?!@?!@?");
+        loginDraw(e);
+      }
+      if (e.data.message == "어드민") {
+
+        window.location.href = "http://127.0.0.1:5500/frontEnd/admin.html"
+      }
+
+      if (e.data.message == "로그인할 수 없습니다 (승인대기중)") {
+        alert("로그인 할 수 없습니다 (승인 대기중)");
+      }
+      if (e.data.message == "비밀번호 틀림") {
+        alert("비밀번호 틀림");
+      }
+      if (e.data.message == "로그인완") {
+        alert("로그인 ㅎㅇ");
+      }
+      if (e.data.message == "회원가입 한 아이디 없음") {
+        alert("회원가입 한 아이디 없음");
+      }
+    })
+
+  }
+
+  logoutBtn.onclick = () => {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    loginSuccess.style.display = "none"
+    beforeLogin.style.display = "block"
+    img_file.src = ""
+  }
+
+  async function loginDraw(e) {
+    document.cookie = `token=${e.data.token}; path=/`
+
+    loginSuccess.style.display = "block"
+    beforeLogin.style.display = "none"
+
+    username.innerHTML = e.data.userInfo.username;
+    img_file.src = e.data.userInfo.profile_img;
+  }
+  const gamestart = document.querySelector('.gamebtn');
+
+
+  gamestart.onclick = () => {
+    if (!document.cookie) {
+      alert("로그인이 필요합니다")
+    }
+    else {
+      window.location.href = "http://127.0.0.1:5500/frontEnd/gameReady.html"
+    }
+  }
+
+  getMain();
+  getloginaccess();
+</script>
+
+</html>

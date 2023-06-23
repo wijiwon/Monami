@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>game page</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <style>
         body {
             margin: 0;
@@ -14,7 +14,6 @@
         }
 
         .questions,
-
         .drawings,
         .gameResult {
             width: 100vw;
@@ -35,6 +34,8 @@
             display: none;
 
         }
+
+
 
         .questions .row1,
         .drawings .rows1,
@@ -257,6 +258,11 @@
             height: 15%;
             border: 1px solid darkblue;
         }
+
+        #DrawresultVideo {
+            width: 500px;
+            height: 500px;
+        }
     </style>
 </head>
 
@@ -378,7 +384,9 @@
             </div>
             <!-- Game 결과 -->
             <div class="gameBoard">
-                <canvas id="resultCanvas"></canvas>
+                <div id="nickname"></div>
+                <video id="DrawresultVideo" src=""></video>
+                <!-- <canvas id="resultCanvas"></canvas> -->
             </div>
         </div>
         <div class="row3">
@@ -388,6 +396,17 @@
 
 </body>
 <script>
+
+    let gmaeplayer = [];
+    let replay = [];
+    const socket = io.connect('/');
+    const playerName = document.querySelector('.playerName');
+    console.log("d");
+    // socket.on('THrowGameMember', (tmp) => {
+    //     console.log(tmp);
+    //     console.log(tmp.rooms[tmp.roomNum].usernickname);
+    // })
+
     // const data = await axios.get('http://127.0.0.1:4000/gameplay/getUserinfo', {
     //     withCredentials: true
     // }).then((e) => {
@@ -559,7 +578,7 @@
             //     "Content-Type": "multipart/form-data"
             // });
             // }, 3000);
-            const response = await axios.post('http://127.0.0.1:4000/gameplay', formData, {
+            const response = await axios.post('/gameplay', formData, {
                 withCredentials: true,
                 "Content-Type": "multipart/form-data"
             });
@@ -584,7 +603,7 @@
             // });    
             // }, 4000);
 
-            await axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+            await axios.post('/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
                 withCredentials: true
             });
             console.log("그림저장완!!!!!!!!!!!");
@@ -650,7 +669,49 @@
         console.log("비디오재생의 인덱스느느느느느느는", index)
 
         try {
-            const response = await axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+            const response = await axios.post('/gameplay/viewVideo', { Drawid: index }, {
+                responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+                withCredentials: true
+            });
+            const videoData = new Blob([response.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+            console.log("그림data----------", response.data)
+            const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+            videoElement.src = videoSrc;
+            videoElement.play();
+            // 할당한 url을 해제한다.
+            URL.revokeObjectURL(videoData);
+
+        } catch (error) {
+            console.log("playVideo 오류")
+            console.log(error)
+
+        }
+
+        // axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+        //     responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+        //     withCredentials: true
+        // }).then((e) => {
+        //     const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+        //     console.log("그림data----------",e.data)
+        //     const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+        //     videoElement.src = videoSrc;
+        //     videoElement.play();
+        //     // 할당한 url을 해제한다.
+        //     URL.revokeObjectURL(videoData);
+        // }).catch((err) => {
+        //     console.log(err)
+        // })
+
+        // videoElement.src = videoURL;
+        // videoElement.play();
+    }
+
+    async function playresultVideo(index) {
+        const videoElement = document.getElementById('DrawresultVideo');
+        console.log("비디오재생의 인덱스느느느느느느는", index)
+
+        try {
+            const response = await axios.post('/gameplay/viewVideo', { Drawid: index }, {
                 responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
                 withCredentials: true
             });
@@ -729,7 +790,7 @@
         const queInput = document.getElementById('question');
         const queInputV = queInput.value;
         console.log("1단계 - 입력받은 첫 제시어", queInput.value)
-        axios.post('http://127.0.0.1:4000/gameplay/InputQuestion', { value: queInputV }, {
+        axios.post('/gameplay/InputQuestion', { value: queInputV }, {
             withCredentials: true
         })
         queInput.value = "";
@@ -738,7 +799,7 @@
     //-------- 두 번째 제시어 입력하는 구문 -----------------------------------------------------------
     function TwoQuestionInput(id, value, que) {
         console.log("유저 아이디, 정답, 제시어아이디 보낸다???", id, value, que)
-        axios.post('http://127.0.0.1:4000/gameplay/TwoQuestionInput', { id: id, value: value, queValue: que }, {
+        axios.post('/gameplay/TwoQuestionInput', { id: id, value: value, queValue: que }, {
             withCredentials: true
         })
         const queInput = document.getElementById('question');
@@ -778,7 +839,7 @@
         console.log(gamestep);
 
         let time = 10;
-        await axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        await axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -800,55 +861,32 @@
                 console.log(gamestep);
                 startRecording()
                 console.log("--------------------------찐찐찐 2단계------------------------------");
-                // 내가 첫 번째 인덱스면
-                if (MyIndex == 0) {
+                // 내가 마지막 인덱스면 0번 인덱스를 가리키고
+                if (MyIndex == lastIndex) {
                     console.log(gamestep);
 
-                    viewIndex = questions[lastIndex];
+                    viewIndex = questions[0];
                     console.log("내가 보는 제시어의 인덱스 - ", viewIndex)
                     document.querySelector('.view_question').innerHTML = viewIndex[1];
                 }
+                // 마지막 인덱스가 아니면 내 다음의 인덱스를 가리킨다.
                 else {
                     console.log(gamestep);
 
-                    viewIndex = questions[MyIndex - 1];
+                    viewIndex = questions[MyIndex + 1];
                     console.log("내가 보는 제시어의 인덱스 - ", viewIndex)
                     // console.log("내 이전의 인덱스는????", viewIndex[1])
                     document.querySelector('.view_question').innerHTML = viewIndex[1];
                 }
+
             }
             // 4단계이면
             else if (gamestep === 4) {
                 startRecording()
                 console.log("--------------------------찐찐찐 4단계------------------------------");
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                // const targetIndex = (MyIndex + 2) % questions.length;
-                // console.log("이번 타겟의 인덱스 - ", targetIndex)
-
-                // const isTarget = questions[targetIndex];
-                // console.log("이번 타겟의 data - ", isTarget)
-
-                // viewIndex = isTarget;
-                // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
-
-
-                // let isContent = isTarget[1];
-                // isContent = isContent.split(',')
-                // console.log("콘텐츠값은??????", isContent)
-                // const isQue = isContent[isContent.length - 1];
-                // console.log("제시어값은??????", isQue)
-                // document.querySelector('.view_question').innerHTML = isQue;
-                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
-
-                // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
-                
-                let targetIndex;
-                if (MyIndex == 0) {
-                    targetIndex = 1;
-                }
-                else {
-                    targetIndex = 0;
-                }
+                const targetIndex = (MyIndex + 2) % questions.length;
+                console.log("이번 타겟의 인덱스 - ", targetIndex)
 
                 const isTarget = questions[targetIndex];
                 console.log("이번 타겟의 data - ", isTarget)
@@ -856,12 +894,38 @@
                 viewIndex = isTarget;
                 // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
 
+
                 let isContent = isTarget[1];
                 isContent = isContent.split(',')
                 console.log("콘텐츠값은??????", isContent)
                 const isQue = isContent[isContent.length - 1];
                 console.log("제시어값은??????", isQue)
                 document.querySelector('.view_question').innerHTML = isQue;
+                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
+
+                // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
+
+                // let targetIndex;
+                // if (MyIndex == 0) {
+                //     targetIndex = 1;
+                // }
+                // else {
+                //     targetIndex = 0;
+                // }
+
+                // const isTarget = questions[targetIndex];
+                // console.log("이번 타겟의 data - ", isTarget)
+
+                // viewIndex = isTarget;
+                // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+
+                // let isContent = isTarget[1];
+                // isContent = isContent.split(',')
+                // console.log("콘텐츠값은??????", isContent)
+                // const isQue = isContent[isContent.length - 1];
+                // console.log("제시어값은??????", isQue)
+                // document.querySelector('.view_question').innerHTML = isQue;
+                //#######################################################################################
             }
 
 
@@ -917,7 +981,7 @@
         // 타겟 제시어 아이디 값
         let targetID;
 
-        axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -933,10 +997,12 @@
             console.log("내 인덱스가 나왔을까???", MyIndex)
 
             //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            // const targetIndex = (MyIndex + 3) % questions.length;
+            const targetIndex = (MyIndex + 3) % questions.length;
+            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
             // ##########두명이서 할 경우 3라운드에서는 내 인덱스의 값이 들어와야 한다.#############
-            const targetIndex = MyIndex;
+            // const targetIndex = MyIndex;
+            //###################################################################################
 
             console.log("이번 타겟의 인덱스 값 - ", targetIndex)
 
@@ -986,7 +1052,7 @@
     const StepFour = async () => {
         console.log("--------------------------4단계------------------------------");
         // 그 다음 순서의 제시어를 보여준다.
-        await axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        await axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -1003,30 +1069,8 @@
             console.log("내 인덱스가 나왔을까???", MyIndex)
 
             //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            // const targetIndex = (MyIndex + 2) % questions.length;
-            // const targetIndex = (MyIndex + 2) % questions.length;
-            // console.log("이번 타겟의 인덱스 - ", targetIndex)
-
-            // const isTarget = questions[targetIndex];
-            // console.log("이번 타겟의 data - ", isTarget)
-
-            // viewIndex = isTarget;
-            // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
-
-            // let isContent = isTarget[1];
-            // isContent = isContent.split(',')
-            // console.log("콘텐츠값은??????", isContent)
-            // const isQue = isContent[isContent.length - 1];
-            // console.log("제시어값은??????", isQue)
-            // document.querySelector('.view_question').innerHTML = isQue;
-
-            // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
-            if (MyIndex == 0) {
-                const targetIndex = 1;
-            }
-            else {
-                const targetIndex = 0;
-            }
+            const targetIndex = (MyIndex + 2) % questions.length;
+            console.log("이번 타겟의 인덱스 - ", targetIndex)
 
             const isTarget = questions[targetIndex];
             console.log("이번 타겟의 data - ", isTarget)
@@ -1040,6 +1084,29 @@
             const isQue = isContent[isContent.length - 1];
             console.log("제시어값은??????", isQue)
             document.querySelector('.view_question').innerHTML = isQue;
+            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+            // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
+            // if (MyIndex == 0) {
+            //     const targetIndex = 1;
+            // }
+            // else {
+            //     const targetIndex = 0;
+            // }
+
+            // const isTarget = questions[targetIndex];
+            // console.log("이번 타겟의 data - ", isTarget)
+
+            // viewIndex = isTarget;
+            // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+
+            // let isContent = isTarget[1];
+            // isContent = isContent.split(',')
+            // console.log("콘텐츠값은??????", isContent)
+            // const isQue = isContent[isContent.length - 1];
+            // console.log("제시어값은??????", isQue)
+            // document.querySelector('.view_question').innerHTML = isQue;
+            //#########################################################################################
 
             // 추가한부분
             try {
@@ -1085,7 +1152,7 @@
         // 타겟 제시어 아이디 값
         let targetID;
 
-        axios.get('http://127.0.0.1:4000/gameplay/QuestionView', {
+        axios.get('/gameplay/QuestionView', {
             responseType: 'json',
             withCredentials: true
         }).then((e) => {
@@ -1102,9 +1169,11 @@
 
 
             //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            //    const targetIndex = (MyIndex + 1) % questions.length;
+            const targetIndex = (MyIndex + 1) % questions.length;
+            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
             // ##########두명이서 할 경우 5라운드에서는 내 인덱스의 값이 들어와야 한다.#############
-            const targetIndex = MyIndex;
+            // const targetIndex = MyIndex;
+            //###################################################################################
 
 
 
@@ -1156,18 +1225,179 @@
     }
 
 
-    const gameEnd = () => {
+    const gameEnd = async () => {
         console.log("--------------------------리플레이------------------------------");
+        document.querySelectorAll('.questions.pop, .drawings.pop').forEach(element => {
+            element.classList.remove('pop');
+        });
+        // // Add "block" class to elements with class "gameResult"
+        document.querySelector('.gameResult').classList.add('pop');
+        await getthing();
+        await replaying();
+
+        socket.on('replaySelect1', (tmp) => {
+            console.log("replaySelect1", tmp);
+            console.log(replay[tmp]);
+            const string = replay[tmp].content;
+            const array = string.split(",");
+            const nicknametag = document.getElementById('nickname');
+            const videoElement = document.getElementById('DrawresultVideo');
+            const gameBoard = document.querySelector('.gameBoard');
+
+            function asd(){
+                const lastChild = nicknametag.lastChild;
+            if (lastChild) {
+                nicknametag.removeChild(lastChild);
+            }
+            }
+            setTimeout(() => {
+                let p = document.createElement('p');
+                p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
+                nicknametag.appendChild(p);
+            }, 1000);
+          
+           
+          
+            setTimeout(() => {
+                asd()
+                let p3 = document.createElement('p');
+                p3.innerHTML = `제시어 :${array[0]}`;
+                nicknametag.appendChild(p3);
+            }, 2000);
+        
+
+            setTimeout(() => {
+                asd();
+                let p2 = document.createElement('p');
+                p2.innerHTML = `그림그린사람 :${array[1]}`;
+                nicknametag.appendChild(p2);
 
 
-        //--------------------------------------------------------------------
-        // ----다시 하기 클릭은 없는게 좋겠어요..... 방 id 새로 부여해야 하는데 그게 될까여,,,? 그냥 나가기로하죠.....
+            }, 3000);
 
+            setTimeout(() => {
+                playresultVideo(array[2]);
+            }, 4000);
+            setTimeout(() => {
+                asd();
+
+                let p4 = document.createElement('p');
+
+                p4.innerHTML = `${array[3]} : ${array[4]}`;
+                nicknametag.appendChild(p4);                
+
+            }, 5000);
+
+            setTimeout(() => {
+                playresultVideo(array[6]);
+            }, 7000);
+            setTimeout(() => {
+                asd();
+
+                let p5 = document.createElement('p');
+                p5.innerHTML = `${array[7]} :${array[8]}`;
+                nicknametag.appendChild(p5);
+                
+                console.log("완료");
+            }, 8000);
+                asd();
+
+
+        })
 
 
     }
 
+    function asdsf(tmp, str) {
+        const nicknametag = document.getElementById('nickname');
+        let p = document.createElement('p');
+        p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
+        nicknametag.appendChild(p)
+    }
 
+    async function getthing() {
+        await axios.get('/gameplay/QuestionView', {
+            responseType: 'json',
+            withCredentials: true
+        }).then((e) => {
+            console.log("마지막 기능 e");
+            for (let i = 0; i < e.data.questionData.length; i++) {
+                gmaeplayer.push(e.data.questionData[i][2]);
+                console.log("gmaeplayer", gmaeplayer);
+                let obj = {}
+                obj.gmaeplayerID = e.data.questionData[i][2];
+                obj.content = e.data.questionData[i][1];
+                obj.nickname = "";
+                replay[i] = { ...obj };
+
+
+            }
+            console.log(replay);
+            gething2();
+        })
+    }
+    async function gething2() {
+        try {
+            await axios.post('/gameplay/getUserinfo', { id: gmaeplayer }, {
+                responseType: 'json',
+                withCredentials: true
+            }).then((e) => {
+                console.log("여기에 접근하는가?");
+                console.log(e)
+                console.log(e.data[e.data.length - 1].id);
+                socket.emit('rein', e.data[e.data.length - 1].id);
+
+                for (let i = 0; i < e.data.length; i++) {
+                    if (i == (e.data.length - 1)) {
+                        break;
+                    } else {
+                        gmaeplayer[i].push = e.data[i].username;
+                        replay[i].nickname = e.data[i].username;
+                    }
+                }
+                console.log("gmaeplayer", gmaeplayer);
+            })
+            console.log(replay);
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    async function fetchData() {
+        try {
+
+            const response = await axios.get('/gameplay/getUserinfo', {
+                withCredentials: true
+            });
+
+            console.log("mite")
+
+            // gmaeplayer[0]=response.data._room.room_manager;
+            // 소켓전송ㄴ
+            socket.emit('rein', response.data._room.id);
+            console.log("들어가벌임", response.data._room.id)
+            console.log(gmaeplayer)
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async function replaying() {
+        await gmaeplayer.forEach((element, index) => {
+            console.log("element", element);
+            let li = document.createElement('li');
+            li.innerHTML = element;
+            li.addEventListener('click', () => {
+                console.log("클릭됌", element);
+                let sdkiojw = index;
+                socket.emit('replaySelect', sdkiojw);
+            })
+            playerName.appendChild(li);
+        })
+
+
+    }
 
 
 

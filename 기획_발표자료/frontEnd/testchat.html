@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body {
+            position: relative;
+            height: 100vh;
+            display: flex;
+        }
+
+        .content {
+            position: absolute;
+            /* 무조건 가운데로 */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* 부모기준 무조건 가운데  */
+            width: 500px;
+            height: 500px;
+            border: 1px solid;
+        }
+
+        #usertab {
+            position: absolute;
+            top: 131px;
+            left: 986px;
+            border: 1px solid;
+            width: 200px;
+            height: 500px;
+        }
+
+        #send {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            border: 1px solid;
+            box-sizing: border-box;
+            display: flex;
+
+        }
+
+        #send #msg {
+            border: 0;
+            box-sizing: border-box;
+            padding: 10px;
+            width: 85%;
+
+        }
+
+        #send #sendBtn {
+            background-color: azure;
+            border: none;
+            box-sizing: border-box;
+            padding: 10px;
+            width: 15;
+        }
+
+        #message {
+            margin: 0;
+            padding: 0;
+        }
+
+        #message li {
+            list-style: none;
+        }
+
+        #login {
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .join_text {
+            background-color: gray;
+            border: 1px solid;
+        }
+
+        .leave_text {
+            background-color: rgb(71, 202, 231);
+            border: 1px solid rgb(71, 202, 231);
+        }
+
+        #main {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <div>귀여운 동물 카톡</div>
+        <div id="login">
+            <p>로그인</p>
+            <input type="text" id="username">
+            <button id="loginbtn">접속</button>
+        </div>
+        <div id="main">
+            <select name="" id="rooms">
+                <option value="고양이방">고양이방</option>
+                <option value="강아지방">강아지방</option>
+            </select>
+        </div>
+        <div id="send">
+            <input type="text" id="msg">
+            <button id="sendBtn">보내기</button>
+        </div>
+        <div id="send2">
+            <input type="text" id="msg2">
+            <button id="sendBtn2">귓속말</button>
+        </div>
+        <ul id="message"></ul>
+
+    </div>
+    <div id="usertab">
+        유저목록
+        <ul id="list"></ul>
+    </div>
+
+
+</body>
+<script>
+    window.onload = () => {
+        let num = 0;
+        loginbtn.onclick = () => {
+            login.style.display = "none";
+            main.style.display = "block";
+            const name = username.value;
+            console.log(rooms.options);
+            console.log(rooms.selectedIndex);
+            // let room=rooms.options
+            let room = 0;
+            room = rooms.options[rooms.selectedIndex].value;
+            console.log(room);
+            const socket = io.connect();
+            socket.emit("joinroom", room, name);
+            rooms.onchange = function (e) {
+                // 해당 이벤트가 일어난 태그
+                let el = e.target;
+                console.log(el.selectedIndex);
+                socket.emit("leaveroom", room, name);
+                room = rooms.options[el.selectedIndex].value;
+                socket.emit("joinroom", room, name);
+            }
+            socket.on("joinroom", (room, name) => {
+                message.innerHTML += `<li class="join_text">${name} 님이 ${room}에 들어왔음~</li>`;
+
+            })
+
+            socket.on('leaveroom', (room, name) => {
+                message.innerHTML += `<li class="leave_text">${name}님이${room}에서 나갔음</li>`
+            })
+            socket.on("chat", (name, msg) => {
+                message.innerHTML += `<li>${name}:${msg}</li>`
+            })
+            sendBtn.onclick = function () {
+                socket.emit("chat", room, name, msg.value);
+                msg.value = "";
+            }
+            sendBtn2.onclick = function () {
+                socket.emit("chat2", msg2.value, name, msg.value);
+                msg.value = "";
+            }
+
+            socket.emit("userw", name);
+            socket.on("userw", (username, userid) => {
+                list.innerHTML = "";
+                console.log("유저아이디", userid);
+                username.forEach((element, index) => {
+                    const li = document.createElement("li");
+                    li.className = `ehddl${index}`;
+                    console.log("111111", userid[index]);
+                    li.innerHTML += `${element}(${userid[index]})`;
+                    list.append(li);
+
+                    li.onclick = () => {
+                        msg2.value = userid[index];
+                    }
+                });
+            })
+
+
+        }
+    }
+</script>
+
+</html>

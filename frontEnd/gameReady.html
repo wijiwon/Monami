@@ -942,29 +942,29 @@
                 
                 roomList.appendChild(roomDiv);
                 
-                let door = roomDiv.querySelector('.door');
+                let indoor = roomDiv.querySelector('.indoor');
 
-                door.addEventListener('mouseenter', function() {
+                indoor.addEventListener('mouseenter', function() {
                     // Add the 'opening' class to the door when the mouse enters
                         if (!door.classList.contains('opening')) {
                             door.classList.add('opening');
                         }
                 });
 
-                door.addEventListener('mouseleave', function() {
+                indoor.addEventListener('mouseleave', function() {
                     // Remove the 'opening' class from the door when the mouse leaves
-                    door.classList.remove('opening');
+                    indoor.classList.remove('opening');
                 });
 
-                let doorChildren = door.querySelectorAll('*');
-                doorChildren.forEach((child) => {
-                    child.addEventListener('mouseenter', function(event) {
-                        event.stopPropagation();
-                    });
-                    child.addEventListener('mouseleave', function(event) {
-                        event.stopPropagation();
-                    });
-                });
+                // let doorChildren = door.querySelectorAll('*');
+                // doorChildren.forEach((child) => {
+                //     child.addEventListener('mouseenter', function(event) {
+                //         event.stopPropagation();
+                //     });
+                //     child.addEventListener('mouseleave', function(event) {
+                //         event.stopPropagation();
+                //     });
+                // });
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
                 let rooms = document.querySelectorAll(".roomlists");
                 // console.log("썸바리헲미이이이이이익",rooms)

@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- axios 로 form 태그 대신 전송 받아오기 ⭐⭐ -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+</head>
+
+<style>
+
+/* 기본 CSS 설정 */
+    body {
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body, div, span, button, a, p, ul, figure, li {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    
+    ul, li {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    button {
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+/* ------------------ 👉 header > main nav ---------------------- */
+
+/* 1. header */
+    .header {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 30px -20px;
+        
+    }
+
+/* 2. main 메뉴바 nav bar */
+    .mainNav {
+        /* background-color: aquamarine; */
+        display: flex;
+        align-items: center;
+        width: 500px;
+    }
+
+    .mainNav_item {
+        /* background-color: gold; */
+        width: 25%;
+        justify-content: center;
+    }
+
+    
+    .mainNav_link {
+        display: block;
+
+        font-size: 1rem;
+        color: #151515;
+        font-weight: bold;
+        text-align: center;
+
+        padding: 1em;
+            /* 현재 글자 크기 만큼 패딩을 주는 것 
+                em 의 기준은 .mainNav_link 의 글자 크기 */
+
+    }
+    
+    .mainNav_link:hover {
+        color: rgb(77, 76, 76);
+
+    }
+
+/* 3. 로고 */
+    .main_logo {
+        /* background-color: blue; */
+
+        width: 200px;
+        height: 50px;
+        background-size: 50%;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        
+    }
+
+
+/* 4. 오른쪽 감싸는 부분 */
+    .right_wrapper {
+        /* background-color: yellow; */
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 500px;
+    }
+
+    .right_wrapper_item {
+        width: 33.333333%;
+    }
+
+
+
+/* 4.1 검색 */
+    .search_form{
+        display: flex;
+
+        height: 40px;
+        /* background-color: green; */
+
+    }
+
+    .search_form_input {
+        flex: 1 1 auto;
+
+        background-color: rgb(235, 232, 232);
+        border-radius: 1.5em;
+        font-size: 0.9rem;
+
+        border: none;
+        outline: none;
+        /* height: 40px; */
+        
+        padding: 0 30px 0 35px;
+    }
+
+
+/* 4.2 공유 버튼 */
+    .shareBtn_wrap {
+        height: 40px;
+        width: 100px;
+        /* background-color: blue; */
+        display: flex;
+        justify-content: center;
+    }
+
+
+    .shareBtn {
+        background-color: #151515;
+        color: rgba(255, 255, 255, 0.952);
+
+        border-radius: 0.8em;
+        width: 130px;
+        
+        font-weight: bold;    
+    }
+
+/* 4.3 프로필 */
+
+    .profile_img {
+        width: 35px;
+        height: 35px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 50% 50%
+        
+    }
+
+
+/* ------------------ 🚀🚀🚀  카테고리 category sub navbar ---------------------- */
+
+/* 0) 콘테이너들 */
+
+.category_nav {
+    padding: 30px 30px;
+}
+
+.category_item_container { 
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.category_item_container button { 
+    font-weight: 600;
+}
+
+
+/* 1) 드롭다운 버튼들 */
+.category_nav_dropdown { 
+    display: flex;
+    justify-content: center;
+
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    font-size: 1rem;
+    border: 0.8px solid lightgray;
+    border-radius: 0.8em;
+}
+
+.category_nav_dropdownBtn {
+    color: gray;
+    font-size: 0.9rem;
+}
+
+
+/* 2) 일반 버튼들 */
+.category_nav_items_container {
+    display: flex;
+}
+
+.category_nav_items:first-child {
+    background-color: rgb(240, 238, 238);
+    border-radius: 0.8em;
+}
+
+.category_nav_items:first-child button {
+    color: #151515;
+    font-weight: 600;
+}
+
+.category_nav_items { 
+    display: flex;
+    justify-content: center;
+
+    width: 100px;
+    height: 40px;
+    font-size: 1rem;
+}
+
+.category_nav_itemBtn { 
+    color: gray;
+    font-size: 0.9rem;
+}
+
+
+
+
+/* -------------🤟🤟🤟 카드 리스트 card list---------------------- */
+
+.post_list_section {
+    overflow-x: hidden;
+    
+}
+
+.card_list_item {
+    margin-bottom: 2rem;    
+        /* 좀 떨어트리고 싶음 */
+}
+
+.card_list_image {
+    /* 사이즈 : 300px 로 줄 수도 있음. */
+    padding-bottom: 60%; 
+        /* 일정비율 유지될 수 있게 사이즈 잡음 */
+
+    background-repeat: no-repeat;
+    background-color: gray;
+    background-size: cover;
+
+}
+
+.card_desc { 
+    flex: 1 1 auto;
+    font-size: 1rem;
+    padding: 1em;
+    background-color: white;
+}
+
+
+@media (min-width : 600px) {
+    .card_list_section  {
+        overflow-x: hidden;
+    }
+    .card_list {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+    }
+
+    .card_list_item {
+        display: flex;
+        flex-direction: column;
+        width: 47%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+}
+
+@media (min-width : 900px) {
+    .card_list_section  {
+        overflow-x: hidden;
+    }
+    .card_list {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+
+        margin-left: 5px;
+        /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
+        /* 반응형은 좀 더 해야 함 😥😥😥😥😥 */
+    }
+
+    .card_list_item {
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+}
+
+@media (min-width : 1200px) {
+    .card_list_section  {
+        overflow-x: hidden;
+    }
+    .card_list {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+        margin-left: 30px;
+            /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
+    }
+
+    .card_list_item {
+        display: flex;
+        flex-direction: column;
+        width: 22%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+}
+
+
+
+
+/* --------------- 예전에 임시로 만든것 👇👇 -------------------------------------------- */
+
+
+
+    #post_01 {
+        background-color: lightgray;
+        width: 300px;
+        height: 300px;
+    }
+/* 
+    #page_navigation { 
+        width: 600px;
+        height: 200px;
+        background-color: lightblue;
+    } */
+
+    .post_container {
+        background-color: lightgreen;
+        width: 300px;
+        height: 500px;
+        display: inline-block;
+        margin: 10px;
+    }
+
+
+    .post_image {
+        width: 100%;
+    }
+
+
+</style>
+
+
+
+<body>
+
+    
+    <div class="page">
+
+
+        <!-- header -->
+        <header class="header">
+
+            <!-- main_nav -->
+
+            <ul class="mainNav">
+
+                <li class="mainNav_item">
+                    <a href="#" class="mainNav_link"> Home </a>
+                </li>
+                
+                <li class="mainNav_item">
+                    <a href="#" class="mainNav_link"> About </a>
+                </li>
+                
+                <li class="mainNav_item">
+                    <a href="#" class="mainNav_link"> Product </a>
+                </li>
+
+                <li class="mainNav_item">
+                    <a href="#" class="mainNav_link"> Go Drawing </a>
+                </li>
+
+            </ul>
+
+            <!-- main logo  -->
+            <figure class="main_logo" style="background-image: url(../backEnd/image/dribbble_logo.jpg)";>
+                <!-- <img src="../backEnd/image/dribbble_logo.jpg" alt=""> -->
+            </figure >
+                <!-- 로고 교체 필요함 ✅ -->
+
+
+            <!-- 검색, 공유, 프로필 감싸는 wrap -->
+            <div class="right_wrapper">
+
+                <!-- search  -->
+                <div class="right_wrapper_item, search_wrap">
+                    <form class="search_form">
+                        <!-- 검색 아이콘 추가 ✅ -->
+                            <!-- <figure class="search_form_img" style="background-image: url(../backEnd/image/magnifying-glass.png)";> -->
+                        <input class="search_form_input" type="search" placeholder="Search...">
+                        <!-- <input type="submit" value="?"> -->
+                    </form>
+                </div>
+
+
+                <!-- share drawing! -->
+                <div class="right_wrapper_item shareBtn_wrap">
+                    <button class="shareBtn"> Share Work</button>
+                </div>
+    
+                <!-- profile -->
+                <div class="profile_img_container">
+                    <figure class="right_wrapper_item profile_img" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+    
+                    </figure>
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- category : sub nav-->
+        <nav class="category_nav">
+            
+            <div class="category_item_container">
+                
+                <!-- 1) 검색 ex) 조회순 -->
+                    <!-- ✅ 시간 되면 도전 -->
+                <div class="category_nav_dropdown">
+                    <button class="category_nav_dropdownBtn">Following</button>
+                </div>
+                
+                
+                
+                <!-- 2) 키워드 검색 -->
+            <ul class="category_nav_items_container">
+                <li class="category_nav_items">
+                    <button class="category_nav_itemBtn">Discover</button>
+                </li>
+                
+                <li class="category_nav_items">
+                    <button class="category_nav_itemBtn">Discover</button>
+                </li>
+                
+                <li class="category_nav_items">
+                    <button class="category_nav_itemBtn">Discover</button>
+                </li>
+
+                <li class="category_nav_items">
+                    <button class="category_nav_itemBtn">Discover</button>
+                </li>
+                
+                <li class="category_nav_items">
+                    <button class="category_nav_itemBtn">Discover</button>
+                </li>
+                
+                <li class="category_nav_items">
+                    <button class="category_nav_itemBtn">Discover</button>
+                </li>
+                
+                <li class="category_nav_items">
+                    <button class="category_nav_itemBtn">Discover</button>
+                </li>
+
+                <li class="category_nav_items">
+                    <button class="category_nav_itemBtn">Discover</button>
+                </li>
+
+            </ul>
+                
+                <!-- 3) 필터 기능 -->
+                <div class="category_nav_dropdown">
+                    <button class="category_nav_dropdownBtn">Filters</button>
+                </div>
+                    <!-- 아이콘 찾아서 넣기 ✅  -->
+
+            
+
+            </div>
+
+        </nav>
+
+        <!-- card list | post_list-->
+        <section class="post_list_section">
+
+            <ul class="card_list">
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+                <li class="card_list_item">
+                    <!-- 사진 -->
+                    <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                        <!-- <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> -->
+                    </figure>
+
+                    <!-- 프로필, 제목, 좋아요, views  -->
+                    <div class="card_desc">
+                        Lorem ipsum dolor sit amet consectetur
+                    </div>
+                </li>
+
+
+            </ul>
+
+
+
+            <!-- ☝☝☝☝☝☝☝☝  여기까지, ui 만들고 있는 중 ☝☝☝☝☝☝  -->
+                <h1>게시판 목록</h1>
+                <p>중요정보 카드 식으로 요약해서 보여주면 됨</p>
+                <p>hover 기능으로 제목 보여주는 건 시간 되면</p>
+            
+                <div id="page_navigation">
+            
+                    <!-- <h3>
+                        <a href="http:127.0.0.1:4000/board/list/:page"> 1page </a>
+                        <a href="http:127.0.0.1:4000/board/list/:page"> 2page </a>
+                        <a href="http:127.0.0.1:4000/board/list/:page"> 3page </a>
+                        <a href="http:127.0.0.1:4000/board/list/:page"> 4page </a>
+                        <a href="http:127.0.0.1:4000/board/list/:page"> 5page </a>
+                        <a href="http:127.0.0.1:4000/board/list/:page"> 6page </a>
+                        <a href="http:127.0.0.1:4000/board/list/:page"> 7page </a>
+                    </h3> -->
+            
+                </div>
+            
+            
+            <div id="posts_wrapper">
+            
+                    <!-- 아이템 1 -->
+                    <div id="post_01">
+                        
+                        <div> 
+                            제목 : <span id="postTitle_container">  </span>
+                        </div>
+            
+                        <div> 
+                            댓글 수 : <span id="commentCount_container">   </span>
+                        </div>
+            
+                        <div> 
+                            글쓴이 : <span id="writer_container">  </span>
+                        </div>
+                        
+                        <div>
+                            유저 프로필 이미지 : <span id="writer_profileImg">  </span>
+                        </div>
+            
+                        <div> 
+                            작성일자 : <span id="createDate_container">  </span>
+                        </div>
+            
+                        <div>
+                            유저 경험치 :  <span id="userExp_container"> </span>
+                        </div>
+            
+                        <div>
+                            views : <span id="postViews_container"> </span>
+                        </div>
+            
+                        <div>
+                            likes 숫자 : <span id="likes_number"> </span>
+                        </div>
+            
+                        <div>
+                            🧡 likes 버튼 <span id="likes_likesBtn"></span>
+                        </div>
+            
+                        <div>
+                            올린 사진 : <span id="postImg_container">  </span>
+                        </div>
+            
+                    </div>
+            
+            </div>
+            
+
+        </section>
+
+
+        <!-- footer -->
+        <footer class="footer">
+
+
+        </footer>
+
+
+
+    </div>    
+
+
+
+
+    
+</body>
+
+
+<script>
+// 🔹 전역변수 
+
+    // 사용자가 클릭한 게시글의 POST ID
+    userClickPostID = 0;
+        // [설명] 
+            // '게시글 목록' 중, 사용자가 특정 게시글을 '클릭' 하면, 
+            // 해당 게시물의 'POST ID' 를 
+            // addeventListner 의 event target.id 사용해서 가져오고 
+            // 이걸 GET 요청에 넣기? 
+
+    // 그려지기 전 준비된 배열통 | 이걸로 그려나감
+    arrPostWithCommentUser = [];
+
+
+    // 페이지네이션에서 클릭하는 page 값, 기본값
+    // clickedPage = 1
+
+
+// getView 함수 
+    async function getView(arrPostWithCommentUser , page_num = 1 ) {
+
+        try {
+
+            // 1. 필요한 데이터 가져오기 
+
+                // 1) 넘길 데이터 준비 
+                    // 뭘 넘겨야 하지? 
+                    // 페이지네이션 하려면? 음😥😥😥 
+
+                    // a) '몇 번째 페이지 클릭' 했는지 (사용자 클릭가능 한 것 관점)
+                        // [효과] 이걸 클릭하면 -> 해당 페이지네이션이 보여져야 함
+                        // [생각해보기]
+                            // '첫 메인 페이지' 는 어떤 페이지가 클릭되었는지, 필요 없음. 
+                            // '2번째 페이지' 로 갈 때, 2번째 페이지의 post, user 테이블 다 가져와야 함
+                            // 그럼, 어떤 페이지를 클릭했는지 어떻게 가져올거야? 
+                                // eventListener 달아줘서, 클릭되면, get 요청 해서 -> 그 페이지 보여 달라⭐⭐
+                            
+                            // 이 페이지는 postListPage 라고 할 수 있겠다
+
+                    // b) '어떤 게시글 클릭' 했는지 (사용자 클릭가능 한 것 관점)
+                        // [효과] 이걸 클릭하면 -> 해당 게시글이 보여져야 함
+                        // [생각해보기]
+                            // 어떤 게시글이 클릭되었나? 
+                            // 특정 상세 페이지로 넘어가려면, 뭐가 필요하지? 
+                                // post 의 id 값이 필요해 ⭐ 
+                            // '사용자가 그 post id 를 클릭했다.' 라는 데이터를 어떻게 얻지? ⭐⭐⭐
+                                // 댓글을 생각해보면, ⭐⭐⭐⭐⭐⭐⭐⭐  
+                                    // for 문으로 '댓글 tag 가 생성' 될 때, '댓글 tag id' 에 'comment ID' 를 묻혀셔 -> split 해서 추출하지 않았나? 
+                            // 그러면, ✅ '사용자가 이 post id 를 클릭했다' (userClickPostID) 라는 전역변수, 를 가지고 -> GET 요청을 하게 된다. 
+
+                    // C) 그럼 구체적으로 어떤 GET 요청
+                        // 
+
+
+                // 2) 넘기기
+                    // a) 언제 요청? ⭐⭐
+                        // 이 페이지가 로드되면 요청되어야 함 -> so, DOMContentLoaded 이벤트가 발생하면, getView 실행 
+
+
+                    // b-1) 새롭게 시도 | 여기에 아예, 페이지네이션 시작하기 | 기본 디폴트로 1 시작하기
+                        // const page_num = 1    // 기본값을 우선 1로 하려고 ✅ | 여기를 매개변수화 ✅                 
+                    const {data} = await axios.get(`http://127.0.0.1:4000/board/list/page?num=${page_num}` , {
+                        withCredentials : true,
+                    })
+
+                    console.log("@boardList > getView() 들어오는거 확인 🙆‍♂️ " , data)
+
+
+
+                        // // b) 요청하기 [예전버전]
+                        // const {data} = await axios.get("http://127.0.0.1:4000/board/list" , {
+                        //             withCredentials : true,
+                        //             });
+                                    
+                        //         // 데이터 첨부하는 버전
+                        //             // const {data} = await axios.get(`http://127.0.0.1:4000/board/list` , {
+                        //             //             withCredentials : true,
+                        //             //             params : {
+                        //             //                 id : postId,     
+                        //             //             }});
+                                
+                // 3) 잘 들어왔는지 확인        
+                    
+                    // console.log("@boardList > getView() 들어오는거 확인 🙆‍♂️ " , data)
+                    
+                    // // a) login한 user 확인  
+                    //     // loginUserData = data.loginUser
+                    //         console.log("현재 로그인한 유저 데이터" , loginUserData)
+
+
+                    // // b) post 테이블에서 필요한 데이터 확인 
+                    //     // 제목
+                            console.log("제목" , data.data[0].title)       // 첫번째 글 
+                        
+                    //     // 글쓴이 
+                    //         // 이 게시글의 user_id 를 가져온다. 
+                            console.log("글쓴이" , data.data[0].user_id)     // dj
+                            
+                    //     // 작성일자
+                            // console.log(data.data[0].createdAt)       // 2023-06-15T05:51:56.000Z
+                            console.log("작성일자" , data.data[0].createdAt.split('T')[0])       // 2023-06-15
+                            
+                    //     // views 
+                            console.log("view" , data.data[0].views)       // 1
+                            
+                    //     // likes 숫자 
+                            console.log("likes" , data.data[0].likes)       // 16
+
+                    // // c) user 테이블에서 필요한 데이터 
+                    //     // 유저 프로필 이미지 
+                    //         // profile_img 속성에서 가져오면 됨
+                            console.log("프로필이미지" , data.data[0].User.profile_img)       // http://127.0.0.1:4000/monami.png
+
+                    //     // 유저 경험치 
+                            console.log("유저경험치" , data.data[0].User.exp)        // 0
+                            
+                    
+                    // // d) comment 테이블에서 필요한 데이터 
+                    //     // 댓글수
+                            console.log("댓글수" , data.data[0].Comments.length)     // 51        // 0
+                
+                
+            // 3-1) 보내줄 데이터 확인 ✅✅ 
+                // 1)) post 테이블에 보낼 데이터 
+                    // likes 버튼 클릭 -> likes 올라가게 하기 
+                    
+                // 2) 해당 게시글 누르면 -> views 올라가게 하기 
+
+
+                // CF. 고민 
+                    // 전체 배열통 만들기 == sequelize 에서 include 로 해오기 
+                    // | 그려줘야 하는 것 '게시글당 모아주기' 👉 이걸 외래키를 쓰면, sequelize 에서 해줌 ⭐⭐⭐
+                    
+                            // a) 데이터 형태 
+                                // ex) [ {1번게시물} , {2번게시물}, {3번 게시물} ]
+                            // b) 이곳에서 뭘 할 수 있나? 
+                                // 전체통을 '이름순' 으로 정렬하면 -> 게시글 조회 이름순이 된다.
+                                // 전체통을 'exp순' 으로 하면 -> 랭킹순으로 된다. 
+                                // 전체통을 '좋아요' 순으로 하면 -> 좋아요 순으로, 처음보여질 때, 보여진다.
+                                // 우선, 230616 현재, 기본 정렬된걸로, 그려주기 
+
+                            // c) 사용할 수 있는 기능               
+                                // map? fileter? 
+
+                // CF. 현 시점에서 할일 정리 ✅✅✅
+                    // USER 테이블의 ID 를 기준으로 하나로 묶을까? ⭐⭐⭐⭐⭐⭐⭐ 
+                        // 1) post 데이터를 POST ID 순서로 정렬해 ⭐⭐⭐⭐⭐ | 여기에서 '게시판 정렬이 들어감'
+                        // 2) 해당 POST ID 를 적은 USER ID 를 찾아 
+                        // 3) 그 USER ID 와 관련된 COMMENT 테이블, USER 정보를 가져와서 -> ⭐하나의 객체⭐로 만든다. ⭐⭐⭐⭐⭐ 
+                        // 4) 그래서 '전체 게시글 배열'= [ {첫번째 보여주면 되는 게시글 관련 정보} , {두 번째 보여주면 되는 게시글 관련 정보}, 등등 ] 으로 나열해
+                        // 5) 그 다음, '전체 게시글 배열'을 페이지 별로 잘라서, 다시 배열에 넣는다. 
+                            // ex) '페이지 구분된 전체 게시글'= [ [첫번째 페이지] , [두 번째 페이지] , ...   ]
+                        // 6) 그 다음, 첫 번째 페이지를 클릭하면 -> '페이지 구분된 전체 게시글'[0] 이 될 수 있게 한다. 
+
+
+            // 4) '배열통 확정' | ✅ 이 부분에서 '좋아요 순, 조회수 순, 등으로 변경 가능'
+                // 👉 이건 이제 sequelize - include 에서 해왔음 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+                const arrPostWithCommentUser = data.data
+                console.log("배열통확인" , arrPostWithCommentUser)
+
+
+
+            // 5) 주주룩 보이게 하기 
+                arrPostWithCommentUser.forEach( (element, index) => {
+                    
+
+                    // 게시글 container div 
+                        const post_container = document.createElement('div');
+                        post_container.classList.add("post_container")      
+                        post_container.id = `post_container_${element.id}`      // 해당 게시글 id
+
+                    // 제목 container
+                        const title_container = document.createElement('div');
+                        title_container.id = `title_container_${element.id}`
+                        title_container.textContent = `제목 : ${element.title}`
+                        post_container.appendChild(title_container)
+                        
+                    // 댓글수 container
+                        const comment_num_container = document.createElement('div');
+                        comment_num_container.id = `comment_num_${element.id}`
+                        comment_num_container.textContent = `댓글수 : ${element.Comments.length}`
+                        post_container.appendChild(comment_num_container)
+                        
+                    // 글쓴이 container
+                        const post_writer_container = document.createElement('div');
+                        post_writer_container.id = `post_writer_container_${element.id}`
+                        post_writer_container.textContent = `글쓴이 : ${element.user_id}`
+                        post_container.appendChild(post_writer_container)
+                        
+                    // 유저 프로필 이미지 container | 📛 사진이 없음. 
+                        // 사진이 들어갈 수 있는 div
+                        const user_profileImg_container = document.createElement('div');
+                        user_profileImg_container.id = `profileImg_container_${element.id}`
+
+                        // div 안에 img 태그로 사진 넣기
+                        const profileImg_Img = document.createElement('img');
+                        profileImg_Img.src = element.User.profile_img;    
+                            
+                        // console.log("사진 경로 확인🚀", element.User.profile_img)
+
+                        post_container.appendChild(user_profileImg_container)
+
+                    // 작성일자 container 
+                        const createdAt_container = document.createElement('div');
+                        createdAt_container.id = `createdAt_${element.id}`
+                        createdAt_container.textContent = `작성일자 : ${element.createdAt.split('T')[0]}`
+                        post_container.appendChild(createdAt_container)
+                        
+                    // 유저 경험치 container 
+                        const exp_container = document.createElement('div');
+                        exp_container.id = `exp_${element.id}`
+                        exp_container.textContent = `유저 경험치 EXP : ${element.User.exp}`
+                        post_container.appendChild(exp_container)
+                        
+                    // views container 
+                        const views_container = document.createElement('div');
+                        views_container.id = `exp_${element.id}`
+                        views_container.textContent = `조회수 : ${element.views}`
+                        post_container.appendChild(views_container)
+                        
+                    // likes container 
+                        const likes_container = document.createElement('div');
+                        likes_container.id = `likes_${element.id}`
+                        likes_container.textContent = `좋아요 : ${element.likes}`
+                        post_container.appendChild(likes_container)
+                        
+                    // likes 버튼 container 
+                        const likesBtn = document.createElement('button');
+                        likesBtn.id = `likesBtn_${element.id}`
+                        likesBtn.classList.add('likesBtn')
+                        likesBtn.textContent = "👍좋아요"
+                        post_container.appendChild(likesBtn)
+
+                    // post 에 유저가 올린 사진 container
+                        const post_image_container = document.createElement('div');
+                        const post_image = document.createElement('img');
+                        post_image.classList.add('post_image');
+                        post_image.src = `http://127.0.0.1:5502/Monami/backEnd/image/${element.post_img}`;    
+
+                        // console.log("사진 경로 확인🚀", element.User.profile_img)
+
+                        post_image_container.appendChild(post_image)
+                        post_container.appendChild(post_image_container)
+
+
+
+                    // 'posts_wrapper' 에,  게시글 하나를 담은 post_container 를 붙이기 
+                    posts_wrapper.appendChild(post_container)
+
+                });
+
+                
+            // 6) 페이지네이션 보여줄 div 
+                pageNavigation(10)
+                pageShow()
+
+                // console.log("서버에서 받은 결과 찍어보자" , result)
+
+
+
+            // 6) 채워진걸 -> 페이지네이션 별로 나누기 => 이것도 sequelize 에서 
+                // a) 16 으로 나눠서 -> 배열이 되게 map 함수를 써야 하나? 
+                
+                // b) 아, 이것도, sequelize 에서 바로 할 수 있네? ⭐⭐⭐⭐⭐⭐ 
+                    
+                // html 상 페이지네이션이 들어갈 공간 
+                    // const page_navigation = document.createElement('div');
+                    
+
+                    // const temp_aTag = document.createElement('a')
+                    // temp_aTag.href = `http://127.0.0.1:4000/board/list/:1`
+                    // temp_aTag.textContent = `page 1`
+
+                    // page_navigation.appendChild(temp_aTag)
+            
+            // 8) 사용자가 1을 클릭하면 -> 첫 번째 배열을 렌더통에 넣기
+                
+                
+
+
+                    
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+// 🔹 1page, 2page 보여주는 함수 
+    let pageNavigation = (page_num) => {
+
+        for(i=1; i<=page_num; i++) {
+            page_navigation.innerHTML += `
+                <button class="pageNumBtn" id="page_btn_${i}"> ${i}page </button>
+                `    
+        }
+        
+    }
+
+
+
+// 🔹 view 초기화 시키는 함수 | 이게 없으면 누적되어서 나옴 
+    initializedView = async (arrPostWithCommentUser , page_num) => {
+
+        // post 내용들 전부 비우기
+            posts_wrapper.innerHTML = "";
+
+        // page1, page2 .. 버튼 전부 지우기 
+            page_navigation.innerHTML = "";
+
+        await getView(arrPostWithCommentUser , page_num)
+    }
+
+
+// 🔹 좋아요 버튼 클릭하면 -> id 찾고 -> like 증가 함수 찾기
+    const findClickedBtn = async () => {
+
+        try {
+            // 좋아요 버튼 모두 가져오기
+            const likesButtons = document.getElementsByClassName('likesBtn')
+            console.log("좋아요 버튼 있어? 📌 " , likesButtons)
+
+            // 배열 만들어서 -> 하나씩 돌면서 -> 숫자 증가시키는 기능 붙이기
+            Array.from(likesButtons).forEach((btn) => {
+                btn.onclick = async (event) => {
+                    const clickedPostID = event.target.id.split('_')[1]
+                        console.log("clickedPostID 확인" , event.target.id.split('_')[1])   // clickedPostID 확인 58
+                        console.log(clickedPostID)  // 58
+    
+                    // clickedLikeBtn 이 버튼 id 에 대해 숫자 증가해주세요~ 
+                    await IncreaseLikeNum(clickedPostID)
+                }
+            })
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+// 🔹 매개변수 입력되면 -> 좋아요 수치 증가 시키기 
+    const IncreaseLikeNum = async (clickedPostID) => {
+
+        try {
+            // 전송시킬 동적 form 데이터 만들기 
+            const form = new FormData();    // form 객체 생성
+            form.append("clickedPostID" , clickedPostID);    // 키값 : clickedPostID, value : clickedPostID 
+            
+            // 서버로 보내기
+            await axios.post("http://127.0.0.1:4000/board/likes" , form , {
+                withCredentials : true,
+                // "Content-Type" : "json/application"     // form 에 담길 데이터 타입 설정
+            })
+            
+            // 다시 그려주기? 
+                // 그러려면, clickedPage 이걸, 전역변수화?
+                initializedView(arrPostWithCommentUser, clickedPage)
+
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+
+
+
+// 🔹 page navigation ex) 1page, 2page 클릭하면, 보내는 함수 
+    const pageShow = () => {
+        const pageNumBtns = document.getElementsByClassName('pageNumBtn');
+
+            // [새로운 시도] 보여주는 함수 이제 만들었으니, 그걸 써보기
+            Array.from(pageNumBtns).forEach((btn) => {
+                btn.onclick = async (event) => {
+                    const clickedPage = event.target.id.split('_')[2];
+                    initializedView(arrPostWithCommentUser, clickedPage)
+                }
+            })
+
+
+            // [과거코드]
+                // Array.from(pageNumBtns).forEach((btn) => {
+                //     btn.onclick = async (event) => {
+                //         console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
+                //         console.log(event.target.id);
+                        
+                //         const page_num = event.target.id;
+                    
+                //         await axios.get(`http://127.0.0.1:4000/board/list/page?num=${page_num}`)
+                //         .then((response) => {
+                            
+                //             // 내가 원하는 데이터를 '배열통' 으로 받아오기
+                //             console.log(response.data.result);
+                //             console.log("🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴🛴")
+
+                //             // '배열통' 을 '매개변수' 로 꽂아주기
+                //             arrPostWithCommentUser = response.data.result       // 📛 전역변수 주의
+
+                //             initializedView(arrPostWithCommentUser)
+                            
+                //         });
+                //     }
+                // });
+    }
+            // [과거 코드]
+                // let pageShow = () => {
+
+                //     document.getElementsByClassName('pageNumBtn').onclick = async (event) => {
+                            
+                //             console.log("🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀🚀")
+                //             console.log(event.target.id)
+                //             const i = event.target.id
+
+
+
+                //             // get 으로 다시 시도 ⭐⭐ 
+                //             await axios.get(`http://127.0.0.1:4000/board/list/page?num=${i}`)
+                //             .then((e) => {
+                //                 res.sendFile(path.join(__dirname , "./boardList.html"))
+                //             })
+
+
+
+
+
+                //             // 그 다음, 상세 페이지는,then, 에서 getAPI 를 함 여기도 그러면 될까 ?⭐⭐ 
+
+
+                //             // axios.post(`http://127.0.0.1:4000/board/list/page?num=${i}` , form , {
+                //             //     "Content-type" : "json/application"
+                //             // }).then((e) => {
+                //             //     const redirectURL = e.data.redirectURL; 
+                //             //     window.location.href =redirectURL;
+                //             // }).catch((err) => {
+                //             //     console.log(err)
+                //             // })
+                //         }
+                //         // 여기에 postPerPage 이거를 얼마나 할지 여기서 넘겨줘야 하나? 
+                //         // href="http://127.0.0.1:4000/board/list/page?num=${i}"
+                // }
+
+
+
+
+
+// 🔹 getView 실행 
+    document.addEventListener('DOMContentLoaded' , async function() {
+        
+        console.log("getView 실행된건가? 💎")
+
+        // 여기에서 getview 가 아니라, 
+            // 1) 초기화된게 실행 되어야 하고 ⭐⭐⭐ 
+            // 2) 매개변수를 받아야 한다. ⭐⭐⭐ 
+            // 3) 음... 
+
+        await initializedView( );
+
+        await findClickedBtn()
+
+    })
+
+
+
+
+
+
+</script>
+
+
+
+
+
+</html>

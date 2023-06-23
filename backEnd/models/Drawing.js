@@ -4,7 +4,7 @@ class Drawing extends Sequelize.Model{
     static init(sequelize){
         return super.init({
             content : {
-                type: Sequelize.BLOB('long'),
+                type: Sequelize.STRING(100),
                 allowNull: false
             }
         },
@@ -15,8 +15,8 @@ class Drawing extends Sequelize.Model{
             modelName: "Drawing",
             tableName: "drawings",
             paranoid: false,
-            charset: "utf8mb4",
-            collate: "utf8mb4_unicode_ci"
+            charset: "utf8",
+            collate: "utf8_general_ci"
         })
     }
     static associate(db){

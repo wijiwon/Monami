@@ -20,10 +20,21 @@
 </head>
 
 <style>
-
+    /* 유지체 */
+    @font-face {
+      font-family: 'HSYuji-Regular';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
 /* 기본 CSS 설정 */
     body {
+        font-family: 'HSYuji-Regular';
         -webkit-font-smoothing: antialiased;
+        background-color: #fffbae;
+        background-image: url(http://127.0.0.1:4000/img/backgroundIMG.png);
+    background-size: cover;
+    position: relative;
     }
 
     body, div, span, button, a, p, ul, figure, li {
@@ -36,9 +47,9 @@
         list-style: none;
     }
 
-    a {
+    /* a {
         text-decoration: none;
-    }
+    } */
 
     button {
 	border: 0;
@@ -50,10 +61,12 @@
 
 /* 1. header */
     .header {
+        width: 100%;
+      height: 130px;
         display: flex;
         justify-content: space-evenly;
-        margin: 30px -20px;
-        
+        /* margin: 30px -20px; */
+        position: relative;
     }
 
 /* 2. main 메뉴바 nav bar */
@@ -99,15 +112,12 @@
     }
 
     .main_logo {
-        /* background-color: blue; */
-
-        width: 200px;
-        height: 50px;
-        
-
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
+        width: 600px;
+      height: 100px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
 
 
@@ -118,6 +128,10 @@
         align-items: center;
         justify-content: space-evenly;
         width: 500px;
+        position: absolute;
+        top: 300px;
+        left: 50%;
+        transform: translate(-50%);
     }
 
     .right_wrapper_item {
@@ -149,6 +163,9 @@
         padding: 0 30px 0 35px;
     }
 
+    .search_wrap{
+        width: 400px;
+    }
 
 /* 4.2 공유 버튼 */
     .shareBtn_wrap {
@@ -188,10 +205,21 @@
 /* 0) 콘테이너들 */
 
 .category_nav {
+    position: absolute;
+    left: 50%;
+    top: 160px;
+    transform: translate(-50%);
     padding: 30px 30px;
+    border: 1px solid;
+    width: 1200px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .category_item_container { 
+    width: 100%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -201,6 +229,9 @@
     font-weight: 600;
 }
 
+.drop_down_options a {
+    text-decoration: none;
+}
 
 /* 1) 드롭다운 버튼들 */
 .category_nav_dropdown { 
@@ -262,13 +293,31 @@
 
     /* 🔹 [레퍼런스 코드]  */
         .post_list_section {
+            position: absolute;
+            left: 50%;
+            top: 130px;
+            transform: translate(-50%);
+            /* overflow-x: hidden; */
+            width: 1400px;
+            height: 1300px;
+            border: 3px solid;
+            background-image: url(http://127.0.0.1:4000/img/sketchbook_3.png);
+        }
+        #posts_wrapper {
             overflow-x: hidden;
-            
         }
 
     /* ✍ 적용 | 스크롤 없애기 */
         #posts_wrapper {
-            overflow-x: hidden;
+            position: absolute;
+            left: 50%;
+            top: 360px;
+            transform: translate(-50%);
+            width: 1260px;           
+            border: 1px solid; 
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
         }
             /* 음... 근데 안 사라진다 😥  */
 
@@ -287,20 +336,37 @@
 
     /* ✍✍ 적용하기 | js 완성된 post 에 적용 */
     .post_container {
-        /* background-color: lightgreen; */
-        /* width: 300px; */
-        /* height: 500px; */
-        /* display: inline-block; */
-        margin-bottom: 2rem;
+        position: relative;
+    /* left: 50%; */
+    top: 0;
+    /* transform: translate(-50%); */
+    width: 290px;
+    height: 330px;
+    /* overflow-x: hidden; */
+    /* display: flex; */
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 12px;
+    background-image: url(http://127.0.0.1:4000/img/postDiv.png);
+    }
+
+    .post_container div:first-child{
+        width: 244px;
+    margin-left: 23px;
+    margin-top: 23px;
     }
 
 
     .likesBtn { 
-
-        width: 100%;
-        padding: 0.5em;
-        /* height: 20px; */
-        background-color: yellow;
+        position: absolute;
+    left: 50%;
+    bottom: 25px;
+    transform: translate(-50%);
+    width: 86%;
+    padding: 0.5em;
+    /* height: 20px; */
+    background-color: yellow;
 
     }
 
@@ -349,153 +415,15 @@
     .post_desc_container {
         flex: 1 1 auto;
         font-size: 1rem;
-        padding: 1em;
-        background-color: white;
+        padding-left: 1.5em;
+        padding-top: 1em;
+        /* background-color: white; */
+    }
+    .post_desc_container div:first-child{
+        margin: 0;
     }
 
 
-/* 🔵 flex 로 정렬하는 부분 | min-width 에 따라 다르게 설정 |  */
-@media (min-width : 600px) {
-    /* 🔹 [레퍼런스] x 스크롤 없애기 */
-    .card_list_section  {
-        overflow-x: hidden;
-    }
-
-    /* 🔹 [레퍼런스] 카드 감싸는 부분임 | flex 로 정렬 시키기 */
-    .card_list  {
-        display: flex;
-        flex-wrap: wrap; 
-        margin: 0 -1rem;
-            /* margin 의 반대로, 
-                즉, 축소되는게 아니라, 옆으로 확장! */
-    }
-    
-    /* ✍ 적용 | 포스팅 감싸는 부분 | flex 로 정렬 시키기 */
-    #posts_wrapper {
-        display: flex;
-        flex-wrap: wrap; 
-        margin: 0 -1rem;
-            /* margin 의 반대로, 
-                즉, 축소되는게 아니라, 옆으로 확장! */
-        overflow-x: hidden;
-        overflow-y: hidden;
-        
-    }
-
-    /* 🔹 [레퍼런스] 각 카드 item | item 간 정렬 | item 내부 desc를 위에서 아래로 내리기 위해 direction 을 세로로 함 */
-    .card_list_item {
-        display: flex;
-        flex-direction: column;
-        width: 47%;
-            /* ⭐⭐ 이 부분이 다단에서 컬럼설정할 때 width 값임 ⭐⭐  */
-        margin-left: 1rem;
-        margin-right: 1rem;
-        /* margin: 0 1rem; */
-    }
-
-    /* ✍ 적용 | 각 post 의 아이템이 담겨 있음. | container 내부의 1) 사진 2) desc 태그를 정렬하기 위해 flex 사용 */
-    .post_container{
-        display: flex;
-        flex-direction: column;
-        width: 47%;
-                    /* ⭐⭐ 이 부분이 다단에서 컬럼설정할 때 width 값임 ⭐⭐  */
-        margin-left: 1rem;
-        margin-right: 1rem;
-        /* margin: 0 1rem; */
-    }
-}
-
-@media (min-width : 900px) {
-    .card_list_section  {
-        overflow-x: hidden;
-    }
-
-    .card_list {
-        display: flex;
-        flex-wrap: wrap; 
-        margin: 0 -1rem;
-            /* margin 의 반대로, 
-                즉, 축소되는게 아니라, 옆으로 확장! */
-
-        margin-left: 5px;
-        /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
-        /* 반응형은 좀 더 해야 함 😥😥😥😥😥 */
-    }
-
-    #posts_wrapper {
-        display: flex;
-        flex-wrap: wrap; 
-        margin: 0 -1rem;
-            /* margin 의 반대로, 
-                즉, 축소되는게 아니라, 옆으로 확장! */
-
-        margin-left: 5px;
-        /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
-        /* 반응형은 좀 더 해야 함 😥😥😥😥😥 */
-    }
-
-    .card_list_item  {
-        display: flex;
-        flex-direction: column;
-        width: 30%;
-        margin-left: 1rem;
-        margin-right: 1rem;
-        /* margin: 0 1rem; */
-    }
-    
-    .post_container {
-        display: flex;
-        flex-direction: column;
-        width: 30%;
-        margin-left: 1rem;
-        margin-right: 1rem;
-        /* margin: 0 1rem; */
-    }
-}
-
-@media (min-width : 1200px) {
-    .card_list_section  {
-        overflow-x: hidden;
-    }
-
-    .card_list  {
-        display: flex;
-        flex-wrap: wrap; 
-        margin: 0 -1rem;
-            /* margin 의 반대로, 
-                즉, 축소되는게 아니라, 옆으로 확장! */
-        margin-left: 30px;
-            /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
-    }
-    
-    #posts_wrapper {
-        display: flex;
-        flex-wrap: wrap; 
-        margin: 0 -1rem;
-            /* margin 의 반대로, 
-                즉, 축소되는게 아니라, 옆으로 확장! */
-        margin-left: 30px;
-            /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
-    }
-
-    .card_list_item {
-        display: flex;
-        flex-direction: column;
-        width: 22%;
-        margin-left: 1rem;
-        margin-right: 1rem;
-        /* margin: 0 1rem; */
-    }
-    
-    .post_container{
-        display: flex;
-        flex-direction: column;
-        width: 22%;
-        margin-left: 1rem;
-        margin-right: 1rem;
-        /* margin: 0 1rem; */
-    }
-}
 
 
 /* ------ 👇👇 목차 페이지 메뉴 👇👇 ------  */
@@ -503,8 +431,15 @@
     /* page 담고 있는 컨테이너 */
     .page_navigation_container {
         display: flex;
-        justify-content: center;
-        padding-bottom: 3rem;
+    justify-content: center;
+    padding-bottom: 3rem;
+    border: 1px solid;
+    width: 1000px;
+    height: 20px;
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translate(-50%);
         
     }
 
@@ -538,10 +473,10 @@
                     [시도해본 것]                
                     position: fixed; 👉 이건 그냥 화면에 딱 고정이니까, 안 돼!
                     position : absolute 로 그 위치에 고정시키니까 됨 ⭐⭐ */
-
+        top: 0;
         cursor: pointer;
-        width: 20em;
-        height: 20em;
+        width: 18em;
+        height: 18em;
     }
 
     /* ⭐ 호버 디자인도 해보고 싶어 ⭐⭐⭐ */
@@ -596,7 +531,7 @@
 
             <!-- main_nav -->
 
-            <ul class="mainNav">
+            <!-- <ul class="mainNav">
 
                 <li class="mainNav_item">
                     <a href="#" class="mainNav_link"> Home </a>
@@ -614,79 +549,48 @@
                     <a href="#" class="mainNav_link"> Go Drawing </a>
                 </li>
 
-            </ul>
+            </ul> -->
 
             <!-- main logo  -->
-            <figure  class="main_logo" style="background-image: url(http://127.0.0.1:5502/Monami/backEnd/image/monami.png);">
+            <!-- <figure  class="main_logo" style="background-image: url(http://127.0.0.1:5502/Monami/backEnd/image/monami.png);"> -->
                 <!-- style 속성에서 url 은 꼭, 'http://127.0.0.1:5502/Monami/backEnd/image/monami.png' 이렇게 full name 으로 써야 함 -->
-
-            </figure >
+            <!-- </figure > -->
+            <a href="/main"><img class="main_logo" src="http://127.0.0.1:4000/img/main_Logo.png" alt="로고">
                 <!-- 로고 교체 필요함 ✅ -->
 
 
-            <!-- 검색, 공유, 프로필 감싸는 wrap -->
-            <div class="right_wrapper">
-
-                <!-- search  -->
-                <div class="right_wrapper_item, search_wrap">
-                    <form class="search_form" id="tagSearch_form" >
-                        <!-- 검색 아이콘 추가 ✅ -->
-                            <!-- <figure class="search_form_img" style="background-image: url(../backEnd/image/magnifying-glass.png)";> -->
-                        <input id="tagSearch_form_input" class="search_form_input" type="search" placeholder="Search...">
-                        <!-- <input type="submit" value="?"> -->
-                    </form>
-                </div>
-
-
-                <!-- share drawing! -->
-                <div class="right_wrapper_item shareBtn_wrap">
-                    <!-- 게시글 작성 페이지로 이동 -->
-                    <button id="shareWorkBtn" class="shareBtn"> Share Work</button>
-                </div>
-    
-                <!-- profile -->
-                <div class="profile_img_container">
-                    <figure class="right_wrapper_item profile_img" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
-    
-                    </figure>
-
-                </div>
-
-
-            </div>
 
 
         </header>
 
 
-        <!-- category : sub nav-->
+        <!-- card list | post_list-->
+        <section class="post_list_section">
+            
+            
+            
+
+                    <!-- category : sub nav-->
         <nav class="category_nav">
             
             <div class="category_item_container">
-                
-                <!-- 1) 검색 ex) 조회순 -->
-                    <!-- ✅ 시간 되면 도전 -->
-                <div class="category_nav_dropdown">
-                    <button class="category_nav_dropdownBtn">Following</button>
-                </div>
-
                 <div class="drop_down_options">
                     <ul>
-                        <li>
+                        <!-- <li>
                             [following 누르면, 드롭다운 예정]
-                        </li>
+                        </li> -->
                         <li> 
-                            <a href="http://127.0.0.1:4000/board/list/view"  id="newest_dropOption" data-track-view="createdAt"> Newest </a>  
+                            <a href="http://127.0.0.1:4000/board/list/view"  id="newest_dropOption" data-track-view="createdAt"> 등록 순 </a>  
                             <!-- data-track-view 이 속성 안에 있는 값이 👉 뽑혀서 DB 로 넘어가게 됨 ⭐⭐⭐ -->
                         </li>
                         
                         <li> 
-                            <a href="http://127.0.0.1:4000/board/list/likes"  id="likes_dropOption" data-track-view="likes"> Most liked  </a>
+                            <a href="http://127.0.0.1:4000/board/list/likes"  id="likes_dropOption" data-track-view="likes"> 좋아요 순 </a>
                         </li>
                         
                         
                         <li> 
-                            <a href="http://127.0.0.1:4000/board/list/views"  id="views_dropOption" data-track-view="views"> Most views  </a>
+                            <a href="http://127.0.0.1:4000/board/list/views"  id="views_dropOption" data-track-view="views"> 조회수 순 </a>
                         </li>
                         
                         
@@ -737,10 +641,15 @@
 
             </ul>
                 
-                <!-- 3) 필터 기능 -->
-                <div class="category_nav_dropdown">
-                    <button class="category_nav_dropdownBtn">See All</button>
+                <!-- 3) 게시글 작성페이지 이동 -->
+                            <!-- share drawing! -->
+                <div class="right_wrapper_item shareBtn_wrap">
+                    <!-- 게시글 작성 페이지로 이동 -->
+                    <button id="shareWorkBtn" class="shareBtn"> Share Work</button>
                 </div>
+                <!-- <div class="category_nav_dropdown">
+                    <button class="category_nav_dropdownBtn">See All</button>
+                </div> -->
                     <!-- 아이콘 찾아서 넣기 ✅  -->
 
             
@@ -749,9 +658,33 @@
 
         </nav>
 
-        <!-- card list | post_list-->
-        <section class="post_list_section">
-            
+
+
+        <!-- 검색, 공유, 프로필 감싸는 wrap -->
+        <div class="right_wrapper">
+
+            <!-- search  -->
+            <div class="right_wrapper_item, search_wrap">
+                <form class="search_form" id="tagSearch_form" >
+                    <!-- 검색 아이콘 추가 ✅ -->
+                        <!-- <figure class="search_form_img" style="background-image: url(../backEnd/image/magnifying-glass.png)";> -->
+                    <input id="tagSearch_form_input" class="search_form_input" type="search" placeholder="Search...">
+                    <!-- <input type="submit" value="?"> -->
+                </form>
+            </div>
+
+            <!-- profile -->
+            <!-- <div class="profile_img_container">
+                <figure class="right_wrapper_item profile_img" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+
+                </figure>
+
+            </div> -->
+
+
+        </div>
+
+
             <!-- 레퍼런스 | 삭제 하면 안 돼 주의 📛-->
                 <!-- <ul class="card_list">
 
@@ -922,13 +855,13 @@
 
 
         <!-- footer -->
-        <footer class="footer">
+        <!-- <footer class="footer">
 
             <div>
                 ||||||||||||||| fooooooooooooooooooooooooter 영역
             </div>
 
-        </footer>
+        </footer> -->
 
 
 
@@ -1110,10 +1043,10 @@
                             post_desc_container.appendChild(title_container)
                             
                         // 댓글수 container
-                            const comment_num_container = document.createElement('div');
-                            comment_num_container.id = `comment_num_${element.id}`
-                            comment_num_container.textContent = `댓글수 : ${element.Comments.length}`
-                            post_desc_container.appendChild(comment_num_container)
+                            // const comment_num_container = document.createElement('div');
+                            // comment_num_container.id = `comment_num_${element.id}`
+                            // comment_num_container.textContent = `댓글수 : ${element.Comments.length}`
+                            // post_desc_container.appendChild(comment_num_container)
                             
                         // 글쓴이 container
                             const post_writer_container = document.createElement('div');
@@ -1135,16 +1068,16 @@
                             post_desc_container.appendChild(user_profileImg_container)
 
                         // 작성일자 container 
-                            const createdAt_container = document.createElement('div');
-                            createdAt_container.id = `createdAt_${element.id}`
-                            createdAt_container.textContent = `작성일자 : ${element.createdAt.split('T')[0]}`
-                            post_desc_container.appendChild(createdAt_container)
+                            // const createdAt_container = document.createElement('div');
+                            // createdAt_container.id = `createdAt_${element.id}`
+                            // createdAt_container.textContent = `작성일자 : ${element.createdAt.split('T')[0]}`
+                            // post_desc_container.appendChild(createdAt_container)
                             
                         // 유저 경험치 container 
-                            const exp_container = document.createElement('div');
-                            exp_container.id = `exp_${element.id}`
-                            exp_container.textContent = `유저 경험치 EXP : ${element.User.exp}`
-                            post_desc_container.appendChild(exp_container)
+                            // const exp_container = document.createElement('div');
+                            // exp_container.id = `exp_${element.id}`
+                            // exp_container.textContent = `유저 경험치 EXP : ${element.User.exp}`
+                            // post_desc_container.appendChild(exp_container)
                             
                         // views container 
                             const views_container = document.createElement('div');
@@ -1385,10 +1318,10 @@ try {
                     post_desc_container.appendChild(user_profileImg_container)
 
                 // 작성일자 container 
-                    const createdAt_container = document.createElement('div');
-                    createdAt_container.id = `createdAt_${element.id}`
-                    createdAt_container.textContent = `작성일자 : ${element.createdAt.split('T')[0]}`
-                    post_desc_container.appendChild(createdAt_container)
+                    // const createdAt_container = document.createElement('div');
+                    // createdAt_container.id = `createdAt_${element.id}`
+                    // createdAt_container.textContent = `작성일자 : ${element.createdAt.split('T')[0]}`
+                    // post_desc_container.appendChild(createdAt_container)
                     
                 // 유저 경험치 container 
                     const exp_container = document.createElement('div');
@@ -1488,7 +1421,9 @@ try {
     let pageNavigation = (page_num) => {
 
         // 페이지네이션 초기화 ⭐⭐⭐
-        const page_navigation = document.querySelector(".page_navigation_container")
+        // const page_navigation = document.querySelector(".page_navigation_container")
+        const page_navigation = document.querySelector('#page_navigation')
+
         while(page_navigation.firstChild) {
             page_navigation.removeChild(page_navigation.firstChild)
         }
@@ -1507,8 +1442,10 @@ try {
             try {
                 console.log("initializedView @boardList.html")
 
-                const posts_wrapper = document.querySelector("#posts_wrapper")
-                const page_navigation = document.querySelector('#page_navigation')
+                // const posts_wrapper = document.querySelector("#posts_wrapper")
+                // const page_navigation = document.querySelector('.page_navigation_container')
+
+                // const page_navigation = document.querySelector('#page_navigation')
 
                 // post 내용들 전부 비우기
                     posts_wrapper.innerHTML = "";

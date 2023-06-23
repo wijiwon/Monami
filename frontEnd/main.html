@@ -315,6 +315,16 @@
     .beforeLoginBox{
       margin-top: 65%;
     }
+
+    .rankImg{
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    .rankName, .rankExp{
+      font-size: 15px;
+      color: #000;
+    }
   </style>
 </head>
 
@@ -491,9 +501,9 @@
       if (index === 0) {
         user_rank.innerHTML += `
             <div>
-                <img src="${e.profile_img}" alt="Profile image of ${e.username}" style="width: 50px; height: 50px;">
-                <span> username : ${e.username}</span>
-                <span> userEXP : ${e.exp}</span>
+                <img class="rankImg" src="${e.profile_img}" alt="Profile image of ${e.username}"> <br>
+                <span class="rankName"> username : ${e.username}</span> <br>
+                <span="rankExp"> userEXP : ${e.exp}</span=> <br>
             </div>`;
       } else {
         user_rank.innerHTML += `

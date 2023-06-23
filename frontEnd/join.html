@@ -178,13 +178,13 @@
 
     }).then((e)=>{
       console.log("e.data@@@",e.data);
-      if (e.data == "완료") {
+      if (e.data.message == "완료") {
         window.location.href = "/main"
       }
-      if (e.data == "중복된 아이디 입니다") {
+      if (e.data.message == "중복된 아이디 입니다") {
         alert("중복된 아이디 입니다");
       }
-      if (e.data == "중복된 닉네임입니다") {
+      if (e.data.message == "중복된 닉네임입니다") {
         alert("중복된 닉네임입니다");
       }
     })

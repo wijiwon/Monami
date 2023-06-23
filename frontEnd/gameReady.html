@@ -953,6 +953,15 @@
                     door.classList.remove('opening');
                 });
 
+                let doorChildren = door.querySelectorAll('*');
+                    doorChildren.forEach((child) => {
+                        child.addEventListener('mouseenter', function(event) {
+                            event.stopPropagation();
+                        });
+                        child.addEventListener('mouseleave', function(event) {
+                            event.stopPropagation();
+                        });
+                    });
                 //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
                 let rooms = document.querySelectorAll(".roomlists");
                 // console.log("썸바리헲미이이이이이익",rooms)

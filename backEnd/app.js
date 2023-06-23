@@ -25,6 +25,7 @@ const { Cookie } = require('express-session');
 app.use(express.urlencoded({ extended: false }))
 
 // 이미지 파일을 등록할 폴더 경로
+// hi
 
 app.use("/img", express.static(path.join(__dirname, "image")));
 
@@ -158,18 +159,23 @@ io.on('connection', (socket) => {
     let _roomNum = 0;
     let roomName = ``;
     let clientsInRoom = [];
-    socket.on('exitRoom', () => {
+    socket.on('exitRoom', (roomNum) => {
         console.log("User has exited the room");
+        console.log(roomName)
         socket.leave(roomName);
+        clientsInRoom = Array.from(io.sockets.adapter.rooms.get(roomName));
         console.log("나가기", clientsInRoom);
+        console.log(roomNum);
+        console.log("rooms[roomNum],exitRoom",rooms[roomNum])
+        rooms[roomNum].usernickname.length=0;
         for (let i = 0; i < userid.length; i++) {
             for (let n = 0; n < userid.length; n++) {
                 if (userid[i].userid == clientsInRoom[n]) {
-                    username[i] = userid[i]._nickname;
+                    rooms[roomNum].usernickname.push(userid[i]._nickname);
                 }
             }
         }
-        socket.to(roomName).emit('getreadyuser', username);
+        socket.to(roomName).emit('getreadyuser', rooms[roomNum].usernickname);
         // Perform any additional actions or emit events as needed
     });
  
@@ -191,6 +197,18 @@ io.on('connection', (socket) => {
         console.log("", rooms);
     });
 
+    socket.on('rein',(tmp)=>{
+        console.log("rein이벤트받음");
+        console.log(tmp);
+        socket.join(`room${tmp}`)
+        let room=`room${tmp}`;
+        let clientsInRoom2 = Array.from(io.sockets.adapter.rooms.get(room));
+        console.log("clientsInRoom", clientsInRoom2);
+        socket.on('replaySelect',(tmp)=>{
+            socket.to(room).emit('replaySelect1', tmp);
+        })
+    })
+ 
     socket.on('joinRoom', (roomNum) => {
         console.log("방입장 한뒤 소켓으로보냄");
         _roomNum = roomNum;
@@ -217,6 +235,9 @@ io.on('connection', (socket) => {
         //         }
         //     }
         // }
+        console.log(rooms);
+        rooms[roomNum].usernickname.length=0;
+        console.log(rooms);
         for (let i = 0; i < clientsInRoom.length; i++) {
             if(socket.id ==clientsInRoom[i])
             {
@@ -227,13 +248,17 @@ io.on('connection', (socket) => {
             for (let n = 0; n < userid.length; n++) {
             if(userid[i].userid==rooms[roomNum].user[n])
             {
+               
                 rooms[roomNum].usernickname.push(userid[i]._nickname);
             }
         }
         }
         console.log(rooms[roomNum]);
         socket.to(roomName).emit('chat message', obj);
-        socket.to(roomName).emit('getreadyuser', rooms[roomNum].usernickname);
+        setTimeout(() => {
+            socket.to(roomName).emit('getreadyuser', rooms[roomNum].usernickname);
+
+        }, 100);
         socket.on('gamestart', () => {
             io.to(clientsInRoom[0]).emit('hostgamestart', () => {
                 console.log("방장도 같이시작.");

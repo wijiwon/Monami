@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { RoomCreate, RoomChoice, RoomViews, UserView,getHost,RoomDelete} = require('../controllers/gameReadyController');
+const { RoomCreate, RoomChoice, RoomViews, UserView,getHost,RoomDelete,gamestatupdatae} = require('../controllers/gameReadyController');
 const { islogin } = require('../middleware/isLogin')
 
 router.get('/',islogin,(req,res)=>{
@@ -17,4 +17,6 @@ router.post('/roomchoice', islogin, RoomChoice);
 router.post('/gethost',islogin,getHost)
 
 router.post('/RoomDelete',islogin,RoomDelete)
+
+router.post('/gamestatupdatae',islogin,gamestatupdatae)
 module.exports = router;

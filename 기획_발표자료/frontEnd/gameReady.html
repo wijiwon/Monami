@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameReady Page</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+
+    <style>
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .view1 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .row1,
+        .row2,
+        .row3 {
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            display: flex;
+        }
+
+        .row1 {
+            height: 15%;
+            border: 1px solid violet;
+        }
+
+        .row2 {
+            height: 50%;
+            border: 1px solid darkblue;
+        }
+
+        .row3 {
+            height: 35%;
+            border: 1px solid darkolivegreen;
+        }
+
+        .row1 .Logo,
+        .row1 .createRoom {
+            top: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            cursor: pointer;
+        }
+
+        .row1 .Logo {
+            left: 50%;
+            font-size: 40px;
+            font-weight: 700;
+        }
+
+        .row1 .createRoom {
+            left: 70%;
+            padding: 10px;
+            font-size: 30px;
+            font-weight: 600;
+            border: 2px solid green;
+            border-radius: 2em;
+        }
+
+        .row2 .roomList,
+        .row2 .userList {
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        .row2 .roomList,
+        .row3 .chat {
+            width: 70%;
+            border: 2px solid fuchsia;
+        }
+
+        .row2 .userList,
+        .row3 .myProfile {
+            width: 30%;
+            border: 2px solid slateblue;
+
+        }
+
+        .row3 .myProfile {
+            position: relative;
+        }
+
+        .myProfile .myProfile2 {
+            width: 230px;
+            border: 1px solid;
+            display: flex;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+        }
+
+        .myProfile2 .profile3 {
+            margin-left: 10px;
+            width: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .profile3 .pro_name {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .profile3 a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .roompopup_creat,
+        .roompopup_ready {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            position: relative;
+            width: 600px;
+            height: 600px;
+            border: 3px solid;
+            z-index: 3;
+            background-color: white;
+        }
+
+        .roompopup_creat {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .roompopup_creat.pop {
+            display: flex;
+
+        }
+
+        .roomTitle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 30px;
+        }
+
+        .roomTitle input {
+            font-size: 20px;
+        }
+
+        .roomBtn {
+            display: flex;
+            justify-content: space-evenly;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        .roomBtn .create,
+        .roomBtn .cancle {
+            width: 100px;
+            border: 1px solid;
+            height: 40px;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .roompopup_ready {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .roompopup_ready.pop {
+            display: flex;
+        }
+
+        .roompopup_ready .readyUser {
+            width: 70%;
+            height: 50%;
+            border: 1px solid;
+        }
+
+        .roompopup_ready .roomBtn_leader,
+        .roompopup_ready .roomBtn_member {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        .roompopup_ready .roomBtn_leader {
+            /* display: none; */
+            border: 1xp solid black;
+        }
+
+        .roompopup_ready .roomBtn_member {
+            display: none;
+        }
+
+        .roomBtn_member.pop {
+            display: flex;
+        }
+
+        .roomBtn_member .roomExit {
+            cursor: pointer;
+        }
+
+        .row2 .roomlists {
+            margin: 15px;
+            width: 230px;
+            height: 150px;
+            border: 1px solid;
+            /* cursor: pointer; */
+        }
+
+        .row2 .roomList {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            overflow: visible;
+            overflow-x: hidden
+        }
+
+        .roomList .room_usernum {
+            display: none;
+        }
+
+        .pro_img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 1px solid;
+        }
+
+        .room_num {
+            display: block;
+        }
+
+        #test1,
+        #test2,
+        #test3 {
+            display: none;
+            width: 100%;
+            height: 100%;
+            border: 1px solid;
+            background-color: black;
+        }
+
+        .te {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 게임 대기방의 전체 영역을 가지고 있다. -->
+    <div class="view1">
+        <div id="test1">
+            <h1 class="te">3</h1>
+        </div>
+        <div id="test2">
+            <h1 class="te">2</h1>
+        </div>
+        <div id="test3">
+            <h1 class="te">1</h1>
+        </div>
+
+        <!-- 페이지의 최상단 영역. 로고와 방만들기 버튼이 있다. -->
+        <div class="row1">
+            <div class="Logo">그림 일심동체</div>
+            <div class="createRoom">방만들기</div> <!-- 방을 생성할 수 있는 버튼 -->
+        </div>
+        <!-- 페이지의 중간 영역. 생성된 방의 리스트와 현재 접속, 게임중인 유저 목록을 확인할 수 있다. -->
+        <div class="row2">
+            <div class="roomList">
+            </div>
+            <div class="userList">
+                <p>User List</p>
+                <ul id="User_id"></ul>
+            </div>
+        </div>
+        <!-- 페이지의 하단 영역. 접속중인 유저간의 전체 채팅과 현재 로그인한 유저의 정보를 확인할 수 있고, 게임페이지 홈으로 이동할 수 있다. -->
+        <div class="row3">
+            <!-- 접속 중인 전체유저 채팅-->
+            <div class="chat">
+                <!-- 채팅 내용이 보이는 영역 -->
+                <div class="chatBox"></div>
+                <!-- 채팅을 입력하는 영역 -->
+                <div class="chatInsert">
+                    <input id="message-input" type="text" placeholder="Type your message">
+                    <input type="text" id="receiver-id" placeholder="Receiver ID or username">
+                    <button id="send-button">Send</button>
+
+                    <ul id="messages"></ul>
+
+                </div>
+            </div>
+            <!-- 유저가 로그인한 계정의 정보가 노출되는 영역. 홈으로 버튼을 누르면 게임 메인페이지로 이동한다. -->
+            <div class="myProfile">
+                <div class="myProfile2"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 방 만들기 버튼을 누르면 켜지는 팝업. 방을 생성할 수 있다. -->
+    <div class="roompopup_creat">
+        <div class="roomTitle">
+            <p>방 제목</p>
+            <input type="text" id="title" placeholder="방 제목을 입력해주세요.">
+        </div>
+        <div class="roomBtn">
+            <button class="create">만들기</button>
+            <button class="cancle">취소하기</button>
+        </div>
+    </div>
+    <!-- 방을 생성하거나, 생성된 방에 들어가면 켜지는 팝업. 해당 방에서 대기하는 사람들을 확인할 수 있다. -->
+    <div class="roompopup_ready">
+        <div class="roomTitle">저장된 방 제목 노출</div>
+        <!-- 게임 시작 대기중인 유저정보 -->
+        <div class="readyUser">시작 대기 중인 유저 목록</div>
+        <!-- 하단의 버튼영역. 방장의 경우 좌측버튼 - 게임시작 -->
+        <div class="roomBtn_leader">
+            <div class="roomStart">게임시작</div>
+            <div class="roomExit">나가기</div>
+        </div>
+        <!-- 하단의 버튼영역. 멤버의 경우 좌측버튼 X -->
+        <div class="roomBtn_member">
+            <div class="roomExit">나가기</div>
+        </div>
+    </div>
+</body>
+<script>
+    const socket = io.connect('http://localhost:4000');
+
+    // ahfmrpTdjdygg
+    // 모르게ㅆ어욯ㅎ
+
+    console.log("ddddddasmdmsadkasdkaskd")
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const messagesList = document.getElementById('messages');
+    const User_idlist = document.getElementById('User_id');
+    const receiverIdInput = document.getElementById('receiver-id');
+    const gamestarts = document.querySelector('.roomStart');
+    const readyUsers = document.querySelector('.readyUser');
+    const roomTitle = document.querySelector('.roomTitle');
+    const pTagValue = roomTitle.querySelector('p').textContent;
+    const exit = document.querySelector('.roomExit');
+    const title = document.getElementById('title');
+    const createRoom = document.querySelector('.createRoom');
+    const create=document.querySelector('.create');
+
+    // roomExitButton.addEventListener('click',()=>{
+    //     console.log("나가버릴꺼야~");
+
+    // })
+    const roomPopup = document.querySelector('.roompopup_ready');
+
+    // Create a new MutationObserver instance
+    const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.attributeName === 'class') {
+                const currentClasses = mutation.target.classList;
+                if (currentClasses.contains('test')) {
+                    const roomExitButton = document.querySelector('.roomBtn_member.pop .roomExit');
+                    roomExitButton.addEventListener('click', () => {
+                        socket.emit('exitRoom');
+                        console.log("dd");
+                        asd1('.readyUser');
+                        console.log("asdsad");
+                    })
+                    asdf1(tmp, '.readyUser');
+
+                }
+            }
+        }
+    });
+
+    // Start observing changes in the target element's attributes
+    observer.observe(roomPopup, { attributes: true });
+
+
+    let titlevalue = "";
+
+    createRoom.addEventListener('click', () => {
+        title.addEventListener('input', () => {
+            titlevalue = title.value;
+            console.log(titlevalue);
+        })
+    })
+    // create.addEventListener('click',()=>{
+    //     console.log("방만들기 버튼 눌림");
+    // })
+    // async function RoomView() {
+    //     try {
+    //         const data = await axios.get('http://127.0.0.1:4000/gameready', {
+    //             withCredentials: true
+    //         })
+
+    exit.addEventListener('click', async () => {
+        await axios.post('http://127.0.0.1:4000/gameready/RoomDelete', { title: titlevalue },
+            {
+                withCredentials: true
+            })
+        socket.emit('madeRoom', () => {
+            console.log("해결함");
+        });
+
+    })
+
+
+    socket.on('getreadyuser', async (tmp) => {
+        console.log("getreadyuser작동함");
+        console.log(tmp);
+        // tmp.forEach((element)=>{
+        //     console.log("dd");
+        //     const li = document.createElement('li');
+        //     li.textContent = `${element}`;
+        //     readyUsers.appendChild(li);
+        // })
+        await asd1('.readyUser');
+        await asdf1(tmp, '.readyUser');
+
+    })
+
+
+    gamestarts.addEventListener('click', () => {
+        socket.emit('gamestart')
+        // window.location.href="http://127.0.0.1:5501/frontEnd/maingame.html";
+    })
+    socket.on('hostgamestart',()=>{
+        console.log("여기오긴하냐.")
+        setTimeout(() => {
+            test1.style.display = "block";
+        }, 1000);
+        setTimeout(() => {
+            test1.style.display = "none";
+            test2.style.display = "block";
+        }, 2000);
+        setTimeout(() => {
+            test2.style.display = "none";
+            test3.style.display = "block";
+        }, 3000);
+        setTimeout(() => {
+            window.location.href = "http://127.0.0.1:5500/frontEnd/game.html";
+        }, 4000);
+        
+    })
+    socket.on('gamestart1', () => {
+        console.log("안녕")
+        test1.style.display = "block";
+    })
+    socket.on('gamestart2', () => {
+        console.log("안녕")
+        test1.style.display = "none";
+        test2.style.display = "block";
+
+    })
+    socket.on('gamestart3', () => {
+        console.log("안녕")
+        test2.style.display = "none";
+        test3.style.display = "block";
+        setTimeout(() => {
+            window.location.href = "http://127.0.0.1:5500/frontEnd/game.html";
+
+        }, 1000);
+    })
+    // const gamestarts=document.querySelector('.createRoom');
+    function joinRoom(roomNUm) {
+        socket.emit('joinRoom', roomNUm)
+    }
+    async function hello() {
+        const roomNumElements = document.getElementsByClassName('room_num');
+        console.log(roomNumElements);
+        Array.from(roomNumElements).forEach((element) => {
+            element.addEventListener('click', () => {
+                console.log("ㅇㅇ눌리긴함");
+                const roomNum = element.textContent;
+                joinRoom(roomNum);
+            })
+        })
+
+    }
+
+    try {
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value;
+            const receiverId = receiverIdInput.value;
+            if (receiverId) {
+                socket.emit('whisper', { message, receiverId });
+            } else {
+                let id = socket.id;
+                socket.emit('chat message', { message, id });
+            }
+            messageInput.value = '';
+            receiverId.value = '';
+        });
+
+        // socket.on('connectuser',(userid)=>{
+        //   const li= document.createElement('li');
+        //   li.textContent =`${userid}님이 들어왔습니다.`
+        //   messagesList.appendChild(li);
+        // })
+        socket.on('disconnectuser', (userid) => {
+            const li = document.createElement('li');
+            li.textContent = `${userid}님이 나갔습니다..`
+            messagesList.appendChild(li);
+        })
+        socket.on('whisper', (msg) => {
+            const li = document.createElement('li');
+            li.textContent = `귓속말:${msg}`;
+            messagesList.appendChild(li);
+        })
+        // socket.on('chat message', (msg) => {
+        //     const li = document.createElement('li');
+        //     li.textContent = msg;
+        //     messagesList.appendChild(li);
+        // });
+        socket.on('nowusers', async (msg) => {
+            // while (messageList.firstChild) {
+            //   messageList.removeChild(messageList.firstChild);
+            // }
+            // msg.forEach(element => {
+            //   console.log(element.userid);
+            //   const li = document.createElement('li');
+            //   li.textContent = "user " + element._nickname;
+            //   messagesList.appendChild(li);
+            // });
+            await asd("User_id");
+            console.log("msg", msg);
+            await asdf(msg, "User_id");
+
+        })
+    } catch (error) {
+        console.log(error);
+    }
+    async function asd(id) {
+        const User_idlist = document.getElementById(id);
+        while (User_idlist.firstChild) {
+            User_idlist.removeChild(User_idlist.firstChild);
+        }
+    }
+    async function asd1(id) {
+        const hahah = document.querySelector(id);
+        console.log(hahah);
+        if (hahah.firstChild) {
+            while (hahah.firstChild) {
+                hahah.removeChild(hahah.firstChild);
+            }
+        }
+        else {
+            console.log("d");
+        }
+
+    }
+    async function asdf1(tmp, id) {
+        const User_idlist = document.querySelector(id);
+        tmp.forEach(element => {
+            const li = document.createElement('li');
+            li.textContent = `${element}`;
+            User_idlist.appendChild(li);
+        });
+
+    }
+    async function asdf(tmp, id) {
+        const User_idlist = document.getElementById(id);
+        tmp.forEach(element => {
+            console.log(element.userid);
+            const li = document.createElement('li');
+            li.textContent = `${element._nickname}, ${element.userid}`;
+            User_idlist.appendChild(li);
+        });
+
+    }
+
+    //-----------------------채팅방
+    const roomCreateBtn = document.querySelector('.createRoom');    // 방 만들기 버튼
+    const roomPopupCreate = document.querySelector('.roompopup_creat')  // 방 만들기 팝업
+    const roomcancle = document.querySelector('.cancle');       // 방 만들기 팝업 - 취소하기 버튼
+    // 방 만들기 버튼 클릭 시, 팝업이 토글 됨
+    roomCreateBtn.onclick = () => {
+        roomPopupCreate.classList.toggle('pop')
+    }
+    // 방 만들기 팝업에서 취소하기 버튼 클릭 시, 팝업이 none
+    roomcancle.onclick = () => {
+        roomPopupCreate.classList.toggle('pop')
+    }
+
+    // --------- axios -----------------------------------------------------------------------------------------
+    // 현재 대기중, 게임중인 룸을 나타내주는 함수
+    async function RoomView() {
+        try {
+            const data = await axios.get('http://127.0.0.1:4000/gameready', {
+                withCredentials: true
+            })
+            const roomArr = data.data;
+            const roomList = document.querySelector('.roomList');
+            roomArr.forEach((el, index) => {
+                // console.log("------------------", el.room_manager.length)
+                roomList.innerHTML += `
+                <div class="roomlists">
+                    <div class="room_num">${el.id}</div>
+                    <div class="room_title">${el.title}</div>
+                    <div class="room_manager">${el.room_manager}</div>
+                    <div class="room_play">게임 진행사항</div>
+                </div>
+                `
+                //----방을 선택해서 참가하는 함수 ---------------------------------------------------------------------
+                let rooms = document.querySelectorAll(".roomlists");
+                // console.log("썸바리헲미이이이이이익",rooms)
+                rooms.forEach((el2) => {
+                    // console.log("살려주세요오오오오오오오옥",el)
+                    el2.onclick = () => {
+                        // console.log("############",el)
+                        const num = el2.querySelector('.room_num').textContent;
+                        const title = el2.querySelector('.room_title').textContent;
+                        // const usernum = el2.querySelector('.room_usernum').textContent;
+                        const play = el2.querySelector('.room_play').textContent;
+
+                        // let usernum2 = [];
+                        // usernum2.push(usernum);
+                        // console.log(usernum)
+                        // let usernum3 = usernum2.split(',') 
+                        // console.log("$$$$$$$$$$$$$$$$",usernum3)
+
+                        axios.post('http://127.0.0.1:4000/gameready/roomchoice', { id: num }, {
+                            withCredentials: true,
+                            "Content-Type": "application/json"
+                        }).then((e) => {
+
+                        }).catch((err) => {
+                            console.log(err);
+                        })
+                        const popReady = document.querySelector('.roompopup_ready');
+                        popReady.classList.toggle('pop');
+                        popReady.classList.toggle('test')
+                        // <div class="readyUser">${usernum}</div>
+                        popReady.innerHTML = `
+                        <div class="roomTitle">${title}</div>
+                        <div class="roomBtn_member pop">
+                            <div class="roomExit">나가기</div>
+                        </div>
+                        `
+                        document.querySelector('.roomExit').onclick = () => {
+                            popReady.classList.toggle('pop')
+                        }
+
+                    }
+                });
+            }
+
+            );
+            const roomNumElements = document.getElementsByClassName('room_num');
+            console.log(roomNumElements);
+            Array.from(roomNumElements).forEach((element) => {
+                element.addEventListener('click', () => {
+                    console.log("ㅇㅇ눌리긴함");
+                    const roomNum = element.textContent;
+                    joinRoom(roomNum);
+                })
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    RoomView();
+    socket.on("madeRoom",
+        async () => {
+
+            console.log("서버에서 방생성이벤트 받음 화면 다시 그려줌");
+            await deleteRoomList('.roomList');
+            setTimeout(() => {
+                RoomView();
+            }, 100);
+            // await RoomView();
+
+        })
+    const createBtn = document.querySelector('.create');
+    // async function deleteRoomList(id) {
+
+    //     const room_list = document.querySelector(id);
+    //     console.log(room_list);
+    //     while (room_list.firstChild) {
+    //         room_list.removeChild(room_list.firstChild);
+    //     }
+    // }
+    function deleteRoomList(selector) {
+        return new Promise((resolve, reject) => {
+            const roomList = document.querySelector(selector);
+            console.log(roomList);
+            while (roomList.firstChild) {
+                roomList.removeChild(roomList.firstChild);
+            }
+            // Once the deletion is complete, resolve the promise
+            resolve();
+        });
+    }
+
+
+    // 방만들기 버튼을 클릭하면 방을 생성할 수 있는 팝업이 열리고 클라이언트가 입력한 값이 db에 넘어간다.
+    createBtn.onclick = () => {
+        // const form = new FormData();
+        // console.log("title.value",title.value);
+        // form.append("title", title.value);
+        socket.emit("madeRoom", () => {
+            console.log("방생성되어서 이벤트보냄")
+        })
+        // joinRoom();
+        axios.post("http://127.0.0.1:4000/gameready/create", { title: title.value }, {
+            withCredentials: true,
+            "Content-Type": "application/json"
+
+
+        }).then((e) => {
+            if (e.status == "200") {
+                const RoomPop = document.querySelector(".roompopup_ready")
+                // if (!RoomPop.classList.contains('pop')) {
+                RoomPop.classList.toggle('pop')
+                roomPopupCreate.classList.remove('pop')
+                // }
+                const RoomExit = document.querySelector(".roomExit")
+                RoomExit.onclick = () => {
+                    RoomPop.classList.toggle('pop')
+                    // axios.post('http://127.0.0.1:4000/gameready/roomDel', { id: title.value }, {
+                    //     withCredentials: true,
+                    //     "Content-Type": "application/json"
+                    // })
+                }
+            }
+            // const redirectURL = e.data.redirectURL;
+            // window.location.href = redirectURL;
+        }).catch((err) => {
+            console.log(err);
+        })
+        // form 데이터로 보내는데 form-data로 설정하지 않아서 생긴 이슈 - form에 json값으로 바꿔줌
+        // axios.post("http://127.0.0.1:4000/gameready/create", form, {
+        //     withCredentials : true,
+        //     // "Content-Type": "application/json"
+        // }).then((e)=>{
+        //     console.log(e.data)
+        // }).catch((err)=>{
+        //     console.log(err);
+        // })
+        setTimeout(() => {
+            axios.post("http://127.0.0.1:4000/gameready/gethost", { title: titlevalue }, {
+                withCredentials: true
+            }).then((e) => {
+                console.log(e);
+                let num = e.data.id
+                socket.emit('createRoom',e.data);
+                joinRoom(num);
+                
+            })
+        }, 100);
+
+    }
+    //--------------------------------------------------------------------------------------------------
+    //------로그인한 유저의 정보를 보여주는 부분----------------------------------------------------------
+    axios.get('http://127.0.0.1:4000/gameready/userInfo', {
+        withCredentials: true
+    }).then((e) => {
+        console.log(e)
+        socket.on('connectuser', (userid) => {
+            const li = document.createElement('li');
+            li.textContent = `${userid._nickname}님이 들어왔습니다.`
+            messagesList.appendChild(li);
+        })
+        socket.on('chat message', (msg) => {
+            console.log("message의", msg);
+            const li = document.createElement('li');
+            li.textContent = `${msg.nick}: ${msg.message}`;
+            messagesList.appendChild(li);
+        });
+        console.log("여기까지 오니?")
+        socket.emit('connectuser2', e);
+        const userInfo = e.data;
+        const myProf = document.querySelector('.myProfile2');
+        myProf.innerHTML = `
+            <img class="pro_img" src="${userInfo.profile_img}" alt="유저프로필">
+            <div class="profile3">
+                <div class="pro_name">${userInfo.name}</div>
+                <div class="pro_exp">${userInfo.experience}</div>
+                <a href="main.html">홈으로</a>
+            </div>
+        `
+    }).catch((err) => {
+        console.log(err)
+    })
+    //----------------------------------------------------------------------------------------------------
+
+
+
+</script>
+
+</html>

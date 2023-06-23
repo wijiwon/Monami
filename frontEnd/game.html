@@ -8,19 +8,30 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="http://localhost:4000/socket.io/socket.io.js"></script>
     <style>
+        /* 유지체 */
+        @font-face {
+            font-family: 'HSYuji-Regular';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
+            background-color: #fffbae;
+            font-family: 'HSYuji-Regular';
             margin: 0;
             padding: 0;
         }
 
         .questions,
-
         .drawings,
         .gameResult {
             width: 100vw;
             height: 100vh;
-            border: 3px solid red;
+            /* border: 3px solid red; */
             box-sizing: border-box;
+            display: none;
+            position: relative;
         }
 
         .questions.pop,
@@ -29,18 +40,11 @@
             display: block;
         }
 
-        .drawings,
-        .questions,
-        .gameResult {
-            display: none;
-
-        }
-
         .questions .row1,
         .drawings .rows1,
         .gameResult .row1 {
-            width: 90%;
-            height: 15%;
+            width: 100%;
+            height: 100px;
             border: 1px solid forestgreen;
             display: flex;
             flex-direction: row;
@@ -51,20 +55,29 @@
             transform: translate(-50%);
         }
 
-        .row1 .users,
+        /* .row1 .users, */
         .row1 .time,
-        .rows1 .users,
+        /* .rows1 .users, */
         .rows1 .draw_time {
-            width: 120px;
-            height: 120px;
-            border: 1px solid slateblue;
+            position: absolute;
+            right: 60px;
+            width: 100px;
+            height: 100px;
+            /* border: 1px solid slateblue; */
+            background-image: url(http://127.0.0.1:4000/img/timeDiv.png);
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 800;
+            color: white;
         }
 
         .questions .row2 {
             position: relative;
             width: 100%;
-            height: 53%;
-            border: 1px solid hotpink;
+            height: 350px;
+            /* border: 1px solid hotpink; */
         }
 
         .row2 .question1,
@@ -74,8 +87,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 600px;
-            height: 400px;
-            border: 3px solid goldenrod;
+            height: 330px;
+            /* border: 3px solid goldenrod; */
             display: none;
         }
 
@@ -84,9 +97,27 @@
             display: block;
         }
 
+        .question1.pop img {
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .question2.pop {
+            background-image: url(http://127.0.0.1:4000/img/row2box.png);
+        }
+
         .question2 #DrawVideo {
-            width: 600px;
-            height: 400px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            /* border: 1px solid; */
+            width: 550px;
+            height: 290px;
         }
 
         .questions .row3 {
@@ -95,14 +126,16 @@
             justify-content: space-around;
             align-items: center;
             width: 100%;
-            height: 30%;
-            border: 1px solid darkblue;
+            height: 100px;
+            /* border: 1px solid darkblue; */
         }
 
         .row3 #question {
             width: 700px;
             height: 50px;
-            font-size: 20px;
+            font-size: 25px;
+            font-family: 'HSYuji-Regular';
+            border-radius: 2em;
         }
 
         .row3 button {
@@ -115,18 +148,25 @@
         .rows1 .view_question {
             width: 800px;
             height: 70px;
-            border-bottom: 3px solid;
+            /* border-bottom: 3px solid; */
             font-size: 30px;
             font-weight: bold;
             text-align: center;
             line-height: 70px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background-image: url(http://127.0.0.1:4000/img/questionBottom.png);
         }
 
         .drawings .rows2 {
             width: 100%;
             height: 70%;
-            border: 1px solid darkmagenta;
+            /* border: 1px solid darkmagenta; */
             display: flex;
+            height: 445px;
         }
 
         .rows2 .colors,
@@ -134,18 +174,17 @@
             position: relative;
             width: 20%;
             height: 100%;
-            border: 1px solid violet;
+            /* border: 1px solid violet; */
         }
 
         .colors .colors2,
         .brushs .brushs2 {
             position: absolute;
             top: 50%;
-            left: 60%;
             transform: translate(-50%, -50%);
-            width: 50%;
+            width: 170px;
             height: 400px;
-            border: 2px solid;
+            /* border: 2px solid; */
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
@@ -153,13 +192,39 @@
             justify-content: space-around;
         }
 
+        .colors .colors2 {
+            background-image: url(http://127.0.0.1:4000/img/colorBox.png);
+            left: 60%;
+        }
+
+        .brushs .brushs2 {
+            background-image: url(http://127.0.0.1:4000/img/brushBox.png);
+            left: 40%;
+        }
+
         .colors2 .colorbox,
         .brushs2 .brushbox {
             position: relative;
             width: 50px;
             height: 50px;
-            border: 1px solid;
+            /* border: 1px solid; */
             margin: 10px;
+            cursor: pointer;
+        }
+
+        .brushbox #eraser,
+        .brushbox #erasers {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .brushbox #eraser {
+            background-image: url(http://127.0.0.1:4000/img/eraser.png);
+        }
+
+        .brushbox #erasers {
+            background-image: url(http://127.0.0.1:4000/img/erasers.png);
         }
 
         .colorbox .brushColor {
@@ -174,35 +239,35 @@
         }
 
         .brushbox .brushSize {
-            background-color: black;
+            background-color: white;
             border-radius: 50%;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            cursor: pointer;
         }
 
         .rows2 .bord {
             position: relative;
-            width: 60%;
-            height: 100%;
-            border: 1px solid blue;
+            width: 800px;
+            height: 445px;
+            /* border: 1px solid blue; */
         }
 
         .bord #canvas {
-            border: 1px solid;
+            /* border: 1px solid; */
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            background-color: white;
         }
 
         .drawings .rows3 {
             position: relative;
             width: 100%;
             height: 10%;
-            border: 1px solid seagreen;
+            /* border: 1px solid seagreen; */
         }
 
         .rows3 button {
@@ -246,7 +311,7 @@
             align-items: center;
             width: 45%;
             height: 100%;
-            border: 3px solid goldenrod;
+            /* border: 3px solid goldenrod; */
         }
 
         .gameResult .row3 {
@@ -257,114 +322,225 @@
             height: 15%;
             border: 1px solid darkblue;
         }
+
+        .boardGR {
+            width: 1500px;
+            height: 690px;
+            /* border: 1px solid violet; */
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+            background-image: url(http://127.0.0.1:4000/img/boardGR.png);
+        }
+
+        .inboard {
+            position: absolute;
+            left: 50%;
+            top: 50px;
+            transform: translate(-50%);
+            /* border: 3px solid; */
+            width: 1350px;
+            height: 550px;
+        }
+
+        .inbord {
+            width: 790px;
+            height: 430px;
+            /* border: 3px solid; */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-image: url(http://127.0.0.1:4000/img/canvasDiv.png);
+        }
+
+        .backImg {
+            position: absolute;
+            left: 50%;
+            top: 50px;
+            transform: translate(-50%);
+            /* border: 3px solid; */
+            width: 1350px;
+            height: 550px;
+        }
+        .kyo,.leejung,.talju,.Ybun,.Pbun,.Bbun{
+            position: absolute;
+            width: 120px;
+            height: 120px;
+        }
+        .eraserImg{
+            position: absolute;
+            width: 150px;
+            height: 150px;
+        }
+        .kyo{
+            top: 10px;
+            left: 20px;
+            background-image: url(http://127.0.0.1:4000/img/kyo.png);
+        }
+        .leejung{
+            bottom: 65px;
+            right: -23px;
+            background-image: url(http://127.0.0.1:4000/img/leejung.png);
+        }
+        .talju{
+            bottom: 98px;
+            left: -32px;
+            background-image: url(http://127.0.0.1:4000/img/talju.png);
+        }
+        .eraserImg{
+            bottom: -59px;
+            right: 80px;
+            background-image: url(http://127.0.0.1:4000/img/eraserImg.png);    
+        }
+        .Ybun{
+            bottom: -77px;
+            right: 228px;
+            background-image: url(http://127.0.0.1:4000/img/Ybun.png);    
+        }
+        .Pbun{
+            bottom: -77px;
+    right: 329px;
+            background-image: url(http://127.0.0.1:4000/img/Pbun.png);    
+        }
+        .Bbun{
+            bottom: -83px;
+    left: 200px;
+
+            background-image: url(http://127.0.0.1:4000/img/Bbun.png);    
+        }
     </style>
 </head>
 
 <body>
     <!-- 첫 제시어 입력하는 화면 -->
-    <div class="questions pop">
+    <div class="questions">
         <!-- row1: 최상단영역 - 총인원(좌), 라운드 시간(우)이 표시된다. -->
-        <div class="row1">
-            <!-- <div class="users">유저인원</div> -->
-            <div class="time">라운드시간</div>
-        </div>
-        <!-- row2: 중간 영역 - 첫 제시어 입력 시 로딩이 나오고, 다음 제시어 입력 시, 그림이 나온다. -->
-        <div class="row2">
-            <!-- question1: 첫 제시어 입력 시 나타나는 로딩화면 -->
-            <div class="question1">
-                <img style="width: 300px; height: 300px;" src="/sample.gif" alt="로딩">
+        <div class="boardGR">
+            <div class="backImg">
+                <div class="kyo"></div>
+                <div class="leejung"></div>
+                <div class="talju"></div>
+                <div class="eraserImg"></div>
+                <div class="Ybun"></div>
+                <div class="Pbun"></div>
+                <div class="Bbun"></div>
             </div>
-            <!-- question2: 제시어 입력 시 나타나는 그림(영상) -->
-            <div class="question2">
-                <video id="DrawVideo" src=""></video>
-            </div>
-        </div>
-        <!-- row3: 하단영역 - 제시어를 입력하는 영역. 제시어를 입력하는 input과 버튼이 있다. -->
-        <div class="row3">
-            <div>
-                <input type="text" name="question" id="question" placeholder="제시어를 입력하세요!">
-                <!-- <button>등록</button> -->
+            <div class="inboard">
+
+                <div class="row1">
+                    <!-- <div class="users">유저인원</div> -->
+                    <div class="time">라운드시간</div>
+                </div>
+                <!-- row2: 중간 영역 - 첫 제시어 입력 시 로딩이 나오고, 다음 제시어 입력 시, 그림이 나온다. -->
+                <div class="row2">
+                    <!-- question1: 첫 제시어 입력 시 나타나는 로딩화면 -->
+                    <div class="question1 pop">
+                        <img style="width: 300px; height: 300px;" src="http://127.0.0.1:4000/img/sample.gif" alt="로딩">
+                    </div>
+                    <!-- question2: 제시어 입력 시 나타나는 그림(영상) -->
+                    <div class="question2">
+                        <video id="DrawVideo" src=""></video>
+                    </div>
+                </div>
+                <!-- row3: 하단영역 - 제시어를 입력하는 영역. 제시어를 입력하는 input과 버튼이 있다. -->
+                <div class="row3">
+                    <div>
+                        <input type="text" name="question" id="question" placeholder="제시어를 입력하세요!">
+                        <!-- <button>등록</button> -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <!-- 그림 그리는 화면 -->
     <div class="drawings">
-        <div class="rows1">
-            <!-- <div class="users">유저인원</div> -->
-            <div class="view_question">넘겨받은 제시어</div>
-            <div class="draw_time">라운드시간</div>
-        </div>
-        <div class="rows2">
-            <div class="colors">
-                <div class="colors2">
-                    <div class="colorbox">
-                        <div style="background-color: white;" class="brushColor" data-color="white"></div>
+        <div class="boardGR">
+            <div class="backImg">
+                <div class="kyo"></div>
+                <div class="leejung"></div>
+                <div class="talju"></div>
+                <div class="eraserImg"></div>
+                <div class="Ybun"></div>
+                <div class="Pbun"></div>
+                <div class="Bbun"></div>
+            </div>
+            <div class="inboard">
+                <div class="rows1">
+                    <!-- <div class="users">유저인원</div> -->
+                    <div class="view_question">넘겨받은 제시어</div>
+                    <div class="draw_time">라운드시간</div>
+                </div>
+                <div class="rows2">
+                    <div class="colors">
+                        <div class="colors2">
+                            <div class="colorbox">
+                                <div style="background-color: black;" class="brushColor" data-color="black"></div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: red;" class="brushColor" data-color="red"></div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: pink;" class="brushColor" data-color="pink"></div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: orangered;" class="brushColor" data-color="orangered">
+                                </div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: yellow;" class="brushColor" data-color="yellow"></div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: green;" class="brushColor" data-color="green"></div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: aqua;" class="brushColor" data-color="aqua"></div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: blue;" class="brushColor" data-color="blue"></div>
+                            </div>
+                            <div class="colorbox">
+                                <div style="background-color: purple;" class="brushColor" data-color="purple"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="colorbox">
-                        <div style="background-color: black;" class="brushColor" data-color="black"></div>
+                    <div class="bord">
+                        <div class="inbord">
+                            <canvas id="canvas"></canvas>
+                        </div>
                     </div>
-                    <div class="colorbox">
-                        <div style="background-color: red;" class="brushColor" data-color="red"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: pink;" class="brushColor" data-color="pink"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: orangered;" class="brushColor" data-color="orangered"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: yellow;" class="brushColor" data-color="yellow"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: green;" class="brushColor" data-color="green"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: blue;" class="brushColor" data-color="blue"></div>
-                    </div>
-                    <div class="colorbox">
-                        <div style="background-color: purple;" class="brushColor" data-color="purple"></div>
+                    <div class="brushs">
+                        <div class="brushs2">
+                            <!-- 지우개 부분. 아직 구현 안됨 -->
+                            <div class="brushbox">
+                                <div class="brushColor" id="eraser" data-color="white"></div>
+                            </div>
+                            <div class="brushbox">
+                                <div id="erasers"></div>
+                            </div>
+                            <div class="brushbox" data-size="5">
+                                <div style="width: 5px; height: 5px;" class="brushSize"></div>
+                            </div>
+                            <div class="brushbox" data-size="10">
+                                <div style="width: 10px; height: 10px;" class="brushSize"></div>
+                            </div>
+                            <div class="brushbox" data-size="15">
+                                <div style="width: 15px; height: 15px;" class="brushSize"></div>
+                            </div>
+                            <div class="brushbox" data-size="20">
+                                <div style="width: 20px; height: 20px;" class="brushSize"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="bord">
-                <canvas id="canvas"></canvas>
-            </div>
-            <div class="brushs">
-                <div class="brushs2">
-                    <!-- 지우개 부분. 아직 구현 안됨 -->
-                    <div class="brushbox">
-                        <div class="eraser">e</div>
-                    </div>
-                    <div class="brushbox">
-                        <div class="erasers">E</div>
-                    </div>
-                    <div class="brushbox">
-                        <div style="width: 5px; height: 5px;" class="brushSize" data-size="5"></div>
-                    </div>
-                    <div class="brushbox">
-                        <div style="width: 10px; height: 10px;" class="brushSize" data-size="10"></div>
-                    </div>
-                    <div class="brushbox">
-                        <div style="width: 15px; height: 15px;" class="brushSize" data-size="15"></div>
-                    </div>
-                    <div class="brushbox">
-                        <div style="width: 20px; height: 20px;" class="brushSize" data-size="20"></div>
-                    </div>
-                </div>
-            </div>
         </div>
-        <div class="rows3">
-            <!-- <button id="complete">완료</button> -->
-        </div>
-        <video style="width: 300px; height: 200px;" id="video_recorded" controls style="border: 1px solid black;"
-            src=""></video>
-        <button id="play">재생</button>
     </div>
     <!-- 결과 보여주는 화면 -->
-    <div class="gameResult">
+    <div class="gameResult pop">
         <div class="row1">
             <div class="playerImage">
                 <img style="width: 100px; height: 100px;" src="/monami.png" alt="게임 로고" id="gamelogo">
@@ -402,8 +578,8 @@
     const ctx = canvas.getContext("2d");
 
     // canvas 영역 지정(css로는 X. 그림 그릴 때 마우스와 좌표가 안맞을 수 있음)
-    canvas.width = 900;
-    canvas.height = 600;
+    canvas.width = 730;
+    canvas.height = 360;
 
     //브러쉬 사이즈와 컬러들을 담는 div를 불러오는 변수.
     const brushSize = document.querySelector('.brushs2');
@@ -426,7 +602,7 @@
     //------ HTML에 저장된 브러쉬 사이즈를 읽어오는 함수 -------------------------------
     const changeBrush = (e) => {
         // 클릭으로 선택한 target의 클래스가 brushSize가 아니라면 return
-        if (!e.target.classList.contains("brushSize")) return;
+        if (!e.target.classList.contains("brushbox")) return;
         // dataset.size: 'datasetd'을 사용하면 해당 요소의 'data-'접두사를 가진 속성의 값을 가져올 수 있다.
         // 따라서, 'data-size'의 속성을 읽어올 수 있는 것이다.
         const brushSized = e.target.dataset.size;
@@ -447,6 +623,7 @@
     brushSize.addEventListener("click", changeBrush);
     // 브러쉬 색상 버튼의 click함수 실행
     brushColor.addEventListener("click", changeColor);
+    eraser.addEventListener("click", changeColor);
 
     // ----------- 그림을 그리는 함수 -----------------------------------------------------------------------
     // ------- 그림 그리는 시작을 하는 함수 ----------------------
@@ -714,6 +891,7 @@
     const completeBtn = document.getElementById('complete');
     const playBtn = document.getElementById('play');
 
+    erasers.addEventListener("click", clearCanvas);
 
     // window.addEventListener('DOMContentLoaded', startRecording);
     // completeBtn.addEventListener('click', () => {
@@ -841,7 +1019,7 @@
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
 
                 // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
-                
+
                 let targetIndex;
                 if (MyIndex == 0) {
                     targetIndex = 1;
@@ -965,8 +1143,6 @@
                 document.querySelector('.time').innerHTML = "시간종료";
                 document.querySelector(".drawings").classList.toggle('pop');
                 document.querySelector(".questions").classList.toggle('pop');
-
-
 
                 // myindex-2에 그림을보고 정답을 입력한다.
                 //필요헌 정보, 정답 입력한 사람 id / 입력한 내용
@@ -1214,7 +1390,7 @@
             }, 1000);
         }
     }
-    startGame();
+    // startGame();
 
 
 

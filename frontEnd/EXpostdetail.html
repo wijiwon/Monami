@@ -108,6 +108,8 @@
     }
 
     .boardItem_closeBtn_wrap {
+        position: absolute;
+    right: 295px;
         width: 2rem;
         height: 2rem;
         /* background-color: yellow; */
@@ -119,6 +121,16 @@
         /* 왼쪽 다 먹고 -> 오른쪽에서 조금 떼어내기 */
         margin-left: auto;
         margin-right: 0.5rem;
+    }
+
+    .boardItem_closeBtn div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    width: 200px;
+    height: 100px;
+    background-image: url(http://127.0.0.1:4000/img/backBtn.png);
     }
 
 
@@ -601,7 +613,7 @@
             <a href="/main"><img class="headerLogo" src="http://127.0.0.1:4000/img/main_Logo.png" alt="로고">
             </a>
             <div class="boardItem_closeBtn_wrap">
-                <a href="http://127.0.0.1:4000/board/list/view" class="boardItem_closeBtn"> ❎ </a>
+                <a href="http://127.0.0.1:4000/board/list/view" class="boardItem_closeBtn"> <div>게시판목록</div> </a>
             </div>
 
         </header>

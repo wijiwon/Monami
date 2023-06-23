@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- axios 로 form 태그 대신 전송 받아오기 ⭐⭐ -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+</head>
+
+<style>
+
+/* 기본 CSS 설정 */
+    body {
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body, div, span, button, a, p, ul, figure, li {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+    
+    ul, li {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    button {
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+/* ------------------ 👉 header > main nav ---------------------- */
+
+/* 1. header */
+    .header {
+        display: flex;
+        justify-content: space-evenly;
+        margin: 30px -20px;
+        
+    }
+
+/* 2. main 메뉴바 nav bar */
+    .mainNav {
+        /* background-color: aquamarine; */
+        display: flex;
+        align-items: center;
+        width: 500px;
+    }
+
+    .mainNav_item {
+        /* background-color: gold; */
+        width: 25%;
+        justify-content: center;
+    }
+
+    
+    .mainNav_link {
+        display: block;
+
+        font-size: 1rem;
+        color: #151515;
+        font-weight: bold;
+        text-align: center;
+
+        padding: 1em;
+            /* 현재 글자 크기 만큼 패딩을 주는 것 
+                em 의 기준은 .mainNav_link 의 글자 크기 */
+
+    }
+    
+    .mainNav_link:hover {
+        color: rgb(77, 76, 76);
+
+    }
+
+/* 3. 로고 */
+
+    .main_image_container {
+        width: 300px;
+        height: 70px;
+        background-color: yellow;
+    }
+
+    .main_logo {
+        /* background-color: blue; */
+
+        width: 200px;
+        height: 50px;
+        
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+
+/* 4. 오른쪽 감싸는 부분 */
+    .right_wrapper {
+        /* background-color: yellow; */
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 500px;
+    }
+
+    .right_wrapper_item {
+        width: 33.333333%;
+    }
+
+
+
+/* 4.1 검색 */
+    .search_form{
+        display: flex;
+
+        height: 40px;
+        /* background-color: green; */
+
+    }
+
+    .search_form_input {
+        flex: 1 1 auto;
+
+        background-color: rgb(235, 232, 232);
+        border-radius: 1.5em;
+        font-size: 0.9rem;
+
+        border: none;
+        outline: none;
+        /* height: 40px; */
+        
+        padding: 0 30px 0 35px;
+    }
+
+
+/* 4.2 공유 버튼 */
+    .shareBtn_wrap {
+        height: 40px;
+        width: 100px;
+        /* background-color: blue; */
+        display: flex;
+        justify-content: center;
+    }
+
+
+    .shareBtn {
+        background-color: #151515;
+        color: rgba(255, 255, 255, 0.952);
+
+        border-radius: 0.8em;
+        width: 130px;
+        
+        font-weight: bold;    
+    }
+
+/* 4.3 프로필 */
+
+    .profile_img {
+        width: 35px;
+        height: 35px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 50% 50%
+        
+    }
+
+
+/* ------------------ 🚀🚀🚀  카테고리 category sub navbar ---------------------- */
+
+/* 0) 콘테이너들 */
+
+.category_nav {
+    padding: 30px 30px;
+}
+
+.category_item_container { 
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.category_item_container button { 
+    font-weight: 600;
+}
+
+
+/* 1) 드롭다운 버튼들 */
+.category_nav_dropdown { 
+    display: flex;
+    justify-content: center;
+
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    font-size: 1rem;
+    border: 0.8px solid lightgray;
+    border-radius: 0.8em;
+}
+
+.category_nav_dropdownBtn {
+    color: gray;
+    font-size: 0.9rem;
+}
+
+
+/* 2) 일반 버튼들 */
+.category_nav_items_container {
+    display: flex;
+    width: 50%;
+    flex-shrink: 0;
+
+}
+
+.category_nav_items:first-child {
+    background-color: rgb(240, 238, 238);
+    border-radius: 0.8em;
+}
+
+.category_nav_items:first-child button {
+    color: #151515;
+    font-weight: 600;
+}
+
+.category_nav_items { 
+    display: flex;
+    justify-content: center;
+
+    width: 100px;
+    height: 40px;
+    font-size: 1rem;
+}
+
+.category_nav_itemBtn { 
+    color: gray;
+    font-size: 0.9rem;
+}
+
+
+
+
+/* -------------🤟🤟🤟 카드 리스트 card list 👉 적용하는 작업 ---------------------- */
+
+/* 🔵 각각의 아이템 감싸는 부분 */
+
+    /* 🔹 [레퍼런스 코드]  */
+        .post_list_section {
+            overflow-x: hidden;
+            
+        }
+
+    /* ✍ 적용 | 스크롤 없애기 */
+        #posts_wrapper {
+            overflow-x: hidden;
+        }
+            /* 음... 근데 안 사라진다 😥  */
+
+
+
+/* 🔵 각각의 아이템 감싸는 부분 */
+    /* 🔹 레퍼런스 */
+    .card_list_item {
+        margin-bottom: 2rem;    
+            /* 좀 떨어트리고 싶음 */
+    }
+        /* [분석]
+            li 태그 == post_container_${element.id} 
+            이 밑에 사진, 제목 등등이 다 붙는다. */
+    
+
+    /* ✍✍ 적용하기 | js 완성된 post 에 적용 */
+    .post_container {
+        /* background-color: lightgreen; */
+        /* width: 300px; */
+        /* height: 500px; */
+        /* display: inline-block; */
+        margin-bottom: 2rem;
+    }
+
+
+    .likesBtn { 
+
+        width: 100%;
+        padding: 0.5em;
+        /* height: 20px; */
+        background-color: yellow;
+
+    }
+
+
+
+/* 🔵 각각의 아이템 하위 > '사진' 넣는 부분 */
+    /* 🔹 레퍼런스 | figure 태그 | style 속성으로 이미지를 갖고 오고 있음. */
+    .card_list_image {
+        /* 사이즈 : 300px 로 줄 수도 있음. */
+        padding-bottom: 60%; 
+            /* 일정비율 유지될 수 있게 사이즈 잡음 */
+
+        background-repeat: no-repeat;
+        background-color: gray;
+        background-size: cover;
+    }
+        /* [주의]
+            ✅ style 속성으로 불러오는 것 주의 */
+
+    /* ✍✍ 적용하기 |  */
+    .post_image {
+        /* 이전 코드 */
+            /* width: 100%; */
+
+        /* 변경 중 */
+            padding-bottom: 60%; 
+
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: gray;
+            background-size: cover;
+            border-radius: 0.5rem;
+    }
+
+
+/* 🔵 각각의 아이템 하위 > '설명' 하는 부분 */
+    /* 🔹 [레퍼런스] div 태그 : 여기에 설명이 들어감  */
+    .card_desc { 
+        flex: 1 1 auto;
+        font-size: 1rem;
+        padding: 1em;
+        background-color: white;
+    }
+
+    /* [✍✍ 적용] */
+    .post_desc_container {
+        flex: 1 1 auto;
+        font-size: 1rem;
+        padding: 1em;
+        background-color: white;
+    }
+
+
+/* 🔵 flex 로 정렬하는 부분 | min-width 에 따라 다르게 설정 |  */
+@media (min-width : 600px) {
+    /* 🔹 [레퍼런스] x 스크롤 없애기 */
+    .card_list_section  {
+        overflow-x: hidden;
+    }
+
+    /* 🔹 [레퍼런스] 카드 감싸는 부분임 | flex 로 정렬 시키기 */
+    .card_list  {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+    }
+    
+    /* ✍ 적용 | 포스팅 감싸는 부분 | flex 로 정렬 시키기 */
+    #posts_wrapper {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+        overflow-x: hidden;
+        overflow-y: hidden;
+        
+    }
+
+    /* 🔹 [레퍼런스] 각 카드 item | item 간 정렬 | item 내부 desc를 위에서 아래로 내리기 위해 direction 을 세로로 함 */
+    .card_list_item {
+        display: flex;
+        flex-direction: column;
+        width: 47%;
+            /* ⭐⭐ 이 부분이 다단에서 컬럼설정할 때 width 값임 ⭐⭐  */
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+
+    /* ✍ 적용 | 각 post 의 아이템이 담겨 있음. | container 내부의 1) 사진 2) desc 태그를 정렬하기 위해 flex 사용 */
+    .post_container{
+        display: flex;
+        flex-direction: column;
+        width: 47%;
+                    /* ⭐⭐ 이 부분이 다단에서 컬럼설정할 때 width 값임 ⭐⭐  */
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+}
+
+@media (min-width : 900px) {
+    .card_list_section  {
+        overflow-x: hidden;
+    }
+
+    .card_list {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+
+        margin-left: 5px;
+        /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
+        /* 반응형은 좀 더 해야 함 😥😥😥😥😥 */
+    }
+
+    #posts_wrapper {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+
+        margin-left: 5px;
+        /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
+        /* 반응형은 좀 더 해야 함 😥😥😥😥😥 */
+    }
+
+    .card_list_item  {
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+    
+    .post_container {
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+}
+
+@media (min-width : 1200px) {
+    .card_list_section  {
+        overflow-x: hidden;
+    }
+
+    .card_list  {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+        margin-left: 30px;
+            /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
+    }
+    
+    #posts_wrapper {
+        display: flex;
+        flex-wrap: wrap; 
+        margin: 0 -1rem;
+            /* margin 의 반대로, 
+                즉, 축소되는게 아니라, 옆으로 확장! */
+        margin-left: 30px;
+            /* 삭제할 수도 . 왜냐면 임시방편임 📛 */
+    }
+
+    .card_list_item {
+        display: flex;
+        flex-direction: column;
+        width: 22%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+    
+    .post_container{
+        display: flex;
+        flex-direction: column;
+        width: 22%;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        /* margin: 0 1rem; */
+    }
+}
+
+
+/* ------ 👇👇 목차 페이지 메뉴 👇👇 ------  */
+
+    /* page 담고 있는 컨테이너 */
+    .page_navigation_container {
+        display: flex;
+        justify-content: center;
+        padding-bottom: 3rem;
+        
+    }
+
+
+    /* pageNumBtn, 페이지 버튼 하나 하나 */
+        /* [목표] 위에 있는 버튼과 비슷한 디자인 */
+    .pageNumBtn {
+        color: gray;
+
+        width: 80px;
+        height: 30px;
+        border: 0.8px solid lightgray;
+        border-radius: 0.8em;
+
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 500;
+
+
+    }
+
+
+
+/* post 항목으로 마우스 올라가면 👉 클릭 될 수 있게 하기 */
+    .link_container_BTN {
+        /* 바로 이 위에 어떻게 놓이게 할까 */
+            position: absolute;
+                /* [문제 상황] 
+                    게시글 card 를 클릭하면 -> 상세 페이지로 이동 하게 하고 싶었음. 
+
+                    [시도해본 것]                
+                    position: fixed; 👉 이건 그냥 화면에 딱 고정이니까, 안 돼!
+                    position : absolute 로 그 위치에 고정시키니까 됨 ⭐⭐ */
+
+        cursor: pointer;
+        width: 20em;
+        height: 20em;
+    }
+
+    /* ⭐ 호버 디자인도 해보고 싶어 ⭐⭐⭐ */
+    .link_container_BTN:hover{
+        /* background-color: blue; */
+    }
+
+
+
+
+
+
+
+/* --------------- 예전에 임시로 만든것 👇👇 -------------------------------------------- */
+
+
+    .footer {
+        background-color: rgb(248, 248, 248);
+        height: 300px;
+    }
+
+    #post_01 {
+        background-color: lightgray;
+        width: 300px;
+        height: 300px;
+    }
+/* 
+    #page_navigation { 
+        width: 600px;
+        height: 200px;
+        background-color: lightblue;
+    } */
+
+
+
+
+
+
+
+</style>
+
+
+
+<body>
+
+    
+    <div class="page">
+
+
+        <!-- header -->
+        <header class="header">
+
+            <!-- main_nav -->
+
+            <ul class="mainNav">
+
+                <li class="mainNav_item">
+                    <a href="#" class="mainNav_link"> Home </a>
+                </li>
+                
+                <li class="mainNav_item">
+                    <a href="#" class="mainNav_link"> About </a>
+                </li>
+                
+                <li class="mainNav_item">
+                    <a href="#" class="mainNav_link"> Product </a>
+                </li>
+
+                <li class="mainNav_item">
+                    <a href="#" class="mainNav_link"> Go Drawing </a>
+                </li>
+
+            </ul>
+
+            <!-- main logo  -->
+            <figure  class="main_logo" style="background-image: url(http://127.0.0.1:5500/Monami/backEnd/image/monami.png);">
+                <!-- style 속성에서 url 은 꼭, 'http://127.0.0.1:5500/Monami/backEnd/image/monami.png' 이렇게 full name 으로 써야 함 -->
+
+            </figure >
+                <!-- 로고 교체 필요함 ✅ -->
+
+
+            <!-- 검색, 공유, 프로필 감싸는 wrap -->
+            <div class="right_wrapper">
+
+                <!-- search  -->
+                <div class="right_wrapper_item, search_wrap">
+                    <form class="search_form" id="tagSearch_form" >
+                        <!-- 검색 아이콘 추가 ✅ -->
+                            <!-- <figure class="search_form_img" style="background-image: url(../backEnd/image/magnifying-glass.png)";> -->
+                        <input id="tagSearch_form_input" class="search_form_input" type="search" placeholder="Search...">
+                        <!-- <input type="submit" value="?"> -->
+                    </form>
+                </div>
+
+
+                <!-- share drawing! -->
+                <div class="right_wrapper_item shareBtn_wrap">
+                    <button id="shareWorkBtn" class="shareBtn"> Share Work</button>
+                </div>
+    
+                <!-- profile -->
+                <div class="profile_img_container">
+                    <figure class="right_wrapper_item profile_img" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+    
+                    </figure>
+
+                </div>
+
+
+            </div>
+
+
+        </header>
+
+
+        <!-- category : sub nav-->
+        <nav class="category_nav">
+            
+            <div class="category_item_container">
+                
+                <!-- 1) 검색 ex) 조회순 -->
+                    <!-- ✅ 시간 되면 도전 -->
+                <div class="category_nav_dropdown">
+                    <button class="category_nav_dropdownBtn">Following</button>
+                </div>
+
+                <div class="drop_down_options">
+                    <ul>
+                        <li>
+                            [following 누르면, 드롭다운 예정]
+                        </li>
+                        <li> 
+                            <a href="http://127.0.0.1:4000/board/list/view"  id="newest_dropOption" data-track-view="createdAt"> Newest </a>  
+                            <!-- data-track-view 이 속성 안에 있는 값이 👉 뽑혀서 DB 로 넘어가게 됨 ⭐⭐⭐ -->
+                        </li>
+                        
+                        <li> 
+                            <a href="http://127.0.0.1:4000/board/list/likes"  id="likes_dropOption" data-track-view="likes"> Most liked  </a>
+                        </li>
+                        
+                        
+                        <li> 
+                            <a href="http://127.0.0.1:4000/board/list/views"  id="views_dropOption" data-track-view="views"> Most views  </a>
+                        </li>
+                        
+                        
+                    </ul>
+                </div>
+                
+                
+                
+                <!-- 2) 키워드 검색 -->
+
+            <ul class="category_nav_items_container" id="tags_item_container">
+
+                <!-- 여기부터 for 문으로 생성하기 👇 | 태그 tag -->
+
+                        <!-- <li class="category_nav_items">
+                            <button class="category_nav_itemBtn">Discover</button>
+                        </li> -->
+                            <!-- 이걸 누른다 > 그러면 어떻게 변해? 태그에서 그것들이 있는 것만 보여줘 -->
+                            <!-- 그러면, 검색 기능!!!  -->
+                        
+                        <!-- <li class="category_nav_items">
+                            <button class="category_nav_itemBtn">Discover</button>
+                        </li>
+                        
+                        <li class="category_nav_items">
+                            <button class="category_nav_itemBtn">Discover</button>
+                        </li>
+
+                        <li class="category_nav_items">
+                            <button class="category_nav_itemBtn">Discover</button>
+                        </li>
+                        
+                        <li class="category_nav_items"> 
+                            <button class="category_nav_itemBtn">Discover</button>
+                        </li>
+                        
+                        <li class="category_nav_items">
+                            <button class="category_nav_itemBtn">Discover</button>
+                        </li>
+                        
+                        <li class="category_nav_items">
+                            <button class="category_nav_itemBtn">Discover</button>
+                        </li>
+
+                        <li class="category_nav_items">
+                            <button class="category_nav_itemBtn">Discover</button>
+                        </li> -->
+
+            </ul>
+                
+                <!-- 3) 필터 기능 -->
+                <div class="category_nav_dropdown">
+                    <button class="category_nav_dropdownBtn">Filters</button>
+                </div>
+                    <!-- 아이콘 찾아서 넣기 ✅  -->
+
+            
+
+            </div>
+
+        </nav>
+
+        <!-- card list | post_list-->
+        <section class="post_list_section">
+            
+            <!-- 레퍼런스 | 삭제 하면 안 돼 주의 📛-->
+                <!-- <ul class="card_list">
+
+
+                    <li class="card_list_item">
+                        [= 사진 =]
+                        <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                            [= <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> =]
+                        </figure>
+
+                        [= 프로필, 제목, 좋아요, views  =]
+                        <div class="card_desc">
+                            Lorem ipsum dolor sit amet consectetur
+                        </div>
+                    </li>
+
+                    <li class="card_list_item">
+                        [= 사진 =]
+                        <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                            [= <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> =]
+                        </figure>
+
+                        [= 프로필, 제목, 좋아요, views  =]
+                        <div class="card_desc">
+                            Lorem ipsum dolor sit amet consectetur
+                        </div>
+                    </li>
+
+                    <li class="card_list_item">
+                        [= 사진 =]
+                        <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                            [= <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> =]
+                        </figure>
+
+                        [= 프로필, 제목, 좋아요, views  =]
+                        <div class="card_desc">
+                            Lorem ipsum dolor sit amet consectetur
+                        </div>
+                    </li>
+
+                    <li class="card_list_item">
+                        [= 사진 =]
+                        <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                            [= <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> =]
+                        </figure>
+
+                        [= 프로필, 제목, 좋아요, views  =]
+                        <div class="card_desc">
+                            Lorem ipsum dolor sit amet consectetur
+                        </div>
+                    </li>
+
+
+                    <li class="card_list_item">
+                        [= 사진 =]
+                        <figure class="card_list_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);">
+                            [= <img src="../backEnd/image/tomHardy_1686569012209.jpg" alt="톰 하디"> =]
+                        </figure>
+
+                        [= 프로필, 제목, 좋아요, views  =]
+                        <div class="card_desc">
+                            Lorem ipsum dolor sit amet consectetur
+                        </div>
+                    </li>
+
+
+                </ul> -->
+
+
+            <!-- 적용한 것  -->
+                <div id="posts_wrapper">
+
+                    
+                </div>
+
+
+
+
+            <!-- 1page, 2page 보이게 하는 곳 | 수정 주의 📛  -->
+                <nav class="page_navigation_container">
+
+                    <div id="page_navigation">
+                        
+                        <!-- <h3>
+                            <a href="http:127.0.0.1:4000/board/list/:page"> 1page </a>
+                            <a href="http:127.0.0.1:4000/board/list/:page"> 2page </a>
+                            <a href="http:127.0.0.1:4000/board/list/:page"> 3page </a>
+                            <a href="http:127.0.0.1:4000/board/list/:page"> 4page </a>
+                            <a href="http:127.0.0.1:4000/board/list/:page"> 5page </a>
+                            <a href="http:127.0.0.1:4000/board/list/:page"> 6page </a>
+                            <a href="http:127.0.0.1:4000/board/list/:page"> 7page </a>
+                        </h3> -->
+                        
+                    </div>
+                    
+                </nav>
+
+
+
+                
+
+                <!-- ☝☝☝☝☝☝☝☝  여기까지, ui 만들고 있는 중 ☝☝☝☝☝☝  -->
+
+
+                <!-- 👇👇 테스트로 작성한 것 임 | 삭제 가능 -->
+                    <!-- <h1>게시판 목록</h1>
+                    <p>중요정보 카드 식으로 요약해서 보여주면 됨</p>
+                    <p>hover 기능으로 제목 보여주는 건 시간 되면</p> -->
+                
+
+                <!-- 게시글 만들어지는 곳 | 혹시 모르니가 keep  👇👇👇 -->
+                <!-- <div id="posts_wrapper"> -->
+                    <!--  -->
+                    
+                    <!-- [해석] 
+                            - javascript 에 의해, posts_wrapper 밑에 post 가 하나씩 붙게 됨 
+                            - 따라서 이 밑에 있는 👇👇👇 아이템 1 은 예시 로써의 기능만 할 뿐 렌더링에는 영향 없음
+                    -->
+                        <!-- 아이템 1 -->
+                        <!-- <div id="post_01">
+                            
+                            <div> 
+                                제목 : <span id="postTitle_container">  </span>
+                            </div>
+                
+                            <div> 
+                                댓글 수 : <span id="commentCount_container">   </span>
+                            </div>
+                
+                            <div> 
+                                글쓴이 : <span id="writer_container">  </span>
+                            </div>
+                            
+                            <div>
+                                유저 프로필 이미지 : <span id="writer_profileImg">  </span>
+                            </div>
+                
+                            <div> 
+                                작성일자 : <span id="createDate_container">  </span>
+                            </div>
+                
+                            <div>
+                                유저 경험치 :  <span id="userExp_container"> </span>
+                            </div>
+                
+                            <div>
+                                views : <span id="postViews_container"> </span>
+                            </div>
+                
+                            <div>
+                                likes 숫자 : <span id="likes_number"> </span>
+                            </div>
+                
+                            <div>
+                                🧡 likes 버튼 <span id="likes_likesBtn"></span>
+                            </div>
+                
+                            <div>
+                                올린 사진 : <span id="postImg_container">  </span>
+                            </div>
+                
+                        </div>
+                -->
+                <!-- </div> -->
+                
+
+            </section>
+
+
+        <!-- footer -->
+        <footer class="footer">
+
+            <div>
+                ||||||||||||||| fooooooooooooooooooooooooter 영역
+            </div>
+
+        </footer>
+
+
+
+    </div>    
+
+
+
+
+    
+</body>
+
+
+<script>
+// 🔹 전역변수 
+
+    // 사용자가 클릭한 게시글의 POST ID
+    userClickPostID = 0;
+        // [설명] 
+            // '게시글 목록' 중, 사용자가 특정 게시글을 '클릭' 하면, 
+            // 해당 게시물의 'POST ID' 를 
+            // addeventListner 의 event target.id 사용해서 가져오고 
+            // 이걸 GET 요청에 넣기? 
+
+    // 그려지기 전 준비된 배열통 | 이걸로 그려나감
+    arrPostWithCommentUser = [];
+
+    // 페이지네이션 보여지는 순서 
+    // let order_option
+
+    // 페이지네이션에서 클릭하는 page 값, 기본값
+    let _order_option ="views"
+
+    // 태그 기본값 
+    let _tags = "default"
+        // 기본값 = view 페이지라고 생각하면 됨. ⭐⭐ 
+        // 클릭되면 -> getview 로 다른 매개변수를 보내고 -> 그걸 기반으로 다른 페이지? 
+        // 그러면, 우선, 모든 걸 다 보여주려면, default 로 해야?  
+        // 우선, 기본적으로 이 태그만 하자
+
+    // 기본값 설정 | 이걸 안 하면, tag view 할 때, page 랑 필요한 매개변수에서 필요하다고 한다.
+    let page_num = 1
+    let order_option = "createdAt"
+
+
+// getView 함수 | 새로고침이 될 수 밖에 없으니까, order_option 이 매개변수를 설정해준다❓ 
+    async function getView(arrPostWithCommentUser , page_num = 1 , order_option = _order_option, tags = _tags) {
+
+        try {
+                    console.log("getView @boardList.html")
+
+                    console.log("✍✍✍✍✍✍✍✍✍✍ 매개변수가 잘 들어오고 있나 :" , order_option)
+                    console.log("✍✍✍✍✍✍✍✍✍✍ 매개변수가 잘 들어오고 있나 :" , page_num )
+                    console.log("✍✍✍✍✍✍✍✍✍✍ 매개변수가 잘 들어오고 있나 :" , tags )
+                    // 여기서 함수 자체를 잠깐 멈추고 싶은데 어케? 
+
+                    let data;   
+                        // 여기에 선언해야, axios 블록에서 get 하면, 가져올 수 있음. 
+                    
+                    if (tags === "default") {
+                        // 경로만 다르게!
+                        ({data} = await axios.get(`http://127.0.0.1:4000/board/list/page?num=${page_num}&order=${order_option}&tags=${tags}` , {
+                            withCredentials : true,
+                        }))
+                    } else {
+                        // 경로만 다르게!
+                        ({data} = await axios.get(`http://127.0.0.1:4000/board/list/page/tags?num=${page_num}&order=${order_option}&tags=${tags}` , {
+                            withCredentials : true,
+                        }))
+                    }
+
+                    console.log("@boardList > getView() 들어오는거 확인 🙆‍♂️ " , data)
+
+
+                    // // b) post 테이블에서 필요한 데이터 확인 
+                    //     // 제목
+                            console.log("제목" , data.data[0].title)       // 첫번째 글 
+                        
+                    //     // 글쓴이 
+                    //         // 이 게시글의 user_id 를 가져온다. 
+                            console.log("글쓴이" , data.data[0].user_id)     // dj
+                            
+                    //     // 작성일자
+                            // console.log(data.data[0].createdAt)       // 2023-06-15T05:51:56.000Z
+                            console.log("작성일자" , data.data[0].createdAt.split('T')[0])       // 2023-06-15
+                            
+                    //     // views 
+                            console.log("view" , data.data[0].views)       // 1
+                            
+                    //     // likes 숫자 
+                            console.log("likes" , data.data[0].likes)       // 16
+
+                            // tags
+                            console.log("tags , 태그들 📌 : " , data.data[0].tags)
+
+
+                    // // c) user 테이블에서 필요한 데이터 
+                    //     // 유저 프로필 이미지 
+                    //         // profile_img 속성에서 가져오면 됨
+                            console.log("프로필이미지" , data.data[0].User.profile_img)       // http://127.0.0.1:4000/monami.png
+
+                    //     // 유저 경험치 
+                            console.log("유저경험치" , data.data[0].User.exp)        // 0
+                            
+                    
+                    // // d) comment 테이블에서 필요한 데이터 
+                    //     // 댓글수
+                            console.log("댓글수" , data.data[0].Comments.length)     // 51        // 0
+
+
+            // 4) '배열통 확정' | ✅ 이 부분에서 '좋아요 순, 조회수 순, 등으로 변경 가능'
+                // 👉 이건 이제 sequelize - include 에서 해왔음 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+                const arrPostWithCommentUser = data.data
+                console.log("배열통확인" , arrPostWithCommentUser)
+
+
+            // 초기화 ⭐⭐⭐⭐⭐ 
+                // a) 포스트 게시물 초기화
+                while (posts_wrapper.firstChild) {
+                    posts_wrapper.removeChild(posts_wrapper.firstChild);
+                }
+                
+                // b) tags 태그들 초기화
+                const category_nav_items_container = document.querySelector(".category_nav_items_container");
+                while (category_nav_items_container.firstChild) {
+                    category_nav_items_container.removeChild(category_nav_items_container.firstChild);
+                }
+
+
+            // 5) 주주룩 보이게 하기 
+                arrPostWithCommentUser.forEach( (element, index) => {
+                    // 초기화 이렇게 하면 되나? 
+                    // tags_item_container.innerHTML = ""
+                    
+
+                    // 게시글 전체 container div 
+                        const post_container = document.createElement('div');
+                        post_container.classList.add("post_container")      
+                        post_container.id = `post_container_${element.id}`      
+                            // 해당 게시글 id
+                            // 확실해❓❓❓ 👉 응 맞음 
+                        
+                    // post 설명하는 div | ex) 제목, 댓글 수, 글쓴이 등이 이 아래로 들어갈 것 임 들어감
+                        const post_desc_container = document.createElement('div');
+                        post_desc_container.classList.add("post_desc_container");
+                        post_desc_container.id = `post_desc_container_${element.id}`      // 해당 게시글 id
+                        
+
+                    // [🔹 마크업 구조 정리]
+                                // posts_wrapper 이 div 안으로 다 append 된다. 
+                                // posts_wrapper 안에 ✅아이템별로 post_container✅ 가 만들어짐
+                                // ✅post_container✅ 안에 1) figure 태그 2) desc 설명 태그 3) 포스트로 이동하는 A 태그는 테스트 📛📛 가 형제 
+                                // desc 설명 태그 안에 1) 제목, 댓글 수, 글쓴이 등이 들어감
+                    
+                    // 1️⃣ post 에 유저가 올린 사진 container | figure 태그 안에 들어가는 것들
+
+                        // [시도] figure 태그로 하는 버전
+                            const post_image_container = document.createElement('div');
+                            const post_image = document.createElement('figure');
+                            post_image.classList.add('post_image');
+                            post_image.style.backgroundImage = `url(http://127.0.0.1:5500/Monami/backEnd/image/${element.post_img})`;    
+                            post_image_container.appendChild(post_image)
+
+                        // post_container 에 합치기
+                            post_container.appendChild(post_image_container)
+
+
+                    // 2️⃣ post_desc_container 안에 들어가는 것들
+                        // 게시글 ID 
+                            // const savePostID = document.createElement('div');
+                            // savePostID.id = `savePostID_${element.id}`
+
+                        // 제목 container
+                            const title_container = document.createElement('div');
+                            title_container.id = `title_container_${element.id}`
+                            title_container.textContent = `제목 : ${element.title}`
+                            post_desc_container.appendChild(title_container)
+                            
+                        // 댓글수 container
+                            const comment_num_container = document.createElement('div');
+                            comment_num_container.id = `comment_num_${element.id}`
+                            comment_num_container.textContent = `댓글수 : ${element.Comments.length}`
+                            post_desc_container.appendChild(comment_num_container)
+                            
+                        // 글쓴이 container
+                            const post_writer_container = document.createElement('div');
+                            post_writer_container.id = `post_writer_container_${element.id}`
+                            post_writer_container.textContent = `글쓴이 : ${element.user_id}`
+                            post_desc_container.appendChild(post_writer_container)
+                            
+                        // 유저 프로필 이미지 container | 📛 사진이 없음. 
+                            // 사진이 들어갈 수 있는 div
+                            const user_profileImg_container = document.createElement('div');
+                            user_profileImg_container.id = `profileImg_container_${element.id}`
+
+                            // div 안에 img 태그로 사진 넣기
+                            const profileImg_Img = document.createElement('img');
+                            profileImg_Img.src = element.User.profile_img;    
+                                
+                            // console.log("사진 경로 확인🚀", element.User.profile_img)
+
+                            post_desc_container.appendChild(user_profileImg_container)
+
+                        // 작성일자 container 
+                            const createdAt_container = document.createElement('div');
+                            createdAt_container.id = `createdAt_${element.id}`
+                            createdAt_container.textContent = `작성일자 : ${element.createdAt.split('T')[0]}`
+                            post_desc_container.appendChild(createdAt_container)
+                            
+                        // 유저 경험치 container 
+                            const exp_container = document.createElement('div');
+                            exp_container.id = `exp_${element.id}`
+                            exp_container.textContent = `유저 경험치 EXP : ${element.User.exp}`
+                            post_desc_container.appendChild(exp_container)
+                            
+                        // views container 
+                            const views_container = document.createElement('div');
+                            views_container.id = `exp_${element.id}`
+                            views_container.textContent = `조회수 : ${element.views}`
+                            post_desc_container.appendChild(views_container)
+                            
+                        // likes container 
+                            const likes_container = document.createElement('div');
+                            likes_container.id = `likes_${element.id}`
+                            likes_container.textContent = `좋아요 : ${element.likes}`
+                            post_desc_container.appendChild(likes_container)
+                            
+                        // likes 버튼 container 
+                            const likesBtn = document.createElement('button');
+                            likesBtn.id = `likesBtn_${element.id}`
+                            likesBtn.classList.add('likesBtn')
+                            likesBtn.textContent = "👍좋아요"
+                            post_desc_container.appendChild(likesBtn)
+
+                        // post_container 에 합치기
+                        post_container.appendChild(post_desc_container)
+
+                        // [정리 ✅]
+                            // 여기까지 오면 post_container 안에
+                                // 1) 이미지 는 post_image_container 안에 
+                                // 2) desc 설명은 post_desc_container 안에 들어감
+                                // 3) 이러한 post_container 는 하나의 아이템이 될 것 임
+                                // 4) 이 아이템은 posts_wrapper 에 붙임
+
+                    // 4️⃣ post 하나 마다 A 태그 심기 
+                            
+                            // A태그 링크 container
+                            const link_container = document.createElement('a');
+                            // Post id 를 a 태그 주소에 넣어주기
+                            const id_post = element.id
+                            link_container.href = `http://127.0.0.1:4000/board/item/${id_post}`
+
+                            link_container.classList.add('link_container_BTN')
+                            link_container.id = `link_container_${element.id}`
+                            // 가게 하는 주소 입력해야 함 ✅ 
+                            post_container.appendChild(link_container)
+
+
+                    // 5️⃣  'posts_wrapper' 에,  게시글 하나를 담은 post_container 를 붙이기 
+                    posts_wrapper.appendChild(post_container)
+                    
+
+            
+            // 🔵 태그 검색
+                    const tags_item = document.createElement('li');
+                    tags_item.id = `tags_item_${element.id}`
+                    tags_item.classList.add('category_nav_items')
+                    
+                    const tags_keywordBtn = document.createElement('button');
+                    tags_keywordBtn.id = `tags_keywordBtn_${element.id}`
+                    tags_keywordBtn.classList.add('category_nav_itemBtn')
+                    tags_keywordBtn.textContent = `${element.tags}`
+
+                    // a.style.href = 'http://127.0.0.1:4000/board/list/tags'
+                        // 동일한 페이지에서? 
+                        // 다른 페이지에서? 
+                        // 이걸 하면 -> 해당 태그들이 검색되고 -> 그것에 담긴 내용들이 담긴다. @ DB 에서 
+                        // 그게 다시 getview 로 온다  | 이 순간, 그러면, 다른 페이지에서 해야하지 않나? 
+                        // 음... 
+                        // 우선, 그러면, 페이지네이션? 음. 그러면, 이 url 에 대해서 query 를 붙여야 하나? 
+
+
+                    tags_item.appendChild(tags_keywordBtn)
+                    tags_item_container.appendChild(tags_item)
+
+
+
+                });
+
+                
+            // 6) 페이지네이션 & pageShow 함수 
+                console.log("initializedView @boardList.html")
+                pageNavigation(7)
+                pageShow()
+
+                    
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+// getTagView 함수 | 
+
+async function getTagView(arrPostWithCommentUser , page_num = 1 , order_option = _order_option, tags = _tags) {
+
+try {
+            console.log("getView @boardList.html")
+
+            console.log("✍✍✍✍✍✍✍✍✍✍ 매개변수가 잘 들어오고 있나 :" , order_option)
+            console.log("✍✍✍✍✍✍✍✍✍✍ 매개변수가 잘 들어오고 있나 :" , page_num )
+            console.log("✍✍✍✍✍✍✍✍✍✍ 매개변수가 잘 들어오고 있나 :" , tags )
+            // 여기서 함수 자체를 잠깐 멈추고 싶은데 어케? 
+            
+            const {data} = await axios.get(`http://127.0.0.1:4000/board/list/page/tags?num=${page_num}&order=${order_option}&tags=${tags}` , {
+                withCredentials : true,
+            })
+            console.log("@boardList > getView() 들어오는거 확인 🙆‍♂️ " , data)
+
+
+            // // b) post 테이블에서 필요한 데이터 확인 
+            //     // 제목
+                    console.log("제목" , data.data[0].title)       // 첫번째 글 
+                
+            //     // 글쓴이 
+            //         // 이 게시글의 user_id 를 가져온다. 
+                    console.log("글쓴이" , data.data[0].user_id)     // dj
+                    
+            //     // 작성일자
+                    // console.log(data.data[0].createdAt)       // 2023-06-15T05:51:56.000Z
+                    console.log("작성일자" , data.data[0].createdAt.split('T')[0])       // 2023-06-15
+                    
+            //     // views 
+                    console.log("view" , data.data[0].views)       // 1
+                    
+            //     // likes 숫자 
+                    console.log("likes" , data.data[0].likes)       // 16
+
+                    // tags
+                    console.log("tags , 태그들 📌 : " , data.data[0].tags)
+
+
+            // // c) user 테이블에서 필요한 데이터 
+            //     // 유저 프로필 이미지 
+            //         // profile_img 속성에서 가져오면 됨
+                    console.log("프로필이미지" , data.data[0].User.profile_img)       // http://127.0.0.1:4000/monami.png
+
+            //     // 유저 경험치 
+                    console.log("유저경험치" , data.data[0].User.exp)        // 0
+                    
+            
+            // // d) comment 테이블에서 필요한 데이터 
+            //     // 댓글수
+                    console.log("댓글수" , data.data[0].Comments.length)     // 51        // 0
+
+
+    // 4) '배열통 확정' | ✅ 이 부분에서 '좋아요 순, 조회수 순, 등으로 변경 가능'
+        // 👉 이건 이제 sequelize - include 에서 해왔음 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+        const arrPostWithCommentUser = data.data
+        console.log("배열통확인" , arrPostWithCommentUser)
+
+
+
+    // 5) 주주룩 보이게 하기 
+        arrPostWithCommentUser.forEach( (element, index) => {
+            
+
+            // 게시글 전체 container div 
+                const post_container = document.createElement('div');
+                post_container.classList.add("post_container")      
+                post_container.id = `post_container_${element.id}`      
+                    // 해당 게시글 id
+                    // 확실해❓❓❓ 👉 응 맞음 
+                
+            // post 설명하는 div | ex) 제목, 댓글 수, 글쓴이 등이 이 아래로 들어갈 것 임 들어감
+                const post_desc_container = document.createElement('div');
+                post_desc_container.classList.add("post_desc_container");
+                post_desc_container.id = `post_desc_container_${element.id}`      // 해당 게시글 id
+                
+
+            // [🔹 마크업 구조 정리]
+                        // posts_wrapper 이 div 안으로 다 append 된다. 
+                        // posts_wrapper 안에 ✅아이템별로 post_container✅ 가 만들어짐
+                        // ✅post_container✅ 안에 1) figure 태그 2) desc 설명 태그 3) 포스트로 이동하는 A 태그는 테스트 📛📛 가 형제 
+                        // desc 설명 태그 안에 1) 제목, 댓글 수, 글쓴이 등이 들어감
+            
+            // 1️⃣ post 에 유저가 올린 사진 container | figure 태그 안에 들어가는 것들
+
+                // [시도] figure 태그로 하는 버전
+                    const post_image_container = document.createElement('div');
+                    const post_image = document.createElement('figure');
+                    post_image.classList.add('post_image');
+                    post_image.style.backgroundImage = `url(http://127.0.0.1:5500/Monami/backEnd/image/${element.post_img})`;    
+                    post_image_container.appendChild(post_image)
+
+                // post_container 에 합치기
+                    post_container.appendChild(post_image_container)
+
+
+            // 2️⃣ post_desc_container 안에 들어가는 것들
+                // 게시글 ID 
+                    // const savePostID = document.createElement('div');
+                    // savePostID.id = `savePostID_${element.id}`
+
+                // 제목 container
+                    const title_container = document.createElement('div');
+                    title_container.id = `title_container_${element.id}`
+                    title_container.textContent = `제목 : ${element.title}`
+                    post_desc_container.appendChild(title_container)
+                    
+                // 댓글수 container
+                    const comment_num_container = document.createElement('div');
+                    comment_num_container.id = `comment_num_${element.id}`
+                    comment_num_container.textContent = `댓글수 : ${element.Comments.length}`
+                    post_desc_container.appendChild(comment_num_container)
+                    
+                // 글쓴이 container
+                    const post_writer_container = document.createElement('div');
+                    post_writer_container.id = `post_writer_container_${element.id}`
+                    post_writer_container.textContent = `글쓴이 : ${element.user_id}`
+                    post_desc_container.appendChild(post_writer_container)
+                    
+                // 유저 프로필 이미지 container | 📛 사진이 없음. 
+                    // 사진이 들어갈 수 있는 div
+                    const user_profileImg_container = document.createElement('div');
+                    user_profileImg_container.id = `profileImg_container_${element.id}`
+
+                    // div 안에 img 태그로 사진 넣기
+                    const profileImg_Img = document.createElement('img');
+                    profileImg_Img.src = element.User.profile_img;    
+                        
+                    // console.log("사진 경로 확인🚀", element.User.profile_img)
+
+                    post_desc_container.appendChild(user_profileImg_container)
+
+                // 작성일자 container 
+                    const createdAt_container = document.createElement('div');
+                    createdAt_container.id = `createdAt_${element.id}`
+                    createdAt_container.textContent = `작성일자 : ${element.createdAt.split('T')[0]}`
+                    post_desc_container.appendChild(createdAt_container)
+                    
+                // 유저 경험치 container 
+                    const exp_container = document.createElement('div');
+                    exp_container.id = `exp_${element.id}`
+                    exp_container.textContent = `유저 경험치 EXP : ${element.User.exp}`
+                    post_desc_container.appendChild(exp_container)
+                    
+                // views container 
+                    const views_container = document.createElement('div');
+                    views_container.id = `exp_${element.id}`
+                    views_container.textContent = `조회수 : ${element.views}`
+                    post_desc_container.appendChild(views_container)
+                    
+                // likes container 
+                    const likes_container = document.createElement('div');
+                    likes_container.id = `likes_${element.id}`
+                    likes_container.textContent = `좋아요 : ${element.likes}`
+                    post_desc_container.appendChild(likes_container)
+                    
+                // likes 버튼 container 
+                    const likesBtn = document.createElement('button');
+                    likesBtn.id = `likesBtn_${element.id}`
+                    likesBtn.classList.add('likesBtn')
+                    likesBtn.textContent = "👍좋아요"
+                    post_desc_container.appendChild(likesBtn)
+
+                // post_container 에 합치기
+                post_container.appendChild(post_desc_container)
+
+                // [정리 ✅]
+                    // 여기까지 오면 post_container 안에
+                        // 1) 이미지 는 post_image_container 안에 
+                        // 2) desc 설명은 post_desc_container 안에 들어감
+                        // 3) 이러한 post_container 는 하나의 아이템이 될 것 임
+                        // 4) 이 아이템은 posts_wrapper 에 붙임
+
+            // 4️⃣ post 하나 마다 A 태그 심기 
+                    
+                    // A태그 링크 container
+                    const link_container = document.createElement('a');
+                    // Post id 를 a 태그 주소에 넣어주기
+                    const id_post = element.id
+                    link_container.href = `http://127.0.0.1:4000/board/item/${id_post}`
+
+                    link_container.classList.add('link_container_BTN')
+                    link_container.id = `link_container_${element.id}`
+                    // 가게 하는 주소 입력해야 함 ✅ 
+                    post_container.appendChild(link_container)
+
+
+
+            // 5️⃣  'posts_wrapper' 에,  게시글 하나를 담은 post_container 를 붙이기 
+            posts_wrapper.appendChild(post_container)
+
+    
+    // 🔵 태그 검색
+            const tags_item = document.createElement('li');
+            tags_item.id = `tags_item_${element.id}`
+            tags_item.classList.add('category_nav_items')
+            
+            const tags_keywordBtn = document.createElement('button');
+            tags_keywordBtn.id = `tags_keywordBtn_${element.id}`
+            tags_keywordBtn.classList.add('category_nav_itemBtn')
+            tags_keywordBtn.textContent = `${element.tags}`
+
+            // a.style.href = 'http://127.0.0.1:4000/board/list/tags'
+                // 동일한 페이지에서? 
+                // 다른 페이지에서? 
+                // 이걸 하면 -> 해당 태그들이 검색되고 -> 그것에 담긴 내용들이 담긴다. @ DB 에서 
+                // 그게 다시 getview 로 온다  | 이 순간, 그러면, 다른 페이지에서 해야하지 않나? 
+                // 음... 
+                // 우선, 그러면, 페이지네이션? 음. 그러면, 이 url 에 대해서 query 를 붙여야 하나? 
+
+
+            tags_item.appendChild(tags_keywordBtn)
+            tags_item_container.appendChild(tags_item)
+
+
+
+        });
+
+        
+    // 6) 페이지네이션 & pageShow 함수 
+        console.log("initializedView @boardList.html")
+        pageNavigation(7)
+        pageShow()
+
+            
+} catch (error) {
+    console.log(error)
+}
+}
+
+
+
+// 🔹 1page, 2page 보여주는 함수 
+    let pageNavigation = (page_num) => {
+
+        // 페이지네이션 초기화 ⭐⭐⭐
+        const page_navigation = document.querySelector(".page_navigation_container")
+        while(page_navigation.firstChild) {
+            page_navigation.removeChild(page_navigation.firstChild)
+        }
+
+        for(i=1; i<=page_num; i++) {
+            page_navigation.innerHTML += `
+                <button class="pageNumBtn" id="page_btn_${i}"> ${i}page </button>
+                `    
+        }
+    }
+
+
+// 🔹 view 초기화 시키는 함수 | 이게 없으면 누적되어서 나옴 
+    initializedView = (arrPostWithCommentUser , page_num , _order_option) => {
+        return new Promise ( async (resolve, reject) => {
+            try {
+                console.log("initializedView @boardList.html")
+
+                // post 내용들 전부 비우기
+                    posts_wrapper.innerHTML = "";
+        
+                // page1, page2 .. 버튼 전부 지우기 
+                    page_navigation.innerHTML = "";
+                
+                await getView(arrPostWithCommentUser , page_num , _order_option)
+    
+                resolve()
+                
+            } catch (error) {
+                reject(error)
+            }
+        }
+        )
+    }
+
+
+// 🔹 tag 버튼 클릭하면 -> 해당 태그로 view 하기 | 태그 버튼 작동하는 함수 | tags 함수 
+    const checkTagBtn = async () => {
+
+        try {
+            const tagButtons = document.getElementsByClassName('category_nav_itemBtn')
+
+            Array.from(tagButtons).forEach((btn) => {
+                btn.onclick = async (event) => {
+                    try {
+                        // 클릭된 텍스트 알아내기
+                        clickedTag = event.target.textContent
+                        console.log( "클릭된 태그 버튼 확인🕵️‍♂️🕵️‍♂️🕵️‍♂️" , clickedTag)    // 🔵 찍혀나옴
+    
+                        // [1차시도] getview 함수에 넣기
+                            // getView(undefined, undefined, undefined, clickedTag) 
+    
+                        // [2차시도] | 페이지 자체를 변경하기 
+                            // axios.get? 
+                            const {data} = await axios.get(`http://127.0.0.1:4000/board/list/page/tags?num=${page_num}&order=${order_option}&tags=${clickedTag}` , {
+                            withCredentials : true
+
+                        })
+                        console.log("유저가 클릭한 태그에 해당하는 data | '배열통' 👉 " , data.data)    // 이게 getView 에 들어가는 형식
+                        console.log("유저가 클릭한 태그에 해당하는 data | 어떤 tag 선택? 👉  " , data.data[0].tags)
+                        
+                        // '유저가 클릭한 태그에 해당하는 게시물들'
+                        _tags = data.data[0].tags
+
+                        await getView(undefined, undefined, undefined, _tags)
+
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+// 🔹 태그 검색 | checkTagBtn 를 변경
+    const checkSearchTag = async (event) => {
+        alert("검색함수에 연결!")
+    
+        event.preventDefault(); // 폼 제출에 의한 페이지 리로딩 방지
+        
+        const tagSearchInput = document.getElementById('tagSearch_form_input')
+
+        try {
+
+            const searchedKeyword = tagSearchInput.value;
+            console.log( "검색된 키워드 확인 🤟🤟🤟🤟🤟" , searchedKeyword)    
+
+            // 페이지 자체를 변경하기 
+                const {data} = await axios.get(`http://127.0.0.1:4000/board/list/page/tags?num=${page_num}&order=${order_option}&tags=${searchedKeyword}` , {
+                withCredentials : true
+                })
+                console.log("유저가 검색한 태그에 해당하는 data | '배열통' 👉 " , data.data)    // 이게 getView 에 들어가는 형식
+                console.log("유저가 검색한 태그에 해당하는 data | 어떤 tag 검색? 👉  " , data.data[0].tags)
+            
+                // '유저가 클릭한 태그에 해당하는 게시물들'
+                _tags = data.data[0].tags
+
+                await getView(undefined, undefined, undefined, _tags)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+    // 🔹 위에서, input 태그에 데이터가 제출되면 > checkSearchTag 를 실행! 
+        document.getElementById('tagSearch_form').onsubmit = checkSearchTag;
+
+
+
+
+
+
+
+
+
+// 🔹 좋아요 버튼 클릭하면 -> id 찾고 -> like 증가 함수 찾기
+    const findClickedBtn = () => {
+        return new Promise ( async(resolve, reject) => {
+
+            
+            try {
+                console.log("findClickedBtn @boardList.html")
+
+                // 좋아요 버튼 모두 가져오기
+                const likesButtons = document.getElementsByClassName('likesBtn')
+                console.log("좋아요 버튼 있어? 📌 " , likesButtons)
+    
+                // 배열 만들어서 -> 하나씩 돌면서 -> 숫자 증가시키는 기능 붙이기
+                Array.from(likesButtons).forEach((btn) => {
+                    btn.onclick = async (event) => {
+                        const clickedPostID = event.target.id.split('_')[1]
+                            console.log("clickedPostID 확인" , event.target.id.split('_')[1])   // clickedPostID 확인 58
+                            console.log(clickedPostID)  // 58
+    
+                            // 이슈 
+                                // 과연, 버튼을 클릭했을 때 나오는 숫자가, 진짜 그 게시물의 post ID 인가? 
+                                // 그 태그의 id 일 것 
+                                // 그러면, 저 내용에 post ID 를 묻혀 놓고, 보이게는 안 하면 되는거 아냐? ⭐⭐⭐⭐⭐⭐
+        
+                        // clickedLikeBtn 이 버튼 id 에 대해 숫자 증가 해주세요~ 
+                        await IncreaseLikeNum(clickedPostID)
+                        
+                        
+                        // window.location.href = 'http://127.0.0.1:4000/board/list/view'
+                        // 그리고 다시 그려주세요 
+                            // 필요한 이유 : 이걸 안 하면, 새로고침 해야, 좋아요가 올라감 
+                            
+                            // [시도 1] 
+                                // initializedView(arrPostWithCommentUser, clickedPage) 
+                                // 안 돼 📛 
+    
+                            // [시도 2] 
+                                // await initializedView( );
+                                    // [해석]
+                                        // 된다! 🔵🔵🔵  
+                                        // 음. 왜 되는거지? 
+                                        // 우선, await 를 써줬기 때문인가? 
+                                    // 문제점
+                                        // 그냥, 한 번 밖에 안 된다. 
+                                        // 그러면, 그냥 새로고침 하는게 나으려나? 
+    
+                            // [시도 3]
+                                // 이걸로 선택 ⭐⭐⭐⭐⭐⭐⭐⭐ 
+                                // 어차피, 다시 데이터를 가져올 때, 다시 그릴 때, 화면이 한번 깜빡인다. 
+                                // 그럴거면, 그냥 '새로고침' 하게 하면 될듯
+                        // await window.location.reload();
+                            
+                    }
+                })
+                
+            } catch (error) {
+                console.log(error)
+            }
+
+
+            // 완료
+            resolve()
+            }
+        )
+        // console.log("지금 로그인 한 유저 👉 " , req.decode.id);
+
+    }
+
+
+// 🔹 매개변수 입력되면 -> 좋아요 수치 증가 시키기 
+    const IncreaseLikeNum = async (clickedPostID) => {
+
+        try {
+            console.log("IncreaseLikeNum 함수 들어왔음!")
+
+
+            // [새로 짜는 코드] 변경하는 이유 : FormData 로 보내니까, 문제가 있었던 것 같음. | 변경 후 작동함 🔵
+                const data = {
+                    clickedPostID : clickedPostID
+                }
+            
+                // [과거 코드] 전송시킬 동적 form 데이터 만들기 | 안 되어서 수정 ✅  
+                    // const data = new FormData();    // form 객체 생성
+                    // data.append("clickedPostID" , clickedPostID);    // 키값 : clickedPostID, value : clickedPostID 
+
+
+            // 서버로 보내기
+            const result = await axios.post("http://127.0.0.1:4000/board/likes" , data , {
+                withCredentials : true,
+                "Content-Type" : "json/application"     // form 에 담길 데이터 타입 설정
+            })
+            
+            console.log( "result.data.message🎏🎏🎏" , result.data.message )
+            if (result.data.message == 'success') {
+                window.location.reload()                
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+// 🔹 page navigation ex) 1page, 2page 클릭하면, 보내는 함수 
+    const pageShow = () => {
+
+        console.log("pageShow 함수 입성 @boardList.html")
+
+        const pageNumBtns = document.getElementsByClassName('pageNumBtn');
+
+            // [새로운 시도] 보여주는 함수 이제 만들었으니, 그걸 써보기
+            Array.from(pageNumBtns).forEach((btn) => {
+                btn.onclick = async (event) => {
+                    const clickedPage = event.target.id.split('_')[2];
+                    initializedView(arrPostWithCommentUser, clickedPage, _order_option)
+                }
+            })
+
+
+    }
+
+
+
+// 🔹 Share Work 클릭하면, 글쓰기 페이지로 이동   
+    shareWorkBtn.onclick = () => {
+            window.location.href = "http://127.0.0.1:4000/board/create"
+    }
+
+
+
+
+// 🔹 getView 실행 | DOMContentLoaded | 기본으로 돌아가는거 
+    document.addEventListener('DOMContentLoaded' , async function() {
+
+        console.log("DOMContentLoaded 입성 @boardList.html")
+        console.log("getView 실행된건가? 💎")
+
+        // 여기에서 getview 가 아니라, 
+            // 1) 초기화된게 실행 되어야 하고 ⭐⭐⭐ 
+            // 2) 매개변수를 받아야 한다. ⭐⭐⭐ 
+            // 3) 음... 
+
+            
+        console.log("DOMContentLoaded > initializedView @boardList.html")
+        await initializedView( );
+
+        console.log("DOMContentLoaded > findClickedBtn() > @boardList.html")
+
+        try {
+            await findClickedBtn();
+            // window.location.reload()
+
+        } catch (error) {
+            console.log(error)
+        }
+
+        // 태그 버튼 눌렸는지 확인
+        checkTagBtn()
+
+
+        // 🔹 위에서, input 태그에 데이터가 제출되면 > checkSearchTag 를 실행! 
+            document.getElementById('tagSearch_form_input').onsubmit = checkSearchTag;
+
+
+    })
+
+
+
+
+
+// 🔹 혹시 모르니까 keep | 정렬 하게 하는 함수 👉 그냥, a 링크로 처리 | 다만, 변경하면, 계속 업데이트 해줘야 하는게 문제  
+    // [실행 맥락 궁금] 
+        // 근데, listOrder 이 함수는, 왜 'DOMContentLoaded' 이곳에서 실행하니까 되는거지? 
+        // 그냥, 밖에 던져놓으면 안 되고? 
+    // listOrder = () => {
+
+    //     console.log("listOrder 입성 @boardList.html")
+    //     // 최신순 클릭되면 -> 데이터 보내고 getView 실행
+    //     newestClickedCheck()
+
+    //     // 좋아요 클릭하면 -> 데이터 보내고 getView 실행
+    //     likesClickedCheck()
+
+    //     viewsClickedCheck()
+    // }
+
+
+
+    // 정렬 함수 2차 작성
+        // document.getElementById("likes_dropOption").addEventListener("click", function(){
+
+        //     clicked_order = "likes"
+        //     console.log(clicked_order)
+        // });
+
+        // document.getElementById("newest_dropOption").addEventListener("click", function(){
+            
+        //     clicked_order = "createdAt"
+        //     console.log(clicked_order)
+        // });
+
+        // document.getElementById("views_dropOption").addEventListener("click", function(){
+
+        //     clicked_order = "views"
+        //     console.log(clicked_order)
+        // });
+
+
+
+
+
+    // newestClickedCheck = () => {
+    //     document.querySelector('#newest_dropOption').addEventListener('click' , async (event) => {
+            
+    //         try {
+    //             // 클릭된거 받아오기
+    //                 console.log('🥙🥙🥙 newest_dropOption 클릭됨!') 
+    //                 const _order_option = event.target.getAttribute('data-track-view');
+    //                 console.log("📌📌📌📌📌📌📌 뭐가 넘어오는거지?" , newest_dropOption)    // createdAt 같은 텍스트가 올것
+    //                 alert(_order_option) // createdAt 찍힘 
+    //             // axios 로 넘길거야 
+                
+    //                 await getView(arrPostWithCommentUser , page_num, _order_option)
+
+                
+    //         } catch (error) {
+    //             console.log(error)
+    //         }    
+    //     })
+    // }
+
+
+    // likesClickedCheck = () => {
+    //     document.querySelector('#likes_dropOption').addEventListener('click' , async (event) => {
+            
+    //         try {
+    //             // 클릭된거 받아오기
+    //                 console.log('🥙🥙🥙 likes_dropOption 클릭됨!') 
+    //                 const _order_option = event.target.getAttribute('data-track-view');
+    //                 console.log("📌📌📌📌📌📌📌 뭐가 넘어오는거지?" , _order_option)    // createdAt 같은 텍스트가 올것
+                    
+    //                 // 예전방식
+    //                 // await getView(undefined , undefined, _order_option)
+                    
+    //             // 파일 자체 이동 시키기 
+    //                 window.location.href = "http://127.0.0.1:4000/board/list/likes"
+                    
+    //                 alert(_order_option) // likes 찍힘
+                
+    //         } catch (error) {
+    //             console.log(error)
+    //         }    
+    //     })
+    // }
+
+    // viewsClickedCheck = () => {
+    //     document.querySelector('#views_dropOption').addEventListener('click' , async (event) => {
+            
+    //         try {
+    //             // 클릭된거 받아오기
+    //                 console.log('🥙🥙🥙 likes_dropOption 클릭됨!') 
+    //                 const _order_option = event.target.getAttribute('data-track-view');
+    //                 console.log("📌📌📌📌📌📌📌 뭐가 넘어오는거지?" , _order_option)    // createdAt 같은 텍스트가 올것
+                    
+
+    //                 // 파일 자체 이동 시키기 
+    //                 window.location.href = "http://127.0.0.1:4000/board/list/views"
+
+                    
+    //                 // alert(_order_option) // likes 찍힘
+
+    //                 // 예전방식
+    //                     // await getView(undefined , undefined, _order_option)
+
+    //                 // 페이지 자체를 넘길까 
+                
+    //         } catch (error) {
+    //             console.log(error)
+    //         }    
+    //     })
+    // }
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+</html>

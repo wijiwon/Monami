@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- axios 로 예전에 쓰던 form 태그 대신 전송⭐⭐⭐ -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+
+<style>
+
+
+
+
+
+.content_background {
+    position: fixed;
+
+    background-color: rgba(0, 0, 0, 0.3);
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.content_wrapper { 
+    width: 80vh;
+    height: 87vh;
+
+    border-radius: 1em;
+    padding: 0.8em 2em;
+
+    background-color: whitesmoke;
+}
+
+
+
+.post_img_title_wrap {
+    background-color: thistle;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.content_closeBtn { 
+    margin-left: auto;
+    cursor: pointer;
+}
+
+
+.post_img_upload_Container { 
+    background-color: palegoldenrod;
+    width: 100%;
+    height: 30%;
+    border-radius: 0.5em;
+
+    
+}
+
+.main_contents_wrap {
+    background-color: magenta;
+    height: 85%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+.post_1st_wrap {
+    /* flex-shrink: 0; */
+
+    height: 100%;
+    width: 40%;
+    background-color: lawngreen;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+}
+
+
+#post_img_pv{ 
+    width: 95%;
+    height: 95%;
+}
+
+
+.post_2nd_wrap {
+    background-color: lightgray;
+    height: 100%;
+    width: 55%;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+
+.postTile_wrap  {
+    background-color: tan;
+    /* display: flex; */
+    /* flex-direction: column; */
+}
+
+
+.text_input{
+    width: 80%;
+    height: 3em;
+}
+
+
+.postText_wrap { 
+    background-color: thistle;
+}
+
+.postTags_wrap { 
+    background-color: tomato;
+}
+
+.postWriteBtn_wrap { 
+    background-color: burlywood;
+}
+
+</style>
+
+
+
+
+<body>
+
+
+
+
+<!--  뒷 배경 | ✅ 뒤에 gif 넣거나 | 아니면, 여기처럼, 이미지 넣고 -> 그 다음 팝업 띄워도 될 듯 -->
+    <div class="content_background">
+
+    <!-- 하얀색 글쓰는 곳 -->
+    <div class="content_wrapper">
+
+        <!-- 1. 맨위 제목 영역 : final touches | 취소 버튼 -->
+            <div class="post_img_title_wrap">
+                
+                <!-- 1) 제목 -->
+                <h2 class="post_img_title">Final touches</h2>
+
+                <!-- 2) 취소버튼 -->
+                <div class="content_closeBtn" id="closeBtn">
+                    ❎
+                </div>
+            </div>
+
+
+
+
+        <!-- 2. 메인 콘텐츠 : 제목, 사진 올리기, 내용 등 -->
+        <div class="main_contents_wrap">
+
+            <!-- 2.1 왼쪽 영역 | 미리보기 사진 올라감 -->
+                <div class="post_1st_wrap">
+                    <!-- 1) 사진 올라가는 영역 -->
+                        <div class="post_img_upload_Container">
+                                
+                            <p> Thumnail Preview </p>
+                            
+                            <!-- b) 미리보기 나오는 영역 | 사진 올라가는 영역에 고정 되어야 함 -->
+                            <img id="post_img_pv" onerror="style.display='none'" alt="">
+                            <!-- [해석] 
+                                onerror="style.display='none'
+                                1) img에 이미지가 없을때 나오는 엑박을 안보이게 해줌 
+                                2) 없어도 되긴 하는 것 같은데, 우선, 해놓음 
+                            -->
+
+                            <!-- a) 파일 올리는 부분 -->
+                            <input type="file" id="post_img"> <br>
+                        
+                        </div>
+                </div>
+
+            <!-- 2.2 오른쪽 영역 | 제목, 설명, 태그, -->
+        
+                <div class="post_2nd_wrap"> 
+    
+                    <!-- 1) 제목 -->
+                    <div class="postTile_wrap">
+                        <label for=""> Title  </label> <br>
+                        <input type="text" id="title" placeholder="Add Titles" class="text_input"> <br>
+                        <div class="suggested_wrap" > <span class="suggested_title" > Suggested : </span> <span class="suggested_title_examples"> 팡팡에서 가지볶음밥 기다리기 </span> </div>
+                    </div>
+
+                    <!-- 2) 본문 -->
+                    <div class="postText_wrap">
+                        <label for=""> Description (minimum 200) </label> <br> 
+                        <input type="text" id="content" class="text_input" placeholder="Add description"> <br>
+                        <div class="suggested_wrap" > <span class="suggested_desc" > Suggested : </span> <span class="suggested_desc_examples"> 팡팡 가지 볶음밥, 유튜브, 주방장, 어묵 맛집, 밑반찬 맛집, 교수님, 양조절 실패, 맛조절만 성공, 대기 시간 조절 실패, 희한하게 또 가게 됨 </span> </div>
+
+                    </div>
+    
+                    <!-- 3) 태그 -->
+                    <div class="postTags_wrap">
+                        <label for=""> Tags (maximum 20) </label> <br>
+                        <input type="text" id="tags" class="text_input" placeholder="Add tags">
+                        <div class="suggested_wrap" > <span class="suggested_tags" > Suggested : </span> <span class="suggested_tag_examples">friend, alien, animal, animation, monster</span> </div>
+
+                    </div>
+    
+                    <!-- 4) 글쓰기 버튼 -->
+                    <div class="postWriteBtn_wrap">
+                        <button id="writeBtn"> 글쓰기 </button>
+                    </div>
+    
+                </div>            
+
+        </div>
+
+
+
+
+        </div>
+    </div>
+
+
+        <!-- 👇👇 여기부터는 예전 코드 | 이제 keep 👇👇 -->
+
+            <!-- 제목 -->
+            <!-- <label for="">제목</label>
+            <input type="text" id="title"> <br> -->
+
+            <!-- 본문 -->
+            <!-- <label for="">본문 | minimum 200</label> 
+            <input type="text" id="content"> <br> -->
+
+            <!-- 태그 -->
+            <!-- <label for=""> tags | maximum 20 , 추천 태그 </label>
+            <input type="text" id="tags"> -->
+
+            <!-- <br> -->
+
+        <!-- 사진 -->
+        <!-- <input type="file" id="post_img"> <br> -->
+
+        <!-- 사진 미리보기 ✅ -->
+        <!-- <img id="post_img_pv" onerror="style.display='none'" alt=""> -->
+            <!-- [해석] 
+                    onerror="style.display='none'
+                        1) img에 이미지가 없을때 나오는 엑박을 안보이게 해줌 
+                        2) 없어도 되긴 하는 것 같은데, 우선, 해놓음 
+                -->
+        <!-- <br> -->
+
+        <!-- 글쓰기 버튼 -->
+        <!-- <button id="writeBtn"> 글쓰기 </button> -->
+
+
+</body>
+
+
+<script>
+
+// 전역변수 
+    let reader = new FileReader();
+    // const token = localStorage.getItem('access_token'); // 로컬 스토리지에서 토큰 값을 가져온다고 가정
+
+
+
+
+// 🔹 사진 미리보기 기능 
+    // 1. input 태그가 변경되면, profile 함수 실행해서, 1) 변환 2) 보여주기 
+    post_img.addEventListener("click" , () => {
+        post_img.onchange = (e) => {
+            const filename = e.target.files[0];
+            profile(filename);
+        }
+    })
+
+    // 2. profile 함수 정의
+    const profile = (value) => {
+        // reader.readAsDataURL(value) 메소드 끝나면, 실행됨
+        reader.onload = () => {
+
+            // readAsDataURL 변환값을 res 에 할당
+            res = reader.result;
+                // [해석]
+                    // reader.result == reader.readAsDataURL(value)의 결과값
+
+            // 미리보기 img 태그에 res 넣기
+            post_img_pv.setAttribute("src" , res);
+                // [해석]
+                    // 미리보기 img 태그를 pv 로 가져오고, src 속성에, res 할당
+            
+            // pv 보이게 하기 
+            post_img_pv.style.display = 'block'
+                // [애매한 것]
+                    // pv 가 이전에는 꺼졌었나❓❓❓❓❓
+        }
+        // 파일 매개변수를 읽어서 -> base 64 로 변환
+        reader.readAsDataURL(value);
+            // [해석]
+                // 완료되면, reader.onload 가 실행됨
+    }
+
+
+    
+// 🔹 글쓰기 버튼 클릭시 axios post 요청 
+    writeBtn.onclick = async () => {
+        
+        try {
+            // form 인스턴스 생성
+            const form = new FormData();
+    
+            // form 객체 안에 데이터 append 하기
+            form.append("title" , title.value);
+            form.append("content" , content.value);
+            form.append("tags" , tags.value);
+            form.append("post_img" , post_img.files[0]);
+    
+            console.log("[@boardCreate.html] 게시글 제목, 본문, 사진 들어오고 있는지 : " , title.value, content.value, tags.value, post_img.files[0])
+    
+    
+            // axios 전송 | await 붙여야❓❓ 
+            const e = await axios.post("http://127.0.0.1:4000/board/create" , form, { 
+                
+                // type 설정 : 설정에 따라, 서버가 기대하는 값이 달라짐
+                "Content-Type" : "multipart/form-data",
+                withCredentials: true,  // ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐
+    
+                    // [해석] 헤더의 내용으로, 인코딩된, 폼 데이터로 전송한다고 설정
+                    // [주의] : 만약, 텍스트 데이터면, json/application 으로, 이것과 다르게 설정해야 함
+                
+                // isLogin 관련 설정
+                // "Authorization": `Bearer ${token}`
+                    // ⭐⭐⭐⭐⭐ 이걸 추가 해야 > 미들웨어 islogin 에서   const authHeader = req.headers.authorization 이 값이 안 비어있게 됨 ⭐⭐⭐⭐⭐
+            })
+            // }).then( (e) => {
+                
+                // redirect 를 수동으로 처리하기 ⭐⭐⭐ 
+                    const redirectURL = e.data.redirectURL;
+                    
+                    console.log("redirectURL 이게 어떻게 넘어오지? @boardCreate" , redirectURL)
+                    window.location.href = redirectURL;
+                        // [이렇게 하는 이유] ⭐⭐⭐⭐⭐⭐⭐⭐
+                            // axios 를 통해서 post 요청을 보내고, redirect 를 하면, 
+                            // axios 통신에 의해, 브라우저가 자동으로 redirect 를 안하는 경우가 생김. 
+                            // 따라서, 서버에서 redirect 할 url 을 json 형식으로 보내고, 그걸 수동으로 처리 해야 함. 
+                            // 다만, 이게 꼭 필요한가? 다른 방법은 없나? 
+                console.log("axios post 잘 전달했고, redirect 수동으로 잘 처리함 🙆‍♂️")
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+// 🔹 취소버튼 누르면 -> 게시글 목록으로 이동하기 
+    closeBtn.onclick = () => {
+        try {
+            window.location.href = 'http://127.0.0.1:4000/board/list/view'
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+
+
+</script>
+
+
+</html>

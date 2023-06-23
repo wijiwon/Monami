@@ -948,14 +948,16 @@
                 let doorAni = roomDiv.querySelector('.doorAni');
                 let door = roomDiv.querySelector('.door');
 
-                doorAni.addEventListener('mouseenter', function() {
+                doorAni.addEventListener('mouseenter', function(e) {
+                    e.stopPropagation();
                     // Add the 'opening' class to the door when the mouse enters
                         if (!door.classList.contains('opening')) {
                             door.classList.add('opening');
                         }
                 });
 
-                doorAni.addEventListener('mouseleave', function() {
+                doorAni.addEventListener('mouseleave', function(e) {
+                    e.stopPropagation();
                     // Remove the 'opening' class from the door when the mouse leaves
                     door.classList.remove('opening');
                 });

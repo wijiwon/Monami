@@ -509,14 +509,15 @@
         user_rank.innerHTML += `
             <div class="rankFirst">
                 <img class="rankImg" src="${e.profile_img}" alt="Profile image of ${e.username}"> <br>
-                <div class="rankName"> username : ${e.username}</div> <br>
-                <div="rankExp"> userEXP : ${e.exp}</div=> <br>
+                <div class="rankName"> username : ${e.username}</div>
+                <div class="rankExp"> userEXP : ${e.exp}</div> 
             </div>`;
       } else {
         user_rank.innerHTML += `
             <div class="rankOther">
-                <div> username : ${e.username}</div>
-                <div> userEXP : ${e.exp}</div>
+                <br>
+                <div class="rankName"> username : ${e.username}</div>
+                <div class="rankExp"> userEXP : ${e.exp}</div>
             </div>`;
       }
     });

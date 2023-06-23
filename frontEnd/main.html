@@ -325,8 +325,8 @@
       border-radius: 50%;
     }
     .rankName, .rankExp{
-      font-size: 15px;
-      color: #000;
+      font-size: 17px;
+      /* color: #000; */
     }
     .rankFirst, .rankOther{
       width: 210px;
@@ -509,15 +509,15 @@
         user_rank.innerHTML += `
             <div class="rankFirst">
                 <img class="rankImg" src="${e.profile_img}" alt="Profile image of ${e.username}"> <br>
-                <div class="rankName"> username : ${e.username}</div>
-                <div class="rankExp"> userEXP : ${e.exp}</div> 
+                <div class="rankName"> 닉네임 : ${e.username}</div>
+                <div class="rankExp"> EXP : ${e.exp}</div> 
             </div>`;
       } else {
         user_rank.innerHTML += `
             <div class="rankOther">
                 <br>
-                <div class="rankName"> username : ${e.username}</div>
-                <div class="rankExp"> userEXP : ${e.exp}</div>
+                <div class="rankName"> 닉네임 : ${e.username}</div>
+                <div class="rankExp"> EXP : ${e.exp}</div>
             </div>`;
       }
     });

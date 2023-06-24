@@ -22,10 +22,24 @@
 
 
 <style>
+    /* 유지체 */
+    @font-face {
+        font-family: 'HSYuji-Regular';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
 
 /* 기본 CSS 설정 */
 body {
-        -webkit-font-smoothing: antialiased;
+    font-family: 'HSYuji-Regular';
+    -webkit-font-smoothing: antialiased;
+    background-color: #fffbae;
+    background-image: url(http://127.0.0.1:4000/img/backgroundIMG.png);
+    background-size: cover;
+    width: 100%;
+    height: 150%;
     }
 
     body, div, span, button, a, p, ul, figure, li {
@@ -65,26 +79,48 @@ body {
 
 /* ------------- 👇 header 👇 ---------------- */
 .header { 
-    height: 2.5rem;
-    background-color: rgba(0, 0, 0, 0.8);
-
-    display: flex;
-    align-items: center;
+    position: relative;
+        height: 130px;
+        /* background-color: rgba(0, 0, 0, 0.8); */
+        display: flex;
+        align-items: center;
 }
+
+.headerLogo {
+        width: 600px;
+        height: 100px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
 
 .boardItem_closeBtn_wrap {
-    width: 2rem;
-    height: 2rem;
-    /* background-color: yellow; */
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
+        position: absolute;
+    right: 295px;
+        width: 2rem;
+        height: 2rem;
+        /* background-color: yellow; */
 
-    /* 왼쪽 다 먹고 -> 오른쪽에서 조금 떼어내기 */
-    margin-left: auto;
-    margin-right: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        /* 왼쪽 다 먹고 -> 오른쪽에서 조금 떼어내기 */
+        margin-left: auto;
+        margin-right: 0.5rem;
 }
+
+.boardItem_closeBtn div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    width: 200px;
+    height: 100px;
+    background-image: url(http://127.0.0.1:4000/img/backBtn.png);
+    }
 
 
 /* ------------- 👇 main content 👇 ---------------- */
@@ -92,63 +128,131 @@ body {
 
 
 .main_contents {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+    position: absolute;
+        left: 50%;
+        top: 50px;
+        transform: translate(-50%);
+        /* display: flex; */
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
 
-    /* 가운데로 오게 하기 */
-    margin: 0 auto;
+        /* 가운데로 오게 하기 */
+        margin: 0 auto;
 
-    width: 50rem;
-    min-height: 180vh;
-    /* background-color: lightblue; */
+        width: 1270px;
+        min-height: 1500px;
+        /* background-color: lightblue; */
 }
+
+
+.SketchBook {
+        /* border: solid 3px rgb(222, 26, 248); */
+        width: 1400px;
+        height: 1600px;
+        position: absolute;
+        left: 50%;
+        top: 130px;
+        transform: translate(-50%);
+        background-image: url(http://127.0.0.1:4000/img/postviewDiv.png);
+    }
+
 
 
 /* <!-- 🔹 1)  top profile | saved | like -->*/
 
 .topProfile_actionBnts_container { 
-    height: 5rem;
+    position: absolute;
+    left: -10px;
+    margin-top: 5px;
+    height: 200px;
+    width: 1295px;
+    /* 이 부분 크기 설정이 살짝 확신이 없음 😥  */
+    /* background-color: greenyellow; */
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    /* height: 5rem;
     width: 40rem;
-        /* 이 부분 크기 설정이 살짝 확신이 없음 😥  */
+        이 부분 크기 설정이 살짝 확신이 없음 😥 
     background-color: greenyellow;
 
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
 }
 
 .topProfile_container { 
+
+    margin-left: 20px;
+
     flex-shrink: 0;
-    width: 5rem;
-        /* width 에 고정값을 주고 flex-shrink 를 주면, 유지된다. */
-    height: 5rem;
-    
-    background-color: gray;
+    width: 200px;
+    /* width 에 고정값을 주고 flex-shrink 를 주면, 유지된다. */
+    height: 200px;
+    border-radius: 50%;
+
+    background-color:white;
 
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* flex-shrink: 0; */
+    /* width: 5rem; */
+        /* width 에 고정값을 주고 flex-shrink 를 주면, 유지된다. */
+    /* height: 5rem; */
+    
+    /* background-color: gray;
+
+    display: flex;
+    justify-content: center;
+    align-items: center; */
 
 }
 
 
 .title_userID_wrap { 
-    flex-grow: 1;
-        /* 빈 공간을 이 녀석이 채우게 된다. */
+    display: flex;
+    margin-left: 50px;
+    width: 750px;
+    height: 145px;
+    /* flex-grow: 1; */
+    /* 빈 공간을 이 녀석이 채우게 된다. */
 
-    background-color: lightseagreen;
+    /* background-color: lightseagreen; */
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 
-.userAction_Btns_wrap {
+.top_userAction_Btns_wrap {
+    margin-left: 50px;
+    margin-top: 115px;
+
     flex-shrink: 0;
+    width: 230px;
+
+    display: flex;
+    justify-content: space-evenly;
+        /* background-color: gray; */
+
+    /* flex-shrink: 0;
     width: 10rem;
     
     display: flex;
     justify-content: space-evenly;
-    background-color: gray;
+    background-color: gray; */
+}
+
+.bottom_userAction_Btns_wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 30px;
+    margin-top: 10px;
 }
 
 .userAction_Btns { 
@@ -158,12 +262,20 @@ body {
 }
 
 .savedBtn { 
+    border: 3px dashed rgb(253, 255, 164);
+    width: 120px;
+    font-size: 20px;
+    font-family: 'HSYuji-Regular';
     background-color: lightcyan;
 }
 
 .likeBtn {
-    background-color : lightpink;
-}
+    border: 3px dashed rgb(253, 255, 164);
+    width: 100px;
+    font-size: 20px;
+    font-family: 'HSYuji-Regular';
+    background-color: lightpink;
+    }
 
 
 .profile_image {
@@ -178,10 +290,71 @@ body {
 }
 
 
+.title_nums_wrap {
+    font-size: 35px;
+
+    /* form 태그 특성으로 title_input_form 에 flex 줬음 */
+        /* display: flex;
+        align-items: center; */
+}
+
+
+/* form 태그 특성으로 form 에 flex 줘야 함 */
+.title_input_form {
+    display: flex;
+    align-items: center;
+}
+
+
+.postTile_title { 
+    flex-shrink: 0;
+    margin-top: 10px;
+    width: 100px;
+}
+
+
+
+.text_input{
+    background-color: transparent;
+    width: 1200px;
+    /* height: 50px; */
+    font-size: 28px;
+    border: none;
+    font-family: 'HSYuji-Regular';
+    overflow: hidden;
+
+    /* margin-left: 15px; */
+}
+
+
+.text_input:focus {
+    outline: none;
+}
+
+
+
+.userName_nums_wrap {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        margin-top: 75px;
+    }
+
+.postInfo_2 {
+    margin-right: 10px;
+}
+
+
+
 /* 🔹 2)  이미지 넣기  */
 
 .main_image_container {
-
+    position: absolute;
+    top: 265px;
+    left: 50%;
+    transform: translate(-50%);
     width: 46rem;
     height: 35rem;
     border-radius: 0.5rem;
@@ -191,6 +364,16 @@ body {
     align-items: center;
 
     background-color: rgb(231, 229, 229);
+
+    /* width: 46rem;
+    height: 35rem;
+    border-radius: 0.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgb(231, 229, 229); */
 }
 
 .main_image { 
@@ -208,31 +391,67 @@ body {
 
 /*  🔹 3) text 설명  */
 
-.main_textContent {
-    /* flex: 1 auto; */
-    /* [해석] 
+.postText_wrap {
+        /* flex: 1 auto; */
+        /* [해석] 
     여기까지 하면, footer 를 하단으로 떨어트리게 할 수 있음. 
     전제는, 자식 요소가 늘어날 수 있는 공간이 있어야 함 
     => 그래서 부모 요소인 main_contents 에 min-heigh 100vh 를 줬음.*/
 
 
-    /* width 를 padding 까지 합쳐서 40rem 으로 맞추기 ⭐⭐  */
-    width: 36rem;
-    padding : 1rem 1.5rem ;
+        /* width 를 padding 까지 합쳐서 40rem 으로 맞추기 ⭐⭐  */
+        position: absolute;
+        top: 900px;
+        width: 1200px;
+        padding: 1rem 1.5rem;
         /* 위 , 아래 = 1rem */
         /* 좌우 = 1.5rem */
 
-    color:#3d3d4e;
-    overflow-wrap: break-word;
-    line-height: 28px;
-    letter-spacing: 0px;
+        position: absolute;
+        top: 866px;
+        width: 1200px;
+        color: #3d3d4e;
+        overflow-wrap: break-word;
+        line-height: 28px;
+        letter-spacing: 0px;
+        height: 242px;
 
-    background-color: orange;
+        /* background-color: orange; */
 
 }
 .main_textContent p a {
     color: #ea4c89;
 }
+
+#editContent {
+    height: 230px;
+    font-size: 30px;
+    line-height: 85px;
+
+}
+
+#post_content {
+    font-size: 33px;
+    line-height: 88px;
+}
+
+
+.postTags_wrap { 
+
+position: absolute;
+bottom: 25px;
+width: 1200px;
+height: 300px;
+left: 50%;
+transform: translate(-50%);
+
+}
+
+.postTags_wrap p {
+font-size: 30px;
+}
+
+
 
 
 
@@ -470,17 +689,17 @@ body {
 
 <body>
 
-    <form method="POST" action="/update_post">
+    <!-- <form method="POST" action="/update_post"> -->
         <!-- 1번 -->
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" value="기존 제목"> <br>
+        <!-- <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" value="기존 제목"> <br> -->
         
         <!-- 2번 -->
-        <label for="content">Content:</label><br>
+        <!-- <label for="content">Content:</label><br>
         <textarea id="content" name="content">기존 내용</textarea>
         <input type="submit" value="Submit">
 
-    </form>
+    </form> -->
     
 
 
@@ -488,39 +707,161 @@ body {
 
     <div class="contents_wrap">
 
-
     <!-- 1. header -->
-        <!-- [할 것] 검은색 테두리 처리 하면 될 것 같음 -->
 
         <header class="header">
-            
+            <a href="/main"><img class="headerLogo" src="http://127.0.0.1:4000/img/main_Logo.png" alt="로고">
+            </a>
             <div class="boardItem_closeBtn_wrap">
-                <a href="http://127.0.0.1:4000/board/list/view" class="boardItem_closeBtn"> ❎ </a>
+                <a href="http://127.0.0.1:4000/board/list/view" class="boardItem_closeBtn"> <div>게시판목록</div> </a>
             </div>
             
         </header>
 
 
-    <!-- 2. main content-->
-        <section class="main_contents">
+
+    <!-- 2. sketchbook 과 동일 -->
+        <div class="SketchBook">
+
+        <!-- 1) main content -->
+            <section class="main_contents">
+
+                <!-- a) [맨 윗 줄] profile 이미지 | 제목 , id, exp  | 날씨 및 행동버튼 -->
+                <section class="topProfile_actionBnts_container">
+
+                    <!-- 1) 왼쪽 영역 : 프로필 사진 -->
+                    <div class="topProfile_container">
+                    
+                        <!-- <figure id="top_profile_image" class="profile_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);"> </figure> -->
+                        <figure id="top_profile_image" class="profile_image"> </figure>
+    
+                    </div>
+
+                    <!-- 2) 가운데 영역 : ㄱ) 윗부분 ㄴ) 아랫부분-->
+                    <div class="title_userID_wrap">
+
+                        <!-- ㄱ) 윗 부분 : a) 제목  -->
+                        <div class="title_nums_wrap"> 
+                            <form action="" class="title_input_form" id="editPost_title">
+                                <label for="title" class="postTile_title"> 제목 : </label> 
+                                <input type="text" class="text_input" id="post_title" name="title" value="기존 제목">
+                            </form>
+                        </div>
+                            <!-- [주의] -->
+                                <!-- 데이터가 들어오고 있지 않은 상태에서는 undefined 가 뜨게 됨 -->
+
+                        <!-- ㄴ) 아랫 부분 : a) 유저 아이디 b) exp 수 c) 좋아요 d) views  -->
+                        <div class="userName_nums_wrap"> 
+                        
+                            <!-- a) 유저 아이디 b) exp -->
+                                <span class="postInfo_1">
+                                    ID <span id="username"> </span>
+                                    (exp <span id="user_exp"> </span>)
+                                </span>
+                            
+                            <!-- c) 좋아요 d) views -->
+                                <span class="postInfo_2">
+                                    <span>좋아요</span> <span id="post_likes"> 0 </span>
+                                    <span style="margin-left: 20px;">views</span> <span id="post_views"> 0 </span>
+                                </span>
+                                
+                        </div>
+
+                    </div>    
+
+                    <!-- 3) 오른쪽 영역 : ㄱ) 버튼  -->
+                    <div class="top_userAction_Btns_wrap">
+                        <button class="savedBtn userAction_Btns" id="post_editBtn">✍ 수정완료 </button>
+                        <button class="likeBtn userAction_Btns" id="post_deleteBtn"> ❎ 삭제 </button>
+                    </div>
+
+                </section>
+
+
+                <!-- b) [두 번째 줄] 본문 이미지 -->
+                <div class="main_image_container">
+
+                        <figure id="posts_img" class="main_image" >
+    
+                        </figure>                        
+
+                </div>
+    
+
+                <!-- c) [세 번째 줄] text 설명  -->
+                <section class="main_textContent">
+
+                    <form id="editPost_content" class="postText_wrap">
+    
+                        <!-- <label for="content">Content:</label><br> -->
+                        <textarea id="editContent"  class="text_input" name="content" cols="30" rows="10" > </textarea>
+                        <!-- <input type="submit" value="Submit"> -->
+                            <!-- 이걸 button 으로 바꿔도 괜춘?  -->
+                    </form>
+                    
+                    <p id="post_content">
+                        <!-- 글 내용을 가져온다. ✅ -->
+                    </p>
+    
+                </section>
+
+
+
+                <!-- d) [네 번째 줄] 태그 수정 | 댓글 -->
+                    <!-- <section class="postTags_wrap"> -->
+
+                        <!-- <p>Edit Tags</p> -->
+
+                        <!-- <input type="text" id="tags" class="text_input" placeholder="Suggested : blue, alien, animal, animation, monster "> -->
+                        <!-- <div class="suggested_wrap" > <span class="suggested_tags" > Suggested : </span> <span class="suggested_tag_examples">friend, alien, animal, animation, monster</span> </div> -->    
+
+
+                    <!-- 2번째 수정 완료 버튼 -->
+                    <!-- <div class="bottom_userAction_Btns_wrap"> -->
+                        <!-- <button class="savedBtn userAction_Btns" id="post_editBtn">✍ 수정완료 </button> -->
+                    <!-- </div> -->
+
+                    </section>
+
+
+                <!-- e) [❓] more by Bethany Heck -->
+                    <!-- 생략 -->
+
+            </section>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 2. main content | sketch book 과 동일 -->
+        <!-- <section class="main_contents"> -->
 
 
             <!-- 1) top profile | saved | like -->
-                <section class="topProfile_actionBnts_container">
+                <!-- <section class="topProfile_actionBnts_container"> -->
 
                     <!-- 1) 왼쪽 영역 -->
-                <div class="topProfile_container">
+                <!-- <div class="topProfile_container"> -->
                     
                     <!-- <figure id="top_profile_image" class="profile_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);"> </figure> -->
-                    <figure id="top_profile_image" class="profile_image"> </figure>
+                    <!-- <figure id="top_profile_image" class="profile_image"> </figure> -->
 
-                </div>
+                <!-- </div> -->
 
                     <!-- 2) 가운데 영역 -->
-                    <div class="title_userID_wrap">
+                    <!-- <div class="title_userID_wrap"> -->
                         
                         <!-- 1) 윗 부분 : a) 제목 b) 좋아요 c) view 수 -->
-                        <div class="title_nums_wrap"> 
+                        <!-- <div class="title_nums_wrap">  -->
                             
                             <!-- 기존 코드 -->
                             <!-- 제목 <span id="post_title">  </span>  -->
@@ -529,95 +870,87 @@ body {
 
                             <!-- a) 'UPDATE' 코드 ✍✍ -->
 
-                            <form action="" id="editPost_title">
+                            <!-- <form action="" id="editPost_title">
                                 <label for="title"> 제목 </label> 
                                 <input type="text" id="post_title" name="title" value="기존 제목">
                             </form>
-
-                        
-                        
-                        </div>
+                        </div> -->
 
                         <!-- <div class="title_userName"> <span id="username"> 제목 | 좋아요 수 | views 수 |  </span> </div> -->
 
                         <!-- 2) 아랫 부분 : a) 유저 아이디 b) exp 수  -->
-                        <div class="userName_nums_wrap"> 
+                        <!-- <div class="userName_nums_wrap"> 
                             유저의 아이디 <span id="username"> </span>
                             exp <span id="user_exp"> </span>
-                        </div>
+                        </div> -->
 
-                    </div>
+                    <!-- </div> -->
 
                     <!-- 3) 오른쪽 영역 -->
-                    <div class="userAction_Btns_wrap">
+                    <!-- <div class="userAction_Btns_wrap">
                         <button class="savedBtn userAction_Btns" id="post_editBtn">✍ 수정완료 </button>
                         <button class="likeBtn userAction_Btns" id="post_deleteBtn"> ❎ 삭제 </button>
-                    </div>
+                    </div> -->
                     
 
 
-                </section>
+                <!-- </section> -->
 
 
             <!-- 2) 이미지 -->
-            <div class="main_image_container">
+            <!-- <div class="main_image_container"> -->
                 <!-- [과거 코드] -->
-                    <figure id="posts_img" class="main_image" >
+                    <!-- <figure id="posts_img" class="main_image" > -->
 
-                    </figure>
+                    <!-- </figure> -->
             
                 <!-- [시도] -->
                     
-            </div>
+            <!-- </div> -->
 
 
             <!-- 3) text 설명  -->
-            <section class="main_textContent">
+            <!-- <section class="main_textContent">
 
                 <form id="editPost_content">
 
                     <label for="content">Content:</label><br>
                     <textarea id="editContent" name="content"> </textarea>
-                    <input type="submit" value="Submit">
+                    <input type="submit" value="Submit"> -->
                         <!-- 이걸 button 으로 바꿔도 괜춘?  -->
-                </form>
+                <!-- </form>
                 
-                <p id="post_content">
+                <p id="post_content"> -->
                     <!-- 글 내용을 가져온다. ✅ -->
-                </p>
-
-
-
-
-
-                </section>
+                <!-- </p> -->
+                <!-- </section> -->
 
 
             <!-- 4) main profile -->
-            <section class="mainProfil_wrap">
+            <!-- <section class="mainProfil_wrap"> -->
 
                 <!-- 프로필 이미지 -->
-                <div class="mainProfile_container topProfile_container ">
+                <!-- <div class="mainProfile_container topProfile_container "> -->
                     <!-- <figure class="mainProfile profile_image" style="background-image: url(../backEnd/image/tomHardy_1686560832409.jpg);"> </figure> -->
-                    <figure id="main_profile_image" class="mainProfile profile_image" > </figure>
-                </div>
+                    <!-- <figure id="main_profile_image" class="mainProfile profile_image" > </figure> -->
+                <!-- </div> -->
                 
                 <!-- 실선 -->
-                <span class="mainProfile_border"> </span>
+                <!-- <span class="mainProfile_border"> </span> -->
                 
-            </section>
+            <!-- </section> -->
 
             <!-- 5) 댓글 -->
-                <section class="user_comment">
+                <!-- <section class="user_comment"> -->
 
                     
-                    <div class="comment_wrapper">
+                    <!-- <div class="comment_wrapper"> -->
 
                         <!-- 1) 기존에 작성된 댓글이 먼저 보임 -->
 
                             <!-- 보낼 곳 : comment 테이블의 connect_id, connect_writer, content -->
-                            <span>(이걸 지우면 문제가 되나? 우선 남김) 댓글 작성된 것 : <span id="comment_read"> </span> </span>
-                            <ul id="comment_container">
+                            <!-- <span>(이걸 지우면 문제가 되나? 우선 남김) 댓글 작성된 것 : <span id="comment_read"> </span> </span> -->
+                            <!-- <ul id="comment_container"> -->
                                 
                                 <!-- 댓글 li 로 들어오는 것들 👇👇👇 -->
                                 
@@ -629,37 +962,39 @@ body {
         
                                     <!-- d) 작성 시간 | 4 weeks ago -->
 
-                            </ul>
+                            <!-- </ul> -->
 
 
 
                         <!-- 2) 작성할 수 있는 comment 버튼 -->
-                        <div class="comment_write_container">
+                        <!-- <div class="comment_write_container"> -->
                             <!-- <label for=""> 댓글 작성란 : </label>  -->
-                            <input type="text" class="comment_write" id="comment_write"> 
-                            <button id="commentWriteBtn"> 댓글 작성 완료 </button> 
-                        </div>
+                            <!-- <input type="text" class="comment_write" id="comment_write">  -->
+                            <!-- <button id="commentWriteBtn"> 댓글 작성 완료 </button>  -->
+                        <!-- </div> -->
 
-                    </div>
+                    <!-- </div> -->
                         
-                </section>
+                <!-- </section> -->
 
 
             <!-- 6) more by Bethany Heck -->
-                <section class="recommendPosts">
+                <!-- <section class="recommendPosts"> -->
 
-                </section>
+                <!-- </section> -->
 
 
         </section>
 
 
-    <!-- 3. footer -->
-        <footer class="footer">
-            footer 입니다.
-        </footer>
 
-</div>
+
+    <!-- 3. footer -->
+        <!-- <footer class="footer"> -->
+            <!-- footer 입니다. -->
+        <!-- </footer> -->
+
+    </div>
 
 
 <!-- 👇👇👇👇👇👇👇👇 예전에 작성한 거 👇👇👇👇👇👇👇👇👇👇👇  -->

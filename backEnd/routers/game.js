@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const { islogin } = require('../middleware/isLogin')
 const { isRoom } = require("../middleware/isRoom")
-const { DrawingAdd, viewVideo, firstQuestionInput, DrawQueUpdate, QuestionView, TwoQuestionInput ,getUserinfo } = require('../controllers/gamePlay')
+const { DrawingAdd, viewVideo, firstQuestionInput, DrawQueUpdate, QuestionView, TwoQuestionInput ,getUserinfo,RoomDelete } = require('../controllers/gamePlay')
 
 const multer = require('multer');
+const { RoomDelete } = require('../controllers/gameReadyController');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -35,4 +36,5 @@ router.post('/DrawQueUpdate', islogin, isRoom, DrawQueUpdate)
 // 제시어를 불러온다.
 router.get('/QuestionView', islogin, isRoom, QuestionView)
 
+router.post('/RoomDelete',islogin,isRoom,RoomDelete)
 module.exports = router;

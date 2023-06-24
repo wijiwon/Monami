@@ -10,11 +10,11 @@ const { Op } = require('sequelize');    // 태그 검색 하기 위해 필요
 
 
 // [READ] 게시판에서 모든 게시글 보여주기 
-    exports.allBoardView = async (req, res) => {
-        // 보여주는 쿼리 쓰고 
+    // exports.allBoardView = async (req, res) => {
+    //     // 보여주는 쿼리 쓰고 
 
-        // res 하기 
-    }
+    //     // res 하기 
+    // }
 
 // [READ] 글쓰기 페이지 보여주기 
     exports.boardCreateView = async(req, res) => {

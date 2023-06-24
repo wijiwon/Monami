@@ -8,7 +8,6 @@ const { sequelize } = require("./models")
 const mainInfoRouter = require("./routers/mainRouter");
 const joinRouter = require("./routers/joinRouter");
 const loginRouter = require("./routers/loginRouter");
-// const mainloginaccessRouter = require("./routers/mainloginRouter");
 const gameReady = require('./routers/gameReadyRouter');
 const game = require('./routers/game');
 const logoutUser = require("./routers/logoutRouter");
@@ -19,9 +18,6 @@ const gamestartRouter = require("./routers/gameStartRouter");
 const boardrouter = require("./routers/boardRouter");
 const { Cookie } = require('express-session');
 
-
-// 수정중입니다 건들지 말아주세요
-// const cookieParser = require('cookie-parser');
 
 app.use(express.urlencoded({ extended: false }))
 
@@ -34,10 +30,6 @@ app.use("/img", express.static(path.join(__dirname, "image")));
 //     origin:"youdonghee.shop",
 //     credentials: true
 // }));
-
-// 수정중 입니다
-// app.use(cookieParser());
-
 
 
 app.use(cors({
@@ -63,7 +55,6 @@ app.use('/gameplay', game);
 app.use('/main',mainInfoRouter);
 app.use('/join',joinRouter);
 app.use('/login',loginRouter);
-// app.use('/mainlogin',mainloginaccessRouter);
 app.use('/logout',logoutUser);
 app.use("/mypage",mypageRouter);
 app.use("/admin",adminRouter);

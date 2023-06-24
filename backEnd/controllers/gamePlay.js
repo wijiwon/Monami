@@ -241,3 +241,16 @@ exports.getUserinfo= async(req,res)=>{
 
     
 }
+
+exports.RoomDelete = async(req,res)=>{
+    try {
+        const {id} =req.body;
+        console.log(id);
+        await Room.destroy({where:{id:id}});
+        res.json();
+
+    } catch (error) {
+        console.log("RoomDelete",error);
+    }
+
+}

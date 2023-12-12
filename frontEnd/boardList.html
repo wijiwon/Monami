@@ -32,7 +32,7 @@
         font-family: 'HSYuji-Regular';
         -webkit-font-smoothing: antialiased;
         background-color: #fffbae;
-        background-image: url(http://127.0.0.1:4000/img/backgroundIMG.png);
+        background-image: url(/img/backgroundIMG.png);
     background-size: cover;
     position: relative;
     }
@@ -301,7 +301,7 @@
             width: 1400px;
             height: 1300px;
             /* border: 3px solid; */
-            background-image: url(http://127.0.0.1:4000/img/sketchbook_3.png);
+            background-image: url(/img/sketchbook_3.png);
         }
         #posts_wrapper {
             overflow-x: hidden;
@@ -348,7 +348,7 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     margin: 12px;
-    background-image: url(http://127.0.0.1:4000/img/postDiv.png);
+    background-image: url(/img/postDiv.png);
     }
 
     .post_container div:first-child{
@@ -555,7 +555,7 @@
             <!-- <figure  class="main_logo" style="background-image: url(http://127.0.0.1:5502/Monami/backEnd/image/monami.png);"> -->
                 <!-- style 속성에서 url 은 꼭, 'http://127.0.0.1:5502/Monami/backEnd/image/monami.png' 이렇게 full name 으로 써야 함 -->
             <!-- </figure > -->
-            <a href="/main"><img class="main_logo" src="http://127.0.0.1:4000/img/main_Logo.png" alt="로고">
+            <a href="/main"><img class="main_logo" src="/img/main_Logo.png" alt="로고">
                 <!-- 로고 교체 필요함 ✅ -->
 
 
@@ -1023,8 +1023,8 @@
                             const post_image_container = document.createElement('div');
                             const post_image = document.createElement('figure');
                             post_image.classList.add('post_image');
-                            // post_image.style.backgroundImage = `url(http://127.0.0.1:4000/img/TV.png)`;    
-                            post_image.style.backgroundImage = `url(http://127.0.0.1:4000/img/${element.post_img})`;    
+                            // post_image.style.backgroundImage = `url(/img/TV.png)`;    
+                            post_image.style.backgroundImage = `url(/img/${element.post_img})`;    
                             post_image_container.appendChild(post_image)
 
                         // post_container 에 합치기

@@ -1,676 +1,728 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>game page</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <style>
-        /* 유지체 */
-        @font-face {
-            font-family: 'HSYuji-Regular';
-            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
+      /* 유지체 */
+      @font-face {
+        font-family: "HSYuji-Regular";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSYuji-Regular.woff")
+          format("woff");
+        font-weight: normal;
+        font-style: normal;
+      }
 
-        body {
-            background-color: #fffbae;
-            font-family: 'HSYuji-Regular';
-            margin: 0;
-            padding: 0;
-        }
+      body {
+        background-color: #fffbae;
+        font-family: "HSYuji-Regular";
+        margin: 0;
+        padding: 0;
+      }
 
-        .questions,
-        .drawings,
-        .gameResult {
-            width: 100vw;
-            height: 100vh;
-            /* border: 3px solid red; */
-            box-sizing: border-box;
-            display: none;
-            position: relative;
-        }
+      .questions,
+      .drawings,
+      .gameResult {
+        width: 100vw;
+        height: 100vh;
+        /* border: 3px solid red; */
+        box-sizing: border-box;
+        display: none;
+        position: relative;
+      }
 
-        .questions.pop,
-        .drawings.pop,
-        .gameResult.pop {
-            display: block;
-        }
+      .questions.pop,
+      .drawings.pop,
+      .gameResult.pop {
+        display: block;
+      }
 
-        .questions .row1,
-        .drawings .rows1,
-        .gameResult .row1 {
-            width: 100%;
-            height: 100px;
-            /* border: 1px solid forestgreen; */
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            left: 50%;
-            transform: translate(-50%);
-        }
+      .questions .row1,
+      .drawings .rows1,
+      .gameResult .row1 {
+        width: 100%;
+        height: 100px;
+        /* border: 1px solid forestgreen; */
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+      }
 
-        /* .row1 .users, */
-        .row1 .time,
+      /* .row1 .users, */
+      .row1 .time,
         /* .rows1 .users, */
         .rows1 .draw_time {
-            position: absolute;
-            right: 60px;
-            width: 100px;
-            height: 100px;
-            /* border: 1px solid slateblue; */
-            background-image: url(http://127.0.0.1:4000/img/timeDiv.png);
-            align-items: center;
-            display: flex;
-            justify-content: center;
-            font-size: 30px;
-            font-weight: 800;
-            color: white;
-        }
+        position: absolute;
+        right: 60px;
+        width: 100px;
+        height: 100px;
+        /* border: 1px solid slateblue; */
+        background-image: url(/img/timeDiv.png);
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: 800;
+        color: white;
+      }
 
-        .questions .row2 {
-            position: relative;
-            width: 100%;
-            height: 350px;
-            /* border: 1px solid hotpink; */
-        }
+      .questions .row2 {
+        position: relative;
+        width: 100%;
+        height: 350px;
+        /* border: 1px solid hotpink; */
+      }
 
-        .row2 .question1,
-        .row2 .question2 {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 330px;
-            /* border: 3px solid goldenrod; */
-            display: none;
-        }
+      .row2 .question1,
+      .row2 .question2 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 330px;
+        /* border: 3px solid goldenrod; */
+        display: none;
+      }
 
-        .question1.pop,
-        .question2.pop {
-            display: block;
-        }
+      .question1.pop,
+      .question2.pop {
+        display: block;
+      }
 
-        .question1.pop img {
-            width: 300px;
-            height: 300px;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
+      .question1.pop img {
+        width: 300px;
+        height: 300px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
 
-        .question2.pop {
-            background-image: url(http://127.0.0.1:4000/img/row2box.png);
-        }
+      .question2.pop {
+        background-image: url(/img/row2box.png);
+      }
 
-        .question2 #DrawVideo {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            /* border: 1px solid; */
-            width: 550px;
-            height: 290px;
-        }
+      .question2 #DrawVideo {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        /* border: 1px solid; */
+        width: 550px;
+        height: 290px;
+      }
 
-        .questions .row3 {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-            align-items: center;
-            width: 100%;
-            height: 100px;
-            /* border: 1px solid darkblue; */
-        }
+      .questions .row3 {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: 100px;
+        /* border: 1px solid darkblue; */
+      }
 
-        .row3 #question {
-            width: 700px;
-            height: 50px;
-            font-size: 25px;
-            font-family: 'HSYuji-Regular';
-            border-radius: 2em;
-        }
+      .row3 #question {
+        width: 700px;
+        height: 50px;
+        font-size: 25px;
+        font-family: "HSYuji-Regular";
+        border-radius: 2em;
+      }
 
-        .row3 button {
-            font-family: 'HSYuji-Regular';
-            border: 3px dashed white;
-            background-color: pink;
-            border-radius: 2em;
-            width: 100px;
-            height: 50px;
-            font-size: 20px;
-        }
+      .row3 button {
+        font-family: "HSYuji-Regular";
+        border: 3px dashed white;
+        background-color: pink;
+        border-radius: 2em;
+        width: 100px;
+        height: 50px;
+        font-size: 20px;
+      }
 
+      .rows1 .view_question {
+        width: 800px;
+        height: 70px;
+        /* border-bottom: 3px solid; */
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 70px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        background-image: url(/img/questionBottom.png);
+      }
 
-        .rows1 .view_question {
-            width: 800px;
-            height: 70px;
-            /* border-bottom: 3px solid; */
-            font-size: 30px;
-            font-weight: bold;
-            text-align: center;
-            line-height: 70px;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            background-image: url(http://127.0.0.1:4000/img/questionBottom.png);
-        }
+      .drawings .rows2 {
+        width: 100%;
+        height: 70%;
+        /* border: 1px solid darkmagenta; */
+        display: flex;
+        height: 445px;
+      }
 
-        .drawings .rows2 {
-            width: 100%;
-            height: 70%;
-            /* border: 1px solid darkmagenta; */
-            display: flex;
-            height: 445px;
-        }
+      .rows2 .colors,
+      .rows2 .brushs {
+        position: relative;
+        width: 20%;
+        height: 100%;
+        /* border: 1px solid violet; */
+      }
 
-        .rows2 .colors,
-        .rows2 .brushs {
-            position: relative;
-            width: 20%;
-            height: 100%;
-            /* border: 1px solid violet; */
-        }
+      .colors .colors2,
+      .brushs .brushs2 {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 170px;
+        height: 400px;
+        /* border: 2px solid; */
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+      }
 
-        .colors .colors2,
-        .brushs .brushs2 {
-            position: absolute;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 170px;
-            height: 400px;
-            /* border: 2px solid; */
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-around;
-        }
+      .colors .colors2 {
+        background-image: url(/img/colorBox.png);
+        left: 60%;
+      }
 
-        .colors .colors2 {
-            background-image: url(http://127.0.0.1:4000/img/colorBox.png);
-            left: 60%;
-        }
+      .brushs .brushs2 {
+        background-image: url(/img/brushBox.png);
+        left: 40%;
+      }
 
-        .brushs .brushs2 {
-            background-image: url(http://127.0.0.1:4000/img/brushBox.png);
-            left: 40%;
-        }
+      .colors2 .colorbox,
+      .brushs2 .brushbox {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        /* border: 1px solid; */
+        margin: 10px;
+        cursor: pointer;
+      }
 
-        .colors2 .colorbox,
-        .brushs2 .brushbox {
-            position: relative;
-            width: 50px;
-            height: 50px;
-            /* border: 1px solid; */
-            margin: 10px;
-            cursor: pointer;
-        }
+      .brushbox #eraser,
+      .brushbox #erasers {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
 
-        .brushbox #eraser,
-        .brushbox #erasers {
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
+      .brushbox #eraser {
+        background-image: url(/img/eraser.png);
+      }
 
-        .brushbox #eraser {
-            background-image: url(http://127.0.0.1:4000/img/eraser.png);
-        }
+      .brushbox #erasers {
+        background-image: url(/img/erasers.png);
+      }
 
-        .brushbox #erasers {
-            background-image: url(http://127.0.0.1:4000/img/erasers.png);
-        }
+      .colorbox .brushColor {
+        width: 90%;
+        height: 90%;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+      }
 
-        .colorbox .brushColor {
-            width: 90%;
-            height: 90%;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-        }
+      .brushbox .brushSize {
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
 
-        .brushbox .brushSize {
-            background-color: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+      .rows2 .bord {
+        position: relative;
+        width: 800px;
+        height: 445px;
+        /* border: 1px solid blue; */
+      }
 
-        .rows2 .bord {
-            position: relative;
-            width: 800px;
-            height: 445px;
-            /* border: 1px solid blue; */
-        }
+      .bord #canvas {
+        /* border: 1px solid; */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+      }
 
-        .bord #canvas {
-            /* border: 1px solid; */
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-        }
+      .drawings .rows3 {
+        position: relative;
+        width: 100%;
+        height: 10%;
+        /* border: 1px solid seagreen; */
+      }
 
-        .drawings .rows3 {
-            position: relative;
-            width: 100%;
-            height: 10%;
-            /* border: 1px solid seagreen; */
-        }
+      .rows3 button {
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        font-size: 20px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
 
-        .rows3 button {
-            position: absolute;
-            width: 100px;
-            height: 50px;
-            font-size: 20px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+      .gameResult .row1 {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 15%;
+        /* border: 1px solid forestgreen; */
+      }
 
-        .gameResult .row1 {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            height: 15%;
-            /* border: 1px solid forestgreen; */
-        }
+      .row1 .playerImage {
+        /* background-color: yellowgreen; */
+        width: 500px;
+        height: 80px;
+        background-image: url(/img/main_Logo.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+        cursor: pointer;
+      }
 
-        .row1 .playerImage {
-            /* background-color: yellowgreen; */
-            width: 500px;
-            height: 80px;
-            background-image: url(http://127.0.0.1:4000/img/main_Logo.png);
-            background-size: cover;
-            background-repeat: no-repeat;
-            cursor: pointer;
-        }
+      .gameResult .row2 {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 1000px;
+        height: 80%;
+        /* border: 1px solid hotpink; */
+      }
 
-        .gameResult .row2 {
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            width: 1000px;
-            height: 80%;
-            /* border: 1px solid hotpink; */
-        }
+      .row2 .player,
+      .row2 .gameBoard {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* border: 3px solid goldenrod; */
+      }
 
-        .row2 .player,
-        .row2 .gameBoard {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            /* border: 3px solid goldenrod; */
-        }
+      .row2 .player {
+        bottom: -35px;
+        width: 200px;
+        height: 350px;
+        background-image: url(/img/resultPlayer.png);
+      }
 
-        .row2 .player {
-            bottom: -35px;
-            width: 200px;
-            height: 350px;
-            background-image: url(http://127.0.0.1:4000/img/resultPlayer.png);
-        }
+      .playerName {
+        /* border: 1px solid; */
+        width: 120px;
+        height: 250px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        .playerName {
-            /* border: 1px solid; */
-            width: 120px;
-            height: 250px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      .playerName li {
+        cursor: pointer;
+        font-size: 20px;
+        list-style: none;
+      }
 
-        .playerName li {
-            cursor: pointer;
-            font-size: 20px;
-            list-style: none;
-        }
+      .playerName p {
+        font-size: 25px;
+        margin: 0;
+        margin-bottom: 10px;
+      }
 
-        .playerName p {
-            font-size: 25px;
-            margin: 0;
-            margin-bottom: 10px;
-        }
+      .row2 .gameBoard {
+        width: 700px;
+        height: 430px;
+        background-image: url(/img/TV.png);
+      }
 
-        .row2 .gameBoard {
-            width: 700px;
-            height: 430px;
-            background-image: url(http://127.0.0.1:4000/img/TV.png);
-        }
+      #nickname {
+        width: 550px;
+        height: 30px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: absolute;
+        top: 110px;
+        font-size: 25px;
+      }
 
-        #nickname {
-            width: 550px;
-            height: 30px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            position: absolute;
-            top: 110px;
-            font-size: 25px;
-        }
+      #DrawresultVideo {
+        position: absolute;
+        width: 550px;
+        height: 245px;
+        /* border: 1px solid; */
+        background-color: white;
+        bottom: 45px;
+      }
 
-        #DrawresultVideo {
-            position: absolute;
-            width: 550px;
-            height: 245px;
-            /* border: 1px solid; */
-            background-color: white;
-            bottom: 45px;
-        }
+      .gameResult .row3 {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        left: 50%;
+        transform: translate(-50%);
+        width: 95%;
+        height: 15%;
+        /* border: 1px solid darkblue; */
+        position: absolute;
+        bottom: 0;
+      }
 
-        .gameResult .row3 {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            left: 50%;
-            transform: translate(-50%);
-            width: 95%;
-            height: 15%;
-            /* border: 1px solid darkblue; */
-            position: absolute;
-            bottom: 0;
-        }
+      .boardGR {
+        width: 1500px;
+        height: 690px;
+        /* border: 1px solid violet; */
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        background-image: url(/img/boardGR.png);
+      }
 
-        .boardGR {
-            width: 1500px;
-            height: 690px;
-            /* border: 1px solid violet; */
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%);
-            background-image: url(http://127.0.0.1:4000/img/boardGR.png);
-        }
+      .inboard {
+        position: absolute;
+        left: 50%;
+        top: 50px;
+        transform: translate(-50%);
+        /* border: 3px solid; */
+        width: 1350px;
+        height: 580px;
+      }
 
-        .inboard {
-            position: absolute;
-            left: 50%;
-            top: 50px;
-            transform: translate(-50%);
-            /* border: 3px solid; */
-            width: 1350px;
-            height: 580px;
-        }
+      .inbord {
+        width: 790px;
+        height: 430px;
+        /* border: 3px solid; */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-image: url(/img/canvasDiv.png);
+      }
 
-        .inbord {
-            width: 790px;
-            height: 430px;
-            /* border: 3px solid; */
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background-image: url(http://127.0.0.1:4000/img/canvasDiv.png);
-        }
+      .backImg {
+        position: absolute;
+        left: 50%;
+        top: 50px;
+        transform: translate(-50%);
+        /* border: 3px solid; */
+        width: 1350px;
+        height: 550px;
+      }
 
-        .backImg {
-            position: absolute;
-            left: 50%;
-            top: 50px;
-            transform: translate(-50%);
-            /* border: 3px solid; */
-            width: 1350px;
-            height: 550px;
-        }
+      .kyo,
+      .leejung,
+      .talju,
+      .Ybun,
+      .Pbun,
+      .Bbun {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+      }
 
-        .kyo,
-        .leejung,
-        .talju,
-        .Ybun,
-        .Pbun,
-        .Bbun {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-        }
+      .eraserImg {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+      }
 
-        .eraserImg {
-            position: absolute;
-            width: 150px;
-            height: 150px;
-        }
+      .kyo {
+        top: 10px;
+        left: 20px;
+        background-image: url(/img/kyo.png);
+      }
 
-        .kyo {
-            top: 10px;
-            left: 20px;
-            background-image: url(http://127.0.0.1:4000/img/kyo.png);
-        }
+      .leejung {
+        bottom: 65px;
+        right: -23px;
+        background-image: url(/img/leejung.png);
+      }
 
-        .leejung {
-            bottom: 65px;
-            right: -23px;
-            background-image: url(http://127.0.0.1:4000/img/leejung.png);
-        }
+      .talju {
+        bottom: 98px;
+        left: -32px;
+        background-image: url(/img/talju.png);
+      }
 
-        .talju {
-            bottom: 98px;
-            left: -32px;
-            background-image: url(http://127.0.0.1:4000/img/talju.png);
-        }
+      .eraserImg {
+        bottom: -59px;
+        right: 80px;
+        background-image: url(/img/eraserImg.png);
+      }
 
-        .eraserImg {
-            bottom: -59px;
-            right: 80px;
-            background-image: url(http://127.0.0.1:4000/img/eraserImg.png);
-        }
+      .Ybun {
+        bottom: -77px;
+        right: 228px;
+        background-image: url(/img/Ybun.png);
+      }
 
-        .Ybun {
-            bottom: -77px;
-            right: 228px;
-            background-image: url(http://127.0.0.1:4000/img/Ybun.png);
-        }
+      .Pbun {
+        bottom: -77px;
+        right: 329px;
+        background-image: url(/img/Pbun.png);
+      }
 
-        .Pbun {
-            bottom: -77px;
-            right: 329px;
-            background-image: url(http://127.0.0.1:4000/img/Pbun.png);
-        }
+      .Bbun {
+        bottom: -83px;
+        left: 200px;
 
-        .Bbun {
-            bottom: -83px;
-            left: 200px;
-
-            background-image: url(http://127.0.0.1:4000/img/Bbun.png);
-        }
+        background-image: url(/img/Bbun.png);
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <!-- 첫 제시어 입력하는 화면 -->
     <div class="questions pop">
-        <!-- row1: 최상단영역 - 총인원(좌), 라운드 시간(우)이 표시된다. -->
-        <div class="boardGR">
-            <div class="backImg">
-                <div class="kyo"></div>
-                <div class="leejung"></div>
-                <div class="talju"></div>
-                <div class="eraserImg"></div>
-                <div class="Ybun"></div>
-                <div class="Pbun"></div>
-                <div class="Bbun"></div>
-            </div>
-            <div class="inboard">
-
-                <div class="row1">
-                    <!-- <div class="users">유저인원</div> -->
-                    <div class="time"></div>
-                </div>
-                <!-- row2: 중간 영역 - 첫 제시어 입력 시 로딩이 나오고, 다음 제시어 입력 시, 그림이 나온다. -->
-                <div class="row2">
-                    <!-- question1: 첫 제시어 입력 시 나타나는 로딩화면 -->
-                    <div class="question1 pop">
-                        <img style="width: 300px; height: 300px;" src="http://127.0.0.1:4000/img/sample.gif" alt="로딩">
-                    </div>
-                    <!-- question2: 제시어 입력 시 나타나는 그림(영상) -->
-                    <div class="question2">
-                        <video id="DrawVideo" src=""></video>
-                    </div>
-                </div>
-                <!-- row3: 하단영역 - 제시어를 입력하는 영역. 제시어를 입력하는 input과 버튼이 있다. -->
-                <div class="row3">
-                    <div>
-                        <input type="text" name="question" id="question" placeholder="제시어를 입력하세요!">
-                        <!-- <button>등록</button> -->
-                    </div>
-                </div>
-            </div>
+      <!-- row1: 최상단영역 - 총인원(좌), 라운드 시간(우)이 표시된다. -->
+      <div class="boardGR">
+        <div class="backImg">
+          <div class="kyo"></div>
+          <div class="leejung"></div>
+          <div class="talju"></div>
+          <div class="eraserImg"></div>
+          <div class="Ybun"></div>
+          <div class="Pbun"></div>
+          <div class="Bbun"></div>
         </div>
+        <div class="inboard">
+          <div class="row1">
+            <!-- <div class="users">유저인원</div> -->
+            <div class="time"></div>
+          </div>
+          <!-- row2: 중간 영역 - 첫 제시어 입력 시 로딩이 나오고, 다음 제시어 입력 시, 그림이 나온다. -->
+          <div class="row2">
+            <!-- question1: 첫 제시어 입력 시 나타나는 로딩화면 -->
+            <div class="question1 pop">
+              <img
+                style="width: 300px; height: 300px"
+                src="/img/sample.gif"
+                alt="로딩"
+              />
+            </div>
+            <!-- question2: 제시어 입력 시 나타나는 그림(영상) -->
+            <div class="question2">
+              <video id="DrawVideo" src=""></video>
+            </div>
+          </div>
+          <!-- row3: 하단영역 - 제시어를 입력하는 영역. 제시어를 입력하는 input과 버튼이 있다. -->
+          <div class="row3">
+            <div>
+              <input
+                type="text"
+                name="question"
+                id="question"
+                placeholder="제시어를 입력하세요!"
+              />
+              <!-- <button>등록</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- 그림 그리는 화면 -->
     <div class="drawings">
-        <div class="boardGR">
-            <div class="backImg">
-                <div class="kyo"></div>
-                <div class="leejung"></div>
-                <div class="talju"></div>
-                <div class="eraserImg"></div>
-                <div class="Ybun"></div>
-                <div class="Pbun"></div>
-                <div class="Bbun"></div>
-            </div>
-            <div class="inboard">
-                <div class="rows1">
-                    <!-- <div class="users">유저인원</div> -->
-                    <div class="view_question">넘겨받은 제시어</div>
-                    <div class="draw_time"></div>
-                </div>
-                <div class="rows2">
-                    <div class="colors">
-                        <div class="colors2">
-                            <div class="colorbox">
-                                <div style="background-color: black;" class="brushColor" data-color="black"></div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: red;" class="brushColor" data-color="red"></div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: pink;" class="brushColor" data-color="pink"></div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: orangered;" class="brushColor" data-color="orangered">
-                                </div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: yellow;" class="brushColor" data-color="yellow"></div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: green;" class="brushColor" data-color="green"></div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: aqua;" class="brushColor" data-color="aqua"></div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: skyblue;" class="brushColor" data-color="skyblue"></div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: blue;" class="brushColor" data-color="blue"></div>
-                            </div>
-                            <div class="colorbox">
-                                <div style="background-color: purple;" class="brushColor" data-color="purple"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bord">
-                        <div class="inbord">
-                            <canvas id="canvas"></canvas>
-                        </div>
-                    </div>
-                    <div class="brushs">
-                        <div class="brushs2">
-                            <!-- 지우개 부분. 아직 구현 안됨 -->
-                            <div class="brushbox">
-                                <div class="brushColor" id="eraser" data-color="white"></div>
-                            </div>
-                            <div class="brushbox">
-                                <div id="erasers"></div>
-                            </div>
-                            <div class="brushbox" data-size="5">
-                                <div style="width: 5px; height: 5px;" class="brushSize"></div>
-                            </div>
-                            <div class="brushbox" data-size="10">
-                                <div style="width: 10px; height: 10px;" class="brushSize"></div>
-                            </div>
-                            <div class="brushbox" data-size="15">
-                                <div style="width: 15px; height: 15px;" class="brushSize"></div>
-                            </div>
-                            <div class="brushbox" data-size="20">
-                                <div style="width: 20px; height: 20px;" class="brushSize"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="boardGR">
+        <div class="backImg">
+          <div class="kyo"></div>
+          <div class="leejung"></div>
+          <div class="talju"></div>
+          <div class="eraserImg"></div>
+          <div class="Ybun"></div>
+          <div class="Pbun"></div>
+          <div class="Bbun"></div>
         </div>
+        <div class="inboard">
+          <div class="rows1">
+            <!-- <div class="users">유저인원</div> -->
+            <div class="view_question">넘겨받은 제시어</div>
+            <div class="draw_time"></div>
+          </div>
+          <div class="rows2">
+            <div class="colors">
+              <div class="colors2">
+                <div class="colorbox">
+                  <div
+                    style="background-color: black"
+                    class="brushColor"
+                    data-color="black"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: red"
+                    class="brushColor"
+                    data-color="red"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: pink"
+                    class="brushColor"
+                    data-color="pink"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: orangered"
+                    class="brushColor"
+                    data-color="orangered"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: yellow"
+                    class="brushColor"
+                    data-color="yellow"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: green"
+                    class="brushColor"
+                    data-color="green"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: aqua"
+                    class="brushColor"
+                    data-color="aqua"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: skyblue"
+                    class="brushColor"
+                    data-color="skyblue"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: blue"
+                    class="brushColor"
+                    data-color="blue"
+                  ></div>
+                </div>
+                <div class="colorbox">
+                  <div
+                    style="background-color: purple"
+                    class="brushColor"
+                    data-color="purple"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div class="bord">
+              <div class="inbord">
+                <canvas id="canvas"></canvas>
+              </div>
+            </div>
+            <div class="brushs">
+              <div class="brushs2">
+                <!-- 지우개 부분. 아직 구현 안됨 -->
+                <div class="brushbox">
+                  <div class="brushColor" id="eraser" data-color="white"></div>
+                </div>
+                <div class="brushbox">
+                  <div id="erasers"></div>
+                </div>
+                <div class="brushbox" data-size="5">
+                  <div style="width: 5px; height: 5px" class="brushSize"></div>
+                </div>
+                <div class="brushbox" data-size="10">
+                  <div
+                    style="width: 10px; height: 10px"
+                    class="brushSize"
+                  ></div>
+                </div>
+                <div class="brushbox" data-size="15">
+                  <div
+                    style="width: 15px; height: 15px"
+                    class="brushSize"
+                  ></div>
+                </div>
+                <div class="brushbox" data-size="20">
+                  <div
+                    style="width: 20px; height: 20px"
+                    class="brushSize"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <!-- 결과 보여주는 화면 -->
     <div class="gameResult">
-        <div class="boardGR">
-            <div class="backImg">
-                <div class="kyo"></div>
-                <div class="leejung"></div>
-                <div class="talju"></div>
-                <div class="eraserImg"></div>
-                <div class="Ybun"></div>
-                <div class="Pbun"></div>
-                <div class="Bbun"></div>
-            </div>
-            <div class="inboard">
-                <div class="row1">
-                    <!-- 로고 누르면 메인페이지로 이동 -->
-                    <a href="/main">
-                        <div class="playerImage"></div>
-                    </a>
-                </div>
-                <div class="row2">
-                    <!-- Player 정보 -->
-                    <div class="player">
-                        <div class="playerName">
-                            <p>플레이어명</p>
-                            <li>asdasd</li>
-                        </div>
-
-                    </div>
-                    <!-- Game 결과 -->
-                    <div class="gameBoard">
-                        <div id="nickname">asdasdasdasdaasdasd</div>
-                        <video id="DrawresultVideo" src=""></video>
-                        <!-- <canvas id="resultCanvas"></canvas> -->
-                    </div>
-                </div>
-                <div class="row3">
-                    <button id="restart">방나가기</button>
-                </div>
-            </div>
+      <div class="boardGR">
+        <div class="backImg">
+          <div class="kyo"></div>
+          <div class="leejung"></div>
+          <div class="talju"></div>
+          <div class="eraserImg"></div>
+          <div class="Ybun"></div>
+          <div class="Pbun"></div>
+          <div class="Bbun"></div>
         </div>
+        <div class="inboard">
+          <div class="row1">
+            <!-- 로고 누르면 메인페이지로 이동 -->
+            <a href="/main">
+              <div class="playerImage"></div>
+            </a>
+          </div>
+          <div class="row2">
+            <!-- Player 정보 -->
+            <div class="player">
+              <div class="playerName">
+                <p>플레이어명</p>
+                <li>asdasd</li>
+              </div>
+            </div>
+            <!-- Game 결과 -->
+            <div class="gameBoard">
+              <div id="nickname">asdasdasdasdaasdasd</div>
+              <video id="DrawresultVideo" src=""></video>
+              <!-- <canvas id="resultCanvas"></canvas> -->
+            </div>
+          </div>
+          <div class="row3">
+            <button id="restart">방나가기</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-</body>
-<script>
-
+  </body>
+  <script>
     let gmaeplayer = [];
     let replay = [];
     // const socket = io.connect('/');
-    const playerName = document.querySelector('.playerName');
+    const playerName = document.querySelector(".playerName");
     console.log("d");
     // socket.on('THrowGameMember', (tmp) => {
     //     console.log(tmp);
@@ -695,40 +747,40 @@
     canvas.height = 360;
 
     //브러쉬 사이즈와 컬러들을 담는 div를 불러오는 변수.
-    const brushSize = document.querySelector('.brushs2');
-    const brushColor = document.querySelector('.colors2');
+    const brushSize = document.querySelector(".brushs2");
+    const brushColor = document.querySelector(".colors2");
 
-    let drawing = false;        // 기본 값은 종료상태이다.
+    let drawing = false; // 기본 값은 종료상태이다.
 
     // ----- 브러쉬 사이즈를 변경하는 함수 ------------------------------------------------------------------
     //------- 읽어온 브러쉬 사이즈를 업데이트 하는 함수 --------------------------------
     let updateBrushSize = (e) => {
-        ctx.lineWidth = e;
-    }
+      ctx.lineWidth = e;
+    };
     //-------------------------------------------------------------------------------
     //------- 읽어온 브러쉬 색상을 업데이트 하는 함수 ---------------------------------
     let updateBrushColor = (e) => {
-        ctx.strokeStyle = e;
-    }
+      ctx.strokeStyle = e;
+    };
     //-------------------------------------------------------------------------------
 
     //------ HTML에 저장된 브러쉬 사이즈를 읽어오는 함수 -------------------------------
     const changeBrush = (e) => {
-        // 클릭으로 선택한 target의 클래스가 brushSize가 아니라면 return
-        if (!e.target.classList.contains("brushbox")) return;
-        // dataset.size: 'datasetd'을 사용하면 해당 요소의 'data-'접두사를 가진 속성의 값을 가져올 수 있다.
-        // 따라서, 'data-size'의 속성을 읽어올 수 있는 것이다.
-        const brushSized = e.target.dataset.size;
-        updateBrushSize(brushSized);
-    }
+      // 클릭으로 선택한 target의 클래스가 brushSize가 아니라면 return
+      if (!e.target.classList.contains("brushbox")) return;
+      // dataset.size: 'datasetd'을 사용하면 해당 요소의 'data-'접두사를 가진 속성의 값을 가져올 수 있다.
+      // 따라서, 'data-size'의 속성을 읽어올 수 있는 것이다.
+      const brushSized = e.target.dataset.size;
+      updateBrushSize(brushSized);
+    };
     // ------------------------------------------------------------------------------
     // ------- HTML에 저장된 브러쉬 컬러를 읽어오는 함수 ------------------------------
     const changeColor = (e) => {
-        if (!e.target.classList.contains("brushColor")) return;
+      if (!e.target.classList.contains("brushColor")) return;
 
-        const selectColor = e.target.dataset.color;
-        updateBrushColor(selectColor);
-    }
+      const selectColor = e.target.dataset.color;
+      updateBrushColor(selectColor);
+    };
     // ------------------------------------------------------------------------------
     //-----------------------------------------------------------------------------------------------------
 
@@ -741,52 +793,52 @@
     // ----------- 그림을 그리는 함수 -----------------------------------------------------------------------
     // ------- 그림 그리는 시작을 하는 함수 ----------------------
     const startDrawing = (e) => {
-        drawing = true;
-        // getBoundingClientRect: 캔버스 요소의 위치와 크기를 가져온다.
-        // canvas영역과의 간격을 없애기 위해 선택한 좌표값에서 빼준다.
-        const canvasRect = canvas.getBoundingClientRect();
-        lastX = e.clientX - canvasRect.left;
-        lastY = e.clientY - canvasRect.top;
-        // console.log(e)
-    }
+      drawing = true;
+      // getBoundingClientRect: 캔버스 요소의 위치와 크기를 가져온다.
+      // canvas영역과의 간격을 없애기 위해 선택한 좌표값에서 빼준다.
+      const canvasRect = canvas.getBoundingClientRect();
+      lastX = e.clientX - canvasRect.left;
+      lastY = e.clientY - canvasRect.top;
+      // console.log(e)
+    };
     //----------------------------------------------------------
 
     // ------ 그림 그리는 동작을 종료하는 함수 ------------------
     const stopDrawing = () => {
-        drawing = false;
-    }
+      drawing = false;
+    };
     // -------------------------------------------------------
 
     // ------- 그림 그리는 동작을 하는 함수 -----------------------
     const draw = (e) => {
-        // console.log(e);
-        // const x = e.offsetX;
-        // const y = e.offsetY;
-        const canvasRect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - canvasRect.left;
-        const mouseY = e.clientY - canvasRect.top;
+      // console.log(e);
+      // const x = e.offsetX;
+      // const y = e.offsetY;
+      const canvasRect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - canvasRect.left;
+      const mouseY = e.clientY - canvasRect.top;
 
-        if (!drawing) return;
-        // beginPath: 경로를 시작하는 메소드. 현재 경로가 초기화 되고, 이후의 그리기 명령으로 새로운 경로를 생성한다.
-        ctx.beginPath();
-        // moveTo: 시작점 설정
-        ctx.moveTo(lastX, lastY);
-        // lineTo: 끝점 설정
-        ctx.lineTo(mouseX, mouseY);
-        // stroke: 선 그리기
-        ctx.stroke();
-        // lineWidth: 선 굵기를 설정
-        // ctx.lineWidth = 10;
-        // lineCap: 선의 끝 모양 설정 (butt: 선 끝이 직선(기본값) / round: 선 끝이 반원 / square: 선 끝이 사각형)
-        ctx.lineCap = "round";
-        // strokeStyle: 선 색상 설정
-        // ctx.strokeStyle = "black";
+      if (!drawing) return;
+      // beginPath: 경로를 시작하는 메소드. 현재 경로가 초기화 되고, 이후의 그리기 명령으로 새로운 경로를 생성한다.
+      ctx.beginPath();
+      // moveTo: 시작점 설정
+      ctx.moveTo(lastX, lastY);
+      // lineTo: 끝점 설정
+      ctx.lineTo(mouseX, mouseY);
+      // stroke: 선 그리기
+      ctx.stroke();
+      // lineWidth: 선 굵기를 설정
+      // ctx.lineWidth = 10;
+      // lineCap: 선의 끝 모양 설정 (butt: 선 끝이 직선(기본값) / round: 선 끝이 반원 / square: 선 끝이 사각형)
+      ctx.lineCap = "round";
+      // strokeStyle: 선 색상 설정
+      // ctx.strokeStyle = "black";
 
-        lastX = mouseX;
-        lastY = mouseY;
-        // 그림을 그릴 때 마다 그림그리는 동작을 기록한다.
-        // recordedFrames.push(canvas.toDataURL('image/webp', 1.0));
-    }
+      lastX = mouseX;
+      lastY = mouseY;
+      // 그림을 그릴 때 마다 그림그리는 동작을 기록한다.
+      // recordedFrames.push(canvas.toDataURL('image/webp', 1.0));
+    };
     // 기본 선 굵기, 컬러 값
     ctx.lineWidth = 10;
     ctx.strokeStyle = "black";
@@ -795,10 +847,10 @@
     // gamestep: 게임 단계
     let gamestep = 1;
     //----------- 그림 그릴 마우스의 상태지정 ---------------------------------------------------------------
-    canvas.addEventListener("mousedown", startDrawing);     //마우스를 누르면 대기상태가 된다.
-    canvas.addEventListener("mouseup", stopDrawing);     //마우스 떼면 종료상태가 된다.
-    canvas.addEventListener("mouseout", stopDrawing);     //마우스가 캔버스 영역에서 나가면 종료상태가 된다.
-    canvas.addEventListener("mousemove", draw);     //마우스를 누른 상태로 움직이면 그림그리는 함수가 동작한다.
+    canvas.addEventListener("mousedown", startDrawing); //마우스를 누르면 대기상태가 된다.
+    canvas.addEventListener("mouseup", stopDrawing); //마우스 떼면 종료상태가 된다.
+    canvas.addEventListener("mouseout", stopDrawing); //마우스가 캔버스 영역에서 나가면 종료상태가 된다.
+    canvas.addEventListener("mousemove", draw); //마우스를 누른 상태로 움직이면 그림그리는 함수가 동작한다.
     //-----------------------------------------------------------------------------------------------------
 
     // 그림그리기는 동작을 기록하기 위한 배열 생성
@@ -807,85 +859,95 @@
 
     // 비디오 녹화 시작
     async function startRecording() {
-        const canvasStream = canvas.captureStream();
-        mediaRecorder = new MediaRecorder(canvasStream, { mimeType: 'video/webm' });
+      const canvasStream = canvas.captureStream();
+      mediaRecorder = new MediaRecorder(canvasStream, {
+        mimeType: "video/webm",
+      });
 
-        mediaRecorder.ondataavailable = (e) => {
-            recordedFrames.push(e.data);
-            console.log("끝났음?")
-        };
+      mediaRecorder.ondataavailable = (e) => {
+        recordedFrames.push(e.data);
+        console.log("끝났음?");
+      };
 
-        mediaRecorder.onstop = () => {
-            // stop() 메서드 호출이 완료된 후에 실행되는 비동기 작업 처리
-            clearCanvas();
-            createVideoURL().then(() => {
-                console.log("그림이 성공적으로 생성되었다.")
-                // 비디오 URL 생성 후 추가 작업 수행
-                // createVideoURL();
-            }).catch((error) => {
-                console.log("앙금모띠~")
-                console.log(error);
-                // 에러 처리
-            });
-        };
-        mediaRecorder.start();
+      mediaRecorder.onstop = () => {
+        // stop() 메서드 호출이 완료된 후에 실행되는 비동기 작업 처리
+        clearCanvas();
+        createVideoURL()
+          .then(() => {
+            console.log("그림이 성공적으로 생성되었다.");
+            // 비디오 URL 생성 후 추가 작업 수행
+            // createVideoURL();
+          })
+          .catch((error) => {
+            console.log("앙금모띠~");
+            console.log(error);
+            // 에러 처리
+          });
+      };
+      mediaRecorder.start();
     }
 
     let anggimo = 0;
 
     async function createVideoURL() {
-        console.log("createVideoURL", "createVideoURL emfdjdha");
+      console.log("createVideoURL", "createVideoURL emfdjdha");
 
-        try {
-            const videoBlob = new Blob(recordedFrames, { type: 'video/webm' });
-            // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
-            console.log("dshjdfhjkdfhjkadfshjkadfshjkladsjkhl", videoBlob);
-            const formData = new FormData();
-            formData.append('file', videoBlob);
+      try {
+        const videoBlob = new Blob(recordedFrames, { type: "video/webm" });
+        // FormData 객체를 사용하여 videoBlob을 전송하도록 수정
+        console.log("dshjdfhjkdfhjkadfshjkadfshjkladsjkhl", videoBlob);
+        const formData = new FormData();
+        formData.append("file", videoBlob);
 
-            // setTimeout(() => {
-            //     const response = axios.post('http://127.0.0.1:4000/gameplay', formData, {
-            //     withCredentials: true,
-            //     "Content-Type": "multipart/form-data"
-            // });
-            // }, 3000);
-            const response = await axios.post('/gameplay', formData, {
-                withCredentials: true,
-                "Content-Type": "multipart/form-data"
-            });
-            console.log("데이터 제에발 와주라....", response);
-            const { drawing, lastDrawing } = response.data;
-            console.log("내가 방금 그린 그림의 id -", lastDrawing);
-            anggimo = lastDrawing;
-            console.log("내가 방금 그린 그림의 data", drawing);
-            console.log("내 id 값 - ", drawing.user_primaryKey);
-            console.log("그림저장완!!!!!!!!!!!");
+        // setTimeout(() => {
+        //     const response = axios.post('http://127.0.0.1:4000/gameplay', formData, {
+        //     withCredentials: true,
+        //     "Content-Type": "multipart/form-data"
+        // });
+        // }, 3000);
+        const response = await axios.post("/gameplay", formData, {
+          withCredentials: true,
+          "Content-Type": "multipart/form-data",
+        });
+        console.log("데이터 제에발 와주라....", response);
+        const { drawing, lastDrawing } = response.data;
+        console.log("내가 방금 그린 그림의 id -", lastDrawing);
+        anggimo = lastDrawing;
+        console.log("내가 방금 그린 그림의 data", drawing);
+        console.log("내 id 값 - ", drawing.user_primaryKey);
+        console.log("그림저장완!!!!!!!!!!!");
 
-            console.log(viewIndex);
-            // console.log("createVideoURL data", response.data);
+        console.log(viewIndex);
+        // console.log("createVideoURL data", response.data);
 
-            // await axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
-            //     withCredentials: true
-            // } );
+        // await axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+        //     withCredentials: true
+        // } );
 
-            // setTimeout(() => {
-            //     axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
-            //     withCredentials: true
-            // });    
-            // }, 4000);
+        // setTimeout(() => {
+        //     axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
+        //     withCredentials: true
+        // });
+        // }, 4000);
 
-            await axios.post('/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
-                withCredentials: true
-            });
-            console.log("그림저장완!!!!!!!!!!!");
+        await axios.post(
+          "/gameplay/DrawQueUpdate",
+          {
+            painter: drawing.user_primaryKey,
+            lastDrawing: lastDrawing,
+            viewIndex: viewIndex,
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        console.log("그림저장완!!!!!!!!!!!");
 
-
-            console.log("비디오 URL 생성 완료");
-        } catch (error) {
-            console.log(error);
-        }
+        console.log("비디오 URL 생성 완료");
+      } catch (error) {
+        console.log(error);
+      }
     }
-
 
     // async function createVideoURL() {
     //     console.log("createVideoURL", "createVideoURL emfdjdha")
@@ -896,22 +958,18 @@
     //         const formData = new FormData();
     //         formData.append('file', videoBlob);
 
-
     //         const response = await axios.post('http://127.0.0.1:4000/gameplay', formData, {
     //             withCredentials: true,
     //             "Content-Type": "multipart/form-data"
     //         })
     //         console.log("데이터 제에발 와주라....", response);
-    //         const { drawing, lastDrawing } = response.data;    
+    //         const { drawing, lastDrawing } = response.data;
     //         console.log("내가 방금 그린 그림의 id -", lastDrawing);
     //         console.log("내가 방금 그린 그림의 data", drawing);
     //         console.log("내 id 값 - ", drawing.user_primaryKey);
     //         console.log("그림저장완!!!!!!!!!!!");
 
     //                 // console.log("createVideoURL data", response.data);
-
-
-
 
     //                 axios.post('http://127.0.0.1:4000/gameplay/DrawQueUpdate', { painter: drawing.user_primaryKey, lastDrawing: lastDrawing, viewIndex: viewIndex }, {
     //                     withCredentials: true
@@ -920,9 +978,7 @@
     //         console.log(error);
     //     }
 
-
     //     //console.log("videoURL", data);
-
 
     //     // .then((e) => {
     //     //     console.log("정신차려어어억 언제까지 붙잡을거야아아악",e.data.lastDrawing)
@@ -936,95 +992,97 @@
 
     // 비디오 재생
     async function playVideo(index) {
-        const videoElement = document.getElementById('DrawVideo');
-        console.log("비디오재생의 인덱스느느느느느느는", index)
+      const videoElement = document.getElementById("DrawVideo");
+      console.log("비디오재생의 인덱스느느느느느느는", index);
 
-        try {
-            const response = await axios.post('/gameplay/viewVideo', { Drawid: index }, {
-                responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
-                withCredentials: true
-            });
-            const videoData = new Blob([response.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
-            console.log("그림data----------", response.data)
-            const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
-            videoElement.src = videoSrc;
-            videoElement.play();
-            // 할당한 url을 해제한다.
-            URL.revokeObjectURL(videoData);
+      try {
+        const response = await axios.post(
+          "/gameplay/viewVideo",
+          { Drawid: index },
+          {
+            responseType: "arraybuffer", // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+            withCredentials: true,
+          }
+        );
+        const videoData = new Blob([response.data], { type: "video/webm" }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+        console.log("그림data----------", response.data);
+        const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+        videoElement.src = videoSrc;
+        videoElement.play();
+        // 할당한 url을 해제한다.
+        URL.revokeObjectURL(videoData);
+      } catch (error) {
+        console.log("playVideo 오류");
+        console.log(error);
+      }
 
-        } catch (error) {
-            console.log("playVideo 오류")
-            console.log(error)
+      // axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+      //     responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+      //     withCredentials: true
+      // }).then((e) => {
+      //     const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+      //     console.log("그림data----------",e.data)
+      //     const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+      //     videoElement.src = videoSrc;
+      //     videoElement.play();
+      //     // 할당한 url을 해제한다.
+      //     URL.revokeObjectURL(videoData);
+      // }).catch((err) => {
+      //     console.log(err)
+      // })
 
-        }
-
-        // axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
-        //     responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
-        //     withCredentials: true
-        // }).then((e) => {
-        //     const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
-        //     console.log("그림data----------",e.data)
-        //     const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
-        //     videoElement.src = videoSrc;
-        //     videoElement.play();
-        //     // 할당한 url을 해제한다.
-        //     URL.revokeObjectURL(videoData);
-        // }).catch((err) => {
-        //     console.log(err)
-        // })
-
-        // videoElement.src = videoURL;
-        // videoElement.play();
+      // videoElement.src = videoURL;
+      // videoElement.play();
     }
 
     async function playresultVideo(index) {
-        const videoElement = document.getElementById('DrawresultVideo');
-        console.log("비디오재생의 인덱스느느느느느느는", index)
+      const videoElement = document.getElementById("DrawresultVideo");
+      console.log("비디오재생의 인덱스느느느느느느는", index);
 
-        try {
-            const response = await axios.post('/gameplay/viewVideo', { Drawid: index }, {
-                responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
-                withCredentials: true
-            });
-            const videoData = new Blob([response.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
-            console.log("그림data----------", response.data)
-            const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
-            videoElement.src = videoSrc;
-            videoElement.play();
-            // 할당한 url을 해제한다.
-            URL.revokeObjectURL(videoData);
+      try {
+        const response = await axios.post(
+          "/gameplay/viewVideo",
+          { Drawid: index },
+          {
+            responseType: "arraybuffer", // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+            withCredentials: true,
+          }
+        );
+        const videoData = new Blob([response.data], { type: "video/webm" }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+        console.log("그림data----------", response.data);
+        const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+        videoElement.src = videoSrc;
+        videoElement.play();
+        // 할당한 url을 해제한다.
+        URL.revokeObjectURL(videoData);
+      } catch (error) {
+        console.log("playVideo 오류");
+        console.log(error);
+      }
 
-        } catch (error) {
-            console.log("playVideo 오류")
-            console.log(error)
+      // axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
+      //     responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
+      //     withCredentials: true
+      // }).then((e) => {
+      //     const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
+      //     console.log("그림data----------",e.data)
+      //     const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
+      //     videoElement.src = videoSrc;
+      //     videoElement.play();
+      //     // 할당한 url을 해제한다.
+      //     URL.revokeObjectURL(videoData);
+      // }).catch((err) => {
+      //     console.log(err)
+      // })
 
-        }
-
-        // axios.post('http://127.0.0.1:4000/gameplay/viewVideo', { Drawid: index }, {
-        //     responseType: 'arraybuffer', // 서버에서 배열 버퍼 형식으로 데이터를 가져옵니다.
-        //     withCredentials: true
-        // }).then((e) => {
-        //     const videoData = new Blob([e.data], { type: 'video/webm' }); // ArrayBuffer를 Blob 으로 변환하고 파일 유형을 설정합니다.
-        //     console.log("그림data----------",e.data)
-        //     const videoSrc = URL.createObjectURL(videoData); // Blob 객체를 사용하여 비디오 URL을 생성합니다.
-        //     videoElement.src = videoSrc;
-        //     videoElement.play();
-        //     // 할당한 url을 해제한다.
-        //     URL.revokeObjectURL(videoData);
-        // }).catch((err) => {
-        //     console.log(err)
-        // })
-
-        // videoElement.src = videoURL;
-        // videoElement.play();
+      // videoElement.src = videoURL;
+      // videoElement.play();
     }
 
     async function stopRecording() {
-        console.log("stopRecording");
-        mediaRecorder.stop();
+      console.log("stopRecording");
+      mediaRecorder.stop();
     }
-
-
 
     // 비디오 녹화 종료
     // async function stopRecording() {
@@ -1040,12 +1098,12 @@
 
     // 캔버스 전체 지우기 함수
     const clearCanvas = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = "black";
-    }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = "black";
+    };
 
-    const completeBtn = document.getElementById('complete');
-    const playBtn = document.getElementById('play');
+    const completeBtn = document.getElementById("complete");
+    const playBtn = document.getElementById("play");
 
     erasers.addEventListener("click", clearCanvas);
 
@@ -1056,327 +1114,157 @@
 
     // playBtn.addEventListener('click', playVideo);
 
-
     //--------- 첫번쨰 제시어 입력하는 구문 ------------------------------------------------------------
     function firstQuestionInput() {
-        console.log("왜 안넘어와.....?")
-        const queInput = document.getElementById('question');
-        const queInputV = queInput.value;
-        console.log("1단계 - 입력받은 첫 제시어", queInput.value)
-        axios.post('/gameplay/InputQuestion', { value: queInputV }, {
-            withCredentials: true
-        })
-        queInput.value = "";
+      console.log("왜 안넘어와.....?");
+      const queInput = document.getElementById("question");
+      const queInputV = queInput.value;
+      console.log("1단계 - 입력받은 첫 제시어", queInput.value);
+      axios.post(
+        "/gameplay/InputQuestion",
+        { value: queInputV },
+        {
+          withCredentials: true,
+        }
+      );
+      queInput.value = "";
     }
 
     //-------- 두 번째 제시어 입력하는 구문 -----------------------------------------------------------
     function TwoQuestionInput(id, value, que) {
-        console.log("유저 아이디, 정답, 제시어아이디 보낸다???", id, value, que)
-        axios.post('/gameplay/TwoQuestionInput', { id: id, value: value, queValue: que }, {
-            withCredentials: true
-        })
-        const queInput = document.getElementById('question');
-        queInput.value = "";
-
+      console.log("유저 아이디, 정답, 제시어아이디 보낸다???", id, value, que);
+      axios.post(
+        "/gameplay/TwoQuestionInput",
+        { id: id, value: value, queValue: que },
+        {
+          withCredentials: true,
+        }
+      );
+      const queInput = document.getElementById("question");
+      queInput.value = "";
     }
-
 
     // 게임 로직 순서에 따른 함수 구현 ------------------------------------------------------------
     let viewIndex;
     const StepOne = () => {
-        console.log("--------------------------1단계------------------------------");
-        // 제시어 입력시간 타이머 설정, 시간이 경과되면 그림을 입력할 수 있는 화면으로 바뀐다.------
-        let time = 10;
-        let QuestionTimer = setInterval(() => {
-            document.querySelector('.time').innerHTML = time + "초";
-            time--;
-            console.log(gamestep);
-            if (time < 0) {
-                clearInterval(QuestionTimer);
-                document.querySelector('.time').innerHTML = "시간종료";
-                // 입력한 제시어의 값이 db로 넘어간다.
-                firstQuestionInput();
-                document.querySelector(".drawings").classList.toggle('pop');
-                document.querySelector(".questions").classList.toggle('pop');
-                //--------------------------------------------------------------------
-                gamestep = 2;
-                startGame();
-            }
-        }, 1000);
+      console.log(
+        "--------------------------1단계------------------------------"
+      );
+      // 제시어 입력시간 타이머 설정, 시간이 경과되면 그림을 입력할 수 있는 화면으로 바뀐다.------
+      let time = 10;
+      let QuestionTimer = setInterval(() => {
+        document.querySelector(".time").innerHTML = time + "초";
+        time--;
+        console.log(gamestep);
+        if (time < 0) {
+          clearInterval(QuestionTimer);
+          document.querySelector(".time").innerHTML = "시간종료";
+          // 입력한 제시어의 값이 db로 넘어간다.
+          firstQuestionInput();
+          document.querySelector(".drawings").classList.toggle("pop");
+          document.querySelector(".questions").classList.toggle("pop");
+          //--------------------------------------------------------------------
+          gamestep = 2;
+          startGame();
+        }
+      }, 1000);
     };
 
     let count = 0;
     let targetIndex = 0;
     function getNextUser(MyIndex, tmp) {
-        console.log("countcountcount", count)
-        if (count == 0) {
-            count++;
-            targetIndex = (MyIndex + 1) % tmp.length;
-            console.log("count 0 ", targetIndex);
-        } else {
-            count++;
-            targetIndex = (targetIndex + 1) % tmp.length;
-            console.log("count ~ ", targetIndex);
-
-        }
+      console.log("countcountcount", count);
+      if (count == 0) {
+        count++;
+        targetIndex = (MyIndex + 1) % tmp.length;
+        console.log("count 0 ", targetIndex);
+      } else {
+        count++;
+        targetIndex = (targetIndex + 1) % tmp.length;
+        console.log("count ~ ", targetIndex);
+      }
     }
 
     const StepTwo = async () => {
+      console.log(
+        "--------------------------2 / 4단계------------------------------"
+      );
+      console.log(gamestep);
 
-        console.log("--------------------------2 / 4단계------------------------------");
-        console.log(gamestep);
-
-        let time = 10;
-        await axios.get('/gameplay/QuestionView', {
-            responseType: 'json',
-            withCredentials: true
-        }).then((e) => {
-            // 제시어가 배열형태로 불러와진다. 순서는 room에 들어온 유저 순서대로 [제시어id, 제시어, 유저id]가 불러와짐
-            // console.log("제시어가 불러와지나????", e.data)
-            const MyID = e.data.userID;
-            const questions = e.data.questionData;
-
-            console.log("내 아이디 - ", MyID)
-            console.log("현재 시점의 이 방의 제시어목록 - ", questions)
-
-            const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
-            if (gamestep <= 2) {
-
-                getNextUser(MyIndex, questions);
-            }
-            console.log("내가 입력한 제시어의 인덱스 - ", MyIndex)
-
-
-            // 2단계이면
-            if (gamestep === 2) {
-                console.log(gamestep);
-                getNextUser(MyIndex, questions);
-                startRecording()
-                console.log("--------------------------찐찐찐 2단계------------------------------");
-                console.log(gamestep);
-                viewIndex = questions[targetIndex];
-                console.log("내가 보는 제시어의 인덱스 - ", viewIndex)
-                document.querySelector('.view_question').innerHTML = viewIndex[1];
-
-
-            }
-            // 4단계이면
-            else if (gamestep === 4) {
-                getNextUser(MyIndex, questions);
-                startRecording()
-                console.log("--------------------------찐찐찐 4단계------------------------------");
-                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                targetIndex = (MyIndex + 1) % questions.length;
-                console.log("이번 타겟의 인덱스 - ", targetIndex)
-
-                const isTarget = questions[targetIndex];
-                console.log("이번 타겟의 data - ", isTarget)
-
-                viewIndex = isTarget;
-                // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
-
-
-                let isContent = isTarget[1];
-                isContent = isContent.split(',')
-                console.log("콘텐츠값은??????", isContent)
-                const isQue = isContent[isContent.length - 1];
-                console.log("제시어값은??????", isQue)
-                document.querySelector('.view_question').innerHTML = isQue;
-                //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
-
-                // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
-
-                // let targetIndex;
-                // if (MyIndex == 0) {
-                //     targetIndex = 1;
-                // }
-                // else {
-                //     targetIndex = 0;
-                // }
-
-                // const isTarget = questions[targetIndex];
-                // console.log("이번 타겟의 data - ", isTarget)
-
-                // viewIndex = isTarget;
-                // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
-
-                // let isContent = isTarget[1];
-                // isContent = isContent.split(',')
-                // console.log("콘텐츠값은??????", isContent)
-                // const isQue = isContent[isContent.length - 1];
-                // console.log("제시어값은??????", isQue)
-                // document.querySelector('.view_question').innerHTML = isQue;
-                //#######################################################################################
-            }
-
-
-        }).catch((err) => {
-            console.log(err)
+      let time = 10;
+      await axios
+        .get("/gameplay/QuestionView", {
+          responseType: "json",
+          withCredentials: true,
         })
+        .then((e) => {
+          // 제시어가 배열형태로 불러와진다. 순서는 room에 들어온 유저 순서대로 [제시어id, 제시어, 유저id]가 불러와짐
+          // console.log("제시어가 불러와지나????", e.data)
+          const MyID = e.data.userID;
+          const questions = e.data.questionData;
 
-        let DrawingTimer = setInterval(async () => {
-            document.querySelector('.draw_time').innerHTML = time + "초";
-            time--;
-            // if (time < 1) {
-            //     stopRecording();
-            // }
-            if (time == 0) {
-                console.log("------------------나는 이제 그림을 저장할거야------------------")
-                // 그린 그림이 db에 저장된다.
-                clearInterval(DrawingTimer);
+          console.log("내 아이디 - ", MyID);
+          console.log("현재 시점의 이 방의 제시어목록 - ", questions);
 
-                await stopRecording();
-                document.querySelector('.draw_time').innerHTML = "시간종료";
-                //--------------------------------------------------------------------
-                console.log(gamestep);
-
-                if (gamestep === 2) {
-                    console.log("------------------2단계 끝------------------")
-                    document.querySelector(".drawings").classList.toggle('pop');
-                    document.querySelector(".questions").classList.toggle('pop');
-                    document.querySelector(".question1").classList.toggle('pop');
-                    document.querySelector(".question2").classList.toggle('pop');
-                    gamestep = 3;
-                    startGame();
-                }
-                else if (gamestep === 4) {
-                    console.log("------------------4단계 끝------------------")
-                    document.querySelector(".drawings").classList.toggle('pop');
-                    document.querySelector(".questions").classList.toggle('pop');
-                    gamestep = 5;
-                    startGame();
-                }
-
-            }
-            console.log(gamestep);
-        }, 1000);
-    }
-
-
-    const StepThree = () => {
-        console.log("--------------------------3단계------------------------------");
-        // myindex-2 제시어의 마지막 그림을 노출시킨다.
-
-        // 내 아이디 값
-        let MyID;
-        // 타겟 제시어 아이디 값
-        let targetID;
-
-        axios.get('/gameplay/QuestionView', {
-            responseType: 'json',
-            withCredentials: true
-        }).then((e) => {
-            // console.log("제시어가 불러와지나????", e.data)
-            MyID = e.data.userID;
-            const questions = e.data.questionData;
-            console.log(e);
-            console.log("내 아이디 값 - ", MyID)
-            console.log("이 방의 제시어들 - ", questions)
-
-            const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
-            const lastIndex = questions.length - 1
-            console.log("내 인덱스가 나왔을까???", MyIndex)
+          const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
+          if (gamestep <= 2) {
             getNextUser(MyIndex, questions);
-            //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+          }
+          console.log("내가 입력한 제시어의 인덱스 - ", MyIndex);
 
-            // ##########두명이서 할 경우 3라운드에서는 내 인덱스의 값이 들어와야 한다.#############
-            // const targetIndex = MyIndex;
-            //###################################################################################
-
-            console.log("이번 타겟의 인덱스 값 - ", targetIndex)
-
+          // 2단계이면
+          if (gamestep === 2) {
+            console.log(gamestep);
+            getNextUser(MyIndex, questions);
+            startRecording();
+            console.log(
+              "--------------------------찐찐찐 2단계------------------------------"
+            );
+            console.log(gamestep);
             viewIndex = questions[targetIndex];
-            console.log("이번 타겟의 data - ", viewIndex)
-
-            let viewContent = viewIndex[1];
-            targetID = viewIndex[0];
-            // console.log("콘텐츠 내용??????", viewContent)
-            console.log("question id - ", targetID)
-            viewContent = viewContent.split(',');
-            console.log("question content - ", viewContent)
-            const isDraw = viewContent[viewContent.length - 1]
-            console.log("이전 그림의 id 값 - ", isDraw)
-            // 비디오를 재생하는 함수. 매개변수로 그림의 id 값을 전달하자
-            playVideo(isDraw);
-        })
-
-        let time = 10;
-        let QuestionTimer = setInterval(() => {
-            document.querySelector('.time').innerHTML = time + "초";
-            time--;
-
-            if (time < 0) {
-                clearInterval(QuestionTimer);
-                document.querySelector('.time').innerHTML = "시간종료";
-                document.querySelector(".drawings").classList.toggle('pop');
-                document.querySelector(".questions").classList.toggle('pop');
-
-                // myindex-2에 그림을보고 정답을 입력한다.
-                //필요헌 정보, 정답 입력한 사람 id / 입력한 내용
-                const queInput = document.getElementById('question');
-                const queInputV = queInput.value;
-                console.log("이제 첫번째 정답을 입력할거야 내 아이디는?", MyID)
-                console.log("이제 첫번째 정답을 입력할거야 정답 값은?", queInputV)
-                TwoQuestionInput(MyID, queInputV, targetID);
-                //--------------------------------------------------------------------
-                gamestep = 4;
-                startGame();
-            }
-        }, 1000);
-    };
-
-
-    const StepFour = async () => {
-        console.log("--------------------------4단계------------------------------");
-        // 그 다음 순서의 제시어를 보여준다.
-        await axios.get('/gameplay/QuestionView', {
-            responseType: 'json',
-            withCredentials: true
-        }).then((e) => {
-            // 제시어가 배열형태로 불러와진다. 순서는 room에 들어온 유저 순서대로 [제시어id, 제시어, 유저id]가 불러와짐
-            // console.log("제시어가 불러와지나????", e.data)
-            const MyID = e.data.userID;
-            const questions = e.data.questionData;
-
-            console.log("내 아이디 값은????", MyID)
-            console.log("이 방의 제시어들은????", questions)
-
-            const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
-            const lastIndex = questions.length - 1
-            console.log("내 인덱스가 나왔을까???", MyIndex)
-
-            //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            const targetIndex = (MyIndex + 2) % questions.length;
-            console.log("이번 타겟의 인덱스 - ", targetIndex)
+            console.log("내가 보는 제시어의 인덱스 - ", viewIndex);
+            document.querySelector(".view_question").innerHTML = viewIndex[1];
+          }
+          // 4단계이면
+          else if (gamestep === 4) {
+            getNextUser(MyIndex, questions);
+            startRecording();
+            console.log(
+              "--------------------------찐찐찐 4단계------------------------------"
+            );
+            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            targetIndex = (MyIndex + 1) % questions.length;
+            console.log("이번 타겟의 인덱스 - ", targetIndex);
 
             const isTarget = questions[targetIndex];
-            console.log("이번 타겟의 data - ", isTarget)
+            console.log("이번 타겟의 data - ", isTarget);
 
             viewIndex = isTarget;
             // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
 
             let isContent = isTarget[1];
-            isContent = isContent.split(',')
-            console.log("콘텐츠값은??????", isContent)
+            isContent = isContent.split(",");
+            console.log("콘텐츠값은??????", isContent);
             const isQue = isContent[isContent.length - 1];
-            console.log("제시어값은??????", isQue)
-            document.querySelector('.view_question').innerHTML = isQue;
-            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            console.log("제시어값은??????", isQue);
+            document.querySelector(".view_question").innerHTML = isQue;
+            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\
 
             // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
+
+            // let targetIndex;
             // if (MyIndex == 0) {
-            //     const targetIndex = 1;
+            //     targetIndex = 1;
             // }
             // else {
-            //     const targetIndex = 0;
+            //     targetIndex = 0;
             // }
 
             // const isTarget = questions[targetIndex];
             // console.log("이번 타겟의 data - ", isTarget)
 
             // viewIndex = isTarget;
-            // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+            // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
 
             // let isContent = isTarget[1];
             // isContent = isContent.split(',')
@@ -1384,424 +1272,579 @@
             // const isQue = isContent[isContent.length - 1];
             // console.log("제시어값은??????", isQue)
             // document.querySelector('.view_question').innerHTML = isQue;
-            //#########################################################################################
-
-            // 추가한부분
-            try {
-                let time = 10;
-                let DrawingTimer = setInterval(async () => {
-                    document.querySelector('.draw_time').innerHTML = time + "초";
-                    time--;
-
-                    if (time < 0) {
-                        clearInterval(DrawingTimer);
-                        stopRecording();
-                        document.querySelector('.draw_time').innerHTML = "시간종료";
-                        //그림을 그려 Drawing db에 입력한다.
-                        document.querySelector(".drawings").classList.toggle('pop');
-                        document.querySelector(".questions").classList.toggle('pop');
-
-                        //--------------------------------------------------------------------
-                        gamestep = 5;
-                        startGame();
-                    }
-                }, 1000);
-
-            } catch (error) {
-                console.log(error);
-            }
-        }).catch((err) => {
-            console.log(err)
+            //#######################################################################################
+          }
         })
+        .catch((err) => {
+          console.log(err);
+        });
 
+      let DrawingTimer = setInterval(async () => {
+        document.querySelector(".draw_time").innerHTML = time + "초";
+        time--;
+        // if (time < 1) {
+        //     stopRecording();
+        // }
+        if (time == 0) {
+          console.log(
+            "------------------나는 이제 그림을 저장할거야------------------"
+          );
+          // 그린 그림이 db에 저장된다.
+          clearInterval(DrawingTimer);
 
+          await stopRecording();
+          document.querySelector(".draw_time").innerHTML = "시간종료";
+          //--------------------------------------------------------------------
+          console.log(gamestep);
+
+          if (gamestep === 2) {
+            console.log("------------------2단계 끝------------------");
+            document.querySelector(".drawings").classList.toggle("pop");
+            document.querySelector(".questions").classList.toggle("pop");
+            document.querySelector(".question1").classList.toggle("pop");
+            document.querySelector(".question2").classList.toggle("pop");
+            gamestep = 3;
+            startGame();
+          } else if (gamestep === 4) {
+            console.log("------------------4단계 끝------------------");
+            document.querySelector(".drawings").classList.toggle("pop");
+            document.querySelector(".questions").classList.toggle("pop");
+            gamestep = 5;
+            startGame();
+          }
+        }
+        console.log(gamestep);
+      }, 1000);
     };
 
+    const StepThree = () => {
+      console.log(
+        "--------------------------3단계------------------------------"
+      );
+      // myindex-2 제시어의 마지막 그림을 노출시킨다.
 
+      // 내 아이디 값
+      let MyID;
+      // 타겟 제시어 아이디 값
+      let targetID;
+
+      axios
+        .get("/gameplay/QuestionView", {
+          responseType: "json",
+          withCredentials: true,
+        })
+        .then((e) => {
+          // console.log("제시어가 불러와지나????", e.data)
+          MyID = e.data.userID;
+          const questions = e.data.questionData;
+          console.log(e);
+          console.log("내 아이디 값 - ", MyID);
+          console.log("이 방의 제시어들 - ", questions);
+
+          const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
+          const lastIndex = questions.length - 1;
+          console.log("내 인덱스가 나왔을까???", MyIndex);
+          getNextUser(MyIndex, questions);
+          //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
+          //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+          // ##########두명이서 할 경우 3라운드에서는 내 인덱스의 값이 들어와야 한다.#############
+          // const targetIndex = MyIndex;
+          //###################################################################################
+
+          console.log("이번 타겟의 인덱스 값 - ", targetIndex);
+
+          viewIndex = questions[targetIndex];
+          console.log("이번 타겟의 data - ", viewIndex);
+
+          let viewContent = viewIndex[1];
+          targetID = viewIndex[0];
+          // console.log("콘텐츠 내용??????", viewContent)
+          console.log("question id - ", targetID);
+          viewContent = viewContent.split(",");
+          console.log("question content - ", viewContent);
+          const isDraw = viewContent[viewContent.length - 1];
+          console.log("이전 그림의 id 값 - ", isDraw);
+          // 비디오를 재생하는 함수. 매개변수로 그림의 id 값을 전달하자
+          playVideo(isDraw);
+        });
+
+      let time = 10;
+      let QuestionTimer = setInterval(() => {
+        document.querySelector(".time").innerHTML = time + "초";
+        time--;
+
+        if (time < 0) {
+          clearInterval(QuestionTimer);
+          document.querySelector(".time").innerHTML = "시간종료";
+          document.querySelector(".drawings").classList.toggle("pop");
+          document.querySelector(".questions").classList.toggle("pop");
+
+          // myindex-2에 그림을보고 정답을 입력한다.
+          //필요헌 정보, 정답 입력한 사람 id / 입력한 내용
+          const queInput = document.getElementById("question");
+          const queInputV = queInput.value;
+          console.log("이제 첫번째 정답을 입력할거야 내 아이디는?", MyID);
+          console.log("이제 첫번째 정답을 입력할거야 정답 값은?", queInputV);
+          TwoQuestionInput(MyID, queInputV, targetID);
+          //--------------------------------------------------------------------
+          gamestep = 4;
+          startGame();
+        }
+      }, 1000);
+    };
+
+    const StepFour = async () => {
+      console.log(
+        "--------------------------4단계------------------------------"
+      );
+      // 그 다음 순서의 제시어를 보여준다.
+      await axios
+        .get("/gameplay/QuestionView", {
+          responseType: "json",
+          withCredentials: true,
+        })
+        .then((e) => {
+          // 제시어가 배열형태로 불러와진다. 순서는 room에 들어온 유저 순서대로 [제시어id, 제시어, 유저id]가 불러와짐
+          // console.log("제시어가 불러와지나????", e.data)
+          const MyID = e.data.userID;
+          const questions = e.data.questionData;
+
+          console.log("내 아이디 값은????", MyID);
+          console.log("이 방의 제시어들은????", questions);
+
+          const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
+          const lastIndex = questions.length - 1;
+          console.log("내 인덱스가 나왔을까???", MyIndex);
+
+          //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
+          const targetIndex = (MyIndex + 2) % questions.length;
+          console.log("이번 타겟의 인덱스 - ", targetIndex);
+
+          const isTarget = questions[targetIndex];
+          console.log("이번 타겟의 data - ", isTarget);
+
+          viewIndex = isTarget;
+          // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+
+          let isContent = isTarget[1];
+          isContent = isContent.split(",");
+          console.log("콘텐츠값은??????", isContent);
+          const isQue = isContent[isContent.length - 1];
+          console.log("제시어값은??????", isQue);
+          document.querySelector(".view_question").innerHTML = isQue;
+          //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+          // ##########두명이서 할 경우 4라운드에서는 상대방의 인덱스의 값이 들어와야 한다.#############
+          // if (MyIndex == 0) {
+          //     const targetIndex = 1;
+          // }
+          // else {
+          //     const targetIndex = 0;
+          // }
+
+          // const isTarget = questions[targetIndex];
+          // console.log("이번 타겟의 data - ", isTarget)
+
+          // viewIndex = isTarget;
+          // // console.log("question에 저장할건데 question의 id값 - ", viewIndex)
+
+          // let isContent = isTarget[1];
+          // isContent = isContent.split(',')
+          // console.log("콘텐츠값은??????", isContent)
+          // const isQue = isContent[isContent.length - 1];
+          // console.log("제시어값은??????", isQue)
+          // document.querySelector('.view_question').innerHTML = isQue;
+          //#########################################################################################
+
+          // 추가한부분
+          try {
+            let time = 10;
+            let DrawingTimer = setInterval(async () => {
+              document.querySelector(".draw_time").innerHTML = time + "초";
+              time--;
+
+              if (time < 0) {
+                clearInterval(DrawingTimer);
+                stopRecording();
+                document.querySelector(".draw_time").innerHTML = "시간종료";
+                //그림을 그려 Drawing db에 입력한다.
+                document.querySelector(".drawings").classList.toggle("pop");
+                document.querySelector(".questions").classList.toggle("pop");
+
+                //--------------------------------------------------------------------
+                gamestep = 5;
+                startGame();
+              }
+            }, 1000);
+          } catch (error) {
+            console.log(error);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
 
     const StepFive = () => {
-        console.log("--------------------------5단계------------------------------");
+      console.log(
+        "--------------------------5단계------------------------------"
+      );
 
-        // 그 다음 제시어의 값을 받아 그림을 보여준다.
-        // myindex-2 제시어의 마지막 그림을 노출시킨다.
+      // 그 다음 제시어의 값을 받아 그림을 보여준다.
+      // myindex-2 제시어의 마지막 그림을 노출시킨다.
 
-        // 내 아이디 값
-        let MyID;
-        // 타겟 제시어 아이디 값
-        let targetID;
+      // 내 아이디 값
+      let MyID;
+      // 타겟 제시어 아이디 값
+      let targetID;
 
-        axios.get('/gameplay/QuestionView', {
-            responseType: 'json',
-            withCredentials: true
-        }).then((e) => {
-            // console.log("제시어가 불러와지나????", e.data)
-            MyID = e.data.userID;
-            const questions = e.data.questionData;
-
-            console.log("내 아이디 값은????", MyID)
-            console.log("이 방의 제시어들은????", questions)
-
-            const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
-            const lastIndex = questions.length - 1
-            console.log("내 인덱스가 나왔을까???", MyIndex)
-
-
-            //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
-            targetIndex = targetIndex + 1;
-            //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            // ##########두명이서 할 경우 5라운드에서는 내 인덱스의 값이 들어와야 한다.#############
-            // const targetIndex = MyIndex;
-            //###################################################################################
-
-
-
-            console.log("이번 타겟은??????", targetIndex)
-
-            viewIndex = questions[targetIndex];
-            console.log("이번 제시어 그림??????", viewIndex)
-
-            let viewContent = viewIndex[1];
-            targetID = viewIndex[0];
-            // console.log("콘텐츠 내용??????", viewContent)
-            console.log("콘텐츠 아이디??????", targetID)
-            viewContent = viewContent.split(',');
-            console.log("콘텐츠 내용??????", viewContent)
-            const isDraw = viewContent[viewContent.length - 1]
-            console.log("그림 아이디는??????", isDraw)
-            // 비디오를 재생하는 함수. 매개변수로 그림의 id 값을 전달하자
-            playVideo(isDraw);
+      axios
+        .get("/gameplay/QuestionView", {
+          responseType: "json",
+          withCredentials: true,
         })
+        .then((e) => {
+          // console.log("제시어가 불러와지나????", e.data)
+          MyID = e.data.userID;
+          const questions = e.data.questionData;
 
+          console.log("내 아이디 값은????", MyID);
+          console.log("이 방의 제시어들은????", questions);
 
-        // 최종 정답을 입력해준다.
-        let time = 10;
-        let QuestionTimer = setInterval(() => {
-            document.querySelector('.time').innerHTML = time + "초";
-            time--;
+          const MyIndex = questions.findIndex((i) => i[i.length - 1] == MyID);
+          const lastIndex = questions.length - 1;
+          console.log("내 인덱스가 나왔을까???", MyIndex);
 
-            if (time < 0) {
-                clearInterval(QuestionTimer);
-                document.querySelector('.time').innerHTML = "시간종료";
-                document.querySelector(".drawings").classList.toggle('pop');
-                document.querySelector(".questions").classList.toggle('pop');
+          //@@@@@@@@@@@@@@@타겟값@@@@@@@@@@@@@@@@@@
+          targetIndex = targetIndex + 1;
+          //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+          // ##########두명이서 할 경우 5라운드에서는 내 인덱스의 값이 들어와야 한다.#############
+          // const targetIndex = MyIndex;
+          //###################################################################################
 
+          console.log("이번 타겟은??????", targetIndex);
 
+          viewIndex = questions[targetIndex];
+          console.log("이번 제시어 그림??????", viewIndex);
 
-                // myindex-2에 그림을보고 정답을 입력한다.
-                //필요헌 정보, 정답 입력한 사람 id / 입력한 내용
-                const queInput = document.getElementById('question');
-                const queInputV = queInput.value;
-                console.log("최종 정답값이야 내 아이디는?", MyID)
-                console.log("최종 정답값이야 정답 값은?", queInputV)
-                TwoQuestionInput(MyID, queInputV, targetID);
-                //--------------------------------------------------------------------
-                gamestep = 6;
-                startGame();
-            }
-        }, 1000);
+          let viewContent = viewIndex[1];
+          targetID = viewIndex[0];
+          // console.log("콘텐츠 내용??????", viewContent)
+          console.log("콘텐츠 아이디??????", targetID);
+          viewContent = viewContent.split(",");
+          console.log("콘텐츠 내용??????", viewContent);
+          const isDraw = viewContent[viewContent.length - 1];
+          console.log("그림 아이디는??????", isDraw);
+          // 비디오를 재생하는 함수. 매개변수로 그림의 id 값을 전달하자
+          playVideo(isDraw);
+        });
 
-    }
+      // 최종 정답을 입력해준다.
+      let time = 10;
+      let QuestionTimer = setInterval(() => {
+        document.querySelector(".time").innerHTML = time + "초";
+        time--;
+
+        if (time < 0) {
+          clearInterval(QuestionTimer);
+          document.querySelector(".time").innerHTML = "시간종료";
+          document.querySelector(".drawings").classList.toggle("pop");
+          document.querySelector(".questions").classList.toggle("pop");
+
+          // myindex-2에 그림을보고 정답을 입력한다.
+          //필요헌 정보, 정답 입력한 사람 id / 입력한 내용
+          const queInput = document.getElementById("question");
+          const queInputV = queInput.value;
+          console.log("최종 정답값이야 내 아이디는?", MyID);
+          console.log("최종 정답값이야 정답 값은?", queInputV);
+          TwoQuestionInput(MyID, queInputV, targetID);
+          //--------------------------------------------------------------------
+          gamestep = 6;
+          startGame();
+        }
+      }, 1000);
+    };
 
     function asd() {
-        const lastChild = nicknametag.lastChild;
-        if (lastChild) {
-            nicknametag.removeChild(lastChild);
-        }
+      const lastChild = nicknametag.lastChild;
+      if (lastChild) {
+        nicknametag.removeChild(lastChild);
+      }
     }
     function selectvideo(tmp) {
+      console.log("replaySelect1", tmp);
+      console.log(replay[tmp]);
+      const string = replay[tmp].content;
+      const array = string.split(",");
+      const nicknametag = document.getElementById("nickname");
+      const videoElement = document.getElementById("DrawresultVideo");
+      const gameBoard = document.querySelector(".gameBoard");
+      function asd() {
+        const lastChild = nicknametag.lastChild;
+        if (lastChild) {
+          nicknametag.removeChild(lastChild);
+        }
+      }
+      setTimeout(() => {
+        let p = document.createElement("p");
+        p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
+        nicknametag.appendChild(p);
+      }, 1000);
+      setTimeout(() => {
+        asd();
+        let p3 = document.createElement("p");
+        p3.innerHTML = `제시어 :${array[0]}`;
+        nicknametag.appendChild(p3);
+      }, 2000);
+      setTimeout(() => {
+        asd();
+        let p2 = document.createElement("p");
+        p2.innerHTML = `그림그린사람 :${array[1]}`;
+        nicknametag.appendChild(p2);
+      }, 3000);
+
+      setTimeout(() => {
+        playresultVideo(array[2]);
+      }, 4000);
+      setTimeout(() => {
+        asd();
+
+        let p4 = document.createElement("p");
+
+        p4.innerHTML = ` ${array[3]} : ${array[4]}`;
+        nicknametag.appendChild(p4);
+      }, 5000);
+
+      setTimeout(() => {
+        playresultVideo(array[6]);
+      }, 7000);
+      setTimeout(() => {
+        asd();
+
+        let p5 = document.createElement("p");
+        p5.innerHTML = `${array[7]} :${array[8]}`;
+        nicknametag.appendChild(p5);
+
+        console.log("완료");
+      }, 8000);
+      asd();
+    }
+
+    const gameEnd = async () => {
+      console.log(
+        "--------------------------리플레이------------------------------"
+      );
+      document
+        .querySelectorAll(".questions.pop, .drawings.pop")
+        .forEach((element) => {
+          element.classList.remove("pop");
+        });
+      // // Add "block" class to elements with class "gameResult"
+      document.querySelector(".gameResult").classList.add("pop");
+      await getthing();
+      await replaying();
+
+      socket.on("replaySelect1", (tmp) => {
         console.log("replaySelect1", tmp);
         console.log(replay[tmp]);
         const string = replay[tmp].content;
         const array = string.split(",");
-        const nicknametag = document.getElementById('nickname');
-        const videoElement = document.getElementById('DrawresultVideo');
-        const gameBoard = document.querySelector('.gameBoard');
-        function asd() {
-            const lastChild = nicknametag.lastChild;
-            if (lastChild) {
-                nicknametag.removeChild(lastChild);
-            }
-        }
+        const nicknametag = document.getElementById("nickname");
+        const videoElement = document.getElementById("DrawresultVideo");
+        const gameBoard = document.querySelector(".gameBoard");
+
         setTimeout(() => {
-            let p = document.createElement('p');
-            p.innerHTML = `나의 닉네임: ${ replay[tmp].nickname }`;
-            nicknametag.appendChild(p);
+          let p = document.createElement("p");
+          p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
+          nicknametag.appendChild(p);
         }, 1000);
+
         setTimeout(() => {
-            asd()
-            let p3 = document.createElement('p');
-            p3.innerHTML = `제시어 :${ array[0] }`;
-            nicknametag.appendChild(p3);
+          asd();
+          let p3 = document.createElement("p");
+          p3.innerHTML = `제시어 :${array[0]}`;
+          nicknametag.appendChild(p3);
         }, 2000);
+
         setTimeout(() => {
-            asd();
-            let p2 = document.createElement('p');
-            p2.innerHTML = `그림그린사람 :${ array[1] }`;
-            nicknametag.appendChild(p2);
-
-
+          asd();
+          let p2 = document.createElement("p");
+          p2.innerHTML = `그림그린사람 :${array[1]}`;
+          nicknametag.appendChild(p2);
         }, 3000);
 
         setTimeout(() => {
-            playresultVideo(array[2]);
+          playresultVideo(array[2]);
         }, 4000);
         setTimeout(() => {
-            asd();
+          asd();
 
-            let p4 = document.createElement('p');
+          let p4 = document.createElement("p");
 
-            p4.innerHTML =` ${ array[3] } : ${ array[4] }`;
-            nicknametag.appendChild(p4);
-
+          p4.innerHTML = `${array[3]} : ${array[4]}`;
+          nicknametag.appendChild(p4);
         }, 5000);
 
         setTimeout(() => {
-            playresultVideo(array[6]);
+          playresultVideo(array[6]);
         }, 7000);
         setTimeout(() => {
-            asd();
+          asd();
 
-            let p5 = document.createElement('p');
-            p5.innerHTML =`${ array[7] } :${ array[8] }`;
-            nicknametag.appendChild(p5);
+          let p5 = document.createElement("p");
+          p5.innerHTML = `${array[7]} :${array[8]}`;
+          nicknametag.appendChild(p5);
 
-            console.log("완료");
+          console.log("완료");
         }, 8000);
         asd();
-
-
-
-    }
-
-    const gameEnd = async () => {
-        console.log("--------------------------리플레이------------------------------");
-        document.querySelectorAll('.questions.pop, .drawings.pop').forEach(element => {
-            element.classList.remove('pop');
-        });
-        // // Add "block" class to elements with class "gameResult"
-        document.querySelector('.gameResult').classList.add('pop');
-        await getthing();
-        await replaying();
-
-        socket.on('replaySelect1', (tmp) => {
-            console.log("replaySelect1", tmp);
-            console.log(replay[tmp]);
-            const string = replay[tmp].content;
-            const array = string.split(",");
-            const nicknametag = document.getElementById('nickname');
-            const videoElement = document.getElementById('DrawresultVideo');
-            const gameBoard = document.querySelector('.gameBoard');
-
-
-            setTimeout(() => {
-                let p = document.createElement('p');
-                p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
-                nicknametag.appendChild(p);
-            }, 1000);
-
-
-
-            setTimeout(() => {
-                asd()
-                let p3 = document.createElement('p');
-                p3.innerHTML = `제시어 :${array[0]}`;
-                nicknametag.appendChild(p3);
-            }, 2000);
-
-
-            setTimeout(() => {
-                asd();
-                let p2 = document.createElement('p');
-                p2.innerHTML = `그림그린사람 :${array[1]}`;
-                nicknametag.appendChild(p2);
-
-
-            }, 3000);
-
-            setTimeout(() => {
-                playresultVideo(array[2]);
-            }, 4000);
-            setTimeout(() => {
-                asd();
-
-                let p4 = document.createElement('p');
-
-                p4.innerHTML = `${array[3]} : ${array[4]}`;
-                nicknametag.appendChild(p4);
-
-            }, 5000);
-
-            setTimeout(() => {
-                playresultVideo(array[6]);
-            }, 7000);
-            setTimeout(() => {
-                asd();
-
-                let p5 = document.createElement('p');
-                p5.innerHTML = `${array[7]} :${array[8]}`;
-                nicknametag.appendChild(p5);
-
-                console.log("완료");
-            }, 8000);
-            asd();
-
-
-        })
-
-
-    }
+      });
+    };
 
     function asdsf(tmp, str) {
-        const nicknametag = document.getElementById('nickname');
-        let p = document.createElement('p');
-        p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
-        nicknametag.appendChild(p)
+      const nicknametag = document.getElementById("nickname");
+      let p = document.createElement("p");
+      p.innerHTML = `나의 닉네임: ${replay[tmp].nickname}`;
+      nicknametag.appendChild(p);
     }
 
     async function getthing() {
-        await axios.get('/gameplay/QuestionView', {
-            responseType: 'json',
-            withCredentials: true
-        }).then((e) => {
-            console.log("마지막 기능 e");
-            for (let i = 0; i < e.data.questionData.length; i++) {
-                gmaeplayer.push(e.data.questionData[i][2]);
-                console.log("gmaeplayer", gmaeplayer);
-                let obj = {}
-                obj.gmaeplayerID = e.data.questionData[i][2];
-                obj.content = e.data.questionData[i][1];
-                obj.nickname = "";
-                replay[i] = { ...obj };
-
-
-            }
-            console.log(replay);
-            gething2();
+      await axios
+        .get("/gameplay/QuestionView", {
+          responseType: "json",
+          withCredentials: true,
         })
+        .then((e) => {
+          console.log("마지막 기능 e");
+          for (let i = 0; i < e.data.questionData.length; i++) {
+            gmaeplayer.push(e.data.questionData[i][2]);
+            console.log("gmaeplayer", gmaeplayer);
+            let obj = {};
+            obj.gmaeplayerID = e.data.questionData[i][2];
+            obj.content = e.data.questionData[i][1];
+            obj.nickname = "";
+            replay[i] = { ...obj };
+          }
+          console.log(replay);
+          gething2();
+        });
     }
 
-
-   async function gething2() {
-        try {
-            await axios.post('http://127.0.0.1:4000/gameplay/getUserinfo', { id: gmaeplayer }, {
-                responseType: 'json',
-                withCredentials: true
-            }).then((e) => {
-                console.log("여기에 접근하는가?");
-                console.log(e)
-                console.log(e.data[e.data.length - 1].id);
-                socket.emit('rein', e.data[e.data.length - 1].id);
-                const exit = document.getElementById('restart');
-                exit.addEventListener('click', async () => {
-                      await axios.post('http://127.0.0.1:4000/gameplay/RoomDelete', { id: e.data[e.data.length - 1].id },
+    async function gething2() {
+      try {
+        await axios
+          .post(
+            "http://127.0.0.1:4000/gameplay/getUserinfo",
+            { id: gmaeplayer },
             {
-                withCredentials: true
-            })})
-
-                for (let i = 0; i < e.data.length; i++) {
-                    if (i == (e.data.length - 1)) {
-                        break;
-                    } else {
-                        gmaeplayer[i].push = e.data[i].username;
-                        replay[i].nickname = e.data[i].username;
-                    }
+              responseType: "json",
+              withCredentials: true,
+            }
+          )
+          .then((e) => {
+            console.log("여기에 접근하는가?");
+            console.log(e);
+            console.log(e.data[e.data.length - 1].id);
+            socket.emit("rein", e.data[e.data.length - 1].id);
+            const exit = document.getElementById("restart");
+            exit.addEventListener("click", async () => {
+              await axios.post(
+                "http://127.0.0.1:4000/gameplay/RoomDelete",
+                { id: e.data[e.data.length - 1].id },
+                {
+                  withCredentials: true,
                 }
-                console.log("gmaeplayer", gmaeplayer);
-            })
-            console.log(replay);
-        } catch (error) {
-            console.log(error);
-        }
+              );
+            });
 
+            for (let i = 0; i < e.data.length; i++) {
+              if (i == e.data.length - 1) {
+                break;
+              } else {
+                gmaeplayer[i].push = e.data[i].username;
+                replay[i].nickname = e.data[i].username;
+              }
+            }
+            console.log("gmaeplayer", gmaeplayer);
+          });
+        console.log(replay);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     async function fetchData() {
-        try {
+      try {
+        const response = await axios.get("/gameplay/getUserinfo", {
+          withCredentials: true,
+        });
 
-            const response = await axios.get('/gameplay/getUserinfo', {
-                withCredentials: true
-            });
+        console.log("mite");
 
-            console.log("mite")
-
-            // gmaeplayer[0]=response.data._room.room_manager;
-            // 소켓전송ㄴ
-            socket.emit('rein', response.data._room.id);
-            console.log("들어가벌임", response.data._room.id)
-            console.log(gmaeplayer)
-
-        } catch (error) {
-            console.error(error);
-        }
+        // gmaeplayer[0]=response.data._room.room_manager;
+        // 소켓전송ㄴ
+        socket.emit("rein", response.data._room.id);
+        console.log("들어가벌임", response.data._room.id);
+        console.log(gmaeplayer);
+      } catch (error) {
+        console.error(error);
+      }
     }
     async function replaying() {
-        await gmaeplayer.forEach((element, index) => {
-            console.log("element", element);
-            let li = document.createElement('li');
-            li.innerHTML = element;
-            li.addEventListener('click', () => {
-                console.log("클릭됌", element);
-                let sdkiojw = index;
+      await gmaeplayer.forEach((element, index) => {
+        console.log("element", element);
+        let li = document.createElement("li");
+        li.innerHTML = element;
+        li.addEventListener("click", () => {
+          console.log("클릭됌", element);
+          let sdkiojw = index;
 
-                socket.emit('replaySelect', sdkiojw);
-                selectvideo(sdkiojw);
-            })
-            playerName.appendChild(li);
-        })
-
-
+          socket.emit("replaySelect", sdkiojw);
+          selectvideo(sdkiojw);
+        });
+        playerName.appendChild(li);
+      });
     }
-
-
 
     //-------- 게임 구현 로직 ------------------------------------------------------------------
 
     const startGame = () => {
-        if (gamestep === 1) {
-            // 첫 번째 제시어를 입력받는다.
-            StepOne();
-        }
-        else if (gamestep === 2) {
-            // 첫 번째 제시어로 그림을 그린다.
-            setTimeout(() => {
-                StepTwo();
-                console.log("조금 기다려");
-            }, 1000);
-        }
-        else if (gamestep === 3) {
-            // 그린 그림을 보고 제시어를 입력한다.
-            setTimeout(() => {
-                StepThree();
-                console.log("조금 기다려");
-            }, 1000);
-        }
-        else if (gamestep === 4) {
-            // 입력한 제시어로 그림을 그린다.
-            setTimeout(() => {
-                // StepFour();
-                StepTwo();
-                console.log("조금 기다려");
-            }, 1000);
-        }
-        else if (gamestep === 5) {
-            // 최종적으로 그린 그림으로 정답을 입력한다.
-            setTimeout(() => {
-                StepFive();
-                console.log("조금 기다려");
-            }, 1000);
-        }
-        else {
-            setTimeout(() => {
-                gameEnd();
-                console.log("조금 기다려");
-            }, 1000);
-        }
-    }
+      if (gamestep === 1) {
+        // 첫 번째 제시어를 입력받는다.
+        StepOne();
+      } else if (gamestep === 2) {
+        // 첫 번째 제시어로 그림을 그린다.
+        setTimeout(() => {
+          StepTwo();
+          console.log("조금 기다려");
+        }, 1000);
+      } else if (gamestep === 3) {
+        // 그린 그림을 보고 제시어를 입력한다.
+        setTimeout(() => {
+          StepThree();
+          console.log("조금 기다려");
+        }, 1000);
+      } else if (gamestep === 4) {
+        // 입력한 제시어로 그림을 그린다.
+        setTimeout(() => {
+          // StepFour();
+          StepTwo();
+          console.log("조금 기다려");
+        }, 1000);
+      } else if (gamestep === 5) {
+        // 최종적으로 그린 그림으로 정답을 입력한다.
+        setTimeout(() => {
+          StepFive();
+          console.log("조금 기다려");
+        }, 1000);
+      } else {
+        setTimeout(() => {
+          gameEnd();
+          console.log("조금 기다려");
+        }, 1000);
+      }
+    };
     startGame();
-
-
-
-
-</script>
-
+  </script>
 </html>
